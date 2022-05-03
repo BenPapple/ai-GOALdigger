@@ -1,0 +1,72 @@
+use goaldiggerProlog as knowledge.
+
+/**
+ * Definitions of all the actions an agent can perform
+ *
+ */
+
+% move agent in world, direction like compass nswe
+define move(Direction) with
+	pre{ true }
+	post{ true }
+	
+% skip move and do no action
+define skip with
+	pre { true }
+	post{ true }
+	
+% TODO conflict with GOAL keyword adopt
+% adopt role 
+%define adopt(Role) with
+%	pre { true }
+%	post { true }
+			
+% rotate Blocks
+define rotate(Direction) with
+	pre { true }
+	post { true }
+	
+% attach blocks
+define attach(Direction) with
+	pre { true }
+	post { true }
+	
+% detach blocks
+define detach(Direction) with
+	pre { true }
+	post { true }
+	
+% connect blocks with other agent
+define connect(Agent, X, Y) with
+	pre { true }
+	post { true }
+	
+% disconnect blocks with other agent
+define disconnect(Agent, X, Y) with
+	pre { true }
+	post { true }	
+		
+% request block
+define request(Direction) with
+	pre { true }
+	post { true }
+	
+% submit task
+define submit(Task) with
+	pre { true }
+	post { true }
+	
+% clear obstacles
+define clear(X, Y) with
+	pre { true }
+	post { true }
+	
+% survey location for information
+define survey(X, Y) with
+	pre { true }
+	post { true }
+	
+% survey target for information
+define survey(T) with
+	pre { true }
+	post { true }

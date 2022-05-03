@@ -1,0 +1,18 @@
+use "eismassim-4.4-jar-with-dependencies.jar" as environment.
+
+/**
+ * Program start file defining primary modules files and launches agents for server
+ *
+ */
+
+define goaldiggerAgent as agent {
+use goaldiggerMain as main module.
+use goaldiggerInit as init module.
+use goaldiggerEvent as event module.
+}
+
+% launch agents automatically when server offers entity
+launchpolicy{
+when * launch goaldiggerAgent with name = *.
+
+}
