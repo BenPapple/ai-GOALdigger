@@ -4,7 +4,7 @@
   "port": 12300,
   "scheduling": true,
   "only-once": false,
-  "timeout": 4000,
+  "timeout": 3000,
   "times": false,
   "notifications": false,
   "queued": false,
