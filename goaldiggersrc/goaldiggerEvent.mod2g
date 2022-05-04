@@ -1,0 +1,38 @@
+use goaldiggerProlog as knowledge.
+use goaldiggerAction as actionspec.
+
+/**
+ * Gets executed everytime a percept or message is received and handles them
+ *
+ */
+
+module goaldiggerEvent {
+
+% Update believe with percept information, insert new objects and delete disappeared objects
+	forall  bel((thing(X, Y, Type, Details))),  bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3)), percept(thing(X3, Y3, Type, Details)) do
+		delete(thing(X, Y, Type, Details)).
+	forall percept(thing(X, Y, Type, Details), not((X = 0, Y = 0))), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thing(X3, Y3, Type, Details)))) do
+		insert(thing(X3, Y3, Type, Details)).
+			
+	% Adopt goal when new step arrives and precondition apply
+	%if percept(step(X)), bel(step(Y), X\=Y), bel(stepAwaitingAction(true))  then delete(stepAwaitingAction(true)) + insert(stepAwaitingAction(false)) + adopt(stepAwaitingAction(true)) .
+	%if percept(step(X)), bel(step(Y), X\=Y)  then adopt(stepAwaitingAction(true)) .
+	
+	% Update step counter with new step when new percept step available
+	if percept(step(X)), bel(step(Y), X\=Y, X>0, haveMove(false)) then delete(step(Y)) + insert(step(X)) .	
+	if percept(step(X)), bel(step(Y), X\=Y, X>0, haveMove(true)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(true)) + insert(haveMove(false)) .
+	 
+	
+	% Managing server successful action messages
+	if percept(lastActionResult(success)) then {
+		% update XY position of agent
+		if percept(lastAction(move), lastActionParams([D])) then {
+			% update agent XY position with confirmed move nswe
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
+	
+		}
+				
+	}
+	
+
+}

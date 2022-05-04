@@ -1,0 +1,14 @@
+use goaldiggerProlog as knowledge.
+
+/**
+ * File initializes first knowledge into agent, gets executed once at agent launch
+ *
+ */
+
+module goaldiggerInit {
+	if true then insert ( stepAwaitingAction(true)). % first action awaits percept
+	if true then insert ( step(-1)). % init server steps
+	if true then insert (agentAt(0,0)). % agent starting coordinate
+	if true then insert (haveMove(true)). % Semaphore of decision for step
+	if bel(randomDirection(X)) then insert (randomAffinity(X)). % random general direction to explore for agent
+}

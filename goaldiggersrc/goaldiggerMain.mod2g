@@ -1,0 +1,36 @@
+use goaldiggerProlog as knowledge.
+use goaldiggerAction as actionspec.
+exit=never.
+
+/**
+ * Macro definitions
+ *
+ */
+ 
+
+/**
+ * Main decision rules
+ *
+ */
+module goaldiggerMain {
+
+	% Server sends new percept and now agent strategy can continue
+    if bel( haveMove(false)) then {
+     
+    % random 90 degree move if blocked Obstacle main direction    
+    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
+    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, obstacle,_))), not(percept( thing(Xm, Ym, entity,_))) then {
+    		if percept(thing(Xn, Yn, obstacle,_))   then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) .
+    		if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) .
+        }
+    }
+    % Move into main affinity direction if possible
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, obstacle,_))), not(percept( thing(Xn, Yn, entity,_))) then 
+    	move(Dir) + delete(haveMove(false)) + insert(haveMove(true)) .
+    
+    % if no move decision skip and prepare idle mode
+    if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
+    
+    } % if haveMove(false)
+	
+} % module
