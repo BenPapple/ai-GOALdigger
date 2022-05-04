@@ -1,4 +1,4 @@
-use "eismassim-4.4-jar-with-dependencies.jar" as environment.
+use "..\eismassim-4.4-jar-with-dependencies.jar" as environment.
 
 /**
  * Program start file defining primary modules files and launches agents for server
