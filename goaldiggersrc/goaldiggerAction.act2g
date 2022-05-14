@@ -17,9 +17,9 @@ define skip with
 	
 % TODO conflict with GOAL keyword adopt
 % adopt role 
-%define adopt(Role) with
-%	pre { true }
-%	post { true }
+define adapt(Role) with
+	pre { true }
+	post { true }
 			
 % rotate Blocks
 define rotate(Direction) with

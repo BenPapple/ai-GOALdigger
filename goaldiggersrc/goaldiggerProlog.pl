@@ -25,6 +25,9 @@ randomDirection(Dir) :- random_between(0, 3, D),
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
 
+randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
+
+
 % helper function random to direction
 integerToDirection(0, n).
 integerToDirection(1, s).
@@ -46,3 +49,6 @@ directionToCoordinate(n, 0, -1).
 directionToCoordinate(s, 0, 1).
 directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
+
+numbertoRoles(0, worker).
+numbertoRoles(1, explorer).
