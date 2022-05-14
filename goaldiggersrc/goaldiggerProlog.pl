@@ -26,10 +26,14 @@ randomDirection(Dir) :- random_between(0, 3, D),
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
 
+% get random role
+randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
+
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
 calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
 calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
+
 
 % helper function random to direction
 integerToDirection(0, n).
@@ -52,6 +56,10 @@ directionToCoordinate(n, 0, -1).
 directionToCoordinate(s, 0, 1).
 directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
+
+% helper function number to roles
+numbertoRoles(0, worker).
+numbertoRoles(1, explorer).
 
 % helper function direction to opposite direction
 oppositeDirection(n, s).
@@ -82,3 +90,4 @@ rotateToDirection(w, cw, n).
 rotateToDirection(w, ccw, s).
 rotateToDirection(e, cw, s).
 rotateToDirection(e, ccw, n).
+

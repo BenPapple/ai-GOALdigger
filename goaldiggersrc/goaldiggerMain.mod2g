@@ -17,6 +17,7 @@ exit=never.
 module goaldiggerMain {
 
 	% Server sends new percept and now agent strategy can continue
+
     if bel(haveMove(false)) then { 
     
     %if true then survey(goal) + delete(haveMove(false)) + insert(haveMove(true)). 
@@ -47,9 +48,23 @@ module goaldiggerMain {
   
     % Debug wird in Init manuell gesetzt
     %if bel(lDebugOn(true)) then starttimer(calculationTimer,10,4000).   
+
     
-    % if no move decision skip and prepare idle mode
-    if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(roleZone(0, 0), role(default)), bel(randomRole(Role)) then print(xxxxxx + Role) + adapt(Role) + delete(haveMove(false)) + insert(haveMove(true)) + log(pb) + log(bb). 
+ 	    
+		% random 90 degree move if blocked Obstacle main direction    
+		if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
+			if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, obstacle,_))), not(percept( thing(Xm, Ym, entity,_))) then {
+				if percept(thing(Xn, Yn, obstacle,_))   then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) + log(pb) + log(bb).
+				if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) + log(pb) + log(bb).
+		    }
+		}
+		% Move into main affinity direction if possible
+		if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, obstacle,_))), not(percept( thing(Xn, Yn, entity,_))) then 
+			move(Dir) + delete(haveMove(false)) + insert(haveMove(true)) + log(pb) + log(bb).
+		
+		% if no move decision skip and prepare idle mode
+		if true then skip + delete(haveMove(false)) + insert(haveMove(true)) + log(pb) + log(bb).
     
     } % if haveMove(false)
 	
