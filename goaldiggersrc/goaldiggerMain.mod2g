@@ -1,5 +1,7 @@
 use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
+use "pathfinding/manhattanExecuteMove" as module.
+use "pathfinding/randomExecuteMove" as module.
 exit=never.
 
 /**
@@ -15,18 +17,36 @@ exit=never.
 module goaldiggerMain {
 
 	% Server sends new percept and now agent strategy can continue
-    if bel( haveMove(false)) then {
-     
-    % random 90 degree move if blocked Obstacle main direction    
-    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
-    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, obstacle,_))), not(percept( thing(Xm, Ym, entity,_))) then {
-    		if percept(thing(Xn, Yn, obstacle,_))   then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) .
-    		if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) .
-        }
+    if bel(haveMove(false)) then { 
+    
+    %if true then survey(goal) + delete(haveMove(false)) + insert(haveMove(true)). 
+    
+    % use dispenser
+    %if percept(thing(0, 0, dispenser, b1)), bel(randomDirection(Dir)) then request(Dir) + delete(haveMove(false)) + insert(haveMove(true)).
+    
+    %if percept(thing())
+    
+    % actions while having block attached
+    if bel(haveBlockAttached(true,DirBlock)) then {
+    
+    if bel(directionToCoordinate(DirBlock, A, B)), bel(randomAffinity(Dir), oppositeDirection(Dir, Dir3), Dir3 == DirBlock) then randomExecuteMove.
+    
+    if  bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, Dir3), Dir3 \= DirBlock, rotateAgainstAffinity(Dir, DirBlock, DirClock)) then rotate(DirClock).
+    %if  percept(thing(A, B, block, _), abs(A) =< 1, abs(B) =< 1), bel(randomAffinity(Dir), directionToCoordinate(Dir2, A, B), rotateAgainstAffinity(Dir, Dir2, Dir3)) then rotate(Dir3).
+    
     }
-    % Move into main affinity direction if possible
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, obstacle,_))), not(percept( thing(Xn, Yn, entity,_))) then 
-    	move(Dir) + delete(haveMove(false)) + insert(haveMove(true)) .
+    
+    %randomExecuteMove.
+    
+    
+    % Movement according to Manhatten Distance
+    if bel(executeManhattan(true)), not(bel(haveBlockAttached(true,_))) then manhattanExecuteMove.
+    
+    % execute random explorer move with affinity to one direction
+	if not(bel(haveBlockAttached(true,_))) then randomExecuteMove. 
+  
+    % Debug wird in Init manuell gesetzt
+    %if bel(lDebugOn(true)) then starttimer(calculationTimer,10,4000).   
     
     % if no move decision skip and prepare idle mode
     if true then skip + delete(haveMove(false)) + insert(haveMove(true)).

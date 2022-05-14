@@ -3,9 +3,10 @@
  *
  */
 
-:- dynamic stepAwaitingAction/1, haveMove/1, step/1.
+:- dynamic stepAwaitingAction/1, haveMove/1, step/1, elapseStepTime/1, lDebugOn/1.
 :- dynamic agentAt/2, thing/4, randomAffinity/1.
-
+:- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
+:- dynamic haveBlockAttached/2. 
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -24,6 +25,11 @@ randomDirection(Dir) :- random_between(0, 3, D),
 % get random 90 degree direction to initial affinity direction		
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
+
+% Calculate distance XY coordinates concerning target targetMd
+calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
+calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
+calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
 
 % helper function random to direction
 integerToDirection(0, n).
@@ -46,3 +52,33 @@ directionToCoordinate(n, 0, -1).
 directionToCoordinate(s, 0, 1).
 directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
+
+% helper function direction to opposite direction
+oppositeDirection(n, s).
+oppositeDirection(s, n).
+oppositeDirection(w, e).
+oppositeDirection(e, w).
+
+% helper function 2 directions to rotation
+rotateAgainstAffinity(n, n, cw).
+rotateAgainstAffinity(n, w, ccw).
+rotateAgainstAffinity(n, e, cw).
+rotateAgainstAffinity(w, n, cw).
+rotateAgainstAffinity(w, s, ccw).
+rotateAgainstAffinity(w, w, ccw).
+rotateAgainstAffinity(s, s, cw).
+rotateAgainstAffinity(s, w, ccw).
+rotateAgainstAffinity(s, e, cw).
+rotateAgainstAffinity(e, e, cw).
+rotateAgainstAffinity(e, n, ccw).
+rotateAgainstAffinity(e, s, cw).
+
+% helper function rotation to nswe
+rotateToDirection(n, cw, e).
+rotateToDirection(n, ccw, w).
+rotateToDirection(s, cw, w).
+rotateToDirection(s, ccw, e).
+rotateToDirection(w, cw, n).
+rotateToDirection(w, ccw, s).
+rotateToDirection(e, cw, s).
+rotateToDirection(e, ccw, n).
