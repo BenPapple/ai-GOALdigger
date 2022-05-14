@@ -8,31 +8,48 @@ use goaldiggerAction as actionspec.
 
 module goaldiggerEvent {
 
-% Update believe with percept information, insert new objects and delete disappeared objects
-	forall  bel((thing(X, Y, Type, Details))),  bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3)), percept(thing(X3, Y3, Type, Details)) do
-		delete(thing(X, Y, Type, Details)).
-	forall percept(thing(X, Y, Type, Details), not((X = 0, Y = 0))), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thing(X3, Y3, Type, Details)))) do
-		insert(thing(X3, Y3, Type, Details)).
-			
-	% Adopt goal when new step arrives and precondition apply
-	%if percept(step(X)), bel(step(Y), X\=Y), bel(stepAwaitingAction(true))  then delete(stepAwaitingAction(true)) + insert(stepAwaitingAction(false)) + adopt(stepAwaitingAction(true)) .
-	%if percept(step(X)), bel(step(Y), X\=Y)  then adopt(stepAwaitingAction(true)) .
-	
-	% Update step counter with new step when new percept step available
-	if percept(step(X)), bel(step(Y), X\=Y, X>0, haveMove(false)) then delete(step(Y)) + insert(step(X)) .	
-	if percept(step(X)), bel(step(Y), X\=Y, X>0, haveMove(true)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(true)) + insert(haveMove(false)) .
-	 
+	% true for logging percept base
+	if bel(lDebugOn(true)) then log(pb).
 	
 	% Managing server successful action messages
-	if percept(lastActionResult(success)) then {
+	forall percept(lastActionResult(success)) do {
 		% update XY position of agent
 		if percept(lastAction(move), lastActionParams([D])) then {
 			% update agent XY position with confirmed move nswe
 			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
 	
-		}
-				
-	}
+		} % move
+		
+	forall percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(false,Dold)) do delete(haveBlockAttached(false,Dold)) + insert(haveBlockAttached(true, Dir)).
+	
+	forall percept(lastAction(rotate), lastActionParams([Rot])), bel(haveBlockAttached(true,Dold), rotateToDirection(Dold, Rot, RotDir)) do delete(haveBlockAttached(true,Dold)) + insert(haveBlockAttached(true, RotDir)).
+	
+		 
+	}% lastaction success
+
+	% Update believe with percept information, insert new objects and delete disappeared objects
+	forall  bel((thing(X, Y, Type, Details))), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, entity, Details))), 
+	bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3)), percept(thing(X3, Y3, Type, Details)) do
+		delete(thing(X, Y, Type, Details)).
+	forall percept(thing(X, Y, Type, Details), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, entity, Details))), not((X = 0, Y = 0))), 
+	bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thing(X3, Y3, Type, Details)))) do
+		insert(thing(X3, Y3, Type, Details)).
+		
+	% store dispenser coordinates as targetMd
+	if percept(thing(X,Y,dispenser,b0)), bel(executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then delete(haveMove(false)) + insert(haveMove(true)) + 
+	delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
+
+	% Update step counter with new step when new percept step available
+	if percept(step(X)), bel(step(Y), X\=Y, X>0, haveMove(false)) then delete(step(Y)) + insert(step(X)).
+	% + starttimer(calculationTimer,1,4000).	
+	if percept(step(X)), bel(step(Y), X\=Y, X>0, haveMove(true)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(true)) + insert(haveMove(false)) + log(pb).
+	% + starttimer(calculationTimer,10,4000) .
+	
+	%forall percept(timer(_,T1)), bel(elapseStepTime(T2)) do 
+		%delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)). 
+	 
+	
+	
 	
 
 }
