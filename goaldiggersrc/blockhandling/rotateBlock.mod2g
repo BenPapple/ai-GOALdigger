@@ -33,6 +33,7 @@ module rotateBlock {
 
 	} % rotate random if block 90 degree
 	
+	% obligatory skip
 	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).  
 	
 } % module

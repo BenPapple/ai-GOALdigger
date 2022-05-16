@@ -3,6 +3,8 @@ use goaldiggerAction as actionspec.
 use "pathfinding/manhattanExecuteMove" as module.
 use "pathfinding/randomExecuteMove" as module.
 use "blockhandling/rotateBlock" as module.
+use "taskhandling/handleTaskSubmit" as module.
+
 exit=never.
 
 /**
@@ -20,13 +22,8 @@ module goaldiggerMain {
 	% Server sends new percept and Event sets haveMove(false) and now agent action strategy can continue
     if bel(haveMove(false)) then {
     
-    	% submit task
-    	if percept(task(Task,_,_,[req(X,Y,b0)]), goalZone(0,0)), bel(haveBlockAttached(true, DirBlock)) then {
-    	
-    	if percept(attached(X,Y)) then submit(Task) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if not(percept(attached(X,Y))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
-    	
-    	} % submit task
+    	% submit task if in goal zone with block and corresponding task available
+    	if percept(task(_,_,_,[req(_,_,b0)]), goalZone(0,0)), bel(haveBlockAttached(true, _)) then handleTaskSubmit.
     
    		% actions while having block attached
     	if bel(haveBlockAttached(true, DirBlock)) then {

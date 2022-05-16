@@ -1,0 +1,31 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Rotate logic clearing block/obstacles at rotate target and then rotates
+ *
+ */
+
+module handleTaskSubmit {
+
+	% rotate block according to task or submit task if block position as requested
+	if percept(task(_,_,_,[req(_,_,b0)])) then {
+		
+		% preconditions for submit achieved, submit task	
+    	if percept(attached(V, W), task(TaskFit,_,_,[req(V, W,b0)])) then submit(TaskFit) + delete(haveMove(false)) + insert(haveMove(true)).
+    	    	
+    	% rotate block to fit task, clear if necessary
+    	if bel(haveBlockAttached(true, DirBlock), rotateToCoord(DirBlock, cw, A, B)) then {
+    	
+	    	if not(percept(thing(A, B, obstacle, _))), not(percept(thing(A, B, block, _))), not(percept(thing(A, B, entity, _))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+	    	if percept(thing(A, B, obstacle, _)) then clear(A, B) + delete(haveMove(false)) + insert(haveMove(true)).
+			if percept(thing(A, B, block, _)) then clear(A, B) + delete(haveMove(false)) + insert(haveMove(true)).
+    	
+    	}
+    	
+    } % if percept(task(Task,_,_,[req(X,Y,b0)]))
+    
+    % obligatory skip
+	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).  
+		
+} % module
