@@ -90,7 +90,7 @@ rotateAgainstAffinity(w, s, ccw).
 rotateAgainstAffinity(w, w, ccw).
 rotateAgainstAffinity(s, s, cw).
 rotateAgainstAffinity(s, w, cw). % was this wrong ccw?
-rotateAgainstAffinity(s, e, cw).
+rotateAgainstAffinity(s, e, ccw).% cw auch falsch
 rotateAgainstAffinity(e, e, cw).
 rotateAgainstAffinity(e, n, ccw).
 rotateAgainstAffinity(e, s, cw).
