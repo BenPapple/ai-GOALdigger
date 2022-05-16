@@ -26,7 +26,6 @@ define request(Direction) with
 	pre { true }
 	post { true }
 	
-% TODO conflict with GOAL keyword adopt
 % adopt role 
 define adapt(Role) with
 	pre { true }

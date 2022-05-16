@@ -1,39 +1,54 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
-%exit = noaction.
+/**
+ * Handling movement, attaching and requesting when agent around dispenser
+ *
+ */
 
-module stepAndRequestAroundDispenser {
-
+module stepAndRequestAroundDispenser {	
 	
+	% Block attaching if in position
+	if  not(bel(haveBlockAttached(true,_))), bel(haveDispenserDelivery(true, X), step(Step), X  =< Step + 1), percept(thing(A, B, block, b0), abs(A) =< 1, abs(B) =< 1) then {
 	
-	
-	%Block attach
-	if  not(bel(haveBlockAttached(true,_))), percept(thing(A, B, block, b0), abs(A) =< 1, abs(B) =< 1) then {
-	
-	if percept(thing(1, 0, block,_)) then attach(e) + delete(haveMove(false)) + insert(haveMove(true)).
-	if percept(thing(-1, 0, block,_)) then attach(w) + delete(haveMove(false)) + insert(haveMove(true)).
-	if percept(thing(0, -1, block,_)) then attach(n) + delete(haveMove(false)) + insert(haveMove(true)).
-	if percept(thing(0, 1, block,_)) then attach(s) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(1, 0, block,_), thing(1, 0, dispenser,_)) then attach(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(-1, 0, block,_), thing(-1, 0, dispenser,_)) then attach(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(0, -1, block,_), thing(0, -1, dispenser,_)) then attach(n) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(0, 1, block,_), thing(0, 1, dispenser,_)) then attach(s) + delete(haveMove(false)) + insert(haveMove(true)).
 	
 	}
 	
-	%Block rotate
-	
+	% Moving into position nswe of dispenser and/or then request block from dispenser	
 	if  not(bel(haveBlockAttached(true,_))), percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1) then {
 
-	% nswe of dispenser
-	if percept(thing(1, 0, dispenser,_)) then request(e) + delete(haveMove(false)) + insert(haveMove(true)).
-	if percept(thing(-1, 0, dispenser,_)) then request(w) + delete(haveMove(false)) + insert(haveMove(true)).
-	if percept(thing(0, 1, dispenser,_)) then request(s) + delete(haveMove(false)) + insert(haveMove(true)).
-	if percept(thing(0, -1, dispenser,_)) then request(n) + delete(haveMove(false)) + insert(haveMove(true)).
+		% request block when nswe of dispenser
+		if percept(thing(1, 0, dispenser,_)), not(percept(thing(1, 0, block,_))) then request(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(-1, 0, dispenser,_)), not(percept(thing(-1, 0, block,_))) then request(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(0, 1, dispenser,_)), not(percept(thing(0, 1, block,_))) then request(s) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(0, -1, dispenser,_)), not(percept(thing(0, -1, block,_))) then request(n) + delete(haveMove(false)) + insert(haveMove(true)).
+		
+		% Dispenser is diagonal relative to agent, agents steps nswe of dispenser or prepares clear of movement target
+		if bel(A = 1, B = -1), bel(directionToCoordinate(e, C, D)), not(percept(thing(C, D, _, _))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(A = 1, B = -1), bel(directionToCoordinate(s, C, D)), not(percept(thing(C, D, _, _))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, block, _)), bel(directionToCoordinate(e, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, obstacle, _)), bel(directionToCoordinate(e, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		
+		if bel(A = -1, B = 1), bel(directionToCoordinate(n, C, D)), not(percept(thing(C, D, _, _))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(A = -1, B = 1), bel(directionToCoordinate(w, C, D)), not(percept(thing(C, D, _, _))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, block, _)), bel(directionToCoordinate(w, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, obstacle, _)), bel(directionToCoordinate(w, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		
+		if bel(A = -1, B = -1), bel(directionToCoordinate(w, C, D)), not(percept(thing(C, D, _, _))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(A = -1, B = -1), bel(directionToCoordinate(s, C, D)), not(percept(thing(C, D, _, _))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, block, _)), bel(directionToCoordinate(w, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, obstacle, _)), bel(directionToCoordinate(w, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		
+		if bel(A = 1, B = 1), bel(directionToCoordinate(e, C, D)), not(percept(thing(C, D, _, _))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(A = 1, B = 1), bel(directionToCoordinate(n, C, D)), not(percept(thing(C, D, _, _))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, block, _)), bel(directionToCoordinate(e, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(A, B, obstacle, _)), bel(directionToCoordinate(e, C, D)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
 	
-	% diagonal relative to dispenser
-	if bel(A = 1, B = -1) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
-	if bel(A = -1, B = 1) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
-	if bel(A = -1, B = -1) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
-	if bel(A = 1, B = 1) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
 	
-	}
+	} % if  not(bel(haveBlockAttached(true,_))), percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1)
 	
-}
+} % module

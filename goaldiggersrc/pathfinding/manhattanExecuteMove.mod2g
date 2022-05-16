@@ -3,14 +3,17 @@ use manhattanCalcModule as module.
 use manhattanChoiceModule as module.
 use stepAndRequestAroundDispenser as module.
 
-%exit = noaction.
+/**
+ * Manhattan Distance Controller organizing modules to execute move with Calculation and Actions
+ *
+ */
 
-% oragnizing modules to execute move with Calculation and Actions
 module manhattanExecuteMove {
 	
 	% handle situation when agent around dispenser
 	if percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1) then stepAndRequestAroundDispenser.
 	
-	
+	% Manhattan Magic
 	if true then manhattanCalcModule + manhattanChoiceModule.
-}
+	
+} % module
