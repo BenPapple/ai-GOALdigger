@@ -89,7 +89,7 @@ rotateAgainstAffinity(w, n, cw).
 rotateAgainstAffinity(w, s, ccw).
 rotateAgainstAffinity(w, w, ccw).
 rotateAgainstAffinity(s, s, cw).
-rotateAgainstAffinity(s, w, ccw).
+rotateAgainstAffinity(s, w, cw). % was this wrong ccw?
 rotateAgainstAffinity(s, e, cw).
 rotateAgainstAffinity(e, e, cw).
 rotateAgainstAffinity(e, n, ccw).

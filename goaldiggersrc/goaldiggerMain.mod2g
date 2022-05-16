@@ -18,7 +18,15 @@ exit=never.
 module goaldiggerMain {
 
 	% Server sends new percept and Event sets haveMove(false) and now agent action strategy can continue
-    if bel(haveMove(false)) then {   
+    if bel(haveMove(false)) then {
+    
+    	% submit task
+    	if percept(task(Task,_,_,[req(X,Y,b0)]), goalZone(0,0)), bel(haveBlockAttached(true, DirBlock)) then {
+    	
+    	if percept(attached(X,Y)) then submit(Task) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if not(percept(attached(X,Y))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+    	
+    	} % submit task
     
    		% actions while having block attached
     	if bel(haveBlockAttached(true, DirBlock)) then {

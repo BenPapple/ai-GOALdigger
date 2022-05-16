@@ -11,6 +11,17 @@ module goaldiggerEvent {
 	% true for logging percept base
 	if bel(lDebugOn(true)) then log(pb).
 	
+	% change affinity direction after X steps
+	if percept(step(X), X >= 2, 0 is mod(X, 80)), bel(randomDirection(Dir), randomAffinity(DirOld)) then delete (randomAffinity(DirOld)) + insert (randomAffinity(Dir)).
+	
+	% check attached block direction for block and if none found switch haveBlockAttached false
+	if bel(haveBlockAttached(true, DirBlock)), not(percept(attached(_, _))) then 
+	delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
+	
+	% update attached coordinates
+	if bel(haveBlockAttached(true, DirBlock)), percept(attached(A, B)), bel(directionToCoordinate(NewDir, A, B)) then 
+	delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(true, NewDir)).
+	
 	% check nswe for blocks and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, Dold)), not(percept(thing(0, 1, block, _))), not(percept(thing(1, 0, block, _))), not(percept(thing(-1, 0, block, _))), not(percept(thing(0, -1, block, _))) 
 	then delete(haveBlockAttached(true, Dold)) + insert(haveBlockAttached(false, Dold)).
@@ -29,10 +40,11 @@ module goaldiggerEvent {
 		} % move	
 
 		% succesfull rotate action handling
-		if percept(lastAction(rotate), lastActionParams([Rot])), bel(haveBlockAttached(true, Dold), rotateToDirection(Dold, Rot, RotDir)) then delete(haveBlockAttached(true,Dold)) + insert(haveBlockAttached(true, RotDir)).
+%		if percept(lastAction(rotate), lastActionParams([Rot])), bel(haveBlockAttached(true, Dold), rotateToDirection(Dold, Rot, NewDir)) then 
+%		delete(haveBlockAttached(true, Dold)) + insert(haveBlockAttached(true, NewDir)).
 		
 		% succesfull attach action handling
-		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(false,Dold)) then delete(haveBlockAttached(false,Dold)) + insert(haveBlockAttached(true, Dir)).		
+		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(false,Dold)) then delete(haveBlockAttached(false, Dold)) + insert(haveBlockAttached(true, Dir)).		
 		
 		% successful dispenser request
 		if percept(lastAction(request), step(Step)), bel(haveDispenserDelivery(false, X)) then delete(haveDispenserDelivery(false, X)) + insert(haveDispenserDelivery(true, Step)).
@@ -59,10 +71,6 @@ module goaldiggerEvent {
 	
 	% timer timing duration percept environment to chosing action
 	%forall percept(timer(_,T1)), bel(elapseStepTime(T2)) do 
-		%delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)). 
-	 
-	
-	
-	
+		%delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)).  
 
-}
+} % module
