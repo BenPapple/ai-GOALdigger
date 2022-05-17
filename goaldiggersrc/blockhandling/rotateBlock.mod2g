@@ -1,5 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
+use "../pathfinding/randomExecuteMove" as module.
 
 /**
  * Rotate logic clearing block/obstacles at rotate target and then rotates

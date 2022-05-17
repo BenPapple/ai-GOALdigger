@@ -3,7 +3,7 @@ use "../goaldiggerAction" as actionspec.
 use "stepAndRequestAroundDispenser" as module.
 use "randomExecuteMove" as module.
 
-order = linearrandom. % random choice between equal values randomall
+order = linearallrandom. % random choice between equal values randomall
 
 /**
  * Compares Manhattan Distance in stored fields nswe around agent and choses lowest value, if exist equal values random lowest chosen
@@ -13,7 +13,7 @@ order = linearrandom. % random choice between equal values randomall
 module manhattanChoiceModule {
 
 	% check if agent already at target
-	if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0)) then {
+	if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0, attached(_, _))) then {
 	
 		% Find field nswe with lowest value ManhattanDistance and chose randomly between equally valued and free target field
 		if bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
@@ -38,7 +38,13 @@ module manhattanChoiceModule {
 						    	
 		} % bel(nMd(X), sMd(Y), eMd(Z), wMd(V))
 	} % if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0))
+	
+	% manhattan movement with 1 block attached
+	%%%%%%%%%
+	%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%
+	
 		
-		% obligatory move continue action if above unsuccessful
-		if true then randomExecuteMove.
+	% obligatory move continue action if above unsuccessful
+	if true then randomExecuteMove.
 }

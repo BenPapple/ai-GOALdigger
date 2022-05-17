@@ -8,6 +8,8 @@
 :- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
 :- dynamic haveBlockAttached/2. 
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block
+:- dynamic skipThisStep/1.
+:- dynamic changeAffinityAfterTheseSteps/1.
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -34,12 +36,25 @@ randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
 randomRotate(Dir) :- random_between(0, 1, R),
 			integerToRotate(R, Dir).
 
+% Give random number for steps after which to change affinity			
+randomChangeStep(Rand) :- random_between(20, 80, Rand).
+
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
 
 % calculate minus or plus 1
 calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
 calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
+
+% return coordinates in front of attached block concerning move direction
+clearAttachedDirection(n, w, -1, 1).
+clearAttachedDirection(n, e, 1, 1).
+clearAttachedDirection(s, w, -1, -1).
+clearAttachedDirection(s, e, 1, -1).
+clearAttachedDirection(w, s, -1, -1).
+clearAttachedDirection(w, n, -1, 1).
+clearAttachedDirection(e, s, 1, -1).
+clearAttachedDirection(e, n, 1, 1).
 
 % helper function integer to rotate
 integerToRotate(0, cw).
@@ -114,4 +129,6 @@ rotateToCoord(w, cw, 0, -1).
 rotateToCoord(w, ccw, 0, 1).
 rotateToCoord(e, cw, 0, 1).
 rotateToCoord(e, ccw, 0, -1).
+
+
 

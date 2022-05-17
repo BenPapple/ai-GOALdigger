@@ -2,6 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use manhattanCalcModule as module.
 use manhattanChoiceModule as module.
 use stepAndRequestAroundDispenser as module.
+use randomExecuteMove as module.
 
 /**
  * Manhattan Distance Controller organizing modules to execute move with Calculation and Actions
@@ -10,8 +11,11 @@ use stepAndRequestAroundDispenser as module.
 
 module manhattanExecuteMove {
 	
+	% handle situation when agent on top of dispenser
+	if percept(thing(0, 0, dispenser, _), role(worker)) then randomExecuteMove.
+	
 	% handle situation when agent around dispenser
-	if percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1) then stepAndRequestAroundDispenser.
+	if percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1, role(worker)) then stepAndRequestAroundDispenser.
 	
 	% Manhattan Magic
 	if true then manhattanCalcModule + manhattanChoiceModule.
