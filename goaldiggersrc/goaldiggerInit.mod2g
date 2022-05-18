@@ -7,6 +7,8 @@ use goaldiggerProlog as knowledge.
 
 module goaldiggerInit {
 
+	if true then insert (lDebugOn(true)). % Variable für Debug, zB elapseStepTime
+	
 	if true then insert ( stepAwaitingAction(true)). % first action awaits percept
 	if true then insert ( step(-1)). % init server steps
 	if true then insert (agentAt(0,0)). % agent starting coordinate
@@ -14,7 +16,6 @@ module goaldiggerInit {
 	if bel(randomDirection(X)) then insert (randomAffinity(X)). % random general direction to explore for agent
 	if bel(randomChangeStep(X)) then insert (changeAffinityAfterTheseSteps(X)). %
 	if true then insert (elapseStepTime(0)). % Time measurement between step
-	if true then insert (lDebugOn(true)). % Variable für Debug, zB elapseStepTime
 	if true then insert (executeManhattan(false)). % init switch Manhatten Distance
 	if true then insert (targetMd(-700, -700)). % init Manhatten Distance 
 	if true then insert (nMd(0)). % ManhattanDistance for field north of agent

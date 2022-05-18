@@ -56,7 +56,7 @@ if bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 				    if bel(V =< Y, V =< Z, V =< X, D \= w, D \= e, clearAttachedDirection(w, D, A, B), rotateAgainstAffinity(w, D, Rot), rotateToDirection(D, Rot, TargetDir), 
 				    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, _,_)), not(percept( thing(M, N, _,_))) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
 					
-					% rotate to free fieldsbeside or behind agent
+					% rotate to free fields beside or behind agent
 					if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(1, 0, _,_))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
 					if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(-1, 0, _,_))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
 					if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, 1, _,_))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).

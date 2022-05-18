@@ -9,13 +9,14 @@ use goaldiggerAction as actionspec.
 module goaldiggerEvent {
 
 	% true for custom percept logging
-	if bel(lDebugOn(true)), percept(role(Role), deactivated(Status), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
-	print("====== Our Mini Percept =====") + print("Agent:"+Result+LastAction+Role+"Off:"+Status).
-	if bel(lDebugOn(true)), percept(role(Role), deactivated(Status), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
-	print("====== Our Mini Percept =====") + print("Agent:"+Result+LastAction+Para+Role+"Off:"+Status).
-	if bel(lDebugOn(true)), percept(role(Role), deactivated(Status), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
-	print("====== Our Mini Percept =====") + print("Agent:"+Result+LastAction+Para+Param2+Role+"Deactivated:"+Status).
+	if bel(lDebugOn(true)), percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
+	print("====== Our Mini Percept =====") + print(Step+Role+"Agent:"+Result+LastAction).
+	if bel(lDebugOn(true)), percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
+	print("====== Our Mini Percept =====") + print(Step+Role+"Agent:"+Result+LastAction+Para).
+	if bel(lDebugOn(true)), percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
+	print("====== Our Mini Percept =====") + print(Step+Role+"Agent:"+Result+LastAction+Para+Param2).
 	% extra custom percept logging because conditional can be false
+	if bel(lDebugOn(true)),percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener+"Deactivated:"+Status).
 	if bel(lDebugOn(true)),percept(attached(X, Y)) then print("Attached:"+X+Y).
 	if bel(lDebugOn(true)),percept(goalZone(0, 0)) then print("Agent is in GoalZone").
 	if bel(lDebugOn(true)),percept(roleZone(0, 0)) then print("Agent is in RoleZone").

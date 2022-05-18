@@ -24,10 +24,10 @@ module manhattanChoiceModule {
 		if bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 		
 				% move onto free fields
-		    	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, block,_))), not(percept(thing(0, -1, obstacle,_))), not(percept( thing(0, -1, entity,_))) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
-		    	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, block,_))), not(percept(thing(0, 1, obstacle,_))), not(percept( thing(0, 1, entity,_))) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
-		    	if bel(Z =< Y, Z =< X, Z =< V), not(percept(thing(1, 0, block,_))), not(percept(thing(1, 0, obstacle,_))), not(percept( thing(1, 0, entity,_))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
-		    	if bel(V =< Y, V =< Z, V =< X), not(percept(thing(-1, 0, block,_))), not(percept(thing(-1, 0, obstacle,_))), not(percept( thing(-1, 0, entity,_))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		    	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, _,_))) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
+		    	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, _,_))) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
+		    	if bel(Z =< Y, Z =< X, Z =< V), not(percept(thing(1, 0, _,_))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		    	if bel(V =< Y, V =< Z, V =< X), not(percept(thing(-1, 0, _,_))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
 				
 				% clear obstacles
 				if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, obstacle,_)) then clear(0, -1) + delete(haveMove(false)) + insert(haveMove(true)).
