@@ -51,11 +51,8 @@ module stepAndRequestAroundDispenser {
 	
 	}
 	
-	
-	
 	% Moving into position nswe of dispenser 
 	if  not(bel(haveBlockAttached(true,_))), percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1), not(percept(thing(A, B, block, _))) then {
-
 		
 		% Dispenser is diagonal relative to agent, agents steps nswe of dispenser or prepares clear of movement target
 		if bel(A = 1, B = -1), bel(directionToCoordinate(e, C, D)), not(percept(thing(C, D, _, _))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
@@ -78,10 +75,8 @@ module stepAndRequestAroundDispenser {
 		if bel(A = 1, B = 1), bel(directionToCoordinate(e, C, D)), not(percept(thing(C, D, _, _))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
 		if bel(A = 1, B = 1), bel(directionToCoordinate(n, X, Y)), not(percept(thing(X, Y, _, _))) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
 		if bel(directionToCoordinate(e, C, D)), percept(thing(C, D, obstacle, _)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(directionToCoordinate(e, C, D)), percept(thing(C, D, block, _)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(directionToCoordinate(e, C, D)), percept(thing(C, D, block, _)) then clear(C, D) + delete(haveMove(false)) + insert(haveMove(true)).		
 		
-	
-	
 	} % if  not(bel(haveBlockAttached(true,_))), percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1)
 	
 	% obligatory skip.

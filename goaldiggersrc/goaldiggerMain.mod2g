@@ -38,7 +38,7 @@ module goaldiggerMain {
     	% Movement according to Manhatten Distance
 	    if bel(executeManhattan(true)) then manhattanExecuteMove.
     
-   		% actions while having block attached
+   		% random movemement actions while having block attached
     	if bel(haveBlockAttached(true, DirBlock)) then {
     
     		% rotate block behind agent direction affinity
@@ -51,7 +51,7 @@ module goaldiggerMain {
     
     		} % if bel(haveBlockAttached(true, DirBlock))	    
 	    
-	    % execute random explorer move with affinity to one direction
+	    % execute random explorer move without attached blocks with affinity to one direction
 		if bel(haveBlockAttached(false,_)) then randomExecuteMove. 
 	
    		% if no move decision skip and prepare idle mode

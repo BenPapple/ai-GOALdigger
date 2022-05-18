@@ -41,7 +41,6 @@ module randomExecuteMove {
     } % random 90 degree
 
 	% obligatory skip
-	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
-   
+	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).   
 	
-} %randomExecuteMove
+} % module randomExecuteMove
