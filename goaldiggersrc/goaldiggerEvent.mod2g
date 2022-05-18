@@ -19,10 +19,10 @@ module goaldiggerEvent {
 			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para+Param2).
 		% extra custom percept logging because conditional can be false
 		if bel(agentAt(X, Y)) then print("AgentAt "| X| Y).
-		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener+"Deactivated:"+Status).
-		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi+"Change after:"+Change).
-		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan+"HaveBlock:"+BoolBlock+"HaveDelivery:"+BoolDelivery).		
-		if percept(attached(X, Y)) then print("Attached:"+X+Y).
+		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
+		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
+		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).		
+		if percept(attached(X, Y)) then print("Attached:"| X| Y).
 		if percept(goalZone(0, 0)) then print("Agent is in GoalZone").
 		if percept(roleZone(0, 0)) then print("Agent is in RoleZone").
 		if percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
