@@ -55,7 +55,7 @@ module goaldiggerMain {
 		if bel(haveBlockAttached(false,_)) then randomExecuteMove. 
 	
    		% if no move decision skip and prepare idle mode
-		if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(haveMove(false)) then skip + delete(haveMove(false)) + insert(haveMove(true)).
 	    
     } % if bel(haveMove(false))
 	

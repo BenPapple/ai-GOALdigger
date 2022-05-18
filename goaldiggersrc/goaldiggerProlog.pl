@@ -47,14 +47,22 @@ calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
 calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
 
 % return coordinates in front of attached block concerning move direction
-clearAttachedDirection(n, w, -1, 1).
-clearAttachedDirection(n, e, 1, 1).
-clearAttachedDirection(s, w, -1, -1).
-clearAttachedDirection(s, e, 1, -1).
-clearAttachedDirection(w, s, -1, -1).
-clearAttachedDirection(w, n, -1, 1).
-clearAttachedDirection(e, s, 1, -1).
-clearAttachedDirection(e, n, 1, 1).
+clearAttachedDirection(n, w, -1, -1).
+clearAttachedDirection(n, e, 1, -1).
+clearAttachedDirection(n, n, 0, -2).
+clearAttachedDirection(n, s, 0, -1).
+clearAttachedDirection(s, w, -1, 1).
+clearAttachedDirection(s, e, 1, 1).
+clearAttachedDirection(s, s, 0, 2).
+clearAttachedDirection(s, n, 0, 1).
+clearAttachedDirection(w, s, -1, 1).
+clearAttachedDirection(w, n, -1, -1).
+clearAttachedDirection(w, w, -2, 0).
+clearAttachedDirection(w, e, -1, 0).
+clearAttachedDirection(e, s, 1, 1).
+clearAttachedDirection(e, n, 1, -1).
+clearAttachedDirection(e, e, 2, 0).
+clearAttachedDirection(e, w, 1, 0).
 
 % helper function integer to rotate
 integerToRotate(0, cw).

@@ -2,8 +2,10 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "stepAndRequestAroundDispenser" as module.
 use "randomExecuteMove" as module.
+use "moveWithBlock" as module.
 
-order = linearallrandom. % random choice between equal values randomall
+
+order = linearrandom. % random choice between equal values randomall
 
 /**
  * Compares Manhattan Distance in stored fields nswe around agent and choses lowest value, if exist equal values random lowest chosen
@@ -11,6 +13,9 @@ order = linearallrandom. % random choice between equal values randomall
  */
 
 module manhattanChoiceModule {
+
+	% manhattan movement with 1 or 2 blocks attached
+	if percept(attached(_, _)) then moveWithBlock.
 
 	% check if agent already at target
 	if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0, attached(_, _))) then {
@@ -39,12 +44,8 @@ module manhattanChoiceModule {
 		} % bel(nMd(X), sMd(Y), eMd(Z), wMd(V))
 	} % if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0))
 	
-	% manhattan movement with 1 block attached
-	%%%%%%%%%
-	%%%%%%%%%%%%
-	%%%%%%%%%%%%%%%%
-	
+
 		
-	% obligatory move continue action if above unsuccessful
-	if true then randomExecuteMove.
+	% obligatory skip continue action if above unsuccessful
+	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
 }
