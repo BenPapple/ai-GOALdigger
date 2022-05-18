@@ -29,7 +29,7 @@ randomDirection(Dir) :- random_between(0, 3, D),
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
 
-% get random role
+% get random role ToDo STILL NECESSARY???
 randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
 
 % get random rotate direction
@@ -112,8 +112,8 @@ rotateAgainstAffinity(w, n, cw).
 rotateAgainstAffinity(w, s, ccw).
 rotateAgainstAffinity(w, w, ccw).
 rotateAgainstAffinity(s, s, cw).
-rotateAgainstAffinity(s, w, cw). % was this wrong ccw?
-rotateAgainstAffinity(s, e, ccw).% cw auch falsch
+rotateAgainstAffinity(s, w, cw). 
+rotateAgainstAffinity(s, e, ccw).
 rotateAgainstAffinity(e, e, cw).
 rotateAgainstAffinity(e, n, ccw).
 rotateAgainstAffinity(e, s, cw).

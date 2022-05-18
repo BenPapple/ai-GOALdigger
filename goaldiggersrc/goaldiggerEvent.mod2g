@@ -10,15 +10,16 @@ module goaldiggerEvent {
 
 	% debug true for custom percept logging
 	if bel(lDebugOn(true)) then {
-		% multiple times because of changing number of arguments, lastActionParams
+	
+		% multiple times because of changing number of arguments with var lastActionParams
 		if percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
 			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction).
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
 			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para).
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
 			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para+Param2).
-		% extra custom percept logging because conditional can be false
-		if bel(agentAt(X, Y)) then print("AgentAt "| X| Y).
+		% some extra extra custom percept logging because conditional can be false, others for formatting
+		if bel(agentAt(X, Y), targetMd(A, B)) then print("AgentAt: "| X| Y+"TargetMD: "| A| B).
 		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
 		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
 		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).		
@@ -27,8 +28,9 @@ module goaldiggerEvent {
 		if percept(roleZone(0, 0)) then print("Agent is in RoleZone").
 		if percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
 		if true then print("====== End Mini Percept =====").
-		% true for logging percept base
-		if bel(lDebugOn(true)) then log(pb).
+		% logging percept base, message base
+		if true then log(pb) + log(mb).
+		
 	} % debug
 	
 	% change affinity direction after X steps
@@ -80,6 +82,9 @@ module goaldiggerEvent {
 	% when role worker without block store first seen dispenser coordinates as targetMd
 	if percept(thing(X, Y, dispenser, b0), role(worker)), not(percept(attached(_, _))), bel(executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
+	
+	% when at manhattan target deactivate manhattan switch
+	if bel(targetMd(X, Y), agentAt(A, B), A==X, B==Y, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).	
 	
 	% when role worker on goalzone without block deactivate manhattan switch
 	if percept(goalZone(0, 0), role(worker)), not(percept(attached(_, _))), bel(executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).

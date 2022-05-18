@@ -35,6 +35,10 @@ module goaldiggerMain {
     	% submit task if in goal zone with block and corresponding task available
     	if percept(task(_,Step,_,[req(_,_,b0)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), Step >= SimStep) then handleTaskSubmit.
     	
+    	% wait in goal zone with block for right task
+    	if percept(goalZone(0,0)), bel(haveBlockAttached(true, _)) then handleTaskSubmit.
+    	
+    	
     	% Movement according to Manhatten Distance
 	    if bel(executeManhattan(true)) then manhattanExecuteMove.
     
