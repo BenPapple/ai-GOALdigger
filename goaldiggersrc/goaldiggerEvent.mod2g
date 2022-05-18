@@ -11,19 +11,20 @@ module goaldiggerEvent {
 	% debug true for custom percept logging
 	if bel(lDebugOn(true)) then {
 		% multiple times because of changing number of arguments, lastActionParams
-		if bel(lDebugOn(true)), percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
-			print("====== Our Mini Percept =====") + print(Step+Role+"Agent:"+Result+LastAction).
-		if bel(lDebugOn(true)), percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
-			print("====== Our Mini Percept =====") + print(Step+Role+"Agent:"+Result+LastAction+Para).
-		if bel(lDebugOn(true)), percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
-			print("====== Our Mini Percept =====") + print(Step+Role+"Agent:"+Result+LastAction+Para+Param2).
+		if percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
+			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction).
+		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
+			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para).
+		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
+			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para+Param2).
 		% extra custom percept logging because conditional can be false
-		if bel(lDebugOn(true)),percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener+"Deactivated:"+Status).
-		if bel(lDebugOn(true)),percept(attached(X, Y)) then print("Attached:"+X+Y).
-		if bel(lDebugOn(true)),percept(goalZone(0, 0)) then print("Agent is in GoalZone").
-		if bel(lDebugOn(true)),percept(roleZone(0, 0)) then print("Agent is in RoleZone").
-		if bel(lDebugOn(true)),percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
-		if bel(lDebugOn(true)) then print("====== End Mini Percept =====").
+		if bel(agentAt(X, Y)) then print("AgentAt "| X| Y).
+		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener+"Deactivated:"+Status).
+		if percept(attached(X, Y)) then print("Attached:"+X+Y).
+		if percept(goalZone(0, 0)) then print("Agent is in GoalZone").
+		if percept(roleZone(0, 0)) then print("Agent is in RoleZone").
+		if percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
+		if true then print("====== End Mini Percept =====").
 		% true for logging percept base
 		if bel(lDebugOn(true)) then log(pb).
 	} % debug
