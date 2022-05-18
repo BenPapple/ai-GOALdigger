@@ -1,0 +1,47 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+order = linearrandom.
+exit = always.
+
+/**
+ * Random Move Controller organizing modules to execute move with random
+ *
+ */
+
+module randomExecuteMove {
+
+    % random 90 degree move if blocked Obstacle main direction    
+    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
+    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, obstacle,_))), not(percept( thing(Xm, Ym, entity,_))), not(percept(thing(Xm, Ym, block,_))) then {
+    		if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)).
+    		if percept(thing(Xn, Yn, block,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)).
+        }
+        if  bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), not(percept(thing(Xm, Ym, obstacle,_))), not(percept( thing(Xm, Ym, entity,_))), not(percept(thing(Xm, Ym, block,_))) then {
+    		if percept(thing(Xn, Yn, entity,_)) then move(AltAltMove) + delete(haveMove(false)) + insert(haveMove(true)).
+    		if percept(thing(Xn, Yn, block,_)) then move(AltAltMove) + delete(haveMove(false)) + insert(haveMove(true)).
+        }
+    } % random 90 degree
+
+    % Move into main affinity direction if possible
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, obstacle,_))), not(percept( thing(Xn, Yn, entity,_))), not(percept(thing(Xn, Yn, block,_))) then 
+    	move(Dir) + delete(haveMove(false)) + insert(haveMove(true)).
+    	
+    % clear main affinity direction of obstacles and blocks
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, obstacle,_)) then clear(Xn, Yn) + delete(haveMove(false)) + insert(haveMove(true)).
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, block,_)) then clear(Xn, Yn) + delete(haveMove(false)) + insert(haveMove(true)).
+    
+    % clear if altmove blocked
+    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
+    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), percept(thing(Xm, Ym, obstacle,_)) then {
+    		if percept(thing(Xn, Yn, obstacle,_))   then clear(Xn, Yn) + delete(haveMove(false)) + insert(haveMove(true)).
+    		if percept(thing(Xn, Yn, block,_))   then clear(Xn, Yn) + delete(haveMove(false)) + insert(haveMove(true)).
+			%if percept(thing(Xn, Yn, obstacle,_)), bel(oppositeDirection(AltMove, NewAltDir), directionToCoordinate(NewAltDir, Xm, Ym)) then clear(Xm, Ym) + delete(haveMove(false)) + insert(haveMove(true)).
+        }
+    } % random 90 degree
+
+	% obligatory skip
+	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
+   
+	
+} %randomExecuteMove

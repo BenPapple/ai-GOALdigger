@@ -15,11 +15,21 @@ define skip with
 	pre { true }
 	post{ true }
 	
-% TODO conflict with GOAL keyword adopt
+	% clear obstacles
+define clear(X, Y) with
+	pre { true }
+	post { true }
+	
+			
+% request block
+define request(Direction) with
+	pre { true }
+	post { true }
+	
 % adopt role 
-%define adopt(Role) with
-%	pre { true }
-%	post { true }
+define adapt(Role) with
+	pre { true }
+	post { true }
 			
 % rotate Blocks
 define rotate(Direction) with
@@ -45,19 +55,10 @@ define connect(Agent, X, Y) with
 define disconnect(Agent, X, Y) with
 	pre { true }
 	post { true }	
-		
-% request block
-define request(Direction) with
-	pre { true }
-	post { true }
+
 	
 % submit task
 define submit(Task) with
-	pre { true }
-	post { true }
-	
-% clear obstacles
-define clear(X, Y) with
 	pre { true }
 	post { true }
 	

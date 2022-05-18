@@ -1,5 +1,10 @@
 use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
+use "pathfinding/manhattanExecuteMove" as module.
+use "pathfinding/randomExecuteMove" as module.
+use "blockhandling/rotateBlock" as module.
+use "taskhandling/handleTaskSubmit" as module.
+
 exit=never.
 
 /**
@@ -12,25 +17,46 @@ exit=never.
  * Main decision rules
  *
  */
+ 
 module goaldiggerMain {
 
-	% Server sends new percept and now agent strategy can continue
-    if bel( haveMove(false)) then {
-     
-    % random 90 degree move if blocked Obstacle main direction    
-    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
-    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, obstacle,_))), not(percept( thing(Xm, Ym, entity,_))) then {
-    		if percept(thing(Xn, Yn, obstacle,_))   then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) .
-    		if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)) .
-        }
-    }
-    % Move into main affinity direction if possible
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, obstacle,_))), not(percept( thing(Xn, Yn, entity,_))) then 
-    	move(Dir) + delete(haveMove(false)) + insert(haveMove(true)) .
+	% Server sends new percept and Event sets haveMove(false) and now agent action strategy can continue
+    if bel(haveMove(false)) then {
     
-    % if no move decision skip and prepare idle mode
-    if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
+    	% handle deactivated by skip
+    	if percept(deactivated(true)) then skip + delete(haveMove(false)) + insert(haveMove(true)).
     
-    } % if haveMove(false)
+    	% skip turn number skipThisStep
+    	if percept(step(Step)), bel(skipThisStep(SkipStep), SkipStep == Step) then skip + delete(haveMove(false)) + insert(haveMove(true)).
+    	
+    	% if oppurtunity arises adapt worker role until complex role module ready
+    	if percept(role(default), roleZone(0, 0)), bel(executeManhattan(true)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)) + delete(executeManhattan(true)) + insert(executeManhattan(false)). 
+    
+    	% submit task if in goal zone with block and corresponding task available
+    	if percept(task(_,Step,_,[req(_,_,b0)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), Step >= SimStep) then handleTaskSubmit.
+    	
+    	% Movement according to Manhatten Distance
+	    if bel(executeManhattan(true)) then manhattanExecuteMove.
+    
+   		% actions while having block attached
+    	if bel(haveBlockAttached(true, DirBlock)) then {
+    
+    		% rotate block behind agent direction affinity
+    		if  bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, OppoDir), DirBlock \== OppoDir) 
+    		then rotateBlock.
+    
+    		% if block behind agent concerning affinity direction move forward
+    		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, Dir3), Dir3 == DirBlock) 
+    		then randomExecuteMove.  
+    
+    		} % if bel(haveBlockAttached(true, DirBlock))	    
+	    
+	    % execute random explorer move with affinity to one direction
+		if bel(haveBlockAttached(false,_)) then randomExecuteMove. 
+	
+   		% if no move decision skip and prepare idle mode
+		if bel(haveMove(false)) then skip + delete(haveMove(false)) + insert(haveMove(true)).
+	    
+    } % if bel(haveMove(false))
 	
 } % module

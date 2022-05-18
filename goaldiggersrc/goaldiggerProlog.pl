@@ -3,9 +3,13 @@
  *
  */
 
-:- dynamic stepAwaitingAction/1, haveMove/1, step/1.
+:- dynamic stepAwaitingAction/1, haveMove/1, step/1, elapseStepTime/1, lDebugOn/1.
 :- dynamic agentAt/2, thing/4, randomAffinity/1.
-
+:- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
+:- dynamic haveBlockAttached/2. 
+:- dynamic haveDispenserDelivery/2. % switch dispenser delivered block
+:- dynamic skipThisStep/1.
+:- dynamic changeAffinityAfterTheseSteps/1.
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -24,6 +28,45 @@ randomDirection(Dir) :- random_between(0, 3, D),
 % get random 90 degree direction to initial affinity direction		
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
+
+% get random role
+randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
+
+% get random rotate direction
+randomRotate(Dir) :- random_between(0, 1, R),
+			integerToRotate(R, Dir).
+
+% Give random number for steps after which to change affinity			
+randomChangeStep(Rand) :- random_between(20, 80, Rand).
+
+% Calculate distance XY coordinates concerning target targetMd
+calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
+
+% calculate minus or plus 1
+calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
+calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
+
+% return coordinates in front of attached block concerning move direction
+clearAttachedDirection(n, w, -1, -1).
+clearAttachedDirection(n, e, 1, -1).
+clearAttachedDirection(n, n, 0, -2).
+clearAttachedDirection(n, s, 0, -1).
+clearAttachedDirection(s, w, -1, 1).
+clearAttachedDirection(s, e, 1, 1).
+clearAttachedDirection(s, s, 0, 2).
+clearAttachedDirection(s, n, 0, 1).
+clearAttachedDirection(w, s, -1, 1).
+clearAttachedDirection(w, n, -1, -1).
+clearAttachedDirection(w, w, -2, 0).
+clearAttachedDirection(w, e, -1, 0).
+clearAttachedDirection(e, s, 1, 1).
+clearAttachedDirection(e, n, 1, -1).
+clearAttachedDirection(e, e, 2, 0).
+clearAttachedDirection(e, w, 1, 0).
+
+% helper function integer to rotate
+integerToRotate(0, cw).
+integerToRotate(1, ccw).
 
 % helper function random to direction
 integerToDirection(0, n).
@@ -46,3 +89,54 @@ directionToCoordinate(n, 0, -1).
 directionToCoordinate(s, 0, 1).
 directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
+
+% helper function number to roles
+numbertoRoles(0, worker).
+numbertoRoles(1, explorer).
+
+% helper function direction to opposite direction
+oppositeDirection(n, s).
+oppositeDirection(s, n).
+oppositeDirection(w, e).
+oppositeDirection(e, w).
+
+% helper function direction to opposite rotate
+oppositeRotate(cw, ccw).
+oppositeRotate(ccw, cw).
+
+% helper function 2 directions to rotation
+rotateAgainstAffinity(n, n, cw).
+rotateAgainstAffinity(n, w, ccw).
+rotateAgainstAffinity(n, e, cw).
+rotateAgainstAffinity(w, n, cw).
+rotateAgainstAffinity(w, s, ccw).
+rotateAgainstAffinity(w, w, ccw).
+rotateAgainstAffinity(s, s, cw).
+rotateAgainstAffinity(s, w, cw). % was this wrong ccw?
+rotateAgainstAffinity(s, e, ccw).% cw auch falsch
+rotateAgainstAffinity(e, e, cw).
+rotateAgainstAffinity(e, n, ccw).
+rotateAgainstAffinity(e, s, cw).
+
+% helper function rotation to nswe
+rotateToDirection(n, cw, e).
+rotateToDirection(n, ccw, w).
+rotateToDirection(s, cw, w).
+rotateToDirection(s, ccw, e).
+rotateToDirection(w, cw, n).
+rotateToDirection(w, ccw, s).
+rotateToDirection(e, cw, s).
+rotateToDirection(e, ccw, n).
+
+% helper function rotation to coordinate nswe
+rotateToCoord(n, cw, 1, 0).
+rotateToCoord(n, ccw, -1, 0).
+rotateToCoord(s, cw, -1, 0).
+rotateToCoord(s, ccw, 1, 0).
+rotateToCoord(w, cw, 0, -1).
+rotateToCoord(w, ccw, 0, 1).
+rotateToCoord(e, cw, 0, 1).
+rotateToCoord(e, ccw, 0, -1).
+
+
+
