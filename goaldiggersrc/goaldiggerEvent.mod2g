@@ -8,6 +8,19 @@ use goaldiggerAction as actionspec.
 
 module goaldiggerEvent {
 
+	% true for custom percept logging
+	if bel(lDebugOn(true)), percept(role(Role), deactivated(Status), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
+	print("====== Our Mini Percept =====") + print("Agent:"+Result+LastAction+Role+"Off:"+Status).
+	if bel(lDebugOn(true)), percept(role(Role), deactivated(Status), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
+	print("====== Our Mini Percept =====") + print("Agent:"+Result+LastAction+Para+Role+"Off:"+Status).
+	if bel(lDebugOn(true)), percept(role(Role), deactivated(Status), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
+	print("====== Our Mini Percept =====") + print("Agent:"+Result+LastAction+Para+Param2+Role+"Deactivated:"+Status).
+	% extra custom percept logging because conditional can be false
+	if bel(lDebugOn(true)),percept(attached(X, Y)) then print("Attached:"+X+Y).
+	if bel(lDebugOn(true)),percept(goalZone(0, 0)) then print("Agent is in GoalZone").
+	if bel(lDebugOn(true)),percept(roleZone(0, 0)) then print("Agent is in RoleZone").
+	if bel(lDebugOn(true)),percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
+	if bel(lDebugOn(true)) then print("====== End Mini Percept =====").
 	% true for logging percept base
 	if bel(lDebugOn(true)) then log(pb).
 	
