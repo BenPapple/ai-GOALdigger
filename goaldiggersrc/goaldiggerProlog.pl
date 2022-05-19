@@ -8,6 +8,7 @@
 :- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
 :- dynamic haveBlockAttached/2. 
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block
+:- dynamic targetDispenserType/1. % block type of dispenser to search out for
 :- dynamic skipThisStep/1.
 :- dynamic changeAffinityAfterTheseSteps/1.
 
@@ -24,6 +25,9 @@ delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 - X2, Y3 is Y1 - Y2.
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
 			integerToDirection(D, Dir).
+			
+% skip random steps
+skipRandomSteps(SkipSteps) :- random_between(2, 6, SkipSteps).
 			
 % get random 90 degree direction to initial affinity direction		
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),

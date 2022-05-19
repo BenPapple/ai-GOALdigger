@@ -15,10 +15,10 @@ order = linearrandom. % random choice between equal values requires random; line
 module manhattanChoiceModule {
 
 	% manhattan movement with 1 or 2 blocks attached
-	if percept(attached(_, _)) then moveWithBlock.
+	if bel(haveBlockAttached(true, _)) then moveWithBlock.
 
 	% check if agent already at target
-	if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0, attached(_, _))), bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(false, _)), not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0)), bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 	
 		% Find field nswe with lowest value ManhattanDistance and chose randomly between equally valued and free target field
 		% move onto free fields

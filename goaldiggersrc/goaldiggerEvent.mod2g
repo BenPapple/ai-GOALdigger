@@ -37,20 +37,12 @@ module goaldiggerEvent {
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 is mod(X, ChangeStep)), bel(randomDirection(Dir), randomAffinity(DirOld)) then 
 		delete (randomAffinity(DirOld)) + insert (randomAffinity(Dir)).
 	
-	% check attached block direction for block and if none found switch haveBlockAttached false
-	if bel(haveBlockAttached(true, DirBlock), executeManhattan(Old)), not(percept(attached(_, _))) then 
-		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan(Old)) + insert(executeManhattan(false)).
-	
-	% update attached coordinates
-	if bel(haveBlockAttached(true, DirBlock)), percept(attached(A, B)), bel(directionToCoordinate(NewDir, A, B)) then 
-		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(true, NewDir)).
-	
 	% check old dispenser request and set switch to false
 	if percept(step(Step)), bel(haveDispenserDelivery(true, X), X =< Step + 3) then delete(haveDispenserDelivery(true, X)) + insert(haveDispenserDelivery(false, Step)).
 		
 	% Managing server partial_success action messages
 	forall percept(lastActionResult(partial_success)) do {	
-	% single move
+	% single move instead of two
 		if percept(lastAction(move), lastActionParams([D, _])) then {
 			% update agent XY position with confirmed move nswe
 			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
@@ -75,6 +67,12 @@ module goaldiggerEvent {
 		% succesfull attach action handling
 		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(false,Dold)) then delete(haveBlockAttached(false, Dold)) + insert(haveBlockAttached(true, Dir)).		
 		
+		% rotate update attached coordinates
+		if percept(lastAction(rotate), lastActionParams([Dir])), bel(haveBlockAttached(true, Dold), directionToCoordinate(Dnew, A, B), rotateToDirection(Dold, Dir, Dnew)), percept(attached(A, B)) then delete(haveBlockAttached(true, Dold)) + insert(haveBlockAttached(true, Dnew)).		
+		
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(attached(A, B)), bel(directionToCoordinate(NewDir, A, B)) then 
+		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(true, NewDir)).
+		
 		% successful dispenser request
 		if percept(lastAction(request), step(Step)), bel(haveDispenserDelivery(false, X)) then delete(haveDispenserDelivery(false, X)) + insert(haveDispenserDelivery(true, Step)).
 		
@@ -82,6 +80,10 @@ module goaldiggerEvent {
 		if percept(lastAction(submit)), bel(executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
 			 
 	}% lastaction success
+
+	% check attached block direction for block and if none found switch haveBlockAttached false
+	if bel(haveBlockAttached(true, DirBlock), executeManhattan(Old), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
+		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan(Old)) + insert(executeManhattan(false)).
 
 	% Update believe with percept information, insert new objects and delete disappeared objects
 	forall  bel((thing(X, Y, Type, Details))), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, entity, Details))), 
@@ -94,25 +96,26 @@ module goaldiggerEvent {
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
 
 	% when role worker without block store first seen dispenser coordinates as targetMd
-	if percept(thing(X, Y, dispenser, b0), role(worker)), not(percept(attached(_, _))), bel(executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
+	if percept(thing(X, Y, dispenser, b0), role(worker)), bel(haveBlockAttached(false,_), executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
 	
-	% when at manhattan target deactivate manhattan switch
-	if bel(targetMd(X, Y), agentAt(A, B), A==X, B==Y, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).	
-	
-	% when role worker on goalzone without block deactivate manhattan switch
-	if percept(goalZone(0, 0), role(worker)), not(percept(attached(_, _))), bel(executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
-
+	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
+	%if bel(targetMd(X, Y), agentAt(A, B), A==X, B==Y, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
+	if bel(targetMd(X, Y), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).	
+		
 	% when role worker with block put first seen goalzone coordinates as targetMd
-	if percept(attached(_, _), goalZone(X, Y), role(worker)), bel(executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
+	if percept(goalZone(X, Y), role(worker)), bel(haveBlockAttached(true,_), executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
 	
 	% when role worker with block put from percept seen goalzone coordinates as targetMd because of disappearing goalzones
-	if percept(attached(_, _), goalZone(X, Y), role(worker)), bel(executeManhattan(true), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
+	if percept(goalZone(X, Y), role(worker)), bel(executeManhattan(true), haveBlockAttached(true,_), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)).
 	
+	% when role worker on goalzone without block deactivate manhattan switch
+	if percept(goalZone(0, 0), role(worker)), bel(haveBlockAttached(false,_)), bel(executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
+	
 	% when role worker with block because of disappearing goalzones has to check if goal around manhattan target
-	if percept(attached(_, _), role(worker)), not(percept(goalZone(_, _))), bel(executeManhattan(true), agentAt(X2, Y2), targetMd(X4, Y4), abs(X2 - X4) + abs(Y2 - Y4) =< 2 ) then 
+	if percept(haveBlockAttached(true,_), role(worker)), not(percept(goalZone(_, _))), bel(executeManhattan(true), agentAt(X2, Y2), targetMd(X4, Y4), abs(X2 - X4) + abs(Y2 - Y4) =< 2 ) then 
 		delete(executeManhattan(true)) + insert(executeManhattan(false)).
 
 	% Update step counter with new step when new percept step available

@@ -10,10 +10,8 @@ order = linearrandom. % random choice between equal values requires random; line
 
 module moveWithBlock {
 
-%if bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-
 	% move onto free fields if block is behind agent concerning move direction
-	if percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
     	if bel(X =< Y, X =< Z, X =< V, D == s), not(percept(thing(0, -1, Type,_), Type \= dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
     	if bel(Y =< X, Y =< Z, Y =< V, D == n), not(percept(thing(0, 1, Type,_), Type \= dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
     	if bel(Z =< Y, Z =< X, Z =< V, D == w), not(percept(thing(1, 0, Type,_), Type \= dispenser)) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
@@ -21,7 +19,7 @@ module moveWithBlock {
 	}
 	
 	% move onto free fields if block is in front of agent concerning move direction
-	if percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
     	if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(0, -2, Type,_), Type \= dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
     	if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(0, 2, Type,_), Type \= dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
     	if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(2, 0, Type,_), Type \= dispenser)) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
@@ -29,7 +27,7 @@ module moveWithBlock {
 	}
 
 	% move onto free fields if front of agent and block is free
-	if percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
     	if bel(X =< Y, X =< Z, X =< V, D \= n, D \= s, clearAttachedDirection(n, D, A, B)), not(percept(thing(0, -1, Type,_), Type \= dispenser)), not(percept(thing(A, B, Type,_), Type \= dispenser)) then 
     		move(n) + delete(haveMove(false)) + insert(haveMove(true)).
 	    if bel(Y =< X, Y =< Z, Y =< V, D \= s, D \= n, clearAttachedDirection(s, D, A, B)), not(percept(thing(0, 1, Type,_), Type \= dispenser)), not(percept(thing(A, B, Type,_), Type \= dispenser)) then 
@@ -41,7 +39,7 @@ module moveWithBlock {
 	}
 
 	% check block in front of move direction
-	if percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 	
 		% clear obstacles in front of agent
 		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, obstacle,_)) then clear(0, -1) + delete(haveMove(false)) + insert(haveMove(true)).
@@ -94,6 +92,29 @@ module moveWithBlock {
 		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, -1, block,_)) then clear(0, -1) + delete(haveMove(false)) + insert(haveMove(true)).
 		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, -1, block,_)) then clear(0, -1) + delete(haveMove(false)) + insert(haveMove(true)).
 				   		    	
+	} % check block in front of move direction
+	
+	% escape move when recognizing other agent
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)), bel(skipThisStep(SkipStep), step(Step), skipRandomSteps(RandSteps)) then {
+	
+		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(Y =< X, Y =< Z, Y =< V), percept(thing(0, 1, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + delete(haveMove(false)) + insert(haveMove(true)).
+		
+%		if percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1), bel(skipThisStep(SkipStep), step(Step), skipRandomSteps(RandSteps)) then { 
+%			if percept(thing(1, 0, dispenser,_)) then 
+%			move(w) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+%			if percept(thing(-1, 0, dispenser,_)) then 
+%			move(e) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+%			if percept(thing(0, 1, dispenser,_)) then 
+%			move(n) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+%			if percept(thing(0, -1, dispenser,_)) then 
+%			move(s) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+	
 	}
-	%} % bel(nMd(X), sMd(Y), eMd(Z), wMd(V))
+	
+	
+	
+
 } % module

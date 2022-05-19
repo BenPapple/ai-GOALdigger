@@ -25,7 +25,7 @@ module randomExecuteMove {
 
     % Move into main affinity direction if possible
     % double speed
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(role(worker)), not(percept(attached(_,_))), not(percept(thing(Xn, Yn, Type,_), Type \= dispenser)), not(percept( thing(Xn+Xn, Yn+Yn, Type,_), Type \= dispenser)) then 
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), percept(role(worker)), not(percept(thing(Xn, Yn, Type,_), Type \= dispenser)), not(percept( thing(Xn+Xn, Yn+Yn, Type,_), Type \= dispenser)) then 
     	move(Dir, Dir) + print("I feel the need, the need for speed") + delete(haveMove(false)) + insert(haveMove(true)).
     % normal speed
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, Type,_), Type \= dispenser)) then 
