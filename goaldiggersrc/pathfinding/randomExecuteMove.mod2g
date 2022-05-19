@@ -13,11 +13,11 @@ module randomExecuteMove {
 
     % random 90 degree move if blocked Obstacle main direction    
     if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
-    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, _,_))) then {
+    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, Type,_), Type \= dispenser)) then {
     		if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)).
     		if percept(thing(Xn, Yn, block,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)).
         }
-        if  bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), not(percept(thing(Xm, Ym, _,_))) then {
+        if  bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), not(percept(thing(Xm, Ym, Type,_), Type \= dispenser)) then {
     		if percept(thing(Xn, Yn, entity,_)) then move(AltAltMove) + delete(haveMove(false)) + insert(haveMove(true)).
     		if percept(thing(Xn, Yn, block,_)) then move(AltAltMove) + delete(haveMove(false)) + insert(haveMove(true)).
         }
@@ -25,10 +25,10 @@ module randomExecuteMove {
 
     % Move into main affinity direction if possible
     % double speed
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(role(worker)), not(percept(attached(_,_))), not(percept(thing(Xn, Yn, _,_))), not(percept( thing(Xn+Xn, Yn+Yn, _,_))) then 
-    	move(Dir, Dir) + print("Woooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooschhhhhhhhhhh") +delete(haveMove(false)) + insert(haveMove(true)).
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(role(worker)), not(percept(attached(_,_))), not(percept(thing(Xn, Yn, Type,_), Type \= dispenser)), not(percept( thing(Xn+Xn, Yn+Yn, Type,_), Type \= dispenser)) then 
+    	move(Dir, Dir) + print("I feel the need, the need for speed") + delete(haveMove(false)) + insert(haveMove(true)).
     % normal speed
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, _,_))) then 
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, Type,_), Type \= dispenser)) then 
     	move(Dir) + delete(haveMove(false)) + insert(haveMove(true)).
     	
     % clear main affinity direction of obstacles and blocks

@@ -22,10 +22,10 @@ module manhattanChoiceModule {
 	
 		% Find field nswe with lowest value ManhattanDistance and chose randomly between equally valued and free target field
 		% move onto free fields
-    	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, _,_))) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, _,_))) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Z =< Y, Z =< X, Z =< V), not(percept(thing(1, 0, _,_))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(V =< Y, V =< Z, V =< X), not(percept(thing(-1, 0, _,_))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, Type,_), Type \= dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, Type,_), Type \= dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Z =< Y, Z =< X, Z =< V), not(percept(thing(1, 0, Type,_), Type \= dispenser)) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(V =< Y, V =< Z, V =< X), not(percept(thing(-1, 0, Type,_), Type \= dispenser)) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
 		
 		% clear obstacles
 		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, obstacle,_)) then clear(0, -1) + delete(haveMove(false)) + insert(haveMove(true)).

@@ -46,7 +46,7 @@ module goaldiggerEvent {
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(true, NewDir)).
 	
 	% check old dispenser request and set switch to false
-	if percept(step(Step)), bel(haveDispenserDelivery(true, X), X =< Step + 5) then delete(haveDispenserDelivery(true, X)) + insert(haveDispenserDelivery(false, Step)).
+	if percept(step(Step)), bel(haveDispenserDelivery(true, X), X =< Step + 3) then delete(haveDispenserDelivery(true, X)) + insert(haveDispenserDelivery(false, Step)).
 		
 	% Managing server partial_success action messages
 	forall percept(lastActionResult(partial_success)) do {	

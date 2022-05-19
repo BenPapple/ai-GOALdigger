@@ -14,29 +14,29 @@ module moveWithBlock {
 
 	% move onto free fields if block is behind agent concerning move direction
 	if percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-    	if bel(X =< Y, X =< Z, X =< V, D == s), not(percept(thing(0, -1, _,_))) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Y =< X, Y =< Z, Y =< V, D == n), not(percept(thing(0, 1, _,_))) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Z =< Y, Z =< X, Z =< V, D == w), not(percept(thing(1, 0, _,_))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(V =< Y, V =< Z, V =< X, D == e), not(percept(thing(-1, 0, _,_))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(X =< Y, X =< Z, X =< V, D == s), not(percept(thing(0, -1, Type,_), Type \= dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Y =< X, Y =< Z, Y =< V, D == n), not(percept(thing(0, 1, Type,_), Type \= dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Z =< Y, Z =< X, Z =< V, D == w), not(percept(thing(1, 0, Type,_), Type \= dispenser)) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(V =< Y, V =< Z, V =< X, D == e), not(percept(thing(-1, 0, Type,_), Type \= dispenser)) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
 	}
 	
 	% move onto free fields if block is in front of agent concerning move direction
 	if percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-    	if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(0, -2, _,_))) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(0, 2, _,_))) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(2, 0, _,_))) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(-2, 0, _,_))) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(0, -2, Type,_), Type \= dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(0, 2, Type,_), Type \= dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(2, 0, Type,_), Type \= dispenser)) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(-2, 0, Type,_), Type \= dispenser)) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
 	}
 
 	% move onto free fields if front of agent and block is free
 	if percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-    	if bel(X =< Y, X =< Z, X =< V, D \= n, D \= s, clearAttachedDirection(n, D, A, B)), not(percept(thing(0, -1, _,_))), not(percept(thing(A, B, _,_))) then 
+    	if bel(X =< Y, X =< Z, X =< V, D \= n, D \= s, clearAttachedDirection(n, D, A, B)), not(percept(thing(0, -1, Type,_), Type \= dispenser)), not(percept(thing(A, B, Type,_), Type \= dispenser)) then 
     		move(n) + delete(haveMove(false)) + insert(haveMove(true)).
-	    if bel(Y =< X, Y =< Z, Y =< V, D \= s, D \= n, clearAttachedDirection(s, D, A, B)), not(percept(thing(0, 1, _,_))), not(percept(thing(A, B, _,_))) then 
+	    if bel(Y =< X, Y =< Z, Y =< V, D \= s, D \= n, clearAttachedDirection(s, D, A, B)), not(percept(thing(0, 1, Type,_), Type \= dispenser)), not(percept(thing(A, B, Type,_), Type \= dispenser)) then 
 	    	move(s) + delete(haveMove(false)) + insert(haveMove(true)).
-	    if bel(Z =< Y, Z =< X, Z =< V, D \= e, D \= w, clearAttachedDirection(e, D, A, B)), not(percept(thing(1, 0, _,_))), not(percept(thing(A, B, _,_))) then 
+	    if bel(Z =< Y, Z =< X, Z =< V, D \= e, D \= w, clearAttachedDirection(e, D, A, B)), not(percept(thing(1, 0, Type,_), Type \= dispenser)), not(percept(thing(A, B, Type,_), Type \= dispenser)) then 
 	    	move(e) + delete(haveMove(false)) + insert(haveMove(true)).
-	    if bel(V =< Y, V =< Z, V =< X, D \= w, D \= e, clearAttachedDirection(w, D, A, B)), not(percept(thing(-1, 0, _,_))), not(percept(thing(A, B, _,_))) then 
+	    if bel(V =< Y, V =< Z, V =< X, D \= w, D \= e, clearAttachedDirection(w, D, A, B)), not(percept(thing(-1, 0, Type,_), Type \= dispenser)), not(percept(thing(A, B, Type,_), Type \= dispenser)) then 
 	    	move(w) + delete(haveMove(false)) + insert(haveMove(true)).
 	}
 
@@ -57,23 +57,23 @@ module moveWithBlock {
 	
 		% rotate to avoid non empty fields in front of block
     	if bel(X =< Y, X =< Z, X =< V, D \= n, D \= s, clearAttachedDirection(n, D, A, B), rotateAgainstAffinity(n, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-    		directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, _,_)), not(percept( thing(M, N, _,_))) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
+    		directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \= dispenser), not(percept( thing(M, N, Type,_), Type \= dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
 	    if bel(Y =< X, Y =< Z, Y =< V, D \= s, D \= n, clearAttachedDirection(s, D, A, B), rotateAgainstAffinity(s, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, _,_)), not(percept( thing(M, N, _,_))) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
+	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \= dispenser), not(percept( thing(M, N, Type,_), Type \= dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
 	    if bel(Z =< Y, Z =< X, Z =< V, D \= e, D \= w, clearAttachedDirection(e, D, A, B), rotateAgainstAffinity(e, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, _,_)), not(percept( thing(M, N, _,_))) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
+	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \= dispenser), not(percept( thing(M, N, Type,_), Type \= dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
 	    if bel(V =< Y, V =< Z, V =< X, D \= w, D \= e, clearAttachedDirection(w, D, A, B), rotateAgainstAffinity(w, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, _,_)), not(percept( thing(M, N, _,_))) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
+	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \= dispenser), not(percept( thing(M, N, Type,_), Type \= dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
 		
 		% rotate to free fields beside or behind agent
-		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(1, 0, _,_))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(-1, 0, _,_))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, 1, _,_))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, -1, _,_))) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(-1, 0, _,_))) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(1, 0, _,_))) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, -1, _,_))) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, 1, _,_))) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(1, 0, Type,_), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(-1, 0, Type,_), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, 1, Type,_), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, -1, Type,_), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(-1, 0, Type,_), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(1, 0, Type,_), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, -1, Type,_), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, 1, Type,_), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
 	
 		% clear rotate position closest to south
 		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(1, 0, obstacle,_)) then clear(1, 0) + delete(haveMove(false)) + insert(haveMove(true)).

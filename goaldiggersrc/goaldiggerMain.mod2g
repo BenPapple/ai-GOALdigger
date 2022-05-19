@@ -37,8 +37,7 @@ module goaldiggerMain {
     	
     	% wait in goal zone with block for right task
     	if percept(goalZone(0,0)), bel(haveBlockAttached(true, _)) then handleTaskSubmit.
-    	
-    	
+    	    	
     	% Movement according to Manhatten Distance
 	    if bel(executeManhattan(true)) then manhattanExecuteMove.
     
