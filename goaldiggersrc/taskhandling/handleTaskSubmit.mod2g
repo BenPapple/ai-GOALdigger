@@ -13,19 +13,50 @@ module handleTaskSubmit {
 	if percept(task(_,Step,_,[req(_,_,b0)])), bel(step(SimStep), Step >= SimStep) then {
 		
 		% preconditions for submit achieved, submit task	
-    	if percept(attached(V, W), task(TaskFit,Step,_,[req(V, W, b0)])), bel(step(SimStep), Step >= SimStep) then submit(TaskFit) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), task(TaskFit,Step,_,[req(V, W, b0)])), bel(step(SimStep), Step >= SimStep) then 
+    		submit(TaskFit) + delete(haveMove(false)) + insert(haveMove(true)).
+    	    	
+    	% prefer rotate to south position
+	    if bel(haveBlockAttached(true, DirBlock)) then {
+	
+		if bel(DirBlock == w), not(percept(thing(0, -1, Type, _), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(DirBlock == e), not(percept(thing(0, -1, Type, _), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(DirBlock == s) then skip + delete(haveMove(false)) + insert(haveMove(true)).
+	
+		}	
     	    	
     	% rotate block to fit task, clear if necessary
     	if bel(haveBlockAttached(true, DirBlock), randomRotate(RandRot), rotateToCoord(DirBlock, RandRot, A, B)) then {
     	
-	    	if not(percept(thing(A, B, obstacle, _))), not(percept(thing(A, B, block, _))), not(percept(thing(A, B, entity, _))) then rotate(RandRot) + delete(haveMove(false)) + insert(haveMove(true)).
-	    	if percept(thing(A, B, obstacle, _)) then clear(A, B) + delete(haveMove(false)) + insert(haveMove(true)).
-			if percept(thing(A, B, block, _)) then clear(A, B) + delete(haveMove(false)) + insert(haveMove(true)).
+	    	if not(percept(thing(A, B, Type, _), Type \= dispenser)) then rotate(RandRot) + delete(haveMove(false)) + insert(haveMove(true)).
+	    	if percept(thing(A, B, obstacle, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \= A, W \= B) then clear(A, B) + delete(haveMove(false)) + insert(haveMove(true)).
+			if percept(thing(A, B, block, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \= A, W \= B) then clear(A, B) + delete(haveMove(false)) + insert(haveMove(true)).
     	
     	}
     	
     } % if percept(task(Task,_,_,[req(X,Y,b0)]))
     
+    % waiting in goalzone with block for task and prefer rotate to south position
+    if bel(haveBlockAttached(true, DirBlock)) then {
+
+	if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \= dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \= dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(DirBlock == s) then skip + delete(haveMove(false)) + insert(haveMove(true)).
+	if percept(thing(-1, 0, obstacle, _)) then clear(-1, 0) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \= -1, W \= 0), percept(thing(-1, 0, block, _)) then clear(-1, 0) + delete(haveMove(false)) + insert(haveMove(true)).
+	if percept(thing(0, -1, obstacle, _)) then clear(0, 1) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \= 0, W \= -1), percept(thing(0, -1, block, _)) then clear(0, 1) + delete(haveMove(false)) + insert(haveMove(true)).
+	if percept(thing(1, 0, obstacle, _)) then clear(1, 0) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \= 1, W \= 0), percept(thing(1, 0, block, _)) then clear(1, 0) + delete(haveMove(false)) + insert(haveMove(true)).
+	if percept(thing(0, 1, obstacle, _)) then clear(0, 1) + delete(haveMove(false)) + insert(haveMove(true)).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \= 0, W \= 1), percept(thing(0, 1, block, _)) then clear(0, 1) + delete(haveMove(false)) + insert(haveMove(true)).
+
+	}	
+
     % obligatory skip/randomExecuteMove
 	if true then randomExecuteMove + delete(haveMove(false)) + insert(haveMove(true)).  
 		

@@ -4,6 +4,7 @@ use "pathfinding/manhattanExecuteMove" as module.
 use "pathfinding/randomExecuteMove" as module.
 use "blockhandling/rotateBlock" as module.
 use "taskhandling/handleTaskSubmit" as module.
+use "pathfinding/stepAndRequestAroundDispenser" as module.
 
 exit=never.
 
@@ -12,7 +13,6 @@ exit=never.
  *
  */
  
-
 /**
  * Main decision rules
  *
@@ -26,8 +26,9 @@ module goaldiggerMain {
     	% handle deactivated by skip
     	if percept(deactivated(true)) then skip + delete(haveMove(false)) + insert(haveMove(true)).
     
-    	% skip turn number skipThisStep
-    	if percept(step(Step)), bel(skipThisStep(SkipStep), SkipStep == Step) then skip + delete(haveMove(false)) + insert(haveMove(true)).
+    	% agents want to be free randomExploreMove / skip turn number skipThisStep    	
+    	if percept(step(Step)), bel(skipThisStep(SkipStep), Step =< SkipStep) then randomExecuteMove.
+    	%if percept(step(Step)), bel(skipThisStep(SkipStep), SkipStep == Step) then skip + delete(haveMove(false)) + insert(haveMove(true)).
     	
     	% if oppurtunity arises adapt worker role until complex role module ready
     	if percept(role(default), roleZone(0, 0)), bel(executeManhattan(true)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)) + delete(executeManhattan(true)) + insert(executeManhattan(false)). 
@@ -35,10 +36,16 @@ module goaldiggerMain {
     	% submit task if in goal zone with block and corresponding task available
     	if percept(task(_,Step,_,[req(_,_,b0)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), Step >= SimStep) then handleTaskSubmit.
     	
+    	% wait in goal zone with block for right task
+    	if percept(goalZone(0,0)), bel(haveBlockAttached(true, _)) then handleTaskSubmit.
+    	
+    	% Movement around dispenser
+	    if percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1, role(worker)), bel(executeManhattan(false), haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
+    	    	
     	% Movement according to Manhatten Distance
 	    if bel(executeManhattan(true)) then manhattanExecuteMove.
-    
-   		% actions while having block attached
+	    
+	    % random movemement actions while having block attached
     	if bel(haveBlockAttached(true, DirBlock)) then {
     
     		% rotate block behind agent direction affinity
@@ -51,7 +58,7 @@ module goaldiggerMain {
     
     		} % if bel(haveBlockAttached(true, DirBlock))	    
 	    
-	    % execute random explorer move with affinity to one direction
+	    % execute random explorer move without attached blocks with affinity to one direction
 		if bel(haveBlockAttached(false,_)) then randomExecuteMove. 
 	
    		% if no move decision skip and prepare idle mode
