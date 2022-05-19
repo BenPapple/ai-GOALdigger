@@ -37,7 +37,7 @@ randomRotate(Dir) :- random_between(0, 1, R),
 			integerToRotate(R, Dir).
 
 % Give random number for steps after which to change affinity			
-randomChangeStep(Rand) :- random_between(20, 80, Rand).
+randomChangeStep(Rand) :- random_between(20, 50, Rand).
 
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).

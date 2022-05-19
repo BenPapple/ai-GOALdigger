@@ -10,6 +10,11 @@ define move(Direction) with
 	pre{ true }
 	post{ true }
 	
+% move agent in world, direction like compass nswe
+define move(Direction, Direction2) with
+	pre{ true }
+	post{ true }
+	
 % skip move and do no action
 define skip with
 	pre { true }

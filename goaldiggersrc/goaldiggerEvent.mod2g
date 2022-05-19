@@ -17,9 +17,9 @@ module goaldiggerEvent {
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
 			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para).
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
-			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para+Param2).
+			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
 		% some extra extra custom percept logging because conditional can be false, others for formatting
-		if bel(agentAt(X, Y), targetMd(A, B)) then print("AgentAt: "| X| Y+"TargetMD: "| A| B).
+		if bel(agentAt(X, Y), targetMd(A, B)) then print("Last step AgentAt: "| X| Y+"TargetMD: "| A| B).
 		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
 		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
 		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).		
@@ -48,14 +48,28 @@ module goaldiggerEvent {
 	% check old dispenser request and set switch to false
 	if percept(step(Step)), bel(haveDispenserDelivery(true, X), X =< Step + 5) then delete(haveDispenserDelivery(true, X)) + insert(haveDispenserDelivery(false, Step)).
 		
+	% Managing server partial_success action messages
+	forall percept(lastActionResult(partial_success)) do {	
+	% single move
+		if percept(lastAction(move), lastActionParams([D, _])) then {
+			% update agent XY position with confirmed move nswe
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
+			}
+	} % lastaction partial_success
+		
 	% Managing server success action messages
 	forall percept(lastActionResult(success)) do {
 	
 		% update XY position of agent
+		% single move
 		if percept(lastAction(move), lastActionParams([D])) then {
 			% update agent XY position with confirmed move nswe
-			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
-	
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
+		} % double move	
+		if percept(lastAction(move), lastActionParams([D, D2])) then {
+			% update agent XY position with confirmed move nswe
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
+			if bel(agentAt(X, Y), transformXYD(D2, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
 		} % move	
 
 		% succesfull attach action handling
