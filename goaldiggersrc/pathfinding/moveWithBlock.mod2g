@@ -1,6 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
+
 order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
 
 /**
@@ -102,19 +103,7 @@ module moveWithBlock {
 		if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + delete(haveMove(false)) + insert(haveMove(true)).
 		if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + delete(haveMove(false)) + insert(haveMove(true)).
 		
-%		if percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1), bel(skipThisStep(SkipStep), step(Step), skipRandomSteps(RandSteps)) then { 
-%			if percept(thing(1, 0, dispenser,_)) then 
-%			move(w) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-%			if percept(thing(-1, 0, dispenser,_)) then 
-%			move(e) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-%			if percept(thing(0, 1, dispenser,_)) then 
-%			move(n) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-%			if percept(thing(0, -1, dispenser,_)) then 
-%			move(s) + delete(haveMove(false)) + insert(haveMove(true)) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-	
 	}
-	
-	
-	
+
 
 } % module

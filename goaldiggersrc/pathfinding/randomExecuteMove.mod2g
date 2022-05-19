@@ -48,3 +48,4 @@ module randomExecuteMove {
 	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).   
 	
 } % module randomExecuteMove
+

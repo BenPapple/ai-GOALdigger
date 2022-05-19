@@ -16,6 +16,7 @@ module rotateBlock {
 	 	 % rotate if free
 		 if not(percept(thing(X, Y, Type, _), Type \= dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
 		 if not(percept(thing(F, G, Type, _), Type \= dispenser)) then rotate(AltRot) + delete(haveMove(false)) + insert(haveMove(true)).
+
 		 % clear blocked rotate targets
 		 if percept(thing(X, Y, obstacle, _)) then clear(X, Y) + delete(haveMove(false)) + insert(haveMove(true)).
 		 if percept(thing(X, Y, block, _)) then clear(X, Y) + delete(haveMove(false)) + insert(haveMove(true)).

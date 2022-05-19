@@ -4,7 +4,6 @@ use "stepAndRequestAroundDispenser" as module.
 use "randomExecuteMove" as module.
 use "moveWithBlock" as module.
 
-
 order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
 
 /**
@@ -40,6 +39,7 @@ module manhattanChoiceModule {
     	if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, block,_)) then clear(-1, 0) + delete(haveMove(false)) + insert(haveMove(true)).						    	
 
 	} % if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0))
+
 		
 	% obligatory skip continue action if above unsuccessful
 	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
