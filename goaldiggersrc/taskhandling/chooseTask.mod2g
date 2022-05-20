@@ -9,36 +9,39 @@ use "../pathfinding/randomExecuteMove" as module.
 
 module chooseTask {
 
+	% choose 1-block tasks if it exists
+	if percept(task(TaskName ,TaskStep, Reward,[req(Xt,Yt,BlockType)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
+		
+		if bel(executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
+		delete(executeManhattan(Old)) + insert(executeManhattan(false)) + delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, TaskStep, Reward, Xt, Yt, BlockType)).
+		
+	} % if
+
+	% choose 1-block tasks if random dispenser has fitting block
+	if percept(task(TaskName ,TaskStep, Reward,[req(Xt,Yt,BlockType)])), bel(thing(A, B, dispenser, BlockType)), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
+		
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) + 
+		delete(executeManhattan(Old)) + insert(executeManhattan(true)) + delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, TaskStep, Reward, Xt, Yt, BlockType)).
+		
+	} % if
+	
 	% choose 1-block tasks if closest dispenser has fitting block
 	if bel(targetDispenserXY(A, B, BlockType, _), BlockType \= bx), percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 40) then {
 		
-		if bel(targetMd(X, Y), executeManhattan(Old), currentChoosenTask(V1, V2, V3, V4, V5, V6), haveTaskUntil(StepOld)) then 
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
 		delete(targetMd(X, Y)) + insert(targetMd(A, B)) + delete(executeManhattan(Old)) + insert(executeManhattan(true))
-		+ delete(currentChoosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChoosenTask(TaskName, Reward, Step, X, Y, BlockType))
-		+ delete(haveTaskUntil(StepOld)) + insert(haveTaskUntil(Step)).
+		+ delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, Step, Reward, X, Y, BlockType)).
 		
-	} % if
+	} % if	
 	
-		% choose 1-block tasks if random dispenser has fitting block
-	if percept(task(TaskName ,TaskStep, Reward,[req(X,Y,BlockType)])), bel(thing(A, B, dispenser, BlockType)), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
-		
-		if bel(targetMd(X, Y), executeManhattan(Old), currentChoosenTask(V1, V2, V3, V4, V5, V6), haveTaskUntil(StepOld)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) + 
-		delete(executeManhattan(Old)) + insert(executeManhattan(true)) + delete(currentChoosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChoosenTask(TaskName, Reward, TaskStep, X, Y, BlockType))
-		+ delete(haveTaskUntil(StepOld)) + insert(haveTaskUntil(TaskStep)).
-		
-	} % if
-	
-	% choose 1-block tasks if it exists
-	if percept(task(TaskName ,TaskStep, Reward,[req(X,Y,BlockType)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
-		
-		if bel(targetMd(X, Y), executeManhattan(Old), currentChoosenTask(V1, V2, V3, V4, V5, V6), haveTaskUntil(StepOld)) then 
-		delete(executeManhattan(Old)) + insert(executeManhattan(false)) + delete(currentChoosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChoosenTask(TaskName, Reward, TaskStep, X, Y, BlockType))
-		+ delete(haveTaskUntil(StepOld)) + insert(haveTaskUntil(TaskStep)).
-		
-	} % if
+%	if percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])) then {
+%		
+%		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(ben, 111, 20, X, Y, BlockType)).
+%		
+%	} % if	
 	
 	
 	% obligatory skip/randommove
-	if true then randomExecuteMove.
+%	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
 	
 } % module

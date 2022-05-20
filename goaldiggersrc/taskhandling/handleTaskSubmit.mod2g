@@ -10,10 +10,10 @@ use "../pathfinding/randomExecuteMove" as module.
 module handleTaskSubmit {
 
 	% rotate block according to task or submit task if block position as requested
-	if percept(task(_,Step,_,[req(_,_,b0)])), bel(step(SimStep), Step >= SimStep) then {
+	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,Step,_,[req(_,_,BlockType)])), bel(step(SimStep), Step >= SimStep) then {
 		
 		% preconditions for submit achieved, submit task	
-    	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), task(TaskFit,Step,_,[req(V, W, b0)])), bel(step(SimStep), Step >= SimStep) then 
+    	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), task(TaskFit,Step,_,[req(V, W, BlockType)])), bel(step(SimStep), Step >= SimStep) then 
     		submit(TaskFit) + delete(haveMove(false)) + insert(haveMove(true)).
     	    	
     	% prefer rotate to south position
@@ -36,7 +36,7 @@ module handleTaskSubmit {
     	
     	}
     	
-    } % if percept(task(Task,_,_,[req(X,Y,b0)]))
+    } % if percept(task(Task,_,_,[req(X,Y,BlockType)]))
     
     % waiting in goalzone with block for task and prefer rotate to south position
     if bel(haveBlockAttached(true, DirBlock)) then {

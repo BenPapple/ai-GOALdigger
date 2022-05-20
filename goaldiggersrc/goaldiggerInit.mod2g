@@ -22,7 +22,7 @@ module goaldiggerInit {
 	if true then insert	(targetDispenserType(b0)).
 	
 	% tasks
-	if true then insert(haveTaskUntil(1000000)). % set 1 million so because of large size always choses initial task in main
+	if true then insert(currentChosenTask(nameTask, -11001001, 10 , 0, 1, b0)).
 		
 	% manhattan distance
 	if true then insert (targetMd(-900, -900)). % init Manhatten Distance 

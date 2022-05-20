@@ -12,8 +12,7 @@
 :- dynamic targetDispenserXY/4. % XY of dispenser to search out for
 :- dynamic skipThisStep/1. % do skip/explore until this step
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
-:- dynamic haveTaskUntil/1. % steps to focus on chosen task until task expired
-:- dynamic currentChoosenTask/6. % task the agent has chosen and works on
+:- dynamic currentChosenTask/6. % task the agent has chosen and works on
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -37,7 +36,7 @@ random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
 
 % get random role ToDo STILL NECESSARY???
-randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
+%randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
 
 % get random rotate direction
 randomRotate(Dir) :- random_between(0, 1, R),
@@ -98,8 +97,8 @@ directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
 
 % helper function number to roles
-numbertoRoles(0, worker).
-numbertoRoles(1, explorer).
+%numbertoRoles(0, worker).
+%numbertoRoles(1, explorer).
 
 % helper function direction to opposite direction
 oppositeDirection(n, s).

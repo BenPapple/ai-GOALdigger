@@ -20,6 +20,7 @@ module goaldiggerEvent {
 			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
 		% some extra extra custom percept logging because conditional can be false, others for formatting
 		if bel(agentAt(X, Y), targetMd(A, B)) then print("Last step AgentAt: "| X| Y+"TargetMD: "| A| B).
+		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType).
 		if bel(targetDispenserXY(X2, Y2, BlockTypeNew, Md)) then print("TargetDispenser: "| X2| Y2+"Block Distance: "| BlockTypeNew| Md).		
 		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
 		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
@@ -99,10 +100,10 @@ module goaldiggerEvent {
 	
 	% Update Manhattan Distance in believe for all dispensers
 	% first delete target MD values and insert 1 million(agent should never encounter such a big map and always put in new Md)
-	if bel(targetDispenserXY(A, B, BlockType, Distance)) then delete(targetDispenserXY(A, B, BlockType, Distance)) + insert(targetDispenserXY(A, B, BlockType, 1000000)).
-	forall  bel(currentChoosenTask(_, _, TaskStep, _, _, BlockType), TaskStep =< SimStep, agentAt(X1, Y1), thing(X2, Y2, dispenser, BlockTypeNew), calculateXYMd(X1, Y1, X2, Y2, Md)) do {
+	if bel(targetDispenserXY(A, B, BlockType, Distance)) then delete(targetDispenserXY(A, B, BlockType, Distance)) + insert(targetDispenserXY(699, 699, b1, 999999)).
+	forall  percept(step(SimStep)),bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep, agentAt(X1, Y1), thing(X2, Y2, dispenser, BlockType), calculateXYMd(X1, Y1, X2, Y2, Md)) do {
 		
-		if bel(targetDispenserXY(A, B, BlockType,  Distance), Md =< Distance) then delete(targetDispenserXY(A, B, BlockType, Distance)) + insert(targetDispenserXY(X2, Y2, BlockTypeNew, Md)).
+		if bel(targetDispenserXY(A, B, BlockType, Distance), Md =< Distance) then delete(targetDispenserXY(A, B, BlockType, Distance)) + insert(targetDispenserXY(X2, Y2, BlockType, Md)).
 		
 		}
 		
@@ -111,7 +112,7 @@ module goaldiggerEvent {
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
 
 %	% when role worker without block store first seen dispenser coordinates as targetMd
-%	if percept(thing(X, Y, dispenser, b0), role(worker)), bel(haveBlockAttached(false,_), executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
+%	if percept(thing(X, Y, dispenser, BlockType), role(worker)), bel(haveBlockAttached(false,_), executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 %		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
 	
 	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
