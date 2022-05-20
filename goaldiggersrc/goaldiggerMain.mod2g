@@ -40,18 +40,18 @@ module goaldiggerMain {
     	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
     	
     	% detach block if task does not fit
-    	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), role(worker)), 
-    		bel(currentChosenTask(_, _, _, _, _, BlockType), BlockType \= BlockTypeAttached) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), role(worker), step(SimStep)), 
+    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, SimStep =< TaskStep) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)).
     
     	% submit task if in goal zone with block and corresponding task available
-    	if bel(currentChosenTask(_, _, _, _, _, BlockType), BlockType \= bx), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), TaskStep >= SimStep) 
+    	if bel(currentChosenTask(_, _, _, _, _, BlockType), BlockType \== bx), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), TaskStep >= SimStep) 
     	then handleTaskSubmit.
     	
     	% wait in goal zone with block for right task
     	if percept(goalZone(0,0), step(SimStep)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.
     	
     	% Movement around dispenser
-	    if bel(targetDispenserXY(_, _, BlockType, _), BlockType \= bx), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), 
+	    if bel(targetDispenserXY(_, _, BlockType, _), BlockType \== bx), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), 
 	    	bel(executeManhattan(false), haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
     	    	
     	% Movement according to Manhatten Distance

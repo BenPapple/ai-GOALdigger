@@ -18,11 +18,11 @@ module goaldiggerInit {
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
 	
 	% dispenser
-	if true then insert (targetDispenserXY(-700, -700, bx, 1000000)). % init Manhatten Distance 
+	if true then insert (targetDispenserXY(70, 70, bx, 751)). % init Manhatten Distance 
 	if true then insert	(targetDispenserType(b0)).
 	
 	% tasks
-	if true then insert(currentChosenTask(nameTask, -11001001, 10 , 0, 1, b0)).
+	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)).
 		
 	% manhattan distance
 	if true then insert (targetMd(-900, -900)). % init Manhatten Distance 

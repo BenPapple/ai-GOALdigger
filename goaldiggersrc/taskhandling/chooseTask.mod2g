@@ -17,7 +17,7 @@ module chooseTask {
 		
 	} % if
 
-	% choose 1-block tasks if random dispenser has fitting block
+	% choose 1-block tasks if random known dispenser has fitting block
 	if percept(task(TaskName ,TaskStep, Reward,[req(Xt,Yt,BlockType)])), bel(thing(A, B, dispenser, BlockType)), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
 		
 		if bel(targetMd(X, Y), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) + 
@@ -26,7 +26,7 @@ module chooseTask {
 	} % if
 	
 	% choose 1-block tasks if closest dispenser has fitting block
-	if bel(targetDispenserXY(A, B, BlockType, _), BlockType \= bx), percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 40) then {
+	if percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])), bel(targetDispenserXY(A, B, BlockType, _), BlockType \== bx), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 40) then {
 		
 		if bel(targetMd(X, Y), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
 		delete(targetMd(X, Y)) + insert(targetMd(A, B)) + delete(executeManhattan(Old)) + insert(executeManhattan(true))
