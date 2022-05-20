@@ -4,6 +4,7 @@ use "pathfinding/manhattanExecuteMove" as module.
 use "pathfinding/randomExecuteMove" as module.
 use "blockhandling/rotateBlock" as module.
 use "taskhandling/handleTaskSubmit" as module.
+use "taskhandling/chooseTask" as module.
 use "pathfinding/stepAndRequestAroundDispenser" as module.
 
 exit=never.
@@ -31,16 +32,21 @@ module goaldiggerMain {
     	%if percept(step(Step)), bel(skipThisStep(SkipStep), SkipStep == Step) then skip + delete(haveMove(false)) + insert(haveMove(true)).
     	
     	% if oppurtunity arises adapt worker role until complex role module ready
-    	if percept(role(default), roleZone(0, 0)), bel(executeManhattan(true)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)) + delete(executeManhattan(true)) + insert(executeManhattan(false)). 
+    	if percept(role(default), roleZone(0, 0)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)). 
+    	%if percept(role(default), roleZone(0, 0)), bel(executeManhattan(true)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)) + delete(executeManhattan(true)) + insert(executeManhattan(false)). 
+        
+    	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    	% as worker change task when task expired or initial task has 1 million steps
+    	if percept(step(Step), role(worker)), bel(haveTaskUntil(LastStepOfTask), LastStepOfTask > Step) then chooseTask.
     
     	% submit task if in goal zone with block and corresponding task available
-    	if percept(task(_,Step,_,[req(_,_,b0)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), Step >= SimStep) then handleTaskSubmit.
+    	if bel(targetDispenserXY(_, _, BlockType, _)), percept(task(_,Step,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), Step >= SimStep) then handleTaskSubmit.
     	
     	% wait in goal zone with block for right task
-    	if percept(goalZone(0,0)), bel(haveBlockAttached(true, _)) then handleTaskSubmit.
+    	if percept(goalZone(0,0), step(SimStep)), bel(haveBlockAttached(true, _), currentChoosenTask(V1, V2, TaskStep, V4, V5, V6), TaskStep =< SimStep) then handleTaskSubmit.
     	
     	% Movement around dispenser
-	    if percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1, role(worker)), bel(executeManhattan(false), haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
+	    if bel(targetDispenserXY(_, _, BlockType, _)), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), bel(executeManhattan(false), haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
     	    	
     	% Movement according to Manhatten Distance
 	    if bel(executeManhattan(true)) then manhattanExecuteMove.

@@ -1,0 +1,44 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../pathfinding/randomExecuteMove" as module.
+
+/**
+ * Choose task from options when having corresponding role
+ *
+ */
+
+module chooseTask {
+
+	% choose 1-block tasks if closest dispenser has fitting block
+	if bel(targetDispenserXY(A, B, BlockType, _), BlockType \= bx), percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 40) then {
+		
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChoosenTask(V1, V2, V3, V4, V5, V6), haveTaskUntil(StepOld)) then 
+		delete(targetMd(X, Y)) + insert(targetMd(A, B)) + delete(executeManhattan(Old)) + insert(executeManhattan(true))
+		+ delete(currentChoosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChoosenTask(TaskName, Reward, Step, X, Y, BlockType))
+		+ delete(haveTaskUntil(StepOld)) + insert(haveTaskUntil(Step)).
+		
+	} % if
+	
+		% choose 1-block tasks if random dispenser has fitting block
+	if percept(task(TaskName ,TaskStep, Reward,[req(X,Y,BlockType)])), bel(thing(A, B, dispenser, BlockType)), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
+		
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChoosenTask(V1, V2, V3, V4, V5, V6), haveTaskUntil(StepOld)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) + 
+		delete(executeManhattan(Old)) + insert(executeManhattan(true)) + delete(currentChoosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChoosenTask(TaskName, Reward, TaskStep, X, Y, BlockType))
+		+ delete(haveTaskUntil(StepOld)) + insert(haveTaskUntil(TaskStep)).
+		
+	} % if
+	
+	% choose 1-block tasks if it exists
+	if percept(task(TaskName ,TaskStep, Reward,[req(X,Y,BlockType)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
+		
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChoosenTask(V1, V2, V3, V4, V5, V6), haveTaskUntil(StepOld)) then 
+		delete(executeManhattan(Old)) + insert(executeManhattan(false)) + delete(currentChoosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChoosenTask(TaskName, Reward, TaskStep, X, Y, BlockType))
+		+ delete(haveTaskUntil(StepOld)) + insert(haveTaskUntil(TaskStep)).
+		
+	} % if
+	
+	
+	% obligatory skip/randommove
+	if true then randomExecuteMove.
+	
+} % module

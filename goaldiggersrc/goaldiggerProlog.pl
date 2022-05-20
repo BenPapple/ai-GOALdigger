@@ -9,8 +9,11 @@
 :- dynamic haveBlockAttached/2. 
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block
 :- dynamic targetDispenserType/1. % block type of dispenser to search out for
-:- dynamic skipThisStep/1.
-:- dynamic changeAffinityAfterTheseSteps/1.
+:- dynamic targetDispenserXY/4. % XY of dispenser to search out for
+:- dynamic skipThisStep/1. % do skip/explore until this step
+:- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
+:- dynamic haveTaskUntil/1. % steps to focus on chosen task until task expired
+:- dynamic currentChoosenTask/6. % task the agent has chosen and works on
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.

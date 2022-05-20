@@ -16,9 +16,16 @@ module goaldiggerInit {
 	if true then insert (executeManhattan(false)). % init switch Manhatten Distance
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
+	
+	% dispenser
+	if true then insert (targetDispenserXY(-700, -700, bx, 1000000)). % init Manhatten Distance 
+	if true then insert	(targetDispenserType(b0)).
+	
+	% tasks
+	if true then insert(haveTaskUntil(1000000)). % set 1 million so because of large size always choses initial task in main
 		
 	% manhattan distance
-	if true then insert (targetMd(-700, -700)). % init Manhatten Distance 
+	if true then insert (targetMd(-900, -900)). % init Manhatten Distance 
 	if true then insert (nMd(0)). % ManhattanDistance for field north of agent
 	if true then insert (sMd(0)). % ManhattanDistance for field south of agent
 	if true then insert (eMd(0)). % ManhattanDistance for field east of agent
