@@ -19,8 +19,8 @@ module handleTaskSubmit {
     	% prefer rotate to south position
 	    if bel(haveBlockAttached(true, DirBlock)) then {
 	
-		if bel(DirBlock == w), not(percept(thing(0, -1, Type, _), Type \== dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
-		if bel(DirBlock == e), not(percept(thing(0, -1, Type, _), Type \== dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
 		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)).
 		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)).
 		if bel(DirBlock == s) then skip + delete(haveMove(false)) + insert(haveMove(true)).

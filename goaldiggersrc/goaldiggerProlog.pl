@@ -14,6 +14,8 @@
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
 :- dynamic currentChosenTask/6. % task the agent has chosen and works on
 :- dynamic thingDispenser/5. % dispenser percept data plus MD
+:- dynamic storedGoalZone/3. % goalzone percept data plus MD
+:- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -21,9 +23,9 @@ transformXYD(s, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 + 1.
 transformXYD(e, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 + 1.
 transformXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 1.
 
-% Update position XY in relation to agent position
+% Update position XY in relation to agent position X2 Y2
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
-delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 - X2, Y3 is Y1 - Y2.
+delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1).
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),

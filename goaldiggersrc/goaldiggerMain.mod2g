@@ -44,6 +44,9 @@ module goaldiggerMain {
     	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), 
     		step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
     	
+    	% Move to goal zone
+	    if bel(haveBlockAttached(true, _), executeManhattan(true)), percept(task(_,TaskStep,_,[req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep) then manhattanExecuteMove.
+        	
     	% wait in goal zone with block for right task
     	if percept(goalZone(0,0), step(SimStep)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.
     	

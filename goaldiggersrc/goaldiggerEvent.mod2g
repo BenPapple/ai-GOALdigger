@@ -21,7 +21,8 @@ module goaldiggerEvent {
 		% some extra extra custom percept logging because conditional can be false, others for formatting
 		if bel(agentAt(X, Y), targetMd(A, B)) then print("Last step AgentAt: "| X| Y+"TargetMD: "| A| B).
 		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType).
-		if bel(targetDispenserAt(X2, Y2, BlockTypeNew, Md)) then print("TargetDispenser: "| X2| Y2+"Block Distance: "| BlockTypeNew| Md).		
+		if bel(targetDispenserAt(X2, Y2, BlockTypeNew, Md)) then print("TargetDispenser: "| X2| Y2+"Block+Distance: "| BlockTypeNew| Md).
+		if bel(targetClosestGoalZone(X, Y, MD)) then print("TargetGoalZone: "| X| Y+"Distance: "| MD).				
 		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
 		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
 		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).		
@@ -35,12 +36,84 @@ module goaldiggerEvent {
 		
 	} % debug
 	
+	% haveBlockAttached true has to happen here before calculating goalzone to enable immediately in turn MD calculation when attach handling
+	if percept(lastActionResult(success), lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(BoolOld2, Dold)) then 
+		delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)).
+	
+	/**
+	 * GOALZONE MAP
+	 *
+	 */
+	
+	% remove disappeared goalzones
+	forall bel(storedGoalZone(X, Y, _)), bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3), abs(X3) + abs(Y3) =< 5), not(percept((goalZone(X3, Y3)))) do {
+		if bel(storedGoalZone(X, Y, Md)) then delete(storedGoalZone(X, Y, Md)).
+	}	
+	% store unknown goalzones with MD field
+	forall percept(goalZone(X, Y)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedGoalZone(X3, Y3, _)))) do 
+		insert(storedGoalZone(X3, Y3, 0)).
+	% reset old MD values in storedgoalzones to high number expected to not occur in simulation
+	forall bel(storedGoalZone(XAlt, YAlt, MdAlt), haveBlockAttached(true,_)), percept(role(worker)) do delete(storedGoalZone(XAlt, YAlt, MdAlt)) 
+		+ insert(storedGoalZone(XAlt, YAlt, 1234567)).
+		
+	% reset old MD values in targetgoalzones to high number expected to not occur in simulation
+	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), haveBlockAttached(true,_)), percept(role(worker)) then delete(targetClosestGoalZone(XAlt, YAlt, MdAlt)) 
+		+ insert(targetClosestGoalZone(XAlt, YAlt, 1234567)).		
+		
+				
+	% calculate MD for all stored in bel goalzones
+	forall bel(storedGoalZone(X, Y, MdAlt), haveBlockAttached(true,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {	 
+		if bel(storedGoalZone(X, Y, MdAlt)) then delete(storedGoalZone(X, Y, MdAlt)) + insert(storedGoalZone(X, Y, Md)).	
+	}
+		
+	% compare lowest MD value for ALL stored goalzones 
+	forall bel(storedGoalZone(X2, Y2, MDZone), haveBlockAttached(true,_), targetClosestGoalZone(X, Y, MDTarget), MDZone < MDTarget), percept(role(worker)) 
+		do {
+	if bel(targetClosestGoalZone(X, Y, MDTarget)) then delete(targetClosestGoalZone(X, Y, MDTarget)) + 
+		insert(targetClosestGoalZone(X2, Y2, MDZone)).	
+	}
+
+	/**
+	 * DISPENSER MAP
+	 *
+	 */
+	
+	% store unknown dispensers with MD field
+	forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thingDispenser(X3, Y3, dispenser, Details, _)))) do 
+		insert(thingDispenser(X3, Y3, dispenser, Details, 0)).
+	% reset old MD values in targetDispenserAt to high number expected to not occur in simulation
+	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) 
+		+ insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
+	% reset old MD values in targetClosestOfAllDispensersAt to high number expected to not occur in simulation
+	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) 
+		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
+	% calculate MD for all stored in bel dispensers
+	forall bel(thingDispenser(X, Y, dispenser, Details, MDValue), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {	 
+		if bel(thingDispenser(X, Y, dispenser, Details, MDValue)) then delete(thingDispenser(X, Y, dispenser, Details, MDValue)) + insert(thingDispenser(X, Y, dispenser, Details, Md)).	
+	}
+	% compare lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
+	forall bel(currentChosenTask(_, _, _, _, _, BlockType), haveBlockAttached(false, _), thingDispenser(X, Y, dispenser, BlockType, MDValue), 
+	targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt), percept(role(worker)) do {	
+		if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
+	}
+	% compare lowest MD value for ALL stored dispensers 
+	forall bel(thingDispenser(X, Y, dispenser, BlockType, MDValue), haveBlockAttached(false,_), targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt), percept(role(worker)) 
+		do {
+		if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) + 
+			insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).	
+	}
+	
 	% change affinity direction after X steps
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 is mod(X, ChangeStep)), bel(randomDirection(Dir), randomAffinity(DirOld)) then 
 		delete (randomAffinity(DirOld)) + insert (randomAffinity(Dir)).
 	
 	% check old dispenser request and set switch to false
-	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 2 == Step) then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
+	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
+	
+	/**
+	 * MANAGING SUCCESS PARTIAL_SUCCESS PERCEPTS
+	 *
+	 */
 	
 	% Managing server partial_success action messages
 	forall percept(lastActionResult(partial_success)) do {	
@@ -49,9 +122,9 @@ module goaldiggerEvent {
 			% update agent XY position with confirmed move nswe
 			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
 			}
-	} % lastaction partial_success
-		
-	% Managing server success action messages
+	} % lastaction partial_success		
+
+	% managing action success percepts
 	forall percept(lastActionResult(success)) do {
 	
 		% update XY position of agent
@@ -66,61 +139,34 @@ module goaldiggerEvent {
 			if bel(agentAt(X, Y), transformXYD(D2, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
 
 		} % move	
-
-		% succesfull attach action handling
-		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(false,Dold)) then delete(haveBlockAttached(false, Dold)) + insert(haveBlockAttached(true, Dir)).		
 		
+		% succesfull attach action handling
+		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(BoolOld2, Dold), targetClosestGoalZone(A, B, _), executeManhattan(BoolOld), targetMd(X, Y)) then 
+		  delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)) 
+		+ delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
+		+ delete(executeManhattan(BoolOld)) + insert(executeManhattan(true)).		
 
 		% rotate update attached coordinates
 		if percept(lastAction(rotate), lastActionParams([Dir])), bel(haveBlockAttached(true, Dold), directionToCoordinate(Dnew, A, B), rotateToDirection(Dold, Dir, Dnew)), 
 			percept(attached(A, B)) then delete(haveBlockAttached(true, Dold)) + insert(haveBlockAttached(true, Dnew)).		
 		
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(attached(A, B)), bel(directionToCoordinate(NewDir, A, B)) then 
-		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(true, NewDir)).
-		
 		% successful dispenser request
 		if percept(lastAction(request), step(Step)), bel(haveDispenserDelivery(false, X)) then delete(haveDispenserDelivery(false, X)) + insert(haveDispenserDelivery(true, Step)).
 		
-		% successful dispenser request
-		if percept(lastAction(submit)), bel(executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
+		% successful task submit
+		if percept(lastAction(submit)), bel(executeManhattan(BoolOld)) then delete(executeManhattan(BoolOld)) + insert(executeManhattan(false)).
 			 
 	}% lastaction success
 
-	% check attached block direction for block and if none found switch haveBlockAttached false
+	/**
+	 * MISCELLANEOUS
+	 *
+	 */	
+	 
+	 % check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), executeManhattan(Old), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan(Old)) + insert(executeManhattan(false)).
-
-	% store unknown dispensers with MD field
-	forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thingDispenser(X3, Y3, dispenser, Details, _)))) do 
-		insert(thingDispenser(X3, Y3, dispenser, Details, 0)).
-	% reset old MD values in targetDispenserAt to high number expected to not occur in simulation
-	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) 
-		+ insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
-	% reset old MD values in targetClosestOfAllDispensersAt to high number expected to not occur in simulation
-	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) 
-		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
-	% calculate MD for all stored in bel dispensers
-	forall bel(thingDispenser(X, Y, dispenser, Details, MDValue), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {
-	 
-	if bel(thingDispenser(X, Y, dispenser, Details, MDValue)) then delete(thingDispenser(X, Y, dispenser, Details, MDValue)) + insert(thingDispenser(X, Y, dispenser, Details, Md)).
 	
-	}
-	% compare lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
-	forall bel(currentChosenTask(_, _, _, _, _, BlockType), haveBlockAttached(false, _), thingDispenser(X, Y, dispenser, BlockType, MDValue), 
-	targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue =< MDAlt), percept(role(worker)) do {	
-	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
-	}
-	% compare lowest MD value for ALL stored dispensers 
-	forall bel(thingDispenser(X, Y, dispenser, BlockType, MDValue), haveBlockAttached(false,_), targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue =< MDAlt), percept(role(worker)) 
-		do {
-	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).	
-	}
-	% Update believe with percept information, insert new objects and delete disappeared objects
-%	forall  bel((thing(X, Y, Type, Details))), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, block, Details))), not(percept(thing(X, Y, entity, Details))), 
-%		bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3)), percept(thing(X3, Y3, Type, Details)) do delete(thing(X, Y, Type, Details)).
-%	forall percept(thing(X, Y, Type, Details), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, block, Details))), not(percept(thing(X, Y, entity, Details))), not((X = 0, Y = 0))), 
-%		bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thing(X3, Y3, Type, Details)))) do insert(thing(X3, Y3, Type, Details)).
-		
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), bel(executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).

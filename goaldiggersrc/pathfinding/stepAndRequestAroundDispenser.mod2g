@@ -20,10 +20,10 @@ module stepAndRequestAroundDispenser {
 	if  bel(haveBlockAttached(false,_)), bel(haveDispenserDelivery(true, X), step(Step), X  =< Step + 1, currentChosenTask(_, _, _, _, _, BlockType)),
 	 percept(thing(A, B, block, BlockType), abs(A) =< 1, abs(B) =< 1) then {
 	
-		if percept(thing(1, 0, block,_), thing(1, 0, dispenser,_)) then attach(e) + delete(haveMove(false)) + insert(haveMove(true)).
-		if percept(thing(-1, 0, block,_), thing(-1, 0, dispenser,_)) then attach(w) + delete(haveMove(false)) + insert(haveMove(true)).
-		if percept(thing(0, -1, block,_), thing(0, -1, dispenser,_)) then attach(n) + delete(haveMove(false)) + insert(haveMove(true)).
-		if percept(thing(0, 1, block,_), thing(0, 1, dispenser,_)) then attach(s) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(1, 0, block,_), thing(1, 0, dispenser,_)), not(percept(attached(1, 0))) then attach(e) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(-1, 0, block,_), thing(-1, 0, dispenser,_)), not(percept(attached(-1, 0))) then attach(w) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(0, -1, block,_), thing(0, -1, dispenser,_)), not(percept(attached(0, -1))) then attach(n) + delete(haveMove(false)) + insert(haveMove(true)).
+		if percept(thing(0, 1, block,_), thing(0, 1, dispenser,_)), not(percept(attached(0, 1))) then attach(s) + delete(haveMove(false)) + insert(haveMove(true)).
 	
 	}
 	
