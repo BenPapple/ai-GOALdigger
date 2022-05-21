@@ -8,8 +8,8 @@
 :- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
 :- dynamic haveBlockAttached/2. 
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block
-:- dynamic targetDispenserType/1. % block type of dispenser to search out for
-:- dynamic targetDispenserXY/4. % XY, BlockType, MD of dispenser to search out for
+:- dynamic targetDispenserAt/4. % XY, BlockType, MD of dispenser to search out for
+:- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers
 :- dynamic skipThisStep/1. % do skip/explore until this step
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
 :- dynamic currentChosenTask/6. % task the agent has chosen and works on
