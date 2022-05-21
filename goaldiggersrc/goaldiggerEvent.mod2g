@@ -90,28 +90,36 @@ module goaldiggerEvent {
 	if bel(haveBlockAttached(true, DirBlock), executeManhattan(Old), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan(Old)) + insert(executeManhattan(false)).
 
-	% store dispenser with MD field
+	% store unknown dispensers with MD field
 	forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thingDispenser(X3, Y3, dispenser, Details, _)))) do 
 		insert(thingDispenser(X3, Y3, dispenser, Details, 0)).
 	% reset old MD values in targetDispenserAt to high number expected to not occur in simulation
-	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
-	% calculate MD for stored in bel dispensers
-	forall bel(thingDispenser(X, Y, dispenser, Details, MDValue)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do 
-		delete(thingDispenser(X, Y, dispenser, Details, MDValue)) + insert(thingDispenser(X, Y, dispenser, Details, Md)).
-	% calculate lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
-	forall bel(currentChosenTask(V1, V2, V3, V4, V5, BlockType), haveBlockAttached(false, _), thingDispenser(X, Y, dispenser, BlockType, MDValue), 
-	targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue =< MDAlt) do delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
-	% calculate lowest MD value for ALL stored dispensers 
-	forall bel(haveBlockAttached(false, _), thingDispenser(X, Y, dispenser, BlockType, MDValue), 
-	targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue =< MDAlt) do delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) + 
-		insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).
+	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) 
+		+ insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
+	% reset old MD values in targetClosestOfAllDispensersAt to high number expected to not occur in simulation
+	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) 
+		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
+	% calculate MD for all stored in bel dispensers
+	forall bel(thingDispenser(X, Y, dispenser, Details, MDValue), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {
+	 
+	if bel(thingDispenser(X, Y, dispenser, Details, MDValue)) then delete(thingDispenser(X, Y, dispenser, Details, MDValue)) + insert(thingDispenser(X, Y, dispenser, Details, Md)).
 	
-	
+	}
+	% compare lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
+	forall bel(currentChosenTask(_, _, _, _, _, BlockType), haveBlockAttached(false, _), thingDispenser(X, Y, dispenser, BlockType, MDValue), 
+	targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue =< MDAlt), percept(role(worker)) do {	
+	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
+	}
+	% compare lowest MD value for ALL stored dispensers 
+	forall bel(thingDispenser(X, Y, dispenser, BlockType, MDValue), haveBlockAttached(false,_), targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue =< MDAlt), percept(role(worker)) 
+		do {
+	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).	
+	}
 	% Update believe with percept information, insert new objects and delete disappeared objects
-	forall  bel((thing(X, Y, Type, Details))), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, block, Details))), not(percept(thing(X, Y, entity, Details))), 
-		bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3)), percept(thing(X3, Y3, Type, Details)) do delete(thing(X, Y, Type, Details)).
-	forall percept(thing(X, Y, Type, Details), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, block, Details))), not(percept(thing(X, Y, entity, Details))), not((X = 0, Y = 0))), 
-		bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thing(X3, Y3, Type, Details)))) do insert(thing(X3, Y3, Type, Details)).
+%	forall  bel((thing(X, Y, Type, Details))), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, block, Details))), not(percept(thing(X, Y, entity, Details))), 
+%		bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3)), percept(thing(X3, Y3, Type, Details)) do delete(thing(X, Y, Type, Details)).
+%	forall percept(thing(X, Y, Type, Details), not(percept(thing(X, Y, obstacle, Details))), not(percept(thing(X, Y, block, Details))), not(percept(thing(X, Y, entity, Details))), not((X = 0, Y = 0))), 
+%		bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thing(X3, Y3, Type, Details)))) do insert(thing(X3, Y3, Type, Details)).
 		
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), bel(executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 

@@ -1,6 +1,5 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "stepAndRequestAroundDispenser" as module.
 use "randomExecuteMove" as module.
 use "moveWithBlock" as module.
 

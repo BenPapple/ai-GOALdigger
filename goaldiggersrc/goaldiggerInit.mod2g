@@ -18,8 +18,8 @@ module goaldiggerInit {
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
 	
 	% dispenser
-	if true then insert (targetDispenserAt(70, 70, bx, 751)). % init with dummy values 
-	if true then insert (targetClosestOfAllDispensersAt(70, 70, bx, 751)). % init with dummy values 
+	if true then insert (targetDispenserAt(70, 70, b0, 751)). % init with dummy values 
+	if true then insert (targetClosestOfAllDispensersAt(70, 70, b0, 751)). % init with dummy values 
 	
 	
 	% tasks
