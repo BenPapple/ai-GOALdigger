@@ -20,6 +20,7 @@ module manhattanChoiceModule {
 	if bel(haveBlockAttached(false, _)), bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 	
 		% Find field nswe with lowest value ManhattanDistance and chose randomly between equally valued and free target field
+		
 		% move onto free fields
     	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
     	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
@@ -39,7 +40,6 @@ module manhattanChoiceModule {
     	if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, block,_)) then clear(-1, 0) + delete(haveMove(false)) + insert(haveMove(true)).						    	
 
 	} % if 
-
 		
 	% obligatory skip continue action if above unsuccessful
 	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).

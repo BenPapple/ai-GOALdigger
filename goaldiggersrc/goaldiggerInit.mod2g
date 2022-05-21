@@ -22,7 +22,7 @@ module goaldiggerInit {
 	if true then insert	(targetDispenserType(b0)).
 	
 	% tasks
-	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)).
+	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)). % filler task -11001001 so it gets replaced when real task available
 		
 	% manhattan distance
 	if true then insert (targetMd(-900, -900)). % init Manhatten Distance 
@@ -35,8 +35,8 @@ module goaldiggerInit {
 	if true then insert ( step(-1)). % init server steps
 	if true then insert (agentAt(0,0)). % agent starting coordinate	
 	if bel(randomDirection(X)) then insert (randomAffinity(X)). % random general direction to explore for agent
-	if bel(randomChangeStep(X)) then insert (changeAffinityAfterTheseSteps(X)). %
+	if bel(randomChangeStep(X)) then insert (changeAffinityAfterTheseSteps(X)). % self explaining
 	if true then insert (elapseStepTime(0)). % Time measurement between step
-	if true then insert (skipThisStep(-2)). %	
+	if true then insert (skipThisStep(-2)). % turns to skip with random explore move
 	
 }

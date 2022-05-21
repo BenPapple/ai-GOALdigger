@@ -34,14 +34,4 @@ module chooseTask {
 		
 	} % if	
 	
-%	if percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])) then {
-%		
-%		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(ben, 111, 20, X, Y, BlockType)).
-%		
-%	} % if	
-	
-	
-	% obligatory skip/randommove
-%	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).
-	
 } % module

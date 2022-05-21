@@ -15,7 +15,7 @@ exit=never.
  */
  
 /**
- * Main decision rules
+ * Main decision rules for every step server sends
  *
  */
  
@@ -29,13 +29,10 @@ module goaldiggerMain {
     
     	% agents want to be free randomExploreMove / skip turn number skipThisStep    	
     	if percept(step(Step)), bel(skipThisStep(SkipStep), Step =< SkipStep) then randomExecuteMove.
-    	%if percept(step(Step)), bel(skipThisStep(SkipStep), SkipStep == Step) then skip + delete(haveMove(false)) + insert(haveMove(true)).
     	
     	% if oppurtunity arises adapt worker role until complex role module ready
     	if percept(role(default), roleZone(0, 0)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)). 
-    	%if percept(role(default), roleZone(0, 0)), bel(executeManhattan(true)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)) + delete(executeManhattan(true)) + insert(executeManhattan(false)). 
-        
-    	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    	  
     	% as worker change task when task expired or initial task has 1 million steps
     	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
     	
@@ -44,14 +41,14 @@ module goaldiggerMain {
     		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, SimStep =< TaskStep) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)).
     
     	% submit task if in goal zone with block and corresponding task available
-    	if bel(currentChosenTask(_, _, _, _, _, BlockType), BlockType \== bx), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), step(SimStep), TaskStep >= SimStep) 
-    	then handleTaskSubmit.
+    	if bel(currentChosenTask(_, _, _, _, _, BlockType), BlockType \== bx), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), 
+    		step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
     	
     	% wait in goal zone with block for right task
     	if percept(goalZone(0,0), step(SimStep)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.
     	
     	% Movement around dispenser
-	    if bel(targetDispenserXY(_, _, BlockType, _), BlockType \== bx), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), 
+	    if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), 
 	    	bel(executeManhattan(false), haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
     	    	
     	% Movement according to Manhatten Distance
@@ -61,12 +58,12 @@ module goaldiggerMain {
     	if bel(haveBlockAttached(true, DirBlock)) then {
     
     		% rotate block behind agent direction affinity
-    		if  bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, OppoDir), DirBlock \== OppoDir) 
-    		then rotateBlock.
+    		if  bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, OppoDir), 
+    			DirBlock \== OppoDir) then rotateBlock.
     
     		% if block behind agent concerning affinity direction move forward
-    		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, Dir3), Dir3 == DirBlock) 
-    		then randomExecuteMove.  
+    		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, Dir3), 
+    			Dir3 == DirBlock) then randomExecuteMove.  
     
     		} % if bel(haveBlockAttached(true, DirBlock))	    
 	    
