@@ -1,0 +1,55 @@
+use "../goaldiggerProlog" as knowledge.
+
+/**
+ * Handles logging data in Our Mini Percept
+ *
+ */
+
+module logMiniPercept {
+
+	% debug true for custom percept logging
+	if true then {
+	
+		% multiple times because of changing number of arguments with var lastActionParams
+		
+		if percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
+			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction).
+			
+		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
+			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para).
+			
+		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
+			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
+			
+		% some extra extra custom percept logging because conditional can be false, others for formatting
+		
+		if bel(agentAt(X, Y), targetMd(A, B)) then print("Last step AgentAt: "| X| Y+"TargetMD: "| A| B).
+		
+		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType).
+		
+		if bel(targetDispenserAt(X2, Y2, BlockTypeNew, Md)) then print("TargetDispenser: "| X2| Y2+"Block+Distance: "| BlockTypeNew| Md).
+		
+		if bel(targetClosestGoalZone(X, Y, MD)) then print("TargetGoalZone: "| X| Y+"Distance: "| MD).		
+				
+		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
+		
+		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
+		
+		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).
+				
+		if percept(attached(X, Y), thing(X, Y, block, BlockType), X =< 1, Y =< 1) then print("Attached:"| X| Y +BlockType).
+		
+		if percept(goalZone(0, 0)) then print("Agent is in GoalZone").
+		
+		if percept(roleZone(0, 0)) then print("Agent is in RoleZone").
+		
+		if percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
+		
+		if true then print("====== End Mini Percept =====").
+		
+		% logging percept base, message base, believe base
+		if true then log(pb) + log(mb) + log(bb).
+		
+	} % debug
+	
+}

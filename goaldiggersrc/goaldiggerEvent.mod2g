@@ -1,5 +1,9 @@
 use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
+use "./eventsubmodules/updateDispenserData" as module.
+use "./eventsubmodules/updateGoalzoneData" as module.
+use "./eventsubmodules/logMiniPercept" as module.
+use "./eventsubmodules/handlingLastActionResult" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -8,162 +12,39 @@ use goaldiggerAction as actionspec.
 
 module goaldiggerEvent {
 
-	% debug true for custom percept logging
-	if bel(lDebugOn(true)) then {
-	
-		% multiple times because of changing number of arguments with var lastActionParams
-		if percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
-			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction).
-		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
-			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para).
-		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
-			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
-		% some extra extra custom percept logging because conditional can be false, others for formatting
-		if bel(agentAt(X, Y), targetMd(A, B)) then print("Last step AgentAt: "| X| Y+"TargetMD: "| A| B).
-		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType).
-		if bel(targetDispenserAt(X2, Y2, BlockTypeNew, Md)) then print("TargetDispenser: "| X2| Y2+"Block+Distance: "| BlockTypeNew| Md).
-		if bel(targetClosestGoalZone(X, Y, MD)) then print("TargetGoalZone: "| X| Y+"Distance: "| MD).				
-		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
-		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
-		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).		
-		if percept(attached(X, Y), thing(X, Y, block, BlockType)) then print("Attached:"| X| Y +BlockType).
-		if percept(goalZone(0, 0)) then print("Agent is in GoalZone").
-		if percept(roleZone(0, 0)) then print("Agent is in RoleZone").
-		if percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
-		if true then print("====== End Mini Percept =====").
-		% logging percept base, message base, belive base
-		if true then log(pb) + log(mb) + log(bb).
-		
-	} % debug
-	
-	% haveBlockAttached true has to happen here before calculating goalzone to enable immediately in turn MD calculation when attach handling
-	if percept(lastActionResult(success), lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(BoolOld2, Dold)) then 
-		delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)).
-	
 	/**
-	 * GOALZONE MAP
+	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
 	 *
 	 */
-	
-	% remove disappeared goalzones
-	forall bel(storedGoalZone(X, Y, _)), bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3), abs(X3) + abs(Y3) =< 5), not(percept((goalZone(X3, Y3)))) do {
-		if bel(storedGoalZone(X, Y, Md)) then delete(storedGoalZone(X, Y, Md)).
-	}	
-	% store unknown goalzones with MD field
-	forall percept(goalZone(X, Y)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedGoalZone(X3, Y3, _)))) do 
-		insert(storedGoalZone(X3, Y3, 0)).
-	% reset old MD values in storedgoalzones to high number expected to not occur in simulation
-	forall bel(storedGoalZone(XAlt, YAlt, MdAlt), haveBlockAttached(true,_)), percept(role(worker)) do delete(storedGoalZone(XAlt, YAlt, MdAlt)) 
-		+ insert(storedGoalZone(XAlt, YAlt, 1234567)).
-		
-	% reset old MD values in targetgoalzones to high number expected to not occur in simulation
-	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), haveBlockAttached(true,_)), percept(role(worker)) then delete(targetClosestGoalZone(XAlt, YAlt, MdAlt)) 
-		+ insert(targetClosestGoalZone(XAlt, YAlt, 1234567)).		
-		
-				
-	% calculate MD for all stored in bel goalzones
-	forall bel(storedGoalZone(X, Y, MdAlt), haveBlockAttached(true,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {	 
-		if bel(storedGoalZone(X, Y, MdAlt)) then delete(storedGoalZone(X, Y, MdAlt)) + insert(storedGoalZone(X, Y, Md)).	
-	}
-		
-	% compare lowest MD value for ALL stored goalzones 
-	forall bel(storedGoalZone(X2, Y2, MDZone), haveBlockAttached(true,_), targetClosestGoalZone(X, Y, MDTarget), MDZone < MDTarget), percept(role(worker)) 
-		do {
-	if bel(targetClosestGoalZone(X, Y, MDTarget)) then delete(targetClosestGoalZone(X, Y, MDTarget)) + 
-		insert(targetClosestGoalZone(X2, Y2, MDZone)).	
-	}
+	if bel(lDebugOn(true)) then logMiniPercept.
 
+	
 	/**
-	 * DISPENSER MAP
+	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
 	 *
 	 */
-	
-	% store unknown dispensers with MD field
-	forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((thingDispenser(X3, Y3, dispenser, Details, _)))) do 
-		insert(thingDispenser(X3, Y3, dispenser, Details, 0)).
-	% reset old MD values in targetDispenserAt to high number expected to not occur in simulation
-	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) 
-		+ insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
-	% reset old MD values in targetClosestOfAllDispensersAt to high number expected to not occur in simulation
-	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) 
-		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
-	% calculate MD for all stored in bel dispensers
-	forall bel(thingDispenser(X, Y, dispenser, Details, MDValue), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {	 
-		if bel(thingDispenser(X, Y, dispenser, Details, MDValue)) then delete(thingDispenser(X, Y, dispenser, Details, MDValue)) + insert(thingDispenser(X, Y, dispenser, Details, Md)).	
-	}
-	% compare lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
-	forall bel(currentChosenTask(_, _, _, _, _, BlockType), haveBlockAttached(false, _), thingDispenser(X, Y, dispenser, BlockType, MDValue), 
-	targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt), percept(role(worker)) do {	
-		if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
-	}
-	% compare lowest MD value for ALL stored dispensers 
-	forall bel(thingDispenser(X, Y, dispenser, BlockType, MDValue), haveBlockAttached(false,_), targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt), percept(role(worker)) 
-		do {
-		if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) + 
-			insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).	
-	}
-	
-	% change affinity direction after X steps
-	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 is mod(X, ChangeStep)), bel(randomDirection(Dir), randomAffinity(DirOld)) then 
-		delete (randomAffinity(DirOld)) + insert (randomAffinity(Dir)).
-	
-	% check old dispenser request and set switch to false
-	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
+	if true then handlingLastActionResult.
+
 	
 	/**
-	 * MANAGING SUCCESS PARTIAL_SUCCESS PERCEPTS
+	 * SUBMODULE UPDATE GOALZONE MAP
 	 *
 	 */
-	
-	% Managing server partial_success action messages
-	forall percept(lastActionResult(partial_success)) do {	
-	% single move instead of two
-		if percept(lastAction(move), lastActionParams([D, _])) then {
-			% update agent XY position with confirmed move nswe
-			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
-			}
-	} % lastaction partial_success		
+	if true then updateGoalzoneData.
 
-	% managing action success percepts
-	forall percept(lastActionResult(success)) do {
-	
-		% update XY position of agent
-		% single move
-		if percept(lastAction(move), lastActionParams([D])) then {
-			% update agent XY position with confirmed move nswe
-			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
-		} % double move	
-		if percept(lastAction(move), lastActionParams([D, D2])) then {
-			% update agent XY position with confirmed move nswe
-			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
-			if bel(agentAt(X, Y), transformXYD(D2, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
-
-		} % move	
-		
-		% succesfull attach action handling
-		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(BoolOld2, Dold), targetClosestGoalZone(A, B, _), executeManhattan(BoolOld), targetMd(X, Y)) then 
-		  delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)) 
-		+ delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
-		+ delete(executeManhattan(BoolOld)) + insert(executeManhattan(true)).		
-
-		% rotate update attached coordinates
-		if percept(lastAction(rotate), lastActionParams([Dir])), bel(haveBlockAttached(true, Dold), directionToCoordinate(Dnew, A, B), rotateToDirection(Dold, Dir, Dnew)), 
-			percept(attached(A, B)) then delete(haveBlockAttached(true, Dold)) + insert(haveBlockAttached(true, Dnew)).		
-		
-		% successful dispenser request
-		if percept(lastAction(request), step(Step)), bel(haveDispenserDelivery(false, X)) then delete(haveDispenserDelivery(false, X)) + insert(haveDispenserDelivery(true, Step)).
-		
-		% successful task submit
-		if percept(lastAction(submit)), bel(executeManhattan(BoolOld)) then delete(executeManhattan(BoolOld)) + insert(executeManhattan(false)).
-			 
-	}% lastaction success
 
 	/**
-	 * MISCELLANEOUS
+	 * SUBMODULE UPDATE DISPENSER MAP
+	 *
+	 */
+	if true then updateDispenserData.
+	
+	/**
+	 * MISCELLANEOUS POST EVERYTHING
 	 *
 	 */	
 	 
-	 % check attached block direction for block and if none found switch haveBlockAttached false
+	% check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), executeManhattan(Old), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan(Old)) + insert(executeManhattan(false)).
 	
@@ -172,7 +53,9 @@ module goaldiggerEvent {
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
 
 	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
-	if bel(targetMd(X, Y), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).	
+	if bel(haveBlockAttached(false,_), targetMd(X, Y), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
+	% deactivate manhattan switch if in goalzone with block
+	if bel(haveBlockAttached(true,_), targetMd(X, Y), agentAt(A, B), A == X, B == Y, executeManhattan(true)), percept(goalZone(0, 0)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
 		
 	% when role worker with block put first seen goalzone coordinates as targetMd
 	if percept(goalZone(X, Y), role(worker)), bel(haveBlockAttached(true,_), executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
@@ -194,6 +77,11 @@ module goaldiggerEvent {
 	% + starttimer(calculationTimer,1,4000).	
 	if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(true)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(true)) + insert(haveMove(false)).
 	% + starttimer(calculationTimer,10,4000) .
+	
+	% With block update goalzone target MD
+	if bel(haveBlockAttached(true, _), targetMd(X, Y), targetClosestGoalZone(A, B, _), executeManhattan(BoolOld)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
+		+ delete(executeManhattan(BoolOld)) + insert(executeManhattan(true)).
+	
 	
 	% timer timing duration percept environment to chosing action ToDo Timer still necessary, would be nice but agent is really fast most of the time
 	%forall percept(timer(_,T1)), bel(elapseStepTime(T2)) do 

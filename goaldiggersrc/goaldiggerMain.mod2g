@@ -38,7 +38,7 @@ module goaldiggerMain {
     	
     	% detach block if task does not fit
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), role(worker), step(SimStep)), 
-    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)).
+    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep + 3) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)).
     
     	% submit task if in goal zone with block and corresponding task available
     	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), 

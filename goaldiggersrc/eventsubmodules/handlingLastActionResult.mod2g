@@ -1,0 +1,57 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Handles field lastActionResult and alters belief accordingly
+ *
+ */
+
+module handlingLastActionResult {
+
+	% Managing action partial_success action messages
+	forall percept(lastActionResult(partial_success)) do {	
+	% single move instead of two
+		if percept(lastAction(move), lastActionParams([D, _])) then {
+			% update agent XY position with confirmed move nswe
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
+			}
+	} % lastaction partial_success		
+
+	% managing action success percepts
+	forall percept(lastActionResult(success)) do {
+	
+		% update XY position of agent
+		
+		% single move
+		if percept(lastAction(move), lastActionParams([D])) then {
+			% update agent XY position with confirmed move nswe
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
+		} 
+		
+		% double move	
+		if percept(lastAction(move), lastActionParams([D, D2])) then {
+			% update agent XY position with confirmed move nswe
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
+			if bel(agentAt(X, Y), transformXYD(D2, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
+
+		} % move	
+		
+		% succesfull attach action handling
+		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(BoolOld2, Dold), targetClosestGoalZone(A, B, _), executeManhattan(BoolOld), targetMd(X, Y)) then 
+		  delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)) 
+		+ delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
+		+ delete(executeManhattan(BoolOld)) + insert(executeManhattan(true)).		
+
+		% rotate update attached coordinates
+		if percept(lastAction(rotate), lastActionParams([Dir])), bel(haveBlockAttached(true, Dold), directionToCoordinate(Dnew, A, B), rotateToDirection(Dold, Dir, Dnew)), 
+			percept(attached(A, B)) then delete(haveBlockAttached(true, Dold)) + insert(haveBlockAttached(true, Dnew)).		
+		
+		% successful dispenser request
+		if percept(lastAction(request), step(Step)), bel(haveDispenserDelivery(false, X)) then delete(haveDispenserDelivery(false, X)) + insert(haveDispenserDelivery(true, Step)).
+		
+		% successful task submit
+		if percept(lastAction(submit)), bel(executeManhattan(BoolOld)) then delete(executeManhattan(BoolOld)) + insert(executeManhattan(false)).
+			 
+	}% lastaction success
+	
+}
