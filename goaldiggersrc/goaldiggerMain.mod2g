@@ -25,20 +25,20 @@ module goaldiggerMain {
     if bel(haveMove(false)) then {
     
     	% handle deactivated by skip
-    	if percept(deactivated(true)) then skip + delete(haveMove(false)) + insert(haveMove(true)).
+    	if percept(deactivated(true)) then skip + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
     
     	% agents want to be free randomExploreMove / skip turn number skipThisStep    	
     	if percept(step(Step)), bel(skipThisStep(SkipStep), Step =< SkipStep) then randomExecuteMove.
     	
     	% if oppurtunity arises adapt worker role until complex role module ready
-    	if percept(role(default), roleZone(0, 0)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)). 
+    	if percept(role(default), roleZone(0, 0)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer). 
     	  
     	% as worker change task when task expired or initial task has -1 million steps
     	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
     	
     	% detach block if task does not fit
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), role(worker), step(SimStep)), 
-    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep + 3) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)).
+    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep + 3) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
     
     	% submit task if in goal zone with block and corresponding task available
     	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), 
@@ -74,7 +74,7 @@ module goaldiggerMain {
 		if bel(haveBlockAttached(false,_)) then randomExecuteMove. 
 	
    		% if no move decision skip and prepare idle mode
-		if bel(haveMove(false)) then skip + delete(haveMove(false)) + insert(haveMove(true)).
+		if bel(haveMove(false)) then skip + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
 	    
     } % if bel(haveMove(false))
 	

@@ -73,11 +73,9 @@ module goaldiggerEvent {
 		delete(executeManhattan(true)) + insert(executeManhattan(false)).
 
 	% Update step counter with new step when new percept step available
-	if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(false)) then delete(step(Y)) + insert(step(X)).
-	% + starttimer(calculationTimer,1,4000).	
-	if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(true)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(true)) + insert(haveMove(false)).
-	% + starttimer(calculationTimer,10,4000) .
-	
+	%if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(false)) then delete(step(Y)) + insert(step(X)).
+	if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(Old)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(Old)) + insert(haveMove(false)).
+		
 	% With block update goalzone target MD
 	if bel(haveBlockAttached(true, _), targetMd(X, Y), targetClosestGoalZone(A, B, _), executeManhattan(BoolOld)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
 		+ delete(executeManhattan(BoolOld)) + insert(executeManhattan(true)).
