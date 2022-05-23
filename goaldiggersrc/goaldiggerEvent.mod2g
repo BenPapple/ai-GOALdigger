@@ -3,7 +3,7 @@ use goaldiggerAction as actionspec.
 use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
-use "./eventsubmodules/handlingLastActionResult" as module.
+use "./eventsubmodules/handleLastActionResult" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -23,7 +23,7 @@ module goaldiggerEvent {
 	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
 	 *
 	 */
-	if true then handlingLastActionResult.
+	if true then handleLastActionResult.
 
 	
 	/**
