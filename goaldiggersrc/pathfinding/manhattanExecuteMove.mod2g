@@ -12,7 +12,8 @@ use randomExecuteMove as module.
 module manhattanExecuteMove {
 	
 	% handle situation when agent around dispenser
-	if percept(thing(A, B, dispenser, b0), abs(A) =< 1, abs(B) =< 1, role(worker)), bel(haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
+	if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep < SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), bel(haveBlockAttached(false, _)) 
+		then stepAndRequestAroundDispenser.
 	
 	% Manhattan Magic
 	if true then manhattanCalcModule + manhattanChoiceModule.

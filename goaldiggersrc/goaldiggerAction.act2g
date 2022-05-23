@@ -10,8 +10,13 @@ define move(Direction) with
 	pre{ true }
 	post{ true }
 	
-% move agent in world, direction like compass nswe
+% move agent in world, direction like compass nswe, double speed
 define move(Direction, Direction2) with
+	pre{ true }
+	post{ true }
+	
+% move agent in world, direction like compass nswe, triple speed
+define move(Direction, Direction2, Direction3) with
 	pre{ true }
 	post{ true }
 	
@@ -50,6 +55,11 @@ define detach(Direction) with
 	pre { true }
 	post { true }
 	
+% submit task
+define submit(Task) with
+	pre { true }
+	post { true }
+	
 % connect blocks with other agent
 define connect(Agent, X, Y) with
 	pre { true }
@@ -59,11 +69,6 @@ define connect(Agent, X, Y) with
 define disconnect(Agent, X, Y) with
 	pre { true }
 	post { true }	
-	
-% submit task
-define submit(Task) with
-	pre { true }
-	post { true }
 	
 % survey location for information
 define survey(X, Y) with

@@ -1,6 +1,5 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "stepAndRequestAroundDispenser" as module.
 use "randomExecuteMove" as module.
 use "moveWithBlock" as module.
 
@@ -17,14 +16,15 @@ module manhattanChoiceModule {
 	if bel(haveBlockAttached(true, _)) then moveWithBlock.
 
 	% check if agent already at target
-	if bel(haveBlockAttached(false, _)), not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0)), bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(false, _)), bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 	
 		% Find field nswe with lowest value ManhattanDistance and chose randomly between equally valued and free target field
+		
 		% move onto free fields
-    	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, Type,_), Type \= dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, Type,_), Type \= dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(Z =< Y, Z =< X, Z =< V), not(percept(thing(1, 0, Type,_), Type \= dispenser)) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
-    	if bel(V =< Y, V =< Z, V =< X), not(percept(thing(-1, 0, Type,_), Type \= dispenser)) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then move(n) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then move(s) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(Z =< Y, Z =< X, Z =< V), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then move(e) + delete(haveMove(false)) + insert(haveMove(true)).
+    	if bel(V =< Y, V =< Z, V =< X), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then move(w) + delete(haveMove(false)) + insert(haveMove(true)).
 		
 		% clear obstacles
 		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, obstacle,_)) then clear(0, -1) + delete(haveMove(false)) + insert(haveMove(true)).
@@ -38,8 +38,7 @@ module manhattanChoiceModule {
     	if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, block,_)) then clear(1, 0) + delete(haveMove(false)) + insert(haveMove(true)).
     	if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, block,_)) then clear(-1, 0) + delete(haveMove(false)) + insert(haveMove(true)).						    	
 
-	} % if not(percept(thing(A, B, dispenser, b0), abs(A) =< 0, abs(B) =< 0))
-
+	} % if 
 		
 	% obligatory skip continue action if above unsuccessful
 	if true then skip + delete(haveMove(false)) + insert(haveMove(true)).

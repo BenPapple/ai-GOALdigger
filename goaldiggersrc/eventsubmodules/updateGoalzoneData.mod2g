@@ -1,0 +1,39 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Handles calculating distance of goalzones to agent and manages inserting goalzone data from percept into belief
+ *
+ */
+
+module updateGoalzoneData {
+
+	% remove disappeared goalzones
+	forall bel(storedGoalZone(X, Y, _)), bel(agentAt(X2, Y2), delocalize(X, Y, X2, Y2, X3, Y3), abs(X3) + abs(Y3) =< 5), not(percept((goalZone(X3, Y3)))) do {
+		if bel(storedGoalZone(X, Y, Md)) then delete(storedGoalZone(X, Y, Md)).
+	}	
+	% store unknown goalzones with MD field
+	forall percept(goalZone(X, Y)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedGoalZone(X3, Y3, _)))) do 
+		insert(storedGoalZone(X3, Y3, 0)).
+		
+	% reset old MD values in storedgoalzones to high number expected to not occur in simulation
+	forall bel(storedGoalZone(XAlt, YAlt, MdAlt), haveBlockAttached(true,_)), percept(role(worker)) do delete(storedGoalZone(XAlt, YAlt, MdAlt)) 
+		+ insert(storedGoalZone(XAlt, YAlt, 1234567)).
+		
+	% reset old MD values in targetgoalzones to high number expected to not occur in simulation
+	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), haveBlockAttached(true,_)), percept(role(worker)) then delete(targetClosestGoalZone(XAlt, YAlt, MdAlt)) 
+		+ insert(targetClosestGoalZone(XAlt, YAlt, 1234567)).				
+				
+	% calculate MD for all stored in bel goalzones
+	forall bel(storedGoalZone(X, Y, MdAlt), haveBlockAttached(true,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {	 
+		if bel(storedGoalZone(X, Y, MdAlt)) then delete(storedGoalZone(X, Y, MdAlt)) + insert(storedGoalZone(X, Y, Md)).	
+	}
+		
+	% compare lowest MD value for ALL stored goalzones 
+	forall bel(storedGoalZone(X2, Y2, MDZone), haveBlockAttached(true,_)), percept(role(worker)) 
+		do {
+			if bel(targetClosestGoalZone(X, Y, MDTarget), MDZone < MDTarget) then delete(targetClosestGoalZone(X, Y, MDTarget)) + 
+				insert(targetClosestGoalZone(X2, Y2, MDZone)).	
+	}
+	
+} % module

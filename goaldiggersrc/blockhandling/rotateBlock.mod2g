@@ -14,8 +14,8 @@ module rotateBlock {
 	 bel(randomAffinity(DirAffi), DirBlock == DirAffi, randomRotate(Rot), oppositeRotate(Rot, AltRot), rotateToCoord(DirBlock, Rot, X, Y), rotateToCoord(DirBlock, AltRot, F, G)) then {
 	 
 	 	 % rotate if free
-		 if not(percept(thing(X, Y, Type, _), Type \= dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
-		 if not(percept(thing(F, G, Type, _), Type \= dispenser)) then rotate(AltRot) + delete(haveMove(false)) + insert(haveMove(true)).
+		 if not(percept(thing(X, Y, Type, _), Type \== dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
+		 if not(percept(thing(F, G, Type, _), Type \== dispenser)) then rotate(AltRot) + delete(haveMove(false)) + insert(haveMove(true)).
 
 		 % clear blocked rotate targets
 		 if percept(thing(X, Y, obstacle, _)) then clear(X, Y) + delete(haveMove(false)) + insert(haveMove(true)).
@@ -29,7 +29,7 @@ module rotateBlock {
 	 if  bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(attached(A, B)), 
 	 bel(randomAffinity(DirAffi), oppositeDirection(DirAffi, DirOppo), DirBlock \== DirAffi, DirBlock \== DirOppo, rotateAgainstAffinity(DirAffi, DirBlock, Rot), rotateToCoord(DirBlock, Rot, X, Y)) then {
 	 
-		 if not(percept(thing(X, Y, Type, _), Type \= dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
+		 if not(percept(thing(X, Y, Type, _), Type \== dispenser)) then rotate(Rot) + delete(haveMove(false)) + insert(haveMove(true)).
 		 if percept(thing(X, Y, obstacle, _)) then clear(X, Y) + delete(haveMove(false)) + insert(haveMove(true)).
 		 if percept(thing(X, Y, block, _)) then clear(X, Y) + delete(haveMove(false)) + insert(haveMove(true)).
 

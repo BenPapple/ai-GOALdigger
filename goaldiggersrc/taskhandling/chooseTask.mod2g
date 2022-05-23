@@ -1,0 +1,67 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../pathfinding/randomExecuteMove" as module.
+
+/**
+ * Choose task from options when having corresponding role; waterfall chosing: last true fit gets chosen
+ *
+ */
+
+module chooseTask {
+
+	% chose task if your attached block fits task	
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached)), percept(task(TaskName ,TaskStep, Reward,[req(Xt,Yt,BlockType)])),
+		bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60, BlockTypeAttached == BlockType) then {
+		
+		if bel(targetMd(C, D), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6), targetClosestGoalZone(A, B, _)) then 
+		delete(targetMd(C, D))+ insert(targetMd(A, B)) + delete(executeManhattan(Old)) + insert(executeManhattan(true)) + delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) 
+		+ insert(currentChosenTask(TaskName, TaskStep, Reward, Xt, Yt, BlockType)) + exit-module.
+		
+	} % if
+	
+	% choose/change 1-block tasks if closest dispenser has fitting block
+	if percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])), bel(targetClosestOfAllDispensersAt(A, B, BlockType, _), BlockType \== bx), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 60)
+	 then {
+		
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
+		delete(targetMd(X, Y)) + insert(targetMd(A, B)) + delete(executeManhattan(Old)) + insert(executeManhattan(true))
+		+ delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, Step, Reward, X, Y, BlockType)) + exit-module.
+		
+	} % if
+	
+	% choose 1-block tasks of target Dispenser concerning currenttaskBlockType+targetDispenserAt calculation in Event Module
+	if percept(task(TaskName ,Step, Reward,[req(X,Y,BlockType)])), bel(targetDispenserAt(A, B, BlockType, _), BlockType \== bx), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 60)
+	 then {
+		
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
+		delete(targetMd(X, Y)) + insert(targetMd(A, B)) + delete(executeManhattan(Old)) + insert(executeManhattan(true))
+		+ delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, Step, Reward, X, Y, BlockType)) + exit-module.
+		
+	} % if
+	
+	% choose 1-block tasks if random known dispenser has fitting block
+	if percept(task(TaskName ,TaskStep, Reward,[req(Xt,Yt,BlockType)])), bel(thing(A, B, dispenser, BlockType)), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60) then {
+		
+		if bel(targetMd(X, Y), executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) + 
+			delete(executeManhattan(Old)) + insert(executeManhattan(true)) + delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, TaskStep, Reward, Xt, Yt, BlockType)) 
+			+ exit-module.
+		
+	} % if
+
+	% choose 1-block tasks if it exists
+	if percept(task(TaskName ,TaskStep, Reward,[req(Xt,Yt,BlockType)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60) then {
+		
+		if bel(executeManhattan(Old), currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
+		delete(executeManhattan(Old)) + insert(executeManhattan(false)) + delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, TaskStep, Reward, Xt, Yt, BlockType)).
+		
+	} % if
+
+	
+	
+	
+	
+	
+	
+	
+	
+} % module
