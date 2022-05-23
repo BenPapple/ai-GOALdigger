@@ -16,6 +16,7 @@
 :- dynamic thingDispenser/5. % dispenser percept data plus MD
 :- dynamic storedGoalZone/3. % goalzone percept data plus MD
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field
+:- dynamic activateDoubleSpeed/1.  % switch to deactivate double speed for workers
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.

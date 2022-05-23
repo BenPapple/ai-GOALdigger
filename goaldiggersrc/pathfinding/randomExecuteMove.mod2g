@@ -14,7 +14,9 @@ module randomExecuteMove {
     % random 90 degree move if blocked Obstacle main direction    
     if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
     	if  bel( directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) then {
-    		if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)).
+    		if percept(thing(Xn, Yn, entity,_)) then move(AltMove) + delete(	% timer timing duration percept environment to chosing action ToDo Timer still necessary, would be nice but agent is really fast most of the time
+	%forall percept(timer(_,T1)), bel(elapseStepTime(T2)) do 
+		%delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)).  (false)) + insert(haveMove(true)).
     		if percept(thing(Xn, Yn, block,_)) then move(AltMove) + delete(haveMove(false)) + insert(haveMove(true)).
         }
         if  bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) then {
@@ -24,10 +26,10 @@ module randomExecuteMove {
     } % random 90 degree
 
     % Move into main affinity direction if possible
-%    % double speed
-%    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), percept(role(worker)), 
-%    	not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)), not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser)) then 
-%    		move(Dir, Dir) + print("I FEEL THE NEED, THE NEED FOR SPEED") + delete(haveMove(false)) + insert(haveMove(true)).
+    % double speed; ToDo reactivate when allowed again for competition
+    if bel(activateDoubleSpeed(true), randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), percept(role(worker)), 
+    	not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)), not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser)) then 
+    		move(Dir, Dir) + print("I FEEL THE NEED, THE NEED FOR SPEED") + delete(haveMove(false)) + insert(haveMove(true)).
     % normal speed
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)) then 
     	move(Dir) + delete(haveMove(false)) + insert(haveMove(true)).

@@ -10,6 +10,10 @@ module logMiniPercept {
 	% debug true for custom percept logging
 	if true then {
 	
+		% timer timing duration percept environment to chosing action ToDo Timer still necessary, would be nice but agent is really fast most of the time
+		%forall percept(timer(_,T1)), bel(elapseStepTime(T2)) do 
+		%delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)).  
+	
 		% multiple times because of changing number of arguments with var lastActionParams
 		
 		if percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
