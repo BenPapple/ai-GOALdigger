@@ -1,0 +1,14 @@
+use "../goaldiggerProlog" as knowledge.
+
+/**
+ * Handles message to coordinate names and relative coordinates between agents
+ *
+ */
+
+module handleRelativeCoordsOfAgents {
+
+
+
+
+	
+} % module
