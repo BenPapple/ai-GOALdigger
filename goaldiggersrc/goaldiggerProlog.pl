@@ -13,7 +13,7 @@
 :- dynamic skipThisStep/1. % do skip/explore until this step
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
 :- dynamic currentChosenTask/6. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType)
-:- dynamic thingDispenser/5. % dispenser percept data plus MD (X,Y,Type,Details,MD)
+:- dynamic storedDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
 :- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
 :- dynamic activateDoubleSpeed/1.  % switch to deactivate double speed for workers
@@ -32,10 +32,17 @@ transformXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 1.
 % Update position XY in relation to agent position X2 Y2
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
 delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1). % X1Y1 gets localized by X2Y2 (add negative values, substract positive values)
+calculateAgentOffset(RecieverBaseX, RecieverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is RecieverBaseX - SenderBaseX - PerceptOffsetX, 
+	OffsetY is RecieverBaseY - SenderBaseY - PerceptOffsetY.
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
 			integerToDirection(D, Dir).
+			
+randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
+			oppositeDirection(AltDir, OppositAltDir),
+			NewDir \= OppositAltDir,
+			integerToDirection(D, NewDir).
 			
 % skip random steps
 skipRandomSteps(SkipSteps) :- random_between(2, 6, SkipSteps).
@@ -52,7 +59,7 @@ randomRotate(Dir) :- random_between(0, 1, R),
 			integerToRotate(R, Dir).
 
 % Give random number for steps after which to change affinity			
-randomChangeStep(Rand) :- random_between(30, 60, Rand).
+randomChangeStep(Rand) :- random_between(15, 30, Rand).
 
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
