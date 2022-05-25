@@ -4,6 +4,7 @@ use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/handleLastActionResult" as module.
+use "./eventsubmodules/handleRelativeCoordsOfAgents" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -23,6 +24,12 @@ module goaldiggerEvent {
 	 *
 	 */
 	if true then handleLastActionResult.
+	
+	/**
+	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER handleLastActionResult MOVE !!!
+	 *
+	 */
+	if true then handleRelativeCoordsOfAgents.
 
 	
 	/**

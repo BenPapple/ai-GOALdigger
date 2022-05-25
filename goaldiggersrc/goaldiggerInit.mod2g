@@ -20,8 +20,8 @@ module goaldiggerInit {
 
 	% subscribing to channels
 	if true then subscribe(channelGoalzone).
-	if true then subscribe(channelRolezone).
-	if true then subscribe(channelRelativeXY).
+	if true then subscribe(channelDispenser).
+	if true then subscribe (channelNamesRelativeXY).
 	
 	% dispenser
 	if true then insert (targetDispenserAt(70, 70, b0, 700)). % init with dummy values 
