@@ -40,7 +40,7 @@ random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
 
 % get random role ToDo STILL NECESSARY???
-randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
+%randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
 
 % get random rotate direction
 randomRotate(Dir) :- random_between(0, 1, R),
@@ -101,8 +101,8 @@ directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
 
 % helper function number to roles
-numbertoRoles(0, worker).
-numbertoRoles(1, explorer).
+%numbertoRoles(0, worker).
+%numbertoRoles(1, explorer).
 
 % helper function direction to opposite direction
 oppositeDirection(n, s).

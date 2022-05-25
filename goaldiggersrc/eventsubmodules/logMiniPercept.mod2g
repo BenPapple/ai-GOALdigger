@@ -10,37 +10,53 @@ module logMiniPercept {
 	% debug true for custom percept logging
 	if true then {
 	
-		% timer timing duration percept environment to chosing action ToDo Timer still necessary, would be nice but agent is really fast most of the time
-		%forall percept(timer(_,T1)), bel(elapseStepTime(T2)) do 
-		%delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)).  
+		% timer timing duration from beginning percept to beginning next percept
+		% cancel timer if no percept of timer
+		if not(percept(timer(calculationTimer,_))) then canceltimer(calculationTimer).
+		% set to -1 in Mini Percept which signals faster than 1 millisecond
+		if bel((elapseStepTime(T2))) then delete(elapseStepTime(T2)) + insert(elapseStepTime(-1)).
+		% find highest timer value in percept
+		forall percept(timer(calculationTimer,T1)) do {
+		 if bel(elapseStepTime(T2), T1 > T2) then delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)).  
+		 }
+		% start timer
+		if true then starttimer(calculationTimer,1,4000). % starttimer name,interval,duration
 	
-		% multiple times because of changing number of arguments with var lastActionParams
+		% lastactionresults gets handles multiple times because of possible changing number of arguments with var lastActionParams
 		
 		if percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
-			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction).
+			print("====== Our Mini Percept =====") 
+			+ print(Step|Role+"Agent: "+Result+LastAction).
 			
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
-			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction+Para).
+			print("====== Our Mini Percept =====") 
+			+ print(Step|Role+"Agent: "+Result+LastAction+Para).
 			
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
-			print("====== Our Mini Percept =====") + print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
+			print("====== Our Mini Percept =====") 
+			+ print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
 			
 		% some extra extra custom percept logging because conditional can be false, others for formatting
-		
+
 		if bel(agentAt(X, Y), targetMd(A, B)) then print("Last step AgentAt: "| X| Y+"TargetMD: "| A| B).
 		
 		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType).
 		
 		if bel(targetDispenserAt(X2, Y2, BlockTypeNew, Md)) then print("TargetDispenser: "| X2| Y2+"Block+Distance: "| BlockTypeNew| Md).
 		
-		if bel(targetClosestGoalZone(X, Y, MD)) then print("TargetGoalZone: "| X| Y+"Distance: "| MD).		
+		if bel(targetClosestGoalZone(X, Y, MD)) then print("TargetGoalZone: "| X| Y+"Distance: "| MD).	
+		
+		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).	
+		
+		% Separator
+		if true then print("++++++ MISC DATA ++++++++++++").
+		
+		if percept(step(SimStep)), bel(elapseStepTime(T1), calculateMinusOne(SimStep, SimStep2))  then print("Calculated time for Step"+SimStep2+"in milliseconds: "+ T1).		
 				
 		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
 		
 		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
 		
-		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).
-				
 		if percept(attached(X, Y), thing(X, Y, block, BlockType), X =< 1, Y =< 1) then print("Attached:"| X| Y +BlockType).
 		
 		if percept(goalZone(0, 0)) then print("Agent is in GoalZone").
@@ -52,7 +68,7 @@ module logMiniPercept {
 		if true then print("====== End Mini Percept =====").
 		
 		% logging percept base, message base, believe base
-		if true then log(pb) + log(mb) + log(bb).
+		if true then log(pb) + log(mb) + log(bb) + log(gb).
 		
 	} % debug
 	
