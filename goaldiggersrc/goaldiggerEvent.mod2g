@@ -17,7 +17,6 @@ module goaldiggerEvent {
 	 *
 	 */
 	if bel(lDebugOn(true)) then logMiniPercept.
-
 	
 	/**
 	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
