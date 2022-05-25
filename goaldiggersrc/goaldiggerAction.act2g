@@ -16,9 +16,9 @@ define move(Direction, Direction2) with
 	post{ true }
 	
 % move agent in world, direction like compass nswe, triple speed
-define move(Direction, Direction2, Direction3) with
-	pre{ true }
-	post{ true }
+%define move(Direction, Direction2, Direction3) with
+%	pre{ true }
+%	post{ true }
 	
 % skip move and do no action
 define skip with
@@ -60,22 +60,22 @@ define submit(Task) with
 	pre { true }
 	post { true }
 	
-% connect blocks with other agent
-define connect(Agent, X, Y) with
-	pre { true }
-	post { true }
-	
-% disconnect blocks with other agent
-define disconnect(Agent, X, Y) with
-	pre { true }
-	post { true }	
-	
-% survey location for information
-define survey(X, Y) with
-	pre { true }
-	post { true }
-	
-% survey target for information
-define survey(T) with
-	pre { true }
-	post { true }
+%% connect blocks with other agent
+%define connect(Agent, X, Y) with
+%	pre { true }
+%	post { true }
+%	
+%% disconnect blocks with other agent
+%define disconnect(Agent, X, Y) with
+%	pre { true }
+%	post { true }	
+%	
+%% survey location for information
+%define survey(X, Y) with
+%	pre { true }
+%	post { true }
+%	
+%% survey target for information
+%define survey(T) with
+%	pre { true }
+%	post { true }

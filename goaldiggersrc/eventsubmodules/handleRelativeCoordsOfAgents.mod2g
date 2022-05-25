@@ -11,6 +11,19 @@ module handleRelativeCoordsOfAgents {
 	forall percept(thing(OtherX, OtherY, entity, Details), OtherX \= 0, OtherY \= 0, name(OwnName), team(TeamName)), bel(Details == TeamName, agentAt(OwnX,OwnY), step(Step), Step > 2)
 		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 		
+	% If I have sent a channelNamesRelativeXY message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
+	forall percept(name(AgentReceiver)), (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
+	
+		% if relative coordinates for other agents are unknown
+		if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)), not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
+		
+			% if both agents coords are inverses of each other create confirmedOtherAgentAt belief with relative coords
+			if bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), bel(delocalize(OwnX, OwnY, SenderX, SenderY, OffsetX, OffsetY))
+				then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).
+				
+			}
+			
+		}
 	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
 	%if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
 	

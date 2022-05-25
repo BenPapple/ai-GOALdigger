@@ -31,7 +31,7 @@ transformXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 1.
 
 % Update position XY in relation to agent position X2 Y2
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
-delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1).
+delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1). % X1Y1 gets localized by X2Y2
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
