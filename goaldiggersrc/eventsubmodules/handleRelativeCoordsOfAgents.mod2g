@@ -24,6 +24,29 @@ module handleRelativeCoordsOfAgents {
 			}
 			
 		}
+		
+	% send goalzone coord, HACK: if instead forall sends only 1 goalzone field
+	if bel(storedGoalZone(X, Y, _)), percept(name(AgentName)) then (channelGoalzone).send(sawGoalzoneAt(X, Y, AgentName)).
+	
+	% send dispenser coord, HACK: if instead forall sends only 1 goalzone field
+	forall bel(thingDispenser(X, Y, dispenser, Type, _)), percept(name(AgentName)) do (channelDispenser).send(sawDispenserAt(X, Y, Type, AgentName)).	
+	
+	% store received goalzones in belief
+	forall (_).sent(sawGoalzoneAt(X1, Y1, AgentName)) do {
+	
+		if percept(name(MyName)), bel(MyName \= AgentName, confirmedOtherAgentAt(X2, Y2, AgentName), localize(X1, Y1, X2, Y2, X3, Y3)), 
+			not(bel(storedGoalZone(X3, Y3, _))) then insert(storedGoalZone(X3, Y3, 0)).
+	
+	}
+	
+	% store messaged dispenser data in belief
+	forall (_).sent(sawDispenserAt(X1, Y1, Type, AgentName)) do {
+	
+			if percept(name(MyName)), bel(MyName \= AgentName, confirmedOtherAgentAt(X2, Y2, AgentName), localize(X1, Y1, X2, Y2, X3, Y3)), 
+			not(bel(thingDispenser(X3, Y3, dispenser, Type, _))) then insert(thingDispenser(X3, Y3, dispenser, Type, 0)).
+	
+	}
+	
 	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
 	%if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
 	
