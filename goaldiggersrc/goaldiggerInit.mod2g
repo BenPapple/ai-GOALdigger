@@ -17,6 +17,11 @@ module goaldiggerInit {
 	if true then insert (executeManhattan(false)). % init switch Manhatten Distance
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
+
+	% subscribing to channels
+	if true then subscribe(channelGoalzone).
+	if true then subscribe(channelRolezone).
+	if true then subscribe(channelRelativeXY).
 	
 	% dispenser
 	if true then insert (targetDispenserAt(70, 70, b0, 700)). % init with dummy values 
