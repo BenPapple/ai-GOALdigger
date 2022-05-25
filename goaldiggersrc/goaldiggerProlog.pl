@@ -4,19 +4,24 @@
  */
 
 :- dynamic stepAwaitingAction/1, haveMove/1, step/1, elapseStepTime/1, lDebugOn/1.
-:- dynamic agentAt/2, thing/4, randomAffinity/1.
+:- dynamic agentAt/2, thing/4, randomAffinity/1. % thing equals thing from percept
 :- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
-:- dynamic haveBlockAttached/2. 
-:- dynamic haveDispenserDelivery/2. % switch dispenser delivered block
-:- dynamic targetDispenserAt/4. % XY, BlockType, MD of dispenser to search out for
-:- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers
+:- dynamic haveBlockAttached/2. % (Bool, Dir)
+:- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
+:- dynamic targetDispenserAt/4. % (X,Y,BlockType,MD) of dispenser to search out for
+:- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)
 :- dynamic skipThisStep/1. % do skip/explore until this step
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
-:- dynamic currentChosenTask/6. % task the agent has chosen and works on
-:- dynamic thingDispenser/5. % dispenser percept data plus MD
-:- dynamic storedGoalZone/3. % goalzone percept data plus MD
-:- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field
+:- dynamic currentChosenTask/6. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType)
+:- dynamic thingDispenser/5. % dispenser percept data plus MD (X,Y,Type,Details,MD)
+:- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
+:- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
 :- dynamic activateDoubleSpeed/1.  % switch to deactivate double speed for workers
+:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
+:- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
+:- dynamic sawGoalzoneAt/2. % data for message (X,X)
+:- dynamic sawDispenserAt/3. % data for messages (X,Y, Type)
+
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
