@@ -13,7 +13,7 @@ module logMiniPercept {
 		% timer timing duration from beginning percept to beginning next percept
 		
 		% cancel timer if no percept of timer
-		if not(percept(timer(calculationTimer,_))) then canceltimer(calculationTimer).
+		%if not(percept(timer(calculationTimer,_))) then canceltimer(calculationTimer).
 		%set to -1 in Mini Percept which signals faster than 1 millisecond
 		if bel((elapseStepTime(T2))) then delete(elapseStepTime(T2)) + insert(elapseStepTime(-1)).
 		%find highest timer value in percept
@@ -47,7 +47,10 @@ module logMiniPercept {
 		
 		if bel(targetClosestGoalZone(X, Y, MD)) then print("TargetGoalZone: "| X| Y+"Distance: "| MD).	
 		
-		if bel(executeManhattan(BoolMan), haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("Manhattan:"+BoolMan| "HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).	
+		if bel(executeManhattan) then print("Manhattan Switch Active").
+		if not(bel(executeManhattan)) then print("Manhattan Switch Inactive").
+		
+		if bel(haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).	
 		
 		% Separator
 		if true then print("++++++ MISC DATA ++++++++++++").
