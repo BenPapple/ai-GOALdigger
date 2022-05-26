@@ -45,6 +45,6 @@ module goaldiggerMain {
 		 */
     	if percept(role(worker)) then roleWorker.
     
-    } % if bel(haveMove(false))
+    } % if haveMove
 	
 } % module
