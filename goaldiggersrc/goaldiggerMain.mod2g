@@ -36,6 +36,27 @@ module goaldiggerMain {
     	% as worker change task when task expired or initial task has -1 million steps
     	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
     	
+    	%(TaskName, TaskStep, Reward, X, Y, BlockType)
+    	% choose other task if percept shows dispenser for fitting not expired 1-block task
+    	if percept(step(Step), role(worker)), bel(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType), TaskStep >= Step, executeManhattan(Old), targetMd(X, Y)), 
+    		percept(task(TaskNameNew ,TaskStepNew, 10,[req(Xt,Yt,BlockTypeNew)]), TaskStepNew >= Step, TaskStepNew - Step >= 30), bel(BlockType \= BlockTypeNew),
+    		percept(thing(XNew,YNew,dispenser,BlockTypeNew)), not(bel(haveBlockAttached(true, _)))
+    		, bel(agentAt(X2, Y2), localize(XNew, YNew, X2, Y2, X3, Y3))
+    		, not(percept(thing(XNew,YNew,dispenser,BlockTypeNew), abs(XNew) =< 1, abs(YNew) =< 1))
+    		
+    		then delete(targetMd(X, Y)) + insert(targetMd(X3, Y3)) 
+	    		+ delete(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType)) + insert(currentChosenTask(TaskNameNew ,TaskStepNew, 10,Xt,Yt,BlockTypeNew))
+	    		+ delete(executeManhattan(Old)) + insert(executeManhattan(true)) + canceltimer(calculationTimer).
+	    		
+	    % choose dispenser from percept for fitting not expired active in agent 1-block task 
+    	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= Step, executeManhattan(false), targetMd(X, Y)), 
+    		percept(thing(XNew,YNew,dispenser,BlockType)), not(bel(haveBlockAttached(true, _)))
+    		, bel(agentAt(X2, Y2), localize(XNew, YNew, X2, Y2, X3, Y3))
+    		, not(percept(thing(XNew,YNew,dispenser,BlockType), abs(XNew) =< 1, abs(YNew) =< 1))
+    		
+    		then delete(targetMd(X, Y)) + insert(targetMd(X3, Y3)) 
+	    		+ delete(executeManhattan(false)) + insert(executeManhattan(true)) + canceltimer(calculationTimer).
+    	
     	% detach block if task does not fit
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), role(worker), step(SimStep)), 
     		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep + 3) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
@@ -50,7 +71,7 @@ module goaldiggerMain {
     	% wait in goal zone with block for right task
     	if percept(goalZone(0,0), step(SimStep)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.
     	
-    	% Movement around dispenser
+    	% Movement around dispenser when without block
 	    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), 
 	    	bel(executeManhattan(false), haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
     	    	

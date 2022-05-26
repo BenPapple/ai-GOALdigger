@@ -12,7 +12,6 @@ module goaldiggerInit {
 	if true then insert (activateDoubleSpeed(false)). % switch to deactivate because not allowed in competition1
 	
 	% switches
-	if true then insert ( stepAwaitingAction(true)). % first action awaits percept ToDo NEVER USED????
 	if true then insert (haveMove(true)). % Semaphore of decision for step
 	if true then insert (executeManhattan(false)). % init switch Manhatten Distance
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
