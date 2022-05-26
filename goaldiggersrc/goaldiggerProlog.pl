@@ -3,15 +3,18 @@
  *
  */
 
-:- dynamic haveMove/1. % Switch that signals Main Module to get active
-:- dynamic step/1. % step counter in belief of siimulation
-:- dynamic elapseStepTime/1. % timing step duration for agent
-:- dynamic lDebugOn/1. % true enables debug features logging, timing etc
-:- dynamic agentAt/2. % Coordinates of agent XY
-:- dynamic randomAffinity/1. % thing equals thing from percept
-:- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
+:- dynamic lDebugOn/0. % true enables debug features logging, timing etc
+:- dynamic activateDoubleSpeed/0.  % switch to deactivate double speed for workers
+:- dynamic haveMove/0. % Switch that signals Main Module to get active
+
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
+
+:- dynamic step/1. % step counter in belief of siimulation
+:- dynamic elapseStepTime/1. % timing step duration for agent
+:- dynamic agentAt/2. % Coordinates of agent XY
+:- dynamic randomAffinity/1. % thing equals thing from percept
+:- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. % Variables for Manhatten Distance 
 :- dynamic targetDispenserAt/4. % (X,Y,BlockType,MD) of dispenser to search out for
 :- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)
 :- dynamic skipThisStep/1. % do skip/explore until this step
@@ -20,7 +23,7 @@
 :- dynamic storedDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
 :- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
-:- dynamic activateDoubleSpeed/1.  % switch to deactivate double speed for workers
+
 :- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 :- dynamic sawGoalzoneAt/3. % data for message (X,X, MyAgentName)

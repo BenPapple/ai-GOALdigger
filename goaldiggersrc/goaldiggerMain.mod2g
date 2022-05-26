@@ -6,6 +6,7 @@ use "blockhandling/rotateBlock" as module.
 use "taskhandling/handleTaskSubmit" as module.
 use "taskhandling/chooseTask" as module.
 use "pathfinding/stepAndRequestAroundDispenser" as module.
+use "./actionhandling/postActionCleanup" as module.
 
 exit=never.
 
@@ -22,23 +23,23 @@ exit=never.
 module goaldiggerMain {
 
 	% Server sends new percept and Event sets haveMove(false) and now agent action strategy can continue
-    if bel(haveMove(false)) then {
+    if not(bel(haveMove)) then {
     
     	% handle deactivated by skip
-    	if percept(deactivated(true)) then skip + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
+    	if percept(deactivated(true)) then postActionCleanup + skip.
     
     	% agents want to be free randomExploreMove / skip turn number skipThisStep    	
     	if percept(step(Step)), bel(skipThisStep(SkipStep), Step =< SkipStep) then randomExecuteMove.
     	
     	% if oppurtunity arises adapt worker role until complex role module ready
-    	if percept(role(default), roleZone(0, 0)) then adapt(worker) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer). 
+    	if percept(role(default), roleZone(0, 0)) then postActionCleanup + adapt(worker). 
     	  
     	% as worker change task when task expired or initial task has -1 million steps
     	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
     	
     	%(TaskName, TaskStep, Reward, X, Y, BlockType)
     	% choose other task if percept shows dispenser for fitting not expired 1-block task
-    	if percept(step(Step), role(worker)), bel(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType), TaskStep >= Step, executeManhattan(Old), targetMd(X, Y)), 
+    	if percept(step(Step), role(worker)), bel(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType), TaskStep >= Step, targetMd(X, Y)), 
     		percept(task(TaskNameNew ,TaskStepNew, 10,[req(Xt,Yt,BlockTypeNew)]), TaskStepNew >= Step, TaskStepNew - Step >= 30), bel(BlockType \= BlockTypeNew),
     		percept(thing(XNew,YNew,dispenser,BlockTypeNew)), not(bel(haveBlockAttached(true, _)))
     		, bel(agentAt(X2, Y2), localize(XNew, YNew, X2, Y2, X3, Y3))
@@ -46,37 +47,38 @@ module goaldiggerMain {
     		
     		then delete(targetMd(X, Y)) + insert(targetMd(X3, Y3)) 
 	    		+ delete(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType)) + insert(currentChosenTask(TaskNameNew ,TaskStepNew, 10,Xt,Yt,BlockTypeNew))
-	    		+ delete(executeManhattan(Old)) + insert(executeManhattan(true)) + canceltimer(calculationTimer).
+	    		+ insert(executeManhattan).
 	    		
 	    % choose dispenser from percept for fitting not expired active in agent 1-block task 
-    	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= Step, executeManhattan(false), targetMd(X, Y)), 
+    	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= Step,targetMd(X, Y)), 
     		percept(thing(XNew,YNew,dispenser,BlockType)), not(bel(haveBlockAttached(true, _)))
     		, bel(agentAt(X2, Y2), localize(XNew, YNew, X2, Y2, X3, Y3))
     		, not(percept(thing(XNew,YNew,dispenser,BlockType), abs(XNew) =< 1, abs(YNew) =< 1))
+    		, not(bel(executeManhattan))
     		
     		then delete(targetMd(X, Y)) + insert(targetMd(X3, Y3)) 
-	    		+ delete(executeManhattan(false)) + insert(executeManhattan(true)) + canceltimer(calculationTimer).
+	    		 + insert(executeManhattan).
     	
     	% detach block if task does not fit
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), role(worker), step(SimStep)), 
-    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep + 3) then detach(DirBlock) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
+    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep + 3) then postActionCleanup + detach(DirBlock).
     
     	% submit task if in goal zone with block and corresponding task available
     	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(haveBlockAttached(true, _), 
     		step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
     	
     	% Move to goal zone
-	    if bel(haveBlockAttached(true, _), executeManhattan(true)), percept(task(_,TaskStep,_,[req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep) then manhattanExecuteMove.
+	    if bel(haveBlockAttached(true, _), executeManhattan), percept(task(_,TaskStep,_,[req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep) then manhattanExecuteMove.
         	
     	% wait in goal zone with block for right task
     	if percept(goalZone(0,0), step(SimStep)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.
     	
     	% Movement around dispenser when without block
 	    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), 
-	    	bel(executeManhattan(false), haveBlockAttached(false, _)) then stepAndRequestAroundDispenser.
+	    	bel(haveBlockAttached(false, _)), not(bel(executeManhattan)) then stepAndRequestAroundDispenser.
     	    	
     	% Movement according to Manhatten Distance
-	    if bel(executeManhattan(true)) then manhattanExecuteMove.
+	    if bel(executeManhattan) then manhattanExecuteMove.
 	    
 	    % random movemement actions while having block attached
     	if bel(haveBlockAttached(true, DirBlock)) then {
@@ -95,7 +97,7 @@ module goaldiggerMain {
 		if bel(haveBlockAttached(false,_)) then randomExecuteMove. 
 	
    		% if no move decision skip and prepare idle mode
-		if bel(haveMove(false)) then skip + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
+		if bel(haveMove) then postActionCleanup + skip.
 	    
     } % if bel(haveMove(false))
 	

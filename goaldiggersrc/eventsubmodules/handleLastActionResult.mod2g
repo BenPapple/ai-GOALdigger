@@ -29,7 +29,7 @@ module handleLastActionResult {
 		} 
 		
 		% double move	
-		if percept(lastAction(move), lastActionParams([D, D2])), bel(activateDoubleSpeed(true)) then {
+		if percept(lastAction(move), lastActionParams([D, D2])), bel(activateDoubleSpeed) then {
 			% update agent XY position with confirmed move nswe
 			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
 			if bel(agentAt(X, Y), transformXYD(D2, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
@@ -48,7 +48,7 @@ module handleLastActionResult {
 		if percept(lastAction(request), step(Step)), bel(haveDispenserDelivery(BoolOld, X)) then delete(haveDispenserDelivery(BoolOld, X)) + insert(haveDispenserDelivery(true, Step)).
 		
 		% successful task submit
-		if percept(lastAction(submit)), bel(executeManhattan(BoolOld)) then delete(executeManhattan(BoolOld)) + insert(executeManhattan(false)).
+		if percept(lastAction(submit)) then insert(executeManhattan).
 			 
 	}% lastaction success
 	

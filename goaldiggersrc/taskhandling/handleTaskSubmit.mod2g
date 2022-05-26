@@ -1,6 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../pathfinding/randomExecuteMove" as module.
+use "../actionhandling/postActionCleanup" as module.
 
 /**
  * Rotate logic clearing block/obstacles at rotate target and then rotates
@@ -14,27 +15,25 @@ module handleTaskSubmit {
 		
 		% preconditions for submit achieved, submit task	
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), thing(V, W, block, BlockType), task(TaskFit,Step,_,[req(V, W, BlockType)])), 
-    		bel(step(SimStep), Step >= SimStep) then submit(TaskFit) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
+    		bel(step(SimStep), Step >= SimStep) then postActionCleanup + submit(TaskFit).
     	    	
     	% prefer rotate to south position
 	    if bel(haveBlockAttached(true, DirBlock)) then {
 	
-		if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-		if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-		if bel(DirBlock == s) then skip + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
+		if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
+		if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
+		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
+		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
+		if bel(DirBlock == s) then postActionCleanup + skip.
 	
 		} %if bel(haveBlockAttached(true, DirBlock))	
     	    	
     	% rotate block to fit task, clear if necessary
     	if bel(haveBlockAttached(true, DirBlock), randomRotate(RandRot), rotateToCoord(DirBlock, RandRot, A, B)) then {
     	
-	    	if not(percept(thing(A, B, Type, _), Type \== dispenser)) then rotate(RandRot) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	    	if percept(thing(A, B, obstacle, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== A, W \== B) then clear(A, B) + delete(haveMove(false)) 
-	    		+ insert(haveMove(true)) + canceltimer(calculationTimer).
-			if percept(thing(A, B, block, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== A, W \== B) then clear(A, B) + delete(haveMove(false)) 
-				+ insert(haveMove(true)) + canceltimer(calculationTimer).
+	    	if not(percept(thing(A, B, Type, _), Type \== dispenser)) then postActionCleanup + rotate(RandRot).
+	    	if percept(thing(A, B, obstacle, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== A, W \== B) then postActionCleanup + clear(A, B).
+			if percept(thing(A, B, block, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== A, W \== B) then postActionCleanup + clear(A, B).
     	
     	} %if
     	
@@ -43,27 +42,23 @@ module handleTaskSubmit {
     % waiting in goalzone with block for task and prefer rotate to south position
     if bel(haveBlockAttached(true, DirBlock)) then {
 
-	if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then rotate(cw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then rotate(ccw) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(DirBlock == s) then skip + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if percept(thing(-1, 0, obstacle, _)) then clear(-1, 0) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, block, _)) then clear(-1, 0) + delete(haveMove(false)) 
-		+ insert(haveMove(true)) + canceltimer(calculationTimer).
-	if percept(thing(0, -1, obstacle, _)) then clear(0, 1) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== -1), percept(thing(0, -1, block, _)) then clear(0, 1) + delete(haveMove(false)) 
-		+ insert(haveMove(true)) + canceltimer(calculationTimer).
-	if percept(thing(1, 0, obstacle, _)) then clear(1, 0) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, block, _)) then clear(1, 0) + delete(haveMove(false)) 
-		+ insert(haveMove(true)) + canceltimer(calculationTimer).
-	if percept(thing(0, 1, obstacle, _)) then clear(0, 1) + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, block, _)) then clear(0, 1) + delete(haveMove(false)) 
-		+ insert(haveMove(true)) + canceltimer(calculationTimer).
+	if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
+	if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
+	if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
+	if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
+	if bel(DirBlock == s) then postActionCleanup + skip.
+	if percept(thing(-1, 0, obstacle, _)) then postActionCleanup + clear(-1, 0).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, block, _)) then postActionCleanup + clear(-1, 0).
+	if percept(thing(0, -1, obstacle, _)) then postActionCleanup + clear(0, 1).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== -1), percept(thing(0, -1, block, _)) then postActionCleanup + clear(0, 1).
+	if percept(thing(1, 0, obstacle, _)) then postActionCleanup + clear(1, 0).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, block, _)) then postActionCleanup + clear(1, 0).
+	if percept(thing(0, 1, obstacle, _)) then postActionCleanup + clear(0, 1).
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, block, _)) then postActionCleanup + clear(0, 1).
 
 	}	
 
     % obligatory skip/randomExecuteMove
-	if true then randomExecuteMove + delete(haveMove(false)) + insert(haveMove(true)) + canceltimer(calculationTimer).  
+	if true then randomExecuteMove.  
 		
 } % module
