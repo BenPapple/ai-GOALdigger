@@ -44,24 +44,39 @@ module goaldiggerEvent {
 	 *
 	 */
 	if true then updateDispenserData.
+
+	/**
+	 * SWITCH MAIPULATION
+	 *
+	 */	
+
+	% check old dispenser request and set switch to false
+	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
+	
+	% check attached block direction for block and if none found switch haveBlockAttached false
+	if bel(haveBlockAttached(true, DirBlock), executeManhattan(Old), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
+		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan(Old)) + insert(executeManhattan(false)).
+
+	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
+	if bel(haveBlockAttached(false,_), targetMd(X, Y), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
+	
+	% deactivate manhattan switch if in goalzone with block
+	if bel(haveBlockAttached(true,_), targetMd(X, Y), agentAt(A, B), A == X, B == Y, executeManhattan(true)), percept(goalZone(0, 0)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
+	
 	
 	/**
 	 * MISCELLANEOUS POST EVERYTHING
 	 *
 	 */	
 	 
-	% check attached block direction for block and if none found switch haveBlockAttached false
-	if bel(haveBlockAttached(true, DirBlock), executeManhattan(Old), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
-		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan(Old)) + insert(executeManhattan(false)).
+	% change affinity direction after X steps
+	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 is mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
+		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
 	
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), bel(executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + delete(executeManhattan(false)) + insert(executeManhattan(true)).
 
-	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
-	if bel(haveBlockAttached(false,_), targetMd(X, Y), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan(true)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
-	% deactivate manhattan switch if in goalzone with block
-	if bel(haveBlockAttached(true,_), targetMd(X, Y), agentAt(A, B), A == X, B == Y, executeManhattan(true)), percept(goalZone(0, 0)) then delete(executeManhattan(true)) + insert(executeManhattan(false)).
 		
 	% when role worker with block put first seen goalzone coordinates as targetMd
 	if percept(goalZone(X, Y), role(worker)), bel(haveBlockAttached(true,_), executeManhattan(false), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
@@ -77,13 +92,17 @@ module goaldiggerEvent {
 	% when role worker with block because of disappearing goalzones has to check if goal around manhattan target
 	if percept(haveBlockAttached(true,_), role(worker)), not(percept(goalZone(_, _))), bel(executeManhattan(true), agentAt(X2, Y2), targetMd(X4, Y4), abs(X2 - X4) + abs(Y2 - Y4) =< 2 ) then 
 		delete(executeManhattan(true)) + insert(executeManhattan(false)).
-
-	% Update step counter with new step when new percept step available
-	%if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(false)) then delete(step(Y)) + insert(step(X)).
-	if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(Old)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(Old)) + insert(haveMove(false)).
 		
 	% With block update goalzone target MD
 	if bel(haveBlockAttached(true, _), targetMd(X, Y), targetClosestGoalZone(A, B, _), executeManhattan(BoolOld)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
 		+ delete(executeManhattan(BoolOld)) + insert(executeManhattan(true)).
+
+	/**
+	 * ACTIVATE MAIN LOOP
+	 *
+	 */	
+
+	% Update step counter with new step when new percept step available
+	if percept(step(X)), bel(step(Y), X\==Y, X>0, haveMove(Old)) then delete(step(Y)) + insert(step(X)) + delete(haveMove(Old)) + insert(haveMove(false)).
 	
 } % module

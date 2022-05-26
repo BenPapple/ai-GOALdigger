@@ -3,8 +3,12 @@
  *
  */
 
-:- dynamic stepAwaitingAction/1, haveMove/1, step/1, elapseStepTime/1, lDebugOn/1.
-:- dynamic agentAt/2, thing/4, randomAffinity/1. % thing equals thing from percept
+:- dynamic haveMove/1. % Switch that signals Main Module to get active
+:- dynamic step/1. % step counter in belief of siimulation
+:- dynamic elapseStepTime/1. % timing step duration for agent
+:- dynamic lDebugOn/1. % true enables debug features logging, timing etc
+:- dynamic agentAt/2. % Coordinates of agent XY
+:- dynamic randomAffinity/1. % thing equals thing from percept
 :- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/1. % Variables for Manhatten Distance 
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
@@ -32,18 +36,22 @@ transformXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 1.
 % Update position XY in relation to agent position X2 Y2
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
 delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1). % X1Y1 gets localized by X2Y2 (add negative values, substract positive values)
+
+% Offset calculator
 calculateAgentOffset(RecieverBaseX, RecieverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is RecieverBaseX - SenderBaseX - PerceptOffsetX, 
 	OffsetY is RecieverBaseY - SenderBaseY - PerceptOffsetY.
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
 			integerToDirection(D, Dir).
-			
+	
+% never go back with new random		
 randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
+			integerToDirection(D, NewDir),
 			oppositeDirection(AltDir, OppositAltDir),
 			NewDir \= OppositAltDir,
-			integerToDirection(D, NewDir).
-			
+			NewDir \= AltDir.
+						
 % skip random steps
 skipRandomSteps(SkipSteps) :- random_between(2, 6, SkipSteps).
 			
@@ -59,7 +67,7 @@ randomRotate(Dir) :- random_between(0, 1, R),
 			integerToRotate(R, Dir).
 
 % Give random number for steps after which to change affinity			
-randomChangeStep(Rand) :- random_between(15, 30, Rand).
+randomChangeStep(Rand) :- random_between(10, 20, Rand).
 
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).

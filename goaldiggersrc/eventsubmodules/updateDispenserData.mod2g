@@ -8,40 +8,33 @@ use "../goaldiggerAction" as actionspec.
 
 module updateDispenserData {
 
-	% store unknown dispensers with MD field
+	% STORE unknown dispensers from percept with MD field
 	forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedDispenser(X3, Y3, dispenser, Details, _, _)))) do 
 		insert(storedDispenser(X3, Y3, dispenser, Details, 0, false)).
 		
-	% reset old MD values in targetDispenserAt to high number expected to not occur in simulation
+	% RESET old MD values in targetDispenserAt to high number expected to not occur in simulation
 	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) 
 		+ insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
 		
-	% reset old MD values in targetClosestOfAllDispensersAt to high number expected to not occur in simulation
+	% RESET old MD values in targetClosestOfAllDispensersAt to high number expected to not occur in simulation
 	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) 
 		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
 		
-	% calculate MD for all stored in bel dispensers
+	% CALCULATE MD for all stored in bel dispensers
 	forall bel(storedDispenser(X, Y, dispenser, Details, MDValue, _), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {	 
 		if bel(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) then delete(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) + insert(storedDispenser(X, Y, dispenser, Details, Md, CheckSend)).	
 	}
 	
-	% compare lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
+	% COMPARE lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
 	forall bel(currentChosenTask(_, _, _, _, _, BlockType), haveBlockAttached(false, _), storedDispenser(X, Y, dispenser, BlockType, MDValue, _)), percept(role(worker)) do {	
 		if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
 	}
 	
-	% compare lowest MD value for ALL stored dispensers 
+	% COMPARE lowest MD value for ALL stored dispensers 
 	forall bel(storedDispenser(X, Y, dispenser, BlockType, MDValue, _), haveBlockAttached(false,_)), percept(role(worker)) 
 		do {
 		if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) + 
 			insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).	
 	}
-	
-	% change affinity direction after X steps
-	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 is mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
-		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
-	
-	% check old dispenser request and set switch to false
-	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
 	
 } % module
