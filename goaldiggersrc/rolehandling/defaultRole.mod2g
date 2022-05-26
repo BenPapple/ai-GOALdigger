@@ -1,0 +1,24 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../actionhandling/postActionCleanup" as module.
+use "../pathfinding/manhattanExecuteMove" as module.
+use "../pathfinding/randomExecuteMove" as module.
+
+
+/**
+ * Main decision rules for role default
+ *
+ */
+
+module defaultRole {
+
+    	% if oppurtunity arises adapt worker role until complex role module ready
+    	if percept(roleZone(0, 0)) then postActionCleanup + adapt(worker).
+    	
+    	% Movement according to Manhatten Distance
+	    if bel(executeManhattan) then manhattanExecuteMove.
+	    
+	    % explore
+	    if true then randomExecuteMove. 	    
+	
+} % end module
