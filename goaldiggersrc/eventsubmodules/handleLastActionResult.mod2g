@@ -46,10 +46,7 @@ module handleLastActionResult {
 		
 		% successful dispenser request
 		if percept(lastAction(request), step(Step)), bel(haveDispenserDelivery(BoolOld, X)) then delete(haveDispenserDelivery(BoolOld, X)) + insert(haveDispenserDelivery(true, Step)).
-		
-		% successful task submit
-		if percept(lastAction(submit)) then insert(executeManhattan).
-			 
+	 
 	}% lastaction success
 	
 }

@@ -5,6 +5,7 @@ use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/handleLastActionResult" as module.
 use "./eventsubmodules/handleRelativeCoordsOfAgents" as module.
+use "./pathfinding/manageManhattanSwitchStatus" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -43,10 +44,10 @@ module goaldiggerEvent {
 	 * SUBMODULE UPDATE DISPENSER MAP
 	 *
 	 */
-	if true then updateDispenserData.
+	if true then updateDispenserData.	
 
 	/**
-	 * SWITCH MAIPULATION
+	 * MISC SWITCH MANIPULATION
 	 *
 	 */	
 
@@ -55,13 +56,13 @@ module goaldiggerEvent {
 	
 	% check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
-		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)) + delete(executeManhattan).
+		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
 
-	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
-	if bel(haveBlockAttached(false,_), targetMd(X, Y), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan) then delete(executeManhattan).
-	
-	% deactivate manhattan switch if in goalzone with block
-	if bel(haveBlockAttached(true,_), targetMd(X, Y), agentAt(A, B), A == X, B == Y, executeManhattan), percept(goalZone(0, 0)) then delete(executeManhattan).
+	/**
+	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
+	 *
+	 */	
+	 if true then manageManhattanSwitchStatus.		
 	
 	
 	/**
@@ -86,13 +87,6 @@ module goaldiggerEvent {
 	if percept(goalZone(X, Y), role(worker)), bel(executeManhattan, haveBlockAttached(true,_), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
 		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)).
 	
-	% when role worker on goalzone without block deactivate manhattan switch
-	if percept(goalZone(0, 0), role(worker)), bel(haveBlockAttached(false,_)), bel(executeManhattan) then delete(executeManhattan).
-	
-	% when role worker with block because of disappearing goalzones has to check if goal around manhattan target
-	if percept(haveBlockAttached(true,_), role(worker)), not(percept(goalZone(_, _))), bel(executeManhattan, agentAt(X2, Y2), targetMd(X4, Y4), abs(X2 - X4) + abs(Y2 - Y4) =< 2 ) then 
-		delete(executeManhattan).
-		
 	% With block update goalzone target MD
 	if bel(haveBlockAttached(true, _), targetMd(X, Y), targetClosestGoalZone(A, B, _)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
 		+ insert(executeManhattan).

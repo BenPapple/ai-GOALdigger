@@ -1,0 +1,25 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Manages all cases to switch off Manhattan Switch targetMd(x,y,type) concerning type field
+ *
+ */
+
+module manageManhattanSwitchStatus {
+
+	% deactivate on successful task submit
+	if percept(lastActionResult(success), lastAction(submit)), bel(executeManhattan) then delete(executeManhattan).
+	
+	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
+	if bel(haveBlockAttached(false,_), targetMd(X, Y), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan) then delete(executeManhattan).
+	
+	% deactivate manhattan switch if in goalzone with block
+	if bel(haveBlockAttached(true,_), targetMd(X, Y), agentAt(A, B), A == X, B == Y, executeManhattan), percept(goalZone(0, 0)) then delete(executeManhattan).
+	
+	% check if have block and if none found switch haveBlockAttached false
+	if bel(haveBlockAttached(false, DirBlock), executeManhattan) then delete(executeManhattan).
+	
+	
+
+}

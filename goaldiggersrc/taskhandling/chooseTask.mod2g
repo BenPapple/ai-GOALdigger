@@ -51,7 +51,7 @@ module chooseTask {
 	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100) then {
 		
 		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
-		insert(executeManhattan) + delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType)).
+		delete(executeManhattan) + delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType)).
 		
 	} % if
 
