@@ -21,7 +21,7 @@ module logMiniPercept {
 		 if bel(elapseStepTime(T2), T1 > T2) then delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)).  
 		 }
 		%start timer
-		if true then starttimer(calculationTimer,1,4000). % starttimer name,interval,duration
+		if true then starttimer(calculationTimer,100,4000). % starttimer name,interval,duration
 	
 		% lastactionresults gets handles multiple times because of possible changing number of arguments with var lastActionParams
 		

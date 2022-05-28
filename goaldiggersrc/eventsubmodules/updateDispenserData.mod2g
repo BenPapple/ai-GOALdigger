@@ -21,9 +21,8 @@ module updateDispenserData {
 		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
 		
 	% CALCULATE MD for all stored in bel dispensers
-	forall bel(storedDispenser(X, Y, dispenser, Details, MDValue, _), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {	 
-		if bel(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) then delete(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) + insert(storedDispenser(X, Y, dispenser, Details, Md, CheckSend)).	
-	}
+	forall bel(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do 
+		delete(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) + insert(storedDispenser(X, Y, dispenser, Details, Md, CheckSend)).	
 	
 	% COMPARE lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
 	forall bel(currentChosenTask(_, _, _, _, _, BlockType), haveBlockAttached(false, _), storedDispenser(X, Y, dispenser, BlockType, MDValue, _)), percept(role(worker)) do {	

@@ -41,24 +41,24 @@ module roleWorker {
 		 *
 		 */		  
     	if bel(haveBlockAttached(true,DirBlock)) then {
+
+			% as worker change task when task expired or initial task has -1 million steps
+	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
     	
 	    	% detach block if task does not fit
 	    	if bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), step(SimStep)), 
 	    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep) then postActionCleanup + detach(DirBlock).
 	    
 	    	% submit task if in goal zone with block and corresponding task available
-	    	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
 	    	% Move to goal zone
-		    if bel(executeManhattan), percept(task(_,TaskStep,_,[req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep) then manhattanExecuteMove.
+		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then manhattanExecuteMove.
 	        	
 	    	% wait in goal zone with block for right task
-	    	if percept(goalZone(0,0), step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.	    	
+	    	%if percept(goalZone(0,0), step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.	    	
 	    	 	    	
-	    	% Movement according to Manhatten Distance
-		    if bel(executeManhattan) then manhattanExecuteMove.
-		    
-		    % random movemement actions while having block attached
+ 		    % random movemement actions while having block attached
 	    	if bel(haveBlockAttached(true, DirBlock)) then {
 	    
 	    		% rotate block behind agent direction affinity
