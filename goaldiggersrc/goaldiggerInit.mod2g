@@ -11,6 +11,9 @@ module goaldiggerInit {
 	if true then insert (lDebugOn). % Variable für Debug, zB elapseStepTime
 	%if true then insert (activateDoubleSpeed). % switch to deactivate because not allowed in competition1
 	
+	% global values
+	if true then insert(limitChangeStepMinMax(10 , 20)). % lowest and highest limit after which agent changes explore direction
+	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
 	%if true then insert (executeManhattan(false)). % init switch Manhatten Distance
@@ -34,7 +37,7 @@ module goaldiggerInit {
 	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)). % filler task -11001001 so it gets replaced when real task available
 		
 	% manhattan distance
-	if true then insert (targetMd(-900, -900)). % init Manhatten Distance 
+	if true then insert (targetMd(-999, -999, placeholdertarget)). % init Manhatten Distance 
 	if true then insert (nMd(0)). % ManhattanDistance for field north of agent
 	if true then insert (sMd(0)). % ManhattanDistance for field south of agent
 	if true then insert (eMd(0)). % ManhattanDistance for field east of agent
@@ -44,7 +47,7 @@ module goaldiggerInit {
 	if true then insert ( step(-1)). % init server steps
 	if true then insert (agentAt(0,0)). % agent starting coordinate	
 	if bel(randomDirection(X)) then insert (randomAffinity(X)). % random general direction to explore for agent
-	if bel(randomChangeStep(X)) then insert (changeAffinityAfterTheseSteps(X)). % self explaining
+	if bel(limitChangeStepMinMax(X, Y), randomBetween(X, Y, Out)) then insert (changeAffinityAfterTheseSteps(Out)). % self explaining
 	if true then insert (elapseStepTime(0)). % Time measurement between step
 	if true then insert (skipThisStep(-2)). % turns to skip with random explore move
 	

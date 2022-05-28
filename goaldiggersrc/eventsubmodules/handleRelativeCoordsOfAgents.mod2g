@@ -11,11 +11,12 @@ module handleRelativeCoordsOfAgents {
 %	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
 %		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 %		
-%	% If I have sent a channelNamesRelativeXY message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
+	% If I have sent a channelNamesRelativeXY message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
 %	forall percept(name(AgentReceiver)), (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
 %	
 %		% if relative coordinates for other agents are unknown
 %		if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)), not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
+%			% and no more than 2 agents have these relative position communicated
 %			if (Connect3).sent(seenOtherAgentAt(_, _,OtherX3, OtherY3, Step, _)), bel(Connect2 \= Connect3, (OtherX) =:= -1 * (OtherX3), (OtherY) =:= -1 * (OtherY3)) then {
 %				% if both agents coords are inverses of each other create confirmedOtherAgentAt belief with relative coords
 %				if bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 

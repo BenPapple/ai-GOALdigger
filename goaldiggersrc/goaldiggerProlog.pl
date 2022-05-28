@@ -10,11 +10,11 @@
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
 
-:- dynamic step/1. % step counter in belief of siimulation
+:- dynamic step/1. % step counter in belief of simulation
 :- dynamic elapseStepTime/1. % timing step duration for agent
 :- dynamic agentAt/2. % Coordinates of agent XY
 :- dynamic randomAffinity/1. % thing equals thing from percept
-:- dynamic targetMd/2, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. % Variables for Manhatten Distance 
+:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. % Variables for Manhatten Distance 
 :- dynamic targetDispenserAt/4. % (X,Y,BlockType,MD) of dispenser to search out for
 :- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)
 :- dynamic skipThisStep/1. % do skip/explore until this step
@@ -23,6 +23,7 @@
 :- dynamic storedDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
 :- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
+:- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
 
 :- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
@@ -69,8 +70,8 @@ random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 randomRotate(Dir) :- random_between(0, 1, R),
 			integerToRotate(R, Dir).
 
-% Give random number for steps after which to change affinity			
-randomChangeStep(Rand) :- random_between(10, 20, Rand).
+% Give random number between lower and higher bound			
+randomBetween(InLow, InHigh, RandOut) :- random_between(InLow, InHigh, RandOut).
 
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).

@@ -6,6 +6,7 @@ use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/handleLastActionResult" as module.
 use "./eventsubmodules/handleRelativeCoordsOfAgents" as module.
 use "./pathfinding/manageManhattanSwitchStatus" as module.
+use "./pathfinding/manageManhattanTarget" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -18,7 +19,10 @@ module goaldiggerEvent {
 	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
 	 *
 	 */
-	if bel(lDebugOn) then logMiniPercept.
+	if bel(lDebugOn) then logMiniPercept.	
+	
+	% Update step counter with new step when new percept step available
+	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
 	
 	/**
 	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
@@ -37,14 +41,14 @@ module goaldiggerEvent {
 	 * SUBMODULE UPDATE GOALZONE MAP
 	 *
 	 */
-	if true then updateGoalzoneData.
+	if bel(haveBlockAttached(true, _)) then updateGoalzoneData.
 
 
 	/**
 	 * SUBMODULE UPDATE DISPENSER MAP
 	 *
 	 */
-	if true then updateDispenserData.	
+	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.	
 
 	/**
 	 * MISC SWITCH MANIPULATION
@@ -57,6 +61,7 @@ module goaldiggerEvent {
 	% check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
+		
 
 	/**
 	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
@@ -74,32 +79,18 @@ module goaldiggerEvent {
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 is mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
 		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
 	
-	% when role default store first seen RoleZone coordinates as targetMd
-	if percept(roleZone(X, Y), role(default)), bel(agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)), not(bel(executeManhattan)) then 
-		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + insert(executeManhattan).
-
-		
-	% when role worker with block put first seen goalzone coordinates as targetMd
-	if percept(goalZone(X, Y), role(worker)), bel(haveBlockAttached(true,_), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)), not(bel(executeManhattan)) then 
-		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)) + insert(executeManhattan).
-	
-	% when role worker with block put from percept seen goalzone coordinates as targetMd because of disappearing goalzones
-	if percept(goalZone(X, Y), role(worker)), bel(executeManhattan, haveBlockAttached(true,_), agentAt(X2, Y2), targetMd(X4, Y4), localize(X, Y, X2, Y2, X3, Y3)) then 
-		delete(targetMd(X4, Y4)) + insert(targetMd(X3, Y3)).
-	
-	% With block update goalzone target MD
-	if bel(haveBlockAttached(true, _), targetMd(X, Y), targetClosestGoalZone(A, B, _)) then delete(targetMd(X, Y)) + insert(targetMd(A, B)) 
-		+ insert(executeManhattan).
-
+	/**
+	 * SUBMODULE MANHATTAN TARGET MANIPULATION
+	 *
+	 */	
+	 if true then manageManhattanTarget.
+	 
 	/**
 	 * ACTIVATE MAIN LOOP
 	 *
 	 */	
-
-	% Update step counter with new step when new percept step available
-	if percept(step(X)), bel(step(Y), X\==Y, X>0) then {
-		if true then delete(step(Y)) + insert(step(X)).
-		if bel(haveMove) then delete(haveMove).
-	}
+	
+	% prepare action chosing in main module
+	if bel(haveMove) then delete(haveMove).
 	
 } % module
