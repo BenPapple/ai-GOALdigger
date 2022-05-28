@@ -15,6 +15,10 @@ use "./pathfinding/manageManhattanTarget" as module.
 
 module goaldiggerEvent {
 
+	% concerning changing simulation
+	if percept(step(0)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)).
+	if percept(step(0)), bel(agentAt(V1, V2)) then delete(agentAt(V1, V2)) + insert(agentAt(0, 0)).
+	
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
 	
@@ -41,7 +45,7 @@ module goaldiggerEvent {
 	 * SUBMODULE UPDATE GOALZONE MAP
 	 *
 	 */
-	if bel(haveBlockAttached(true, _)) then updateGoalzoneData.
+	if bel(haveBlockAttached(true, _)), percept(role(worker)) then updateGoalzoneData.
 
 
 	/**

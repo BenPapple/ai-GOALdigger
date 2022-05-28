@@ -15,6 +15,7 @@ module manageManhattanSwitchStatus {
 	if bel(executeManhattan, targetMd(_, _, goalzone), haveBlockAttached(false, _)), percept(role(worker)) then delete(executeManhattan).
 	if bel(executeManhattan, targetMd(_, _, dispenser), haveBlockAttached(true, _)), percept(role(worker)) then delete(executeManhattan).
 	
+	if bel(haveBlockAttached(true, _), executeManhattan, targetClosestGoalZone(_, _, MdAlt), MdAlt >= 123456) then delete(executeManhattan).
 	
 	% deactivate on successful task submit
 	%if percept(lastActionResult(success), lastAction(submit)), bel(executeManhattan) then delete(executeManhattan).
