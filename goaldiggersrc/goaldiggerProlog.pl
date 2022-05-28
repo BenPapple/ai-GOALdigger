@@ -53,8 +53,7 @@ randomDirection(Dir) :- random_between(0, 3, D),
 randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
 			integerToDirection(D, NewDir),
 			oppositeDirection(AltDir, OppositAltDir),
-			NewDir \= OppositAltDir,
-			NewDir \= AltDir.
+			NewDir \= OppositAltDir.
 						
 % skip random steps
 skipRandomSteps(SkipSteps) :- random_between(2, 6, SkipSteps).
