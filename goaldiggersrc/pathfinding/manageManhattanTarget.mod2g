@@ -21,7 +21,7 @@ module manageManhattanTarget {
 				}
 		
 	% With block update goalzone target MD
-	if bel(haveBlockAttached(true, _), targetMd(X, Y, Target), targetClosestGoalZone(A, B, _)) then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) 
+	if bel(haveBlockAttached(true, _), targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567) then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) 
 		+ insert(executeManhattan).
 		
 	%	% when role worker with block put first seen goalzone coordinates as targetMd

@@ -15,12 +15,6 @@ use "./pathfinding/manageManhattanTarget" as module.
 
 module goaldiggerEvent {
 
-	/**
-	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
-	 *
-	 */
-	if bel(lDebugOn) then logMiniPercept.	
-	
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
 	
@@ -29,6 +23,12 @@ module goaldiggerEvent {
 	 *
 	 */
 	if true then handleLastActionResult.
+
+	/**
+	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
+	 *
+	 */
+	if bel(lDebugOn) then logMiniPercept.	
 	
 	/**
 	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER handleLastActionResult MOVE !!!
