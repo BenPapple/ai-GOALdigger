@@ -22,33 +22,14 @@ module roleWorker {
 		if bel(haveBlockAttached(false,_)) then {
 		
 			% as worker change task when task expired or initial task has -1 million steps
-	    	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
+	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
 	    	
-	    	%(TaskName, TaskStep, Reward, X, Y, BlockType)
-	    	% choose other task if percept shows dispenser for fitting not expired 1-block task
-	    	if percept(step(Step), role(worker)), bel(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType), TaskStep >= Step, targetMd(X, Y)), 
-	    		percept(task(TaskNameNew ,TaskStepNew, 10,[req(Xt,Yt,BlockTypeNew)]), TaskStepNew >= Step, TaskStepNew - Step >= 30), bel(BlockType \= BlockTypeNew),
-	    		percept(thing(XNew,YNew,dispenser,BlockTypeNew))
-	    		, bel(agentAt(X2, Y2), localize(XNew, YNew, X2, Y2, X3, Y3))
-	    		, not(percept(thing(XNew,YNew,dispenser,BlockTypeNew), abs(XNew) =< 1, abs(YNew) =< 1))
-	    		
-	    		then delete(targetMd(X, Y)) + insert(targetMd(X3, Y3)) 
-		    		+ delete(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType)) + insert(currentChosenTask(TaskNameNew ,TaskStepNew, 10,Xt,Yt,BlockTypeNew))
-		    		+ insert(executeManhattan).
-		    		
-		    % choose dispenser from percept for fitting not expired active in agent 1-block task 
-	    	if percept(step(Step), role(worker)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= Step,targetMd(X, Y)), 
-	    		percept(thing(XNew,YNew,dispenser,BlockType))
-	    		, bel(agentAt(X2, Y2), localize(XNew, YNew, X2, Y2, X3, Y3))
-	    		, not(percept(thing(XNew,YNew,dispenser,BlockType), abs(XNew) =< 1, abs(YNew) =< 1))
-	    		, not(bel(executeManhattan))
-	    		
-	    		then delete(targetMd(X, Y)) + insert(targetMd(X3, Y3)) 
-		    		 + insert(executeManhattan).
-		    		 
-		    % Movement around dispenser when without block
-		    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1, role(worker)), 
+	        % Movement around dispenser when without block
+		    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1), 
 		    	not(bel(executeManhattan)) then stepAndRequestAroundDispenser.
+	    	
+	    	% manhattan move to dispenser
+	    	if percept(step(SimStep)), bel(targetMd(_, _, dispenser), executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _), TaskStep >= SimStep) then manhattanExecuteMove.
 
     	    % execute random explorer move without attached blocks with affinity to one direction
 			if true then randomExecuteMove. 
@@ -59,11 +40,11 @@ module roleWorker {
 		 * WITH BLOCK
 		 *
 		 */		  
-    	if bel(haveBlockAttached(true,_)) then {
+    	if bel(haveBlockAttached(true,DirBlock)) then {
     	
 	    	% detach block if task does not fit
-	    	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), role(worker), step(SimStep)), 
-	    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep + 3) then postActionCleanup + detach(DirBlock).
+	    	if bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), step(SimStep)), 
+	    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), BlockType \== BlockTypeAttached, TaskStep >= SimStep) then postActionCleanup + detach(DirBlock).
 	    
 	    	% submit task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,TaskStep,_,[req(_,_,BlockType)]), goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.

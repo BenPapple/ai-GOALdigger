@@ -16,7 +16,7 @@ module defaultRole {
     	if percept(roleZone(0, 0)) then postActionCleanup + adapt(worker).
     	
     	% Movement according to Manhatten Distance
-	    if bel(executeManhattan) then manhattanExecuteMove.
+	    if bel(executeManhattan, targetMd(_, _, rolezone)) then manhattanExecuteMove.
 	    
 	    % explore
 	    if true then randomExecuteMove. 	    
