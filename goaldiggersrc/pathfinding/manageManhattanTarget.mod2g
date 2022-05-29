@@ -14,7 +14,7 @@ module manageManhattanTarget {
 		
 	% when role worker and without block set dispenser as target
 	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep, 
-		targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), BlockType == AltBlockType) 
+		targetDispenserAt(AltX, AltY, AltBlockType, _), BlockType == AltBlockType) 
 			then {
 				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + insert(targetMd(AltX, AltY, dispenser)).	
 				if not(bel(executeManhattan)) then insert(executeManhattan).
@@ -24,12 +24,4 @@ module manageManhattanTarget {
 	if bel(haveBlockAttached(true, _), targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567) then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) 
 		+ insert(executeManhattan).
 		
-	%	% when role worker with block put first seen goalzone coordinates as targetMd
-	%	if bel(haveBlockAttached(true,_)), percept(goalZone(X, Y), role(worker)), bel(agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)), not(bel(executeManhattan)) then 
-	%		delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, goalzone)) + insert(executeManhattan).
-	%	
-	%	% when role worker with block put from percept seen goalzone coordinates as targetMd because of disappearing goalzones
-	%	if bel(haveBlockAttached(true,_)), percept(goalZone(X, Y), role(worker)), bel(executeManhattan, agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)) then 
-	%		delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, goalzone)).
-	
-}
+} % end module

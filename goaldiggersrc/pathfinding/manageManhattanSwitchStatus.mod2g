@@ -8,28 +8,17 @@ use "../goaldiggerAction" as actionspec.
 
 module manageManhattanSwitchStatus {
 	
-	% deactivate rolezone target and executeManhattan
+	% deactivate target and executeManhattan when role, targetMd and haveBlock does not match
 	if bel(executeManhattan, targetMd(_, _, dispenser)), percept(role(default)) then delete(executeManhattan).
 	if bel(executeManhattan, targetMd(_, _, goalzone)), percept(role(default)) then delete(executeManhattan).
 	if bel(executeManhattan, targetMd(_, _, rolezone)), percept(role(worker)) then delete(executeManhattan).
 	if bel(executeManhattan, targetMd(_, _, goalzone), haveBlockAttached(false, _)), percept(role(worker)) then delete(executeManhattan).
 	if bel(executeManhattan, targetMd(_, _, dispenser), haveBlockAttached(true, _)), percept(role(worker)) then delete(executeManhattan).
 	
+	% don't use dummy values of targetClosestGoalZone
 	if bel(haveBlockAttached(true, _), executeManhattan, targetClosestGoalZone(_, _, MdAlt), MdAlt >= 123456) then delete(executeManhattan).
 	
-	% deactivate on successful task submit
-	%if percept(lastActionResult(success), lastAction(submit)), bel(executeManhattan) then delete(executeManhattan).
-	
-	% when at manhattan target deactivate manhattan switch, XY same Coord or one value max 1 different 
-	%if bel(haveBlockAttached(false,_), targetMd(X, Y, dispenser), agentAt(A, B), abs(A)-abs(X) =< 1, abs(B)-abs(Y) =< 1, executeManhattan) then delete(executeManhattan).
+	% when at manhattan target deactivate manhattan switch, XY same Coord
 	if bel(targetMd(X, Y, _), agentAt(A, B), X == A, Y == B, executeManhattan) then delete(executeManhattan).
-	
-	% deactivate manhattan switch if in goalzone with block
-	%if bel(haveBlockAttached(true,_), targetMd(X, Y, _), agentAt(A, B), A == X, B == Y, executeManhattan), percept(goalZone(0, 0)) then delete(executeManhattan).
-	
-	% check if have block and if none found switch haveBlockAttached false
-	%if bel(haveBlockAttached(false, _), executeManhattan) then delete(executeManhattan).
-	
-	
 
 }

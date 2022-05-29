@@ -1,7 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 
 /**
- * Handles logging data in Our Mini Percept
+ * Handles logging custom data in Our Mini Percept
  *
  */
 
@@ -14,12 +14,15 @@ module logMiniPercept {
 		
 		% cancel timer if no percept of timer
 		%if not(percept(timer(calculationTimer,_))) then canceltimer(calculationTimer).
+		
 		%set to -1 in Mini Percept which signals faster than 1 millisecond
 		if bel((elapseStepTime(T2))) then delete(elapseStepTime(T2)) + insert(elapseStepTime(-1)).
+		
 		%find highest timer value in percept
 		forall percept(timer(calculationTimer,T1)) do {
 		 if bel(elapseStepTime(T2), T1 > T2) then delete(elapseStepTime(T2)) + insert(elapseStepTime(T1)).  
 		 }
+
 		%start timer
 		if true then starttimer(calculationTimer,100,4000). % starttimer name,interval,duration
 	

@@ -5,10 +5,11 @@ use "../goaldiggerAction" as actionspec.
  * Handles calculating distance of goalzones to agent and manages inserting goalzone data from percept into belief
  *
  */
+ 
+ % ToDo Module not used see if still necessary
 
 module updateManhattanTarget {
 
-	%(TaskName, TaskStep, Reward, X, Y, BlockType)
 	% choose other task if percept shows dispenser for fitting not expired 1-block task
 	if percept(step(Step)), bel(currentChosenTask(V1, TaskStep, V3, V4, V5, BlockType), TaskStep >= Step, targetMd(X, Y, Target)), 
 		percept(task(TaskNameNew ,TaskStepNew, 10,[req(Xt,Yt,BlockTypeNew)]), TaskStepNew >= Step, TaskStepNew - Step >= 30), bel(BlockType \= BlockTypeNew),

@@ -46,14 +46,6 @@ module chooseTask {
 		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then 
 		delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType)).
 		
-	} % if
-
-	
-	
-	
-	
-	
-	
-	
+	} % if	
 	
 } % module

@@ -71,8 +71,6 @@ module roleWorker {
 	    
 	    		} % if bel(haveBlockAttached(true, DirBlock))
     		
-    	} % end haveBlockAttached(true,_)	    
-	    
-
+    	} % end haveBlockAttached(true,_)	
 	
 }

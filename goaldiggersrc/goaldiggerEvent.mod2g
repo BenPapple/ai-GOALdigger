@@ -15,7 +15,7 @@ use "./pathfinding/manageManhattanTarget" as module.
 
 module goaldiggerEvent {
 
-	% concerning changing simulation
+	% concerning changing simulation reset values that can't survive into next simulation
 	if percept(step(0)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)).
 	if percept(step(0)), bel(agentAt(V1, V2)) then delete(agentAt(V1, V2)) + insert(agentAt(0, 0)).
 	
@@ -65,7 +65,6 @@ module goaldiggerEvent {
 	% check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
-		
 
 	/**
 	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
@@ -80,7 +79,7 @@ module goaldiggerEvent {
 	 */	
 	 
 	% change affinity direction after X steps
-	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 is mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
+	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
 		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
 	
 	/**
