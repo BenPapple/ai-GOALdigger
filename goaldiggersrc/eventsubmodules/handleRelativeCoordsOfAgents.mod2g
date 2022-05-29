@@ -5,6 +5,8 @@ use "../goaldiggerProlog" as knowledge.
  *
  */
 
+% ToDo fix message system
+
 module handleRelativeCoordsOfAgents {
 
 %	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen

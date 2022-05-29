@@ -1,22 +1,12 @@
 use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
-use "pathfinding/manhattanExecuteMove" as module.
 use "pathfinding/randomExecuteMove" as module.
-use "blockhandling/rotateBlock" as module.
-use "taskhandling/handleTaskSubmit" as module.
-use "taskhandling/chooseTask" as module.
-use "pathfinding/stepAndRequestAroundDispenser" as module.
 use "./actionhandling/postActionCleanup" as module.
 use "./rolehandling/defaultRole" as module.
 use "./rolehandling/roleWorker" as module.
 
 exit=never.
 
-/**
- * Macro definitions
- *
- */
- 
 /**
  * Main decision rules for every step server sends
  *

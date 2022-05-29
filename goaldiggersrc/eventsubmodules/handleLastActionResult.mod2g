@@ -2,7 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * Handles field lastActionResult and alters belief accordingly
+ * Handles field lastActionResult from percept and alters belief accordingly
  *
  */
 
@@ -10,7 +10,7 @@ module handleLastActionResult {
 
 	% Managing action partial_success action messages
 	forall percept(lastActionResult(partial_success)) do {	
-	% single move instead of two
+		% single move instead of two
 		if percept(lastAction(move), lastActionParams([D, _])) then {
 			% update agent XY position with confirmed move nswe
 			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
