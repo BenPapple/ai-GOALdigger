@@ -8,7 +8,7 @@ use goaldiggerProlog as knowledge.
 module goaldiggerInit {
 
 	% debug and custom competition rules
-	if true then insert (lDebugOn). % Variable für Debug, zB elapseStepTime
+	if true then insert (lDebugOn). % Variable fÃ¼r Debug, zB elapseStepTime
 	%if true then insert (activateDoubleSpeed). % switch to deactivate because not allowed in competition1
 	
 	% global values
