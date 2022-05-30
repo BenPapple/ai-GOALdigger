@@ -4,61 +4,42 @@ use "../pathfinding/randomExecuteMove" as module.
 use "../actionhandling/postActionCleanup" as module.
 
 /**
- * Rotate logic clearing block/obstacles at rotate target and then rotates
+ * Rotate logic clearing block/obstacles at rotate target and then rotates prefering south, if block south submit action
  *
  */
 
 module handleTaskSubmit {
 
-	% rotate block according to task or submit task if block position as requested
-	if bel(currentChosenTask(_, _, _, _, _, BlockType)), percept(task(_,Step,_,[req(_,_,BlockType)])), bel(step(SimStep), Step >= SimStep) then {
+	% submit block if it is south of agent
+	if bel(currentChosenTask(_, TaskStep, _, _, _, BlockType)), bel(step(SimStep), TaskStep >= SimStep) then {
 		
 		% preconditions for submit achieved, submit task	
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), thing(V, W, block, BlockType), task(TaskFit,Step,_,[req(V, W, BlockType)])), 
     		bel(step(SimStep), Step >= SimStep) then postActionCleanup + submit(TaskFit).
     	    	
-    	% prefer rotate to south position
-	    if bel(haveBlockAttached(true, DirBlock)) then {
-	
+    } %bel(currentChosenTask(
+
+	% prefer rotate to south position and clear route to it if necessary
+    if bel(haveBlockAttached(true, DirBlock)) then {
+
+		% rotate block to south position if free target fields
 		if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
 		if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
 		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
 		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
 		if bel(DirBlock == s) then postActionCleanup + skip.
+		
+		% clear fields west, east and south from obstacle and blocks to enable rotate to south or closer positions	
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, block, _)) then postActionCleanup + clear(-1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, obstacle, _)) then postActionCleanup + clear(-1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, block, _)) then postActionCleanup + clear(1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, obstacle, _)) then postActionCleanup + clear(1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, block, _)) then postActionCleanup + clear(0, 1).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, obstacle, _)) then postActionCleanup + clear(0, 1).
 	
-		} %if bel(haveBlockAttached(true, DirBlock))	
-    	    	
-    	% rotate block to fit task, clear if necessary
-    	if bel(haveBlockAttached(true, DirBlock), randomRotate(RandRot), rotateToCoord(DirBlock, RandRot, A, B)) then {
-    	
-	    	if not(percept(thing(A, B, Type, _), Type \== dispenser)) then postActionCleanup + rotate(RandRot).
-	    	if percept(thing(A, B, obstacle, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== A, W \== B) then postActionCleanup + clear(A, B).
-			if percept(thing(A, B, block, _)), bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== A, W \== B) then postActionCleanup + clear(A, B).
-    	
-    	} %if
-    	
-    } % if
-    
-    % waiting in goalzone with block for task and prefer rotate to south position
-    if bel(haveBlockAttached(true, DirBlock)) then {
-
-	if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-	if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
-	if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
-	if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-	if bel(DirBlock == s) then postActionCleanup + skip.
-	if percept(thing(-1, 0, obstacle, _)) then postActionCleanup + clear(-1, 0).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, block, _)) then postActionCleanup + clear(-1, 0).
-	if percept(thing(0, -1, obstacle, _)) then postActionCleanup + clear(0, 1).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== -1), percept(thing(0, -1, block, _)) then postActionCleanup + clear(0, 1).
-	if percept(thing(1, 0, obstacle, _)) then postActionCleanup + clear(1, 0).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, block, _)) then postActionCleanup + clear(1, 0).
-	if percept(thing(0, 1, obstacle, _)) then postActionCleanup + clear(0, 1).
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, block, _)) then postActionCleanup + clear(0, 1).
-
-	}	
-
-    % obligatory skip/randomExecuteMove
-	if true then randomExecuteMove.  
+	}
+	
+	% obligatory skip/randomExecuteMove
+	if true then skip.  
 		
 } % module
