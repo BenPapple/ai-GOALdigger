@@ -2,6 +2,9 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../actionhandling/postActionCleanup" as module.
 use "./moveWithoutBlock" as module.
+use "../blockhandling/rotateBlock" as module.
+use "../pathfinding/executeRandomMove" as module.
+use "./moveOrClearForward" as module.
 
 order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
 
@@ -12,7 +15,29 @@ order = linearrandom. % random choice between equal values requires random; line
 
 module moveWithBlock {
 
-% ToDo create moving with block random
-if  bel(haveBlockAttached(true, _)) then moveWithoutBlock. % stub uses without block while having block, needs to change
+	% rotate block behind agent direction affinity
+	if  bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, OppoDir), 
+		DirBlock \== OppoDir) then rotateBlock.
+
+    % random 90 degree move if blocked Obstacle main direction, checking free fields for agent and attached block 
+    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
+    	if  bel( directionToCoordinate(AltMove, Xm, Ym), diagonalCoordForAffiAndOppoBlock(Diry,AltMove,A,B)), not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)), 
+    		not(percept(thing(A, B, Type,_), Type \== dispenser)) then {
+    		
+	    		if percept(thing(Xn, Yn, entity,_)) then postActionCleanup + move(AltMove).
+	    		if percept(thing(Xn, Yn, block,_)) then postActionCleanup + move(AltMove).
+	    		
+        }
+        if  bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym), diagonalCoordForAffiAndOppoBlock(Diry,AltAltMove,A,B)), not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)), 
+        	not(percept(thing(A, B, Type,_), Type \== dispenser)) then {
+        	
+	    		if percept(thing(Xn, Yn, entity,_)) then postActionCleanup + move(AltAltMove).
+	    		if percept(thing(Xn, Yn, block,_)) then postActionCleanup + move(AltAltMove).
+	    		
+        }
+    } % random 90 degree
+
+	%  move into affinity direction
+	if  bel(haveBlockAttached(true, _)) then moveOrClearForward.
 	
-}
+} % end module

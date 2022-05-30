@@ -20,7 +20,7 @@ module goaldiggerMain {
     	% handle deactivated by skip
     	if percept(deactivated(true)) then postActionCleanup + skip.
     
-    	% agents want to be free randomExploreMove / skip turn number skipThisStep    	
+    	% agents want to be free randomExploreMove for turn number skipThisStep    	
     	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep) then executeRandomMove.
     	
 	    /**

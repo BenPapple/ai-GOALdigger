@@ -16,7 +16,8 @@ module stepAndRequestAroundDispenser {
 	% handle situation when agent on top of dispenser
 	if bel(haveBlockAttached(false, _), currentChosenTask(_, _, _, _, _, BlockType)), percept(thing(0, 0, dispenser, BlockType), role(worker)) 
 		then executeRandomMove.
-	
+
+
 	% Block attaching if in position
 	if  bel(haveBlockAttached(false,_)), bel(haveDispenserDelivery(true, X), step(Step), X  =< Step + 1, currentChosenTask(_, _, _, _, _, BlockType)),
 	 percept(thing(A, B, block, BlockType), abs(A) =< 1, abs(B) =< 1) then {
@@ -27,23 +28,6 @@ module stepAndRequestAroundDispenser {
 		if percept(thing(0, 1, block,_), thing(0, 1, dispenser,_)), not(percept(attached(0, 1))) then postActionCleanup + attach(s).
 	
 	}
-	
-	% if entity around and block on near dispenser move out and skip 1 turn
-	if  bel(haveBlockAttached(false,_), currentChosenTask(_, _, _, _, _, BlockType)),  
-		percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1) then {
-	
-		if percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1), bel(skipThisStep(SkipStep), step(Step), skipRandomSteps(RandSteps)) then { 
-			if percept(thing(1, 0, dispenser,_)) then 
-			postActionCleanup + move(w) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-			if percept(thing(-1, 0, dispenser,_)) then 
-			postActionCleanup + move(e) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-			if percept(thing(0, 1, dispenser,_)) then 
-			postActionCleanup + move(n) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-			if percept(thing(0, -1, dispenser,_)) then 
-			postActionCleanup + move(s) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
-		}
-		
-	} % block on dispenser
 
 	% request block if in position nswe of dispenser
 	if  bel(haveBlockAttached(false,_)), bel(currentChosenTask(_, _, _, _, _, BlockType)), 
@@ -62,6 +46,23 @@ module stepAndRequestAroundDispenser {
 		if percept(thing(0, -1, dispenser,_)), percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) then postActionCleanup + clear(0, -1).
 	
 	}
+
+	% if entity around and block on near dispenser move out and skip X turns
+	if  bel(haveBlockAttached(false,_), currentChosenTask(_, _, _, _, _, BlockType)),  
+		percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1) then {
+	
+		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), bel(skipThisStep(SkipStep), step(Step), skipRandomSteps(RandSteps)) then { 
+			if percept(thing(1, 0, dispenser,_)) then 
+			postActionCleanup + move(w) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+			if percept(thing(-1, 0, dispenser,_)) then 
+			postActionCleanup + move(e) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+			if percept(thing(0, 1, dispenser,_)) then 
+			postActionCleanup + move(n) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+			if percept(thing(0, -1, dispenser,_)) then 
+			postActionCleanup + move(s) + delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)).
+		}
+		
+	} % other entity around
 	
 	% Moving into position nswe of dispenser 
 	if  bel(haveBlockAttached(false,_)), bel(currentChosenTask(_, _, _, _, _, BlockType)), 
