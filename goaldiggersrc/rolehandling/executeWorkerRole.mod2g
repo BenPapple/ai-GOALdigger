@@ -55,10 +55,7 @@ module executeWorkerRole {
 	    	% Move to goal zone
 		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	        	
-	    	% wait in goal zone with block for right task
-	    	%if percept(goalZone(0,0), step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.	    	
-	    	 	    	
- 		    % random movemement actions while having block attached
+	    	% random movemement actions while having block attached
 	    	if bel(haveBlockAttached(true, DirBlock)) then executeRandomMove.
 	    	
     	} % end haveBlockAttached(true,_)	
