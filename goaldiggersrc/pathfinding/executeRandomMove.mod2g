@@ -1,0 +1,27 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../actionhandling/postActionCleanup" as module.
+use "./moveManhattanWithBlock" as module.
+use "./moveWithoutBlock" as module.
+use "./moveWithBlock" as module.
+
+exit = always.
+
+/**
+ * Random Move Controller organizing modules to execute move with random
+ *
+ */
+
+module executeRandomMove {
+
+	% move with block
+	if  bel(haveBlockAttached(true, _)) then moveWithBlock.
+	
+	% move without block
+	if  bel(haveBlockAttached(false, _)) then moveWithoutBlock.
+
+	% obligatory skip
+	if true then postActionCleanup + skip.   
+	
+} % module executeRandomMove
+

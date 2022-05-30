@@ -1,9 +1,9 @@
 use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
-use "pathfinding/randomExecuteMove" as module.
+use "pathfinding/executeRandomMove" as module.
 use "./actionhandling/postActionCleanup" as module.
-use "./rolehandling/defaultRole" as module.
-use "./rolehandling/roleWorker" as module.
+use "./rolehandling/executeDefaultRole" as module.
+use "./rolehandling/executeWorkerRole" as module.
 
 exit=never.
 
@@ -21,19 +21,19 @@ module goaldiggerMain {
     	if percept(deactivated(true)) then postActionCleanup + skip.
     
     	% agents want to be free randomExploreMove / skip turn number skipThisStep    	
-    	if percept(step(Step)), bel(skipThisStep(SkipStep), Step =< SkipStep) then randomExecuteMove.
+    	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep) then executeRandomMove.
     	
 	    /**
 		 * Handle DEFAULT role
 		 *
 		 */
-    	if percept(role(default)) then defaultRole.
+    	if percept(role(default)) then executeDefaultRole.
 
 	    /**
 		 * Handle WORKER role
 		 *
 		 */
-    	if percept(role(worker)) then roleWorker.
+    	if percept(role(worker)) then executeWorkerRole.
     
     } % if haveMove
 	

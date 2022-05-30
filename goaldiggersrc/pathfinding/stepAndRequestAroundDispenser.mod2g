@@ -1,6 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "randomExecuteMove" as module.
+use "executeRandomMove" as module.
 use "../actionhandling/postActionCleanup" as module.
 
 /**
@@ -11,11 +11,11 @@ use "../actionhandling/postActionCleanup" as module.
 module stepAndRequestAroundDispenser {	
 
 	% go random explore when current task expired
-	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < SimStep) then randomExecuteMove.
+	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < SimStep) then executeRandomMove.
 
 	% handle situation when agent on top of dispenser
 	if bel(haveBlockAttached(false, _), currentChosenTask(_, _, _, _, _, BlockType)), percept(thing(0, 0, dispenser, BlockType), role(worker)) 
-		then randomExecuteMove.
+		then executeRandomMove.
 	
 	% Block attaching if in position
 	if  bel(haveBlockAttached(false,_)), bel(haveDispenserDelivery(true, X), step(Step), X  =< Step + 1, currentChosenTask(_, _, _, _, _, BlockType)),

@@ -1,6 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "../pathfinding/randomExecuteMove" as module.
+use "../pathfinding/executeRandomMove" as module.
 use "../actionhandling/postActionCleanup" as module.
 use "../blockhandling/rotateBlockToSouth" as module.
 
@@ -23,7 +23,7 @@ module handleTaskSubmit {
 	% prefer rotate to south position and clear route to it if necessary
     if true then rotateBlockToSouth.
 	
-	% obligatory skip/randomExecuteMove
+	% obligatory skip/executeRandomMove
 	if true then skip.  
 		
 } % module
