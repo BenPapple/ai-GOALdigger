@@ -14,7 +14,7 @@
 :- dynamic step/1. % step counter in belief of simulation
 :- dynamic elapseStepTime/1. % timing step duration for agent
 :- dynamic agentAt/2. % Coordinates of agent XY
-:- dynamic randomAffinity/1. % thing equals thing from percept
+:- dynamic randomAffinity/1. % nswe direction preferred for exploration
 :- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. % Variables for Manhatten Distance 
 :- dynamic targetDispenserAt/4. % (X,Y,BlockType,MD) of dispenser to search out for
 :- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)
@@ -57,7 +57,7 @@ randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
 			NewDir \= OppositAltDir.
 						
 % skip random steps
-skipRandomSteps(SkipSteps) :- random_between(2, 6, SkipSteps).
+skipRandomSteps(SkipSteps) :- random_between(0, 8, SkipSteps).
 			
 % get random 90 degree direction to initial affinity direction		
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
@@ -97,6 +97,16 @@ clearAttachedDirection(e, s, 1, 1).
 clearAttachedDirection(e, n, 1, -1).
 clearAttachedDirection(e, e, 2, 0).
 clearAttachedDirection(e, w, 1, 0).
+
+%
+diagonalCoordForAffiAndOppoBlock(n,e,1,1).
+diagonalCoordForAffiAndOppoBlock(n,w,-1,1).
+diagonalCoordForAffiAndOppoBlock(s,w,-1,-1).
+diagonalCoordForAffiAndOppoBlock(s,e,1,-1).
+diagonalCoordForAffiAndOppoBlock(w,n,1,-1).
+diagonalCoordForAffiAndOppoBlock(w,s,1,1).
+diagonalCoordForAffiAndOppoBlock(e,s,-1,1).
+diagonalCoordForAffiAndOppoBlock(e,n,-1,-1).
 
 % helper function integer to rotate
 integerToRotate(0, cw).

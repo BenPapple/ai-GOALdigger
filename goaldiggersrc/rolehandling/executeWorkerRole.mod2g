@@ -59,18 +59,8 @@ module executeWorkerRole {
 	    	%if percept(goalZone(0,0), step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.	    	
 	    	 	    	
  		    % random movemement actions while having block attached
-	    	if bel(haveBlockAttached(true, DirBlock)) then {
-	    
-	    		% rotate block behind agent direction affinity
-	    		if  bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, OppoDir), 
-	    			DirBlock \== OppoDir) then rotateBlock.
-	    
-	    		% if block behind agent concerning affinity direction move forward
-	    		if bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, Dir3), 
-	    			Dir3 == DirBlock) then executeRandomMove.  
-	    
-	    		} % if bel(haveBlockAttached(true, DirBlock))
-    		
+	    	if bel(haveBlockAttached(true, DirBlock)) then executeRandomMove.
+	    	
     	} % end haveBlockAttached(true,_)	
 	
 }

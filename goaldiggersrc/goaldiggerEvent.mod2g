@@ -6,8 +6,8 @@ use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/handleLastActionResult" as module.
 use "./eventsubmodules/handleRelativeCoordsOfAgents" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
-use "./pathfinding/manageManhattanSwitchStatus" as module.
-use "./pathfinding/manageManhattanTarget" as module.
+use "./eventsubmodules/manageManhattanSwitchStatus" as module.
+use "./eventsubmodules/manageManhattanTarget" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
