@@ -40,7 +40,7 @@ module moveWithBlock {
 	    not(percept(thing(A, B, Type,_), Type \== dispenser)) then postActionCleanup + move(w).
 	}
 
-	% check block in front of move direction
+	% check for block/obstacles in front of move direction
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 	
 		% clear obstacles in front of agent

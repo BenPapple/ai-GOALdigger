@@ -6,6 +6,7 @@
 :- dynamic lDebugOn/0. % true enables debug features logging, timing etc
 :- dynamic activateDoubleSpeed/0.  % switch to deactivate double speed for workers
 :- dynamic haveMove/0. % Switch that signals Main Module to get active
+:- dynamic expectDifferentSimulations/0. % switch to recognize simulations have different characteristics on sim change
 
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)

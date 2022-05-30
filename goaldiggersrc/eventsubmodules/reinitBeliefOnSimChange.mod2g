@@ -1,0 +1,24 @@
+use "../goaldiggerProlog" as knowledge.
+
+/**
+ * Remove and restore init values when entering a new simulation
+ *
+ */
+
+module reinitBeliefOnSimChange {
+
+	% restore initial belief
+	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)).
+	if bel(agentAt(V1, V2)) then delete(agentAt(V1, V2)) + insert(agentAt(0, 0)).
+	if bel(executeManhattan) then delete(executeManhattan).
+	if not(bel(haveMove)) then insert(haveMove).
+	
+	% on switch delete custom belief data belonging to old simulation
+	if bel(expectDifferentSimulations) then {
+	
+	forall bel(storedDispenser(V1, V2, V3, V4, V5, V6)) do delete(storedDispenser(V1, V2, V3, V4, V5, V6)).
+	forall bel(storedGoalZone(V1, V2, V3)) do delete(storedGoalZone(V1, V2, V3)).
+	
+	}
+	
+}

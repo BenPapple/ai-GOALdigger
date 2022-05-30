@@ -12,6 +12,7 @@ module goaldiggerInit {
 	%if true then insert (activateDoubleSpeed). % switch to deactivate because not allowed in competition1
 	
 	% global values
+	if true then insert(expectDifferentSimulations). % switch to recognize simulations have different characteristics on sim change
 	if true then insert(limitChangeStepMinMax(10 , 20)). % lowest and highest limit after which agent changes explore direction
 	
 	% switches
