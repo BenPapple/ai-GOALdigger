@@ -1,10 +1,9 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "randomExecuteMove" as module.
-use "moveWithBlock" as module.
+use "executeRandomMove" as module.
+use "moveManhattanWithBlock" as module.
+use "moveManhattanWithoutBlock" as module.
 use "../actionhandling/postActionCleanup" as module.
-
-order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
 
 /**
  * Compares Manhattan Distance in stored fields nswe around agent and choses lowest value, if exist equal values random lowest chosen
@@ -14,32 +13,10 @@ order = linearrandom. % random choice between equal values requires random; line
 module manhattanChoiceModule {
 
 	% manhattan movement with 1 or 2 blocks attached
-	if bel(haveBlockAttached(true, _)) then moveWithBlock.
-
-	% check if agent already at target
-	if bel(haveBlockAttached(false, _)), bel(nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(true, _)) then moveManhattanWithBlock.
 	
-		% Find field nswe with lowest value ManhattanDistance and chose randomly between equally valued and free target field
-		
-		% move onto free fields
-    	if bel(X =< Y, X =< Z, X =< V), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then postActionCleanup + move(n).
-    	if bel(Y =< X, Y =< Z, Y =< V), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then postActionCleanup + move(s).
-    	if bel(Z =< Y, Z =< X, Z =< V), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then postActionCleanup + move(e).
-    	if bel(V =< Y, V =< Z, V =< X), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then postActionCleanup + move(w).
-		
-		% clear obstacles
-		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, obstacle,_)) then postActionCleanup + clear(0, -1).
-		if bel(Y =< X, Y =< Z, Y =< V), percept(thing(0, 1, obstacle,_)) then postActionCleanup + clear(0, 1).
-    	if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, obstacle,_)) then postActionCleanup + clear(1, 0).
-    	if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, obstacle,_)) then postActionCleanup + clear(-1, 0).
-    	
-    	% clear blocks
-    	if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, block,_)) then postActionCleanup + clear(0, -1).
-		if bel(Y =< X, Y =< Z, Y =< V), percept(thing(0, 1, block,_)) then postActionCleanup + clear(0, 1).
-    	if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, block,_)) then postActionCleanup + clear(1, 0).
-    	if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, block,_)) then postActionCleanup + clear(-1, 0).						    	
-
-	} % if 
+	% manhattan movement with 1 or 2 blocks attached
+	if bel(haveBlockAttached(false, _)) then moveManhattanWithoutBlock.
 		
 	% obligatory skip continue action if above unsuccessful
 	if true then skip +  postActionCleanup.

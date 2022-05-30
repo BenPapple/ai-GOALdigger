@@ -1,110 +1,18 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../actionhandling/postActionCleanup" as module.
-
+use "./moveWithoutBlock" as module.
 
 order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
 
 /**
- * handle moving manhattan with block
+ * handle moving with block
  *
  */
 
 module moveWithBlock {
 
-	% move onto free fields if block is behind agent concerning move direction
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-    	if bel(X =< Y, X =< Z, X =< V, D == s), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then postActionCleanup + move(n).
-    	if bel(Y =< X, Y =< Z, Y =< V, D == n), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then postActionCleanup + move(s).
-    	if bel(Z =< Y, Z =< X, Z =< V, D == w), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then postActionCleanup + move(e).
-    	if bel(V =< Y, V =< Z, V =< X, D == e), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then postActionCleanup + move(w).
-	}
+% ToDo create moving with block random
+if  bel(haveBlockAttached(true, _)) then moveWithoutBlock. % stub uses without block while having block, needs to change
 	
-	% move onto free fields if block is in front of agent concerning move direction
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-    	if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(0, -2, Type,_), Type \== dispenser)) then postActionCleanup + move(n).
-    	if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(0, 2, Type,_), Type \== dispenser)) then postActionCleanup + move(s).
-    	if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(2, 0, Type,_), Type \== dispenser)) then postActionCleanup + move(e).
-    	if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(-2, 0, Type,_), Type \== dispenser)) then postActionCleanup + move(w).
-	}
-
-	% move onto free fields if front of agent and front of block is free
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-    	if bel(X =< Y, X =< Z, X =< V, D \== n, D \== s, clearAttachedDirection(n, D, A, B)), not(percept(thing(0, -1, Type,_), Type \== dispenser)), 
-    		not(percept(thing(A, B, Type,_), Type \== dispenser)) then postActionCleanup + move(n).
-	    if bel(Y =< X, Y =< Z, Y =< V, D \== s, D \== n, clearAttachedDirection(s, D, A, B)), not(percept(thing(0, 1, Type,_), Type \== dispenser)), 
-	    	not(percept(thing(A, B, Type,_), Type \== dispenser)) then postActionCleanup + move(s).
-	    if bel(Z =< Y, Z =< X, Z =< V, D \== e, D \== w, clearAttachedDirection(e, D, A, B)), not(percept(thing(1, 0, Type,_), Type \== dispenser)), 
-	    	not(percept(thing(A, B, Type,_), Type \== dispenser)) then postActionCleanup + move(e).
-	    if bel(V =< Y, V =< Z, V =< X, D \== w, D \== e, clearAttachedDirection(w, D, A, B)), not(percept(thing(-1, 0, Type,_), Type \== dispenser)), 
-	    not(percept(thing(A, B, Type,_), Type \== dispenser)) then postActionCleanup + move(w).
-	}
-
-	% check for block/obstacles in front of move direction
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
-	
-		% clear obstacles in front of agent
-		if bel(X =< Y, X =< Z, X =< V, DirBlock \== n), percept(thing(0, -1, obstacle,_)) then postActionCleanup + clear(0, -1).
-		if bel(Y =< X, Y =< Z, Y =< V, DirBlock \== s), percept(thing(0, 1, obstacle,_)) then postActionCleanup + clear(0, 1).
-    	if bel(Z =< Y, Z =< X, Z =< V, DirBlock \== e), percept(thing(1, 0, obstacle,_)) then postActionCleanup + clear(1, 0).
-    	if bel(V =< Y, V =< Z, V =< X, DirBlock \== w), percept(thing(-1, 0, obstacle,_)) then postActionCleanup + clear(-1, 0).
-    	
-    	% clear blocks in front of agent
-    	if bel(X =< Y, X =< Z, X =< V, DirBlock \== n), percept(thing(0, -1, block,_)) then postActionCleanup + clear(0, -1).
-		if bel(Y =< X, Y =< Z, Y =< V, DirBlock \== s), percept(thing(0, 1, block,_)) then postActionCleanup + clear(0, 1).
-    	if bel(Z =< Y, Z =< X, Z =< V, DirBlock \== e), percept(thing(1, 0, block,_)) then postActionCleanup + clear(1, 0).
-    	if bel(V =< Y, V =< Z, V =< X, DirBlock \== w), percept(thing(-1, 0, block,_)) then postActionCleanup + clear(-1, 0).
-	
-		% rotate to avoid non empty fields in front of block
-    	if bel(X =< Y, X =< Z, X =< V, D \== n, D \== s, clearAttachedDirection(n, D, A, B), rotateAgainstAffinity(n, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-    		directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then postActionCleanup + rotate(Rot).
-	    if bel(Y =< X, Y =< Z, Y =< V, D \== s, D \== n, clearAttachedDirection(s, D, A, B), rotateAgainstAffinity(s, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then postActionCleanup + rotate(Rot).
-	    if bel(Z =< Y, Z =< X, Z =< V, D \== e, D \== w, clearAttachedDirection(e, D, A, B), rotateAgainstAffinity(e, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then postActionCleanup + rotate(Rot).
-	    if bel(V =< Y, V =< Z, V =< X, D \== w, D \== e, clearAttachedDirection(w, D, A, B), rotateAgainstAffinity(w, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then postActionCleanup + rotate(Rot).
-		
-		% rotate to free fields beside or behind agent
-		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then postActionCleanup + rotate(cw).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then postActionCleanup + rotate(cw).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then postActionCleanup + rotate(cw).
-		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then postActionCleanup + rotate(cw).
-		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-	
-		% clear rotate position closest to south
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(1, 0, obstacle,_)) then postActionCleanup + clear(1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(1, 0, obstacle,_)) then postActionCleanup + clear(1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, 1, obstacle,_)) then postActionCleanup + clear(0, 1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, 1, obstacle,_)) then postActionCleanup + clear(0, 1).
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(1, 0, block,_)) then postActionCleanup + clear(1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(1, 0, block,_)) then postActionCleanup + clear(1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, 1, block,_)) then postActionCleanup + clear(0, 1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, 1, block,_)) then postActionCleanup + clear(0, 1).
-		
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(-1, 0, obstacle,_)) then postActionCleanup + clear(-1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(-1, 0, obstacle,_)) then postActionCleanup + clear(-1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, -1, obstacle,_)) then postActionCleanup + clear(0, -1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, -1, obstacle,_)) then postActionCleanup + clear(0, -1).
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(-1, 0, block,_)) then postActionCleanup + clear(-1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(-1, 0, block,_)) then postActionCleanup + clear(-1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, -1, block,_)) then postActionCleanup + clear(0, -1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, -1, block,_)) then postActionCleanup + clear(0, -1).
-				   		    	
-	} % check block in front of move direction
-	
-	% escape move when recognizing other agent
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)), bel(skipThisStep(SkipStep), step(Step), 
-		skipRandomSteps(RandSteps)) then {
-	
-		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + postActionCleanup + skip.
-		if bel(Y =< X, Y =< Z, Y =< V), percept(thing(0, 1, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + postActionCleanup + skip.
-		if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + postActionCleanup + skip.
-		if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(Step + RandSteps)) + postActionCleanup + skip.
-		
-	}
-
-} % module
+}

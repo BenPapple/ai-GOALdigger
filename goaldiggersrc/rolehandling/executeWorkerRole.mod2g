@@ -1,8 +1,8 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../actionhandling/postActionCleanup" as module.
-use "../pathfinding/manhattanExecuteMove" as module.
-use "../pathfinding/randomExecuteMove" as module.
+use "../pathfinding/executeManhattanMove" as module.
+use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/stepAndRequestAroundDispenser" as module.
 use "../taskhandling/chooseTask" as module.
 use "../taskhandling/handleTaskSubmit" as module.
@@ -13,7 +13,7 @@ use "../blockhandling/rotateBlock" as module.
  *
  */
 
-module roleWorker {
+module executeWorkerRole {
 
 	    /**
 		 * WITHOUT BLOCK	
@@ -25,14 +25,14 @@ module roleWorker {
 	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < Step) then chooseTask.
 	    	
 	        % Movement around dispenser when without block
-		    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1), 
-		    	not(bel(executeManhattan)) then stepAndRequestAroundDispenser.
+		    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1)
+		    	 then stepAndRequestAroundDispenser.
 	    	
 	    	% manhattan move to dispenser
-	    	if percept(step(SimStep)), bel(targetMd(_, _, dispenser), executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _), TaskStep >= SimStep) then manhattanExecuteMove.
+	    	if percept(step(SimStep)), bel(targetMd(_, _, dispenser), executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _), TaskStep >= SimStep) then executeManhattanMove.
 
     	    % execute random explorer move without attached blocks with affinity to one direction
-			if true then randomExecuteMove. 
+			if true then executeRandomMove. 
 		
 		} % end haveBlockAttached(false,_)
 	    
@@ -53,7 +53,7 @@ module roleWorker {
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
 	    	% Move to goal zone
-		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then manhattanExecuteMove.
+		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	        	
 	    	% wait in goal zone with block for right task
 	    	%if percept(goalZone(0,0), step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, _), TaskStep =< SimStep) then handleTaskSubmit.	    	
@@ -67,7 +67,7 @@ module roleWorker {
 	    
 	    		% if block behind agent concerning affinity direction move forward
 	    		if bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, _)), bel(randomAffinity(Dir), oppositeDirection(Dir, Dir3), 
-	    			Dir3 == DirBlock) then randomExecuteMove.  
+	    			Dir3 == DirBlock) then executeRandomMove.  
 	    
 	    		} % if bel(haveBlockAttached(true, DirBlock))
     		
