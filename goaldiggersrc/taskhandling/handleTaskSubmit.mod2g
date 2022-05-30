@@ -2,6 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../pathfinding/randomExecuteMove" as module.
 use "../actionhandling/postActionCleanup" as module.
+use "../blockhandling/rotateBlockToSouth" as module.
 
 /**
  * Rotate logic clearing block/obstacles at rotate target and then rotates prefering south, if block south submit action
@@ -17,27 +18,10 @@ module handleTaskSubmit {
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), thing(V, W, block, BlockType), task(TaskFit,Step,_,[req(V, W, BlockType)])), 
     		bel(step(SimStep), Step >= SimStep) then postActionCleanup + submit(TaskFit).
     	    	
-    } %bel(currentChosenTask(
+    } % if
 
 	% prefer rotate to south position and clear route to it if necessary
-    if bel(haveBlockAttached(true, DirBlock)) then {
-
-		% rotate block to south position if free target fields
-		if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-		if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
-		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(cw).
-		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then postActionCleanup + rotate(ccw).
-		if bel(DirBlock == s) then postActionCleanup + skip.
-		
-		% clear fields west, east and south from obstacle and blocks to enable rotate to south or closer positions	
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, block, _)) then postActionCleanup + clear(-1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, obstacle, _)) then postActionCleanup + clear(-1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, block, _)) then postActionCleanup + clear(1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, obstacle, _)) then postActionCleanup + clear(1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, block, _)) then postActionCleanup + clear(0, 1).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, obstacle, _)) then postActionCleanup + clear(0, 1).
-	
-	}
+    if true then rotateBlockToSouth.
 	
 	% obligatory skip/randomExecuteMove
 	if true then skip.  
