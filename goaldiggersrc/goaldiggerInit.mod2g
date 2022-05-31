@@ -17,7 +17,6 @@ module goaldiggerInit {
 	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
-	%if true then insert (executeManhattan(false)). % init switch Manhatten Distance
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
 
