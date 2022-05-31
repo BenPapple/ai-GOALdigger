@@ -31,6 +31,23 @@
 :- dynamic sawGoalzoneAt/3. % data for message (X,X, MyAgentName)
 :- dynamic sawDispenserAt/4. % data for messages (X,Y, Type, MyAgentName)
 
+% Variables related to world measurement
+:- dynamic worldListX/1, worldListY/1. % lists containing world X and Y sizes
+:- dynamic messageProcessingDelay/1. % how long does it take for a distStepNamePosition message to get processed (the greater the delay, the most sure we can be to have received all messages sent during a concrete step)
+:- dynamic messagePersitanceAfterDelay/1. % how long does a distStepNamePosition message still lingers around after being processed
+:- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0, greetAgents/0. % Flags to steer world measurements.
+:- dynamic worldSizeX/1, worldSizeY/1. % store the size of the world on X and Y
+
+% Variables related to locating other agents in the world
+:- dynamic otherAgentAt/4, updateOtherAgentAt/4. % store / update other agents' positions
+:- dynamic agentOffset/4. % field name x y CalcStep
+:- dynamic savedOffsetMessage/5. % Saves offset messages from other to use them later
+:- dynamic ownTeam/1, ownName/1. %These variables contain the own team name and own name 
+:- dynamic dummy/1.% Dummy variable to see if something evaluates
+:- dynamic agentEntity/2. %Variable to know which entity is assigned to each agent in order to address the correct agents.
+:- dynamic distStepNamePosition/6. % message passed to everyone else if other agents seen / saved (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
+:- dynamic myDistStepNamePosition/5 % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
+
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -182,5 +199,20 @@ rotateToCoord(w, ccw, 0, 1).
 rotateToCoord(e, cw, 0, 1).
 rotateToCoord(e, ccw, 0, -1).
 
+% mod function for 2 values
+getMod(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
 
+% world size calculator
+getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :- 
+	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, NewWorldSize is abs(PosDiff)); 
+	(PosDiff = 0, NewWorldSize is OldWorldSize); 
+	(abs(PosDiff) >= OldWorldSize, NewWorldSize is OldWorldSize).
+
+% Counting the quantity of repeated world measurement in the world measurement list.
+count_repeated([Elem|Xs], Elem, Count, Ys) :- count_repeated(Xs, Elem, Count1, Ys), Count is Count1+1.
+count_repeated([AnotherElem|Ys], Elem, 0, [AnotherElem|Ys]) :- Elem \= AnotherElem.
+count_repeated([], _, 0, []).
+
+rle([X|Xs], [[C,X]|Ys]) :- count_repeated([X|Xs], X, C, Zs), rle(Zs, Ys).
+rle([], []).
 

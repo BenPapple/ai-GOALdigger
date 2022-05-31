@@ -1,0 +1,30 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+module greetAgents {
+	
+	/*
+
+This block checks whether an encounter with another agent has taken place (if our agent sees another agent).
+If so, it will send all other agents messages with the distance it sees the other agent at, the step, its name and its position
+in its system of coordinates.
+
+[Note: It can be made more efficient by checking wheter an already known agent is at the apparent position, and not
+sending any messages in that case.]
+
+*/
+	% Sending other agents its position and distance to next agent if agent is being seen.
+	
+	forall percept(thing(DistX, DistY, entity, Details), step(Step)), bel(ownTeam(Team), Details = Team),
+		bel(DistX \== 0, DistY \== 0),
+		bel(agentAt(AgentX,AgentY)), 
+		bel(Step > 2),
+		bel(ownName(AgentName))
+		do allother.send(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY))
+		+ insert(myDistStepNamePosition(DistX, DistY, Step, AgentX, AgentY)).
+
+
+	if bel(agentAt(X, Y), ownName(Name)), percept(step(Step)) then allother.send(otherAgentAt(Name, X, Y, Step)).
+	  
+	
+}

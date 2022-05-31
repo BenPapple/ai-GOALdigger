@@ -8,6 +8,8 @@ use "./eventsubmodules/handleRelativeCoordsOfAgents" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
+use "./eventsubmodules/worldSizeEvents" as module.
+use "./eventsubmodules/greetAgents" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -32,6 +34,8 @@ module goaldiggerEvent {
 	 *
 	 */
 	if true then handleLastActionResult.
+
+	if true then greetAgents.
 
 	/**
 	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
