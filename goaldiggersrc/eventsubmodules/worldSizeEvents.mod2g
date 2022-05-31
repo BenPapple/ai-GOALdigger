@@ -1,0 +1,182 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+
+module worldSizeEvents {
+
+% Update believe with percept information, insert new objects and delete disappeared objects
+
+/* This block handles updates in the known world size. 
+As soon as an agent discovers the measure in the world in any of the directions, it informs everyone.
+In this block, every agent update the position of every object or agent known to him.
+*/ 
+
+/* At first, the believes about the size of the world are updated.
+The variable worldUpdateX or Y tells the agent that the next block must be executed.
+The variable worldUpdatedX or Y tells the agent that the world size is already known
+and should not be measured anymore. We assume that the first measurement will be correct.
+ */
+
+	% Fill a list with worldSizeX values:
+	if not(bel(worldUpdatedX)) then {forall (_).sent(worldSizeX(SizeX))
+		do { if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])) + print("Added one X"). }}
+	
+	% Fill a list with worldSizeY values:
+	if not(bel(worldUpdatedY)) then {forall (_).sent(worldSizeY(SizeY))
+		do { if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY])) + print("Added one Y"). }}
+
+	% Pick the most common value from a full worldSizeX value list:	
+	if bel(worldListX(WorldListX), not(worldUpdatedX), length(WorldListX, Length), Length >= 10,
+	    msort(WorldListX, SList), rle(SList, RLE), sort(RLE, SRLE),last(SRLE, [Freq, MostCommon]), length(WorldListX, ListLen), Freq > ListLen/2) 
+	then insert(worldSizeX(MostCommon)) + insert (worldUpdateX) + insert(worldUpdatedX) + all.send(dummy(["Updated world size X", MostCommon])).
+
+	% Pick the most common value from a full worldSizeY value list:
+	if bel(worldListY(WorldListY), not(worldUpdatedY),length(WorldListY, Length), Length >= 10,
+	    msort(WorldListY, SList), rle(SList, RLE), sort(RLE, SRLE), last(SRLE, [Freq, MostCommon]), length(WorldListY, ListLen),
+	Freq > ListLen/2) then insert(worldSizeY(MostCommon)) + insert (worldUpdateY) + insert(worldUpdatedY) + all.send(dummy(["Updated world size Y", MostCommon])).
+
+	% Flag to know that an agent has already picked both worldSizeX values:
+	if bel(worldUpdatedX, worldUpdateY) then print("Finished simulation").
+
+
+
+	% After updating one agent's belief about world size, the agent updates its own position.
+	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getMod(X0, SizeX, X1), getMod(Y0, SizeY, Y1)) then delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
+
+
+	%% TO DO: THIS CODE IS REMOVED UNTIL WE DECIDE HOW TO STORE OTHER OBJECTS IN MEMORY. THING IS NOT USED CURRENTLY AND WOULD CAUSE THE PROGRAM TO CRASH.
+
+	/*	
+	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
+	if bel(worldUpdateX; worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
+		then { 
+			forall bel(thing(X0, Y0, Type, Details), getMod(X0, SizeX, X1), getMod(Y0, SizeY, Y1))
+			do insert(updateThing(X1, Y1, Type, Details)) + delete(thing(X0,Y0,Type,Details)).
+		} % end then
+
+
+	% TO DO: Make sure GetMod also gets negative values right.
+	% The values of the variable updateThing are added to new thing variables.
+	forall bel(updateThing(X,Y,Type,Details)) do insert(thing(X,Y,Type,Details)) + delete (updateThing(X,Y,Type,Details)).
+	*/
+	
+	%% TO DO: THIS CODE IS REMOVED UNTIL I RESOLVE AN EXCEPTION ARISING FROM IT.
+	
+	/*
+	
+	% After updating one agent's belief about world size, the agent updates other agents' positions. The variable updateOtherAgentAt stores the values while deletig old values.
+	if bel(worldUpdateX; worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
+		then { 
+			forall bel(otherAgentAt(AgentName, X0, Y0, Step), getMod(X0, SizeX, X1), getMod(Y0, SizeY, Y1))
+		do insert(updateOtherAgentAt(AgentName, X1, Y1, Step)) + delete(otherAgentAt(AgentName, X0, Y0, Step)).
+		} % end then
+
+
+	% The values of the variable updateOtherAgentAt are added to new otherAgentAt variables.	
+	forall bel(updateOtherAgentAt(AgentName, X, Y, Step)) do insert(otherAgentAt(AgentName, X, Y, Step)) + delete (updateOtherAgentAt(AgentName, X, Y, Step)).
+	*/
+	
+	% remove conditionals update belief coord
+	if bel(worldUpdateX) then delete(worldUpdateX).
+	if bel(worldUpdateY) then delete(worldUpdateY).	
+
+
+	
+	/*
+	This block handles messages about offsets sent by agents to everyone after they have measured any
+	offset to any other agent.
+	If Agent1 receives a message from Agent2 about the offset between Agent2 and Agent3,
+	and Agent1 already knows its own offset to Agent2, it can get its offset to Agent3
+	by adding the offset from the message to its own offset.
+	*/	
+
+
+	% The agent processes received messages about other agents' positions it it already knows it offsets to those agents:
+	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, Y1 is Y0 + OffsetToEntityY,
+		worldSizeX(WorldX), worldSizeY(WorldY), getMod(X1, WorldX, X2), getMod(Y1, WorldY, Y2)) do insert(otherAgentAt(Name, X2, Y2, Step)).
+
+	% Remove old otherAgentAt variables:
+	forall percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, 
+		otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
+	do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 	
+	
+	% Fetch all distStepNamePosition messages from other agents:
+	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
+	do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
+	
+	% Delete all myDistStepNamePosition messages which are compatible with more than one distStepNamePosition messages.
+	forall bel(distStepNamePosition(DistX, DistY, Step, Agent1Name, _, _), distStepNamePosition(DistX, DistY, Step, Agent2Name, _, _),
+		Agent1Name \== Agent2Name, myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), MyDistX =:= -DistX, MyDistY =:= -DistY)
+	do delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
+	
+	
+	/*	
+	This block manages the identification of newly met agents.
+	Every agent reads the distStepNamePosition messages related to agent encounters
+	which are compatible with its own encounter of an agent. So if Agent1 sees an agent at position (2,3) relative to its own position,
+	and Agent2 sees an agent at position (-2,-3), and there are no other agents with these relative distances,
+	Agent1 assumes it is seeing Agent2, and Agent2 assumes it is seeing agent 1.
+	From the position of Agent2 in Agent2's own coordinate system communicated in the distStepNamePosition message and the position of Agent2 in
+	Agent1's coordinate system, Agent1 calculates an offset. So, if it receives a message from Agent2 later telling it its position, Agent1 can
+	translate Agent2's position to its own coordinate system.
+	
+	This is done only the first time that both agents meet and only two compatible messages are available, to avoid confusion.
+	After knowing each other's Offset, this procedure is not repeated.
+	The knewly calculated offsets are communicated to everyone so that they can calculate their offsets with the offsets' transitive property.
+	
+	Note: Since messages can experience some delay between to turns, only saved messages from a previous turn are analyzed to avoid
+	the information being incomplete (and thus wrongly believing there are only two compatible messages.	
+	*/
+
+	% If I have sent a distStepNamePosition message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
+	
+	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY))
+	do { if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit, distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY),
+			AgentDistX =:= -MyDistX, AgentDistY =:= -MyDistY), not(bel(agentOffset(AgentNameSender,_,_,_))), bel(ApparentPosX is MyPosX+MyDistX, ApparentPosY is MyPosY+MyDistY), 
+			bel(distanceBetweenPoints(ApparentPosX, ApparentPosY, AgentPosX, AgentPosY, OffsetX, OffsetY))	
+		then insert(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)) + delete (distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY))
+			+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step))
+			%+ print("Offset calculated from the messages: ", Step, AgentReceiver, AgentNameSender)
+			+ allother.send(dummy(["Offset calculated:",AgentNameSender,MyPosX,MyPosY,AgentPosX,AgentPosY,MyDistX,MyDistY,ApparentPosX,ApparentPosY,OffsetX,OffsetY,"OldStep:",Step,"CurrentStep:",CurrentStep])).	
+	}
+
+	% Keep only most recent agentOffset entry:
+	%forall bel(lastSeen(AgentNameSender, A, B, C, D, Step1), lastSeen(AgentNameSender, _, _, _, _, Step2), Step1 < Step2) do delete(lastSeen(AgentNameSender, A, B, C, D, Step1)). 
+	
+	% Assign agent names to entity names:
+	forall (Agent).sent(distStepNamePosition(_, _, _, Name, _, _)), not(bel(agentEntity(Agent, Name))) do insert(agentEntity(Agent, Name)).
+
+	/*
+	
+	This block mesasures the world with distanceStepNamePosition messages.
+	This is done by comparing the expected position of an agent with the observed position at a new encounter.
+	If they are different, it means an agent have turned around the world relatively to other.
+	The difference in any of the directions is the size of the world in that direction.
+	
+	*/
+	
+	% Agent sieht anderen Agenten dann bemisst er die Welt als die Diff in einer/beiden Richtung(en) und sendet an alle anderen Agenten
+	
+
+	if not(bel(worldUpdatedX, worldUpdatedY)), percept(step(CurrentStep)) then {	
+
+	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY), 
+		MyDistX =:= -AgentDistX, MyDistY =:= -AgentDistY, otherAgentAt(AgentNameSender, KnownAgentPosX,KnownAgentPosY, Step), 
+		messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit)
+	do {
+		if bel( SeenAgentPosX is MyPosX + MyDistX, SeenAgentPosY is MyPosY + MyDistY, worldSizeX(OldWorldX), worldSizeY(OldWorldY),
+			(SeenAgentPosX \= KnownAgentPosX; SeenAgentPosY \= KnownAgentPosY),
+			distanceBetweenPoints(KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY, ApparentDeltaX, ApparentDeltaY),
+			getWorldSize(ApparentDeltaX, OldWorldX, NewWorldX),	getWorldSize(ApparentDeltaY, OldWorldY, NewWorldY))	
+		then all.send(worldSizeX(NewWorldX)) + all.send(worldSizeY(NewWorldY))
+		+print(dummy(["Match found:", myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY), KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY])).
+		} % end do
+	} % end if
+
+	% Remove old distanceStepNamePosition messages.
+	forall bel(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)) do
+		{ if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, Step < StepLimit) 
+		 then delete(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)).
+		} % end if	
+	
+}

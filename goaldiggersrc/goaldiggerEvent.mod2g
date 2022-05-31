@@ -10,6 +10,8 @@ use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
+use "./eventsubmodules/worldSizeEvents" as module.
+use "./eventsubmodules/greetAgents" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -17,33 +19,35 @@ use "./eventsubmodules/messageMultiTaskCoordination" as module.
  */
 
 module goaldiggerEvent {
-	
+
 	% ToDo add Isaac
-	
+
 	/**
 	 * SUBMODULE REINITIALIZE BELIEF AFTER SIMULATION CHANGES
 	 *
 	 */
 	if percept(step(0)) then reinitBeliefOnSimChange.
-	
+
 	/**
 	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
 	 *
 	 */
 	if true then handleLastActionResult.
-	
+
 	/**
 	 * SUBMODULE Store percept data in belief
 	 *
 	 */
 	if true then syncPerceptDataIntoBelief.
 
+	if true then greetAgents.
+
 	/**
 	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
 	 *
 	 */
-	if bel(lDebugOn) then logMiniPercept.	
-	
+	if bel(lDebugOn) then logMiniPercept.
+
 	/**
 	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER handleLastActionResult MOVE !!!
 	 *
@@ -57,7 +61,7 @@ module goaldiggerEvent {
 	% ToDo
 	%if percept(step(-11)) then messageMultiTaskCoordination.
 	if true then messageMultiTaskCoordination.
-	
+
 	/**
 	 * SUBMODULE UPDATE GOALZONE MAP
 	 *
@@ -68,47 +72,47 @@ module goaldiggerEvent {
 	 * SUBMODULE UPDATE DISPENSER MAP
 	 *
 	 */
-	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.	
+	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
 
 	/**
 	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
 	 *
-	 */	
-	 if true then manageManhattanSwitchStatus.		
-	
+	 */
+	 if true then manageManhattanSwitchStatus.
+
 	/**
 	 * SUBMODULE MANHATTAN TARGET MANIPULATION
 	 *
-	 */	
+	 */
 	 if true then manageManhattanTarget.
 
 	/**
 	 * MISC SWITCH MANIPULATION
 	 *
-	 */	
+	 */
 
 	% check old dispenser request and set switch to false
 	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
-	
+
 	% check attached block direction for block and if none found switch haveBlockAttached false
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
-	
+
 	/**
 	 * MISCELLANEOUS POST EVERYTHING
 	 *
-	 */	
-	 
+	 */
+
 	% change affinity direction after X steps
-	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
+	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then
 		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
-	 
+
 	/**
 	 * ACTIVATE MAIN LOOP
 	 *
-	 */	
-	
+	 */
+
 	% prepare action chosing in main module
 	if bel(haveMove), percept(step(SimStep), SimStep >= 0) then delete(haveMove).
-	
+
 } % module
