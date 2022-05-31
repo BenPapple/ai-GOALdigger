@@ -15,7 +15,9 @@ use "./eventsubmodules/manageManhattanTarget" as module.
  */
 
 module goaldiggerEvent {
-
+	
+	% ToDo add Isaac
+	
 	/**
 	 * SUBMODULE REINITIALIZE BELIEF AFTER SIMULATION CHANGES
 	 *
