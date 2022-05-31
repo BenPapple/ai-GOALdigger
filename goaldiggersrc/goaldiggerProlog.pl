@@ -98,7 +98,7 @@ clearAttachedDirection(e, n, 1, -1).
 clearAttachedDirection(e, e, 2, 0).
 clearAttachedDirection(e, w, 1, 0).
 
-%
+% diagonal coords of direction blocks move with agent concerning DirAffi and 90degreeDir
 diagonalCoordForAffiAndOppoBlock(n,e,1,1).
 diagonalCoordForAffiAndOppoBlock(n,w,-1,1).
 diagonalCoordForAffiAndOppoBlock(s,w,-1,-1).
