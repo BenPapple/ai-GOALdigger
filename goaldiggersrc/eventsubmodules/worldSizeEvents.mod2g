@@ -19,29 +19,29 @@ and should not be measured anymore. We assume that the first measurement will be
 
 	% Fill a list with worldSizeX values:
 	if not(bel(worldUpdatedX)) then {forall (_).sent(worldSizeX(SizeX))
-		do { if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])) + print("Added one X"). }}
+		do { if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])). }}
 	
 	% Fill a list with worldSizeY values:
 	if not(bel(worldUpdatedY)) then {forall (_).sent(worldSizeY(SizeY))
-		do { if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY])) + print("Added one Y"). }}
+		do { if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY])). }}
 
 	% Pick the most common value from a full worldSizeX value list:	
-	if bel(worldListX(WorldListX), not(worldUpdatedX), length(WorldListX, Length), Length >= 10,
+	if bel(worldListX(WorldListX), worldSizeX(OldWorldSizeX), not(worldUpdatedX), length(WorldListX, Length), Length >= 10,
 	    msort(WorldListX, SList), rle(SList, RLE), sort(RLE, SRLE),last(SRLE, [Freq, MostCommon]), length(WorldListX, ListLen), Freq > ListLen/2) 
-	then insert(worldSizeX(MostCommon)) + insert (worldUpdateX) + insert(worldUpdatedX) + all.send(dummy(["Updated world size X", MostCommon])).
+	then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommon)) + insert (worldUpdateX) + insert(worldUpdatedX) + print(worldListX(WorldListX)).
 
 	% Pick the most common value from a full worldSizeY value list:
-	if bel(worldListY(WorldListY), not(worldUpdatedY),length(WorldListY, Length), Length >= 10,
+	if bel(worldListY(WorldListY), worldSizeY(OldWorldSizeY), not(worldUpdatedY),length(WorldListY, Length), Length >= 10,
 	    msort(WorldListY, SList), rle(SList, RLE), sort(RLE, SRLE), last(SRLE, [Freq, MostCommon]), length(WorldListY, ListLen),
-	Freq > ListLen/2) then insert(worldSizeY(MostCommon)) + insert (worldUpdateY) + insert(worldUpdatedY) + all.send(dummy(["Updated world size Y", MostCommon])).
+	Freq > ListLen/2) then delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommon)) + insert (worldUpdateY) + insert(worldUpdatedY) + print(worldListY(WorldListY)).
 
 	% Flag to know that an agent has already picked both worldSizeX values:
-	if bel(worldUpdatedX, worldUpdateY) then print("Finished simulation").
+	if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
 
 
 
 	% After updating one agent's belief about world size, the agent updates its own position.
-	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getMod(X0, SizeX, X1), getMod(Y0, SizeY, Y1)) then delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
+	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModInt(X0, SizeX, X1), getModInt(Y0, SizeY, Y1)) then delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
 
 
 	%% TO DO: THIS CODE IS REMOVED UNTIL WE DECIDE HOW TO STORE OTHER OBJECTS IN MEMORY. THING IS NOT USED CURRENTLY AND WOULD CAUSE THE PROGRAM TO CRASH.
@@ -93,7 +93,7 @@ and should not be measured anymore. We assume that the first measurement will be
 
 	% The agent processes received messages about other agents' positions it it already knows it offsets to those agents:
 	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, Y1 is Y0 + OffsetToEntityY,
-		worldSizeX(WorldX), worldSizeY(WorldY), getMod(X1, WorldX, X2), getMod(Y1, WorldY, Y2)) do insert(otherAgentAt(Name, X2, Y2, Step)).
+		worldSizeX(WorldX), worldSizeY(WorldY), getModInt(X1, WorldX, X2), getModInt(Y1, WorldY, Y2)) do insert(otherAgentAt(Name, X2, Y2, Step)).
 
 	% Remove old otherAgentAt variables:
 	forall percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, 
@@ -135,9 +135,7 @@ and should not be measured anymore. We assume that the first measurement will be
 			AgentDistX =:= -MyDistX, AgentDistY =:= -MyDistY), not(bel(agentOffset(AgentNameSender,_,_,_))), bel(ApparentPosX is MyPosX+MyDistX, ApparentPosY is MyPosY+MyDistY), 
 			bel(distanceBetweenPoints(ApparentPosX, ApparentPosY, AgentPosX, AgentPosY, OffsetX, OffsetY))	
 		then insert(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)) + delete (distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY))
-			+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step))
-			%+ print("Offset calculated from the messages: ", Step, AgentReceiver, AgentNameSender)
-			+ allother.send(dummy(["Offset calculated:",AgentNameSender,MyPosX,MyPosY,AgentPosX,AgentPosY,MyDistX,MyDistY,ApparentPosX,ApparentPosY,OffsetX,OffsetY,"OldStep:",Step,"CurrentStep:",CurrentStep])).	
+			+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)).	
 	}
 
 	% Keep only most recent agentOffset entry:
@@ -157,7 +155,6 @@ and should not be measured anymore. We assume that the first measurement will be
 	
 	% Agent sieht anderen Agenten dann bemisst er die Welt als die Diff in einer/beiden Richtung(en) und sendet an alle anderen Agenten
 	
-
 	if not(bel(worldUpdatedX, worldUpdatedY)), percept(step(CurrentStep)) then {	
 
 	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY), 
@@ -168,8 +165,7 @@ and should not be measured anymore. We assume that the first measurement will be
 			(SeenAgentPosX \= KnownAgentPosX; SeenAgentPosY \= KnownAgentPosY),
 			distanceBetweenPoints(KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY, ApparentDeltaX, ApparentDeltaY),
 			getWorldSize(ApparentDeltaX, OldWorldX, NewWorldX),	getWorldSize(ApparentDeltaY, OldWorldY, NewWorldY))	
-		then all.send(worldSizeX(NewWorldX)) + all.send(worldSizeY(NewWorldY))
-		+print(dummy(["Match found:", myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY), KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY])).
+		then all.send(worldSizeX(NewWorldX)) + all.send(worldSizeY(NewWorldY)).
 		} % end do
 	} % end if
 
