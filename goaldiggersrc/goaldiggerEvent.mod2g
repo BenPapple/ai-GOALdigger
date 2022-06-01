@@ -10,6 +10,7 @@ use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/worldSizeEvents" as module.
 use "./eventsubmodules/greetAgents" as module.
+use "./eventsubmodules/chooseExplorerRole" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -26,10 +27,15 @@ module goaldiggerEvent {
 	if percept(step(0)) then reinitBeliefOnSimChange.
 	
 	/**
+	 * SUBMODULE Choose RandomAgent for Explorer
+	 *
+	 */
+	if true then chooseExplorerRole.
+	
+	/**
 	 * SUBMODULE TO MEASURE THE WORLD
 	 *
 	 */
-	
 	if true then worldSizeEvents.
 	
 	

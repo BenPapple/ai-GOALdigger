@@ -1,0 +1,16 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+module chooseExplorerRole {
+	
+	if percept(step(0), name(Name)), bel(randomSeed(RandomSeed)) then allother.send(messageChooseRole(RandomSeed, Name)).
+	
+	forall allother.sent(messageChooseRole(OtherRandomSeed, Name)) do
+	{
+		if bel(randomSeed(RandomSeed), positionInHirarchie(PositionInHirarchie), RandomSeed > OtherRandomSeed, NewPositionInHirarchie is PositionInHirarchie + 1) then
+			delete(positionInHirarchie(PositionInHirarchie)) + insert (positionInHirarchie(NewPositionInHirarchie)).
+	}
+	
+	if percept(teamSize(TeamSize), role(default)), bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), TeamSize - PositionInHirarchie < 2) then
+		delete(targetRole(Role)) + insert (targetRole(explorer)).
+}
