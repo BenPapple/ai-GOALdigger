@@ -6,7 +6,7 @@ use goaldiggerProlog as knowledge.
  */
 
 module goaldiggerInit {
-
+	
 	% debug and custom competition rules
 	if true then insert (lDebugOn). % Variable für Debug, zB elapseStepTime
 	%if true then insert (activateDoubleSpeed). % switch to deactivate because not allowed in competition1
@@ -51,4 +51,10 @@ module goaldiggerInit {
 	if true then insert (elapseStepTime(0)). % Time measurement between step
 	if true then insert (skipThisStep(-2)). % turns to skip with random explore move
 	
+	% variables for world size calculation
+	if true then insert ( worldSizeX(1000), worldSizeY(1000) ).
+	if true then insert ( worldListX([]), worldListY([]) ).
+	if true then insert ( messageProcessingDelay(4), messagePersitanceAfterDelay(1) ).
+	if percept(team(Team)) then insert(ownTeam(Team)). %The agent leans its own team from the initial percept.
+	if percept(name(Name)) then insert ( ownName(Name) ).	
 }

@@ -46,7 +46,7 @@
 :- dynamic dummy/1.% Dummy variable to see if something evaluates
 :- dynamic agentEntity/2. %Variable to know which entity is assigned to each agent in order to address the correct agents.
 :- dynamic distStepNamePosition/6. % message passed to everyone else if other agents seen / saved (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
-:- dynamic myDistStepNamePosition/5 % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
+:- dynamic myDistStepNamePosition/5. % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
 
 
 % Transform XY coordinates concerning direction D nswe
@@ -200,7 +200,11 @@ rotateToCoord(w, ccw, 0, 1).
 rotateToCoord(e, cw, 0, 1).
 rotateToCoord(e, ccw, 0, -1).
 
-% mod function for 2 values
+
+% Gives the apparent displacement of the observed agent relative to the observing agent between t0 and t1. 
+distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
+
+% modulo function for 2 values
 getMod(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
 
 % world size calculator
