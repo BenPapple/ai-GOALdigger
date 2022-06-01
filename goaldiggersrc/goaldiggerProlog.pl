@@ -204,8 +204,18 @@ rotateToCoord(e, ccw, 0, -1).
 % Gives the apparent displacement of the observed agent relative to the observing agent between t0 and t1. 
 distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
 
-% modulo function for 2 values
-getMod(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
+% modulo function for 2 values. It only returns positive values.
+getModPos(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, V is Y + X, Z is V mod Y).
+
+% modulo function for 2 values. It returns int values.
+getModInt(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
+
+% calculates the distance between an object and an agent according to the agent perception limits and the size of the world
+getPerceivedDistance(ObjectAt, AgentAt, WorldSize, PerceptDistance, Z) :-
+	(Delta is ObjectAt - AgentAt), ((   Delta >= 0, Delta =< PerceptDistance, Z is Delta );
+                       (   Delta >= 0, Delta > PerceptDistance, V is Delta - WorldSize, ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)));
+                       (   Delta < 0, abs(Delta) =< PerceptDistance, Z is Delta);
+                       (   Delta < 0, abs(Delta) > PerceptDistance, getModPos(Delta, WorldSize, V), ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)))).
 
 % world size calculator
 getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :- 
