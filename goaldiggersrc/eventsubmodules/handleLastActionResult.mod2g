@@ -13,7 +13,7 @@ module handleLastActionResult {
 		% single move instead of two
 		if percept(lastAction(move), lastActionParams([D, _])) then {
 			% update agent XY position with confirmed move nswe
-			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2), worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X2, Y2, SizeX, SizeY, X3, Y3)) then delete(agentAt(X, Y)) + insert(agentAt(X3, Y3)).
 			}
 	} % lastaction partial_success		
 
@@ -25,14 +25,14 @@ module handleLastActionResult {
 		% single move
 		if percept(lastAction(move), lastActionParams([D])) then {
 			% update agent XY position with confirmed move nswe
-			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2), worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X2, Y2, SizeX, SizeY, X3, Y3)) then delete(agentAt(X, Y)) + insert(agentAt(X3, Y3)).	
 		} 
 		
 		% double move	
 		if percept(lastAction(move), lastActionParams([D, D2])), bel(activateDoubleSpeed) then {
 			% update agent XY position with confirmed move nswe
-			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).	
-			if bel(agentAt(X, Y), transformXYD(D2, X, Y, X2, Y2)) then delete(agentAt(X, Y)) + insert(agentAt(X2, Y2)).
+			if bel(agentAt(X, Y), transformXYD(D, X, Y, X2, Y2), worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X2, Y2, SizeX, SizeY, X3, Y3)) then delete(agentAt(X, Y)) + insert(agentAt(X3, Y3)).	
+			if bel(agentAt(X, Y), transformXYD(D2, X, Y, X2, Y2), worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X2, Y2, SizeX, SizeY, X3, Y3)) then delete(agentAt(X, Y)) + insert(agentAt(X3, Y3)).
 
 		} % move	
 		
