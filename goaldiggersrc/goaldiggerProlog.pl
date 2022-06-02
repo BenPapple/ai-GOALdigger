@@ -94,6 +94,19 @@ randomBetween(InLow, InHigh, RandOut) :- random_between(InLow, InHigh, RandOut).
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
 
+% Calculate distance XY coordinates concerning target targetMd and taking into account the world size
+calculateXYMd(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-  
+	(SizeX == 1000, SizeY == 1000, calculateXYMd(X1, Y1, X2, Y2, Md));
+	(SizeX \== 1000, SizeY \==1000, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), Md is DistanceX + DistanceY).
+
+% Calculate absolute distance between two points taking into account the size of the world
+absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-
+    ( D1 is abs(ObjectPos - AgentPos), 
+      D2 is abs(ObjectPos + WorldSize - AgentPos), 
+      D3 is abs(AgentPos - ObjectPos), 
+      D4 is abs(AgentPos + WorldSize - ObjectPos), 
+      min_list([D1,D2,D3,D4], MinD), Distance is MinD ).
+
 % calculate minus or plus 1
 calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
 calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
@@ -205,10 +218,19 @@ rotateToCoord(e, ccw, 0, -1).
 distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
 
 % modulo function for 2 values. It only returns positive values.
-getModPos(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, V is Y + X, Z is V mod Y).
+getModPos(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, V is abs(Y+X), Z is V mod Y).
+
+getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
+    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
+    (getModPos(X1,SizeX,X2), getModPos(Y1,SizeY,Y2)).
 
 % modulo function for 2 values. It returns int values.
 getModInt(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
+
+% conditional modulo function: it only triggers if the world size is no longer 1000, it returns pos values
+getModInt(X1,Y1,SizeX,SizeY,X2,Y2) :-
+    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
+    (getModInt(X1,SizeX,X2), getModInt(Y1,SizeY,Y2)). 
 
 % calculates the distance between an object and an agent according to the agent perception limits and the size of the world
 getPerceivedDistance(ObjectAt, AgentAt, WorldSize, PerceptDistance, Z) :-
