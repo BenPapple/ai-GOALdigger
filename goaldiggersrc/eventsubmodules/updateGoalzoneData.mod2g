@@ -8,12 +8,7 @@ use "../goaldiggerAction" as actionspec.
 
 module updateGoalzoneData {
 
-	% DELETE disappeared goalzones
-	forall bel(storedGoalZone(X, Y, Md)), bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5), not(percept((goalZone(X3, Y3)))) do delete(storedGoalZone(X, Y, Md)).
 	
-	% STORE unknown goalzones with MD field
-	forall percept(goalZone(X, Y)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedGoalZone(X3, Y3, _)))) do 
-		insert(storedGoalZone(X3, Y3, 0)).
 		
 	% RESET old MD values in storedgoalzones to high number expected to not occur in simulation
 	forall bel(storedGoalZone(XAlt, YAlt, MdAlt)) do delete(storedGoalZone(XAlt, YAlt, MdAlt)) 

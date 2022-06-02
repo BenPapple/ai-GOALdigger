@@ -19,5 +19,5 @@ module manhattanChoiceModule {
 	if bel(haveBlockAttached(false, _)) then moveManhattanWithoutBlock.
 		
 	% obligatory skip continue action if above unsuccessful
-	if true then skip +  postActionCleanup.
+	if true then postActionCleanup + executeRandomMove.
 }
