@@ -8,7 +8,7 @@ use "../goaldiggerProlog" as knowledge.
 module reinitBeliefOnSimChange {
 
 	% restore initial belief
-	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0, batman)).
+	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0, submittingAgent)).
 	if bel(agentAt(V1, V2)) then delete(agentAt(V1, V2)) + insert(agentAt(0, 0)).
 	if bel(executeManhattan) then delete(executeManhattan).
 	if not(bel(haveMove)) then insert(haveMove).

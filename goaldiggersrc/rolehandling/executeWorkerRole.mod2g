@@ -50,10 +50,13 @@ module executeWorkerRole {
 	    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _), BlockType \== BlockTypeAttached, TaskStep >= SimStep) then postActionCleanup + detach(DirBlock).
 	    
 	    	% submit task if in goal zone with block and corresponding task available
-	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,_)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
-	    	% Move to goal zone
-		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,_), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+	    	% move to other agent to help in multitask
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent), targetMd(_, _, targetTaskSubmitter)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+	    	
+	    	% Move to goal zone to submit block
+		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	        	
 	    	% random movemement actions while having block attached
 	    	if bel(haveBlockAttached(true, DirBlock)) then executeRandomMove.
