@@ -1,0 +1,25 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Use the 2s task
+ *
+ */
+
+module twoTaskHandling {
+
+
+
+
+
+
+
+% choose 2-block tasks if it exists
+	if percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) then {
+		
+		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then 
+		delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(TaskName, TaskStep, 40, Xt, Yt, BlockType, batman)).
+		
+	} % if	
+	
+}

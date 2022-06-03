@@ -13,7 +13,7 @@ module manageManhattanTarget {
 		delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, rolezone)) + insert(executeManhattan).
 		
 	% when role worker and without block set dispenser as target
-	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType), TaskStep >= SimStep, 
+	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _), TaskStep >= SimStep, 
 		targetDispenserAt(AltX, AltY, AltBlockType, _), BlockType == AltBlockType) 
 			then {
 				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + insert(targetMd(AltX, AltY, dispenser)).	

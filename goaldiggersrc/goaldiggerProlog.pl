@@ -20,7 +20,7 @@
 :- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)
 :- dynamic skipThisStep/1. % do skip/explore until this step
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
-:- dynamic currentChosenTask/6. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType)
+:- dynamic currentChosenTask/7. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType)
 :- dynamic storedDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
 :- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
