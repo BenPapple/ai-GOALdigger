@@ -11,15 +11,15 @@ use "../actionhandling/postActionCleanup" as module.
 module stepAndRequestAroundDispenser {	
 
 	% go random explore when current task expired
-	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false, _), currentChosenTask(_, TaskStep, _, _, _, _), TaskStep < SimStep) then executeRandomMove.
+	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false, _), currentChosenTask(_, TaskStep, _, _, _, _,_), TaskStep < SimStep) then executeRandomMove.
 
 	% handle situation when agent on top of dispenser
-	if bel(haveBlockAttached(false, _), currentChosenTask(_, _, _, _, _, BlockType)), percept(thing(0, 0, dispenser, BlockType), role(worker)) 
+	if bel(haveBlockAttached(false, _), currentChosenTask(_, _, _, _, _, BlockType,_)), percept(thing(0, 0, dispenser, BlockType), role(worker)) 
 		then executeRandomMove.
 
 
 	% Block attaching if in position
-	if  bel(haveBlockAttached(false,_)), bel(haveDispenserDelivery(true, X), step(Step), X  =< Step + 1, currentChosenTask(_, _, _, _, _, BlockType)),
+	if  bel(haveBlockAttached(false,_)), bel(haveDispenserDelivery(true, X), step(Step), X  =< Step + 1, currentChosenTask(_, _, _, _, _, BlockType,_)),
 	 percept(thing(A, B, block, BlockType), abs(A) =< 1, abs(B) =< 1) then {
 	
 		if percept(thing(1, 0, block,_), thing(1, 0, dispenser,_)), not(percept(attached(1, 0))) then postActionCleanup + attach(e).
@@ -30,7 +30,7 @@ module stepAndRequestAroundDispenser {
 	}
 
 	% request block if in position nswe of dispenser
-	if  bel(haveBlockAttached(false,_)), bel(currentChosenTask(_, _, _, _, _, BlockType)), 
+	if  bel(haveBlockAttached(false,_)), bel(currentChosenTask(_, _, _, _, _, BlockType,_)), 
 		percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1) then {
 	
 		% request block when nswe of dispenser
@@ -48,7 +48,7 @@ module stepAndRequestAroundDispenser {
 	}
 
 	% if entity around and block on near dispenser move out and skip X turns
-	if  bel(haveBlockAttached(false,_), currentChosenTask(_, _, _, _, _, BlockType)),  
+	if  bel(haveBlockAttached(false,_), currentChosenTask(_, _, _, _, _, BlockType,_)),  
 		percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1) then {
 	
 		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), bel(skipThisStep(SkipStep), step(Step), skipRandomSteps(RandSteps)) then { 
@@ -65,7 +65,7 @@ module stepAndRequestAroundDispenser {
 	} % other entity around
 	
 	% Moving into position nswe of dispenser 
-	if  bel(haveBlockAttached(false,_)), bel(currentChosenTask(_, _, _, _, _, BlockType)), 
+	if  bel(haveBlockAttached(false,_)), bel(currentChosenTask(_, _, _, _, _, BlockType,_)), 
 		percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1), not(percept(thing(A, B, block, _))) then {
 		
 		% Dispenser is diagonal relative to agent, agents steps nswe of dispenser or prepares clear of movement target

@@ -1,0 +1,51 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Use the 1s task
+ *
+ */
+
+module oneTaskHandling {
+
+	% chose task if your attached block fits task	
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached)), percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])),
+		bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0, BlockTypeAttached == BlockType) then {
+		
+		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, batman)) + exit-module.
+		
+	} % if
+	
+	% choose/change 1-block tasks if closest dispenser has fitting block
+	if percept(task(TaskName ,Step, 10,[req(X,Y,BlockType)])), bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \== bx), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 0)
+	 then {
+		
+		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then  delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(TaskName, Step, 10, X, Y, BlockType, batman)) + exit-module.
+		
+	} % if
+	
+	% choose 1-block tasks of target Dispenser concerning currenttaskBlockType+targetDispenserAt calculation in Event Module
+	if percept(task(TaskName ,Step, 10,[req(X,Y,BlockType)])), bel(targetDispenserAt(_, _, BlockType, _), BlockType \== bx), bel(step(SimStep), Step >= SimStep, Step - SimStep >= 0)
+	 then {
+		
+		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(TaskName, Step, 10, X, Y, BlockType, batman)) + exit-module.
+		
+	} % if
+	
+	% choose 1-block tasks if random known dispenser has fitting block
+	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])), bel(storedDispenser(_, _, dispenser, BlockType, _, _)), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) then {
+		
+		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, batman)) 
+			+ exit-module.
+		
+	} % if
+
+	% choose 1-block tasks if it exists
+	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) then {
+		
+		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then 
+		delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, batman)).
+		
+	} % if	
+	
+}
