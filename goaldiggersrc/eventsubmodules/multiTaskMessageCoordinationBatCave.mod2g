@@ -1,0 +1,39 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * coordination for tasks greater than 1 (batman & robin)
+ *
+ */
+ 
+module multiTaskMessageCoordinationBatCave {
+
+	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
+	% sending: Eigennamen, Zufallszahl, Taskname, Blocktyp, Zielkoordinate (sonst eigene Koordinaten), Step  
+	if percept(name(NameOwn)), bel(randomBetween(0, 10000, RandomNo), currentChosenTask(TaskName, TaskStep, _, _, _, _, batmanOrRobin), agentAt(OwnX,OwnY), step(Step), TaskStep >= Step )
+		, percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)]))
+		then (channnelMultiTask).send(needTaskSideKick(NameOwn, RandomNo, TaskName, BlockType2, OwnX, OwnY, Step)). % GoalX, GoalY
+	
+	% receive message for multitask	
+	if percept(name(NameOwn)),(_).sent(needTaskSideKick(NameOwn2, RandomNo2, TaskName2, BlockType2, OwnX2, OwnY2, Step1)), bel(NameOwn \= NameOwn2), 
+		sent (needTaskSideKick(NameOwn, RandomNo, TaskName, BlockType, OwnX, OwnY, Step1)) % GoalX, GoalY
+			then {
+				% become a client (Batman), give instructions to Robin
+				if bel(RandomNo > RandomNo2)
+					then (channnelMultiTask).send(setRobin(NameOwn, robin, NameOwn2, OwnX, OwnY)).
+				if bel(RandomNo > RandomNo2, currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) then 
+					delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(V1, V2, V3, V4, V5, V6, batman)).
+			}
+	
+	% become Robin, check block for task and target		
+	if percept(name(NameOwn)), (_).sent(setRobin(NameSender, robin, NameOwn, GoalX, GoalY)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) 
+		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(V1, V2, V3, V4, V5, V6, robin)).	
+			
+			% block fits the task
+			if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached)), percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)]), BlockTypeAttached == BlockType2)
+				, bel(targetMd(T1,T2,T3)) then delete(targetMd(T1,T2,T3)) + insert(targetMd(GoalX,GoalY,robinTarget)). 
+			
+			% get the right block
+			if bel(haveBlockAttached(false, _), currentChosenTask(V1, V2, V3, V4, V5, V6, V7)), percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)])) 
+				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7)) + insert(currentChosenTask(V1, V2, V3, V4, V5, BlockType2, robin)).
+}
