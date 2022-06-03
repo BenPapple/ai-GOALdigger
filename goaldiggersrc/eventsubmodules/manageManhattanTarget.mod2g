@@ -20,8 +20,13 @@ module manageManhattanTarget {
 				if not(bel(executeManhattan)) then insert(executeManhattan).
 				}
 		
-	% With block update goalzone target MD
-	if bel(haveBlockAttached(true, _), targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567) then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) 
-		+ insert(executeManhattan).
+	% With block and as submittingAgent update goalzone target MD
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent), TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
+		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
+		
+	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or goalzone)
+	% ToDo
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,targetTaskSubmitter), TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
+		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
 		
 } % end module
