@@ -22,14 +22,14 @@ module executeWorkerRole {
 		if bel(haveBlockAttached(false,_)) then {
 		
 			% as worker change task when task expired or initial task has -1 million steps
-	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_), TaskStep < Step) then chooseTask.
+	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) then chooseTask.
 	    	
 	        % Movement around dispenser when without block
-		    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1)
+		    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1)
 		    	 then stepAndRequestAroundDispenser.
 	    	
 	    	% manhattan move to dispenser
-	    	if percept(step(SimStep)), bel(targetMd(_, _, dispenser), executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,_), TaskStep >= SimStep) then executeManhattanMove.
+	    	if percept(step(SimStep)), bel(targetMd(_, _, dispenser), executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep >= SimStep) then executeManhattanMove.
 
     	    % execute random explorer move without attached blocks with affinity to one direction
 			if true then executeRandomMove. 
@@ -43,20 +43,21 @@ module executeWorkerRole {
     	if bel(haveBlockAttached(true,DirBlock)) then {
 
 			% as worker change task when task expired or initial task has -1 million steps
-	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_), TaskStep < Step) then chooseTask.
+	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) then chooseTask.
     	
 	    	% detach block if task does not fit
 	    	if bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), step(SimStep)), 
-	    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _), BlockType \== BlockTypeAttached, TaskStep >= SimStep) then postActionCleanup + detach(DirBlock).
+	    		bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), BlockType \== BlockTypeAttached, TaskStep >= SimStep) then postActionCleanup + detach(DirBlock).
 	    
 	    	% submit task if in goal zone with block and corresponding task available
-	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
-	    	% move to other agent to help in multitask
-	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent), targetMd(_, _, targetTaskSubmitter)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+	    	% move to other agent to help in multitask 
+	    	% ToDo
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent,_), targetMd(_, _, otherAgentAt)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	    	
 	    	% Move to goal zone to submit block
-		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent,_), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	        	
 	    	% random movemement actions while having block attached
 	    	if bel(haveBlockAttached(true, DirBlock)) then executeRandomMove.
