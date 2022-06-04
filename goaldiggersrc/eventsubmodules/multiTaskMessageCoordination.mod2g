@@ -6,7 +6,7 @@ use "../goaldiggerAction" as actionspec.
  *
  */
  
-module multiTaskMessageCoordinationBatCave {
+module multiTaskMessageCoordination {
 
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
 	% sending: Eigennamen, Zufallszahl, Taskname, Blocktyp, Zielkoordinate (sonst eigene Koordinaten), Step  
@@ -31,7 +31,7 @@ module multiTaskMessageCoordinationBatCave {
 			
 			% block fits the task
 			if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached)), percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)]), BlockTypeAttached == BlockType2)
-				, bel(targetMd(T1,T2,T3)) then delete(targetMd(T1,T2,T3)) + insert(targetMd(GoalX,GoalY,targetTaskSubmitter)). 
+				, bel(targetMd(T1,T2,T3)) then delete(targetMd(T1,T2,T3)) + insert(targetMd(11111,222222,targetTaskSubmitter)). 
 			
 			% get the right block
 			if bel(haveBlockAttached(false, _), currentChosenTask(V1, V2, V3, V4, V5, V6, V7)), percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)])) 
