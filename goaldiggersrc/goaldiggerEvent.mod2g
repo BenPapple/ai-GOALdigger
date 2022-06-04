@@ -9,7 +9,7 @@ use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
-
+use "./eventsubmodules/multiTaskMessageCoordination" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -26,7 +26,7 @@ module goaldiggerEvent {
 	 */
 	if percept(step(0)) then reinitBeliefOnSimChange.
 	
-		/**
+	/**
 	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
 	 *
 	 */
@@ -49,6 +49,14 @@ module goaldiggerEvent {
 	 *
 	 */
 	if true then handleRelativeCoordsOfAgents.
+
+	/**
+	 * SUBMODULE MANAGING MESSAGES CONCERNING TASK COORDINATION
+	 *
+	 */
+	% ToDo
+	if percept(step(-11)) then multiTaskMessageCoordination.
+	%if true then multiTaskMessageCoordination.
 	
 	/**
 	 * SUBMODULE UPDATE GOALZONE MAP
@@ -63,6 +71,18 @@ module goaldiggerEvent {
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.	
 
 	/**
+	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
+	 *
+	 */	
+	 if true then manageManhattanSwitchStatus.		
+	
+	/**
+	 * SUBMODULE MANHATTAN TARGET MANIPULATION
+	 *
+	 */	
+	 if true then manageManhattanTarget.
+
+	/**
 	 * MISC SWITCH MANIPULATION
 	 *
 	 */	
@@ -73,13 +93,6 @@ module goaldiggerEvent {
 	% check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
-
-	/**
-	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
-	 *
-	 */	
-	 if true then manageManhattanSwitchStatus.		
-	
 	
 	/**
 	 * MISCELLANEOUS POST EVERYTHING
@@ -89,12 +102,6 @@ module goaldiggerEvent {
 	% change affinity direction after X steps
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
 		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
-	
-	/**
-	 * SUBMODULE MANHATTAN TARGET MANIPULATION
-	 *
-	 */	
-	 if true then manageManhattanTarget.
 	 
 	/**
 	 * ACTIVATE MAIN LOOP
