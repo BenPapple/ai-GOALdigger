@@ -4,12 +4,12 @@ use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/handleLastActionResult" as module.
-use "./eventsubmodules/handleRelativeCoordsOfAgents" as module.
+use "./eventsubmodules/messageRelativeCoordsOfAgents" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
-use "./eventsubmodules/multiTaskMessageCoordination" as module.
+use "./eventsubmodules/messageMultiTaskCoordination" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -48,15 +48,15 @@ module goaldiggerEvent {
 	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER handleLastActionResult MOVE !!!
 	 *
 	 */
-	if true then handleRelativeCoordsOfAgents.
+	if true then messageRelativeCoordsOfAgents.
 
 	/**
 	 * SUBMODULE MANAGING MESSAGES CONCERNING TASK COORDINATION
 	 *
 	 */
 	% ToDo
-	if percept(step(-11)) then multiTaskMessageCoordination.
-	%if true then multiTaskMessageCoordination.
+	%if percept(step(-11)) then messageMultiTaskCoordination.
+	if true then messageMultiTaskCoordination.
 	
 	/**
 	 * SUBMODULE UPDATE GOALZONE MAP

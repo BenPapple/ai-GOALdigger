@@ -7,7 +7,7 @@ use "../goaldiggerProlog" as knowledge.
 
 % ToDo fix message system
 
-module handleRelativeCoordsOfAgents {
+module messageRelativeCoordsOfAgents {
 
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
 	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
@@ -52,7 +52,7 @@ module handleRelativeCoordsOfAgents {
 %	
 %	}
 %	
-%	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
-%	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
+	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
+	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
 	
 } % module

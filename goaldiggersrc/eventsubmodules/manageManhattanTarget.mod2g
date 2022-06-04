@@ -13,7 +13,7 @@ module manageManhattanTarget {
 		delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, rolezone)) + insert(executeManhattan).
 		
 	% when role worker and without block set dispenser as target
-	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _), TaskStep >= SimStep, 
+	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), TaskStep >= SimStep, 
 		targetDispenserAt(AltX, AltY, AltBlockType, _), BlockType == AltBlockType) 
 			then {
 				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + insert(targetMd(AltX, AltY, dispenser)).	
@@ -21,12 +21,13 @@ module manageManhattanTarget {
 				}
 		
 	% With block and as submittingAgent update goalzone target MD
-	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent), TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _), TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
 		
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or goalzone)
 	% ToDo
-	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,targetTaskSubmitter), TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
-		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, targetMd(X, Y, Target)), (_).sent(otherAgentAt(NameSubmitter, A, B, _))
+		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, otherAgentAt)) + insert(executeManhattan).
+	
 		
 } % end module
