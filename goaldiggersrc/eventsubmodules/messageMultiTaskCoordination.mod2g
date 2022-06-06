@@ -26,8 +26,9 @@ module messageMultiTaskCoordination {
 			}
 	
 	% become supportingAgent, check block for task and target		
-	if percept(name(NameOwn)), (_).sent(informSupportingAgent(NameSender, supportingAgent, NameOwn, GoalX, GoalY)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)) 
-		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)) + insert(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, NameSender)).	
+	if percept(name(NameOwn)), (_).sent(informSupportingAgent(NameSender, supportingAgent, NameOwn, GoalX, GoalY)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)) ,
+		percept(task(V1 ,_, 40,[req(_,_,_),req(X3,Y4,BlockType2)]))
+			then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)) + insert(currentChosenTask(V1, V2, V3, X3, Y4, BlockType2, supportingAgent, NameSender)).	
 			
 			% block fits the task
 			%if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached)), percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)]), BlockTypeAttached == BlockType2)
