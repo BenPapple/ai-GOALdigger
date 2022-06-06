@@ -4,6 +4,7 @@ use "../actionhandling/postActionCleanup" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/stepAndRequestAroundDispenser" as module.
+use "../pathfinding/stepAroundSubmittingAgent" as module.
 use "../taskhandling/chooseTask" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlock" as module.
@@ -52,6 +53,11 @@ module executeWorkerRole {
 	    	% submit task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
+	    	 % Movement for supporting agent around submitting agent when with block for multitask
+		    if percept(step(SimStep), team(Team)), bel(currentChosenTask(_, TaskStep, _, _, _, _, _,_), TaskStep >= SimStep), percept(thing(A, B, entity, Team), abs(A) =< 1, abs(B) =< 1),
+		    	 bel(targetMd(A, B, otherAgentAt), abs(A) =< 1, abs(B) =< 1)
+		    	 then stepAroundSubmittingAgent.
+		    	 
 	    	% move to other agent to help in multitask 
 	    	% ToDo
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent,_), targetMd(_, _, otherAgentAt)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.

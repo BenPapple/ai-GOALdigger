@@ -60,16 +60,16 @@ define submit(Task) with
 	pre { true }
 	post { true }
 	
-%% connect blocks with other agent
-%define connect(Agent, X, Y) with
-%	pre { true }
-%	post { true }
-%	
-%% disconnect blocks with other agent
-%define disconnect(Agent, X, Y) with
-%	pre { true }
-%	post { true }	
-%	
+% connect blocks with other agent
+define connect(Agent, X, Y) with
+	pre { true }
+	post { true }
+	
+% disconnect blocks with other agent
+define disconnect(Agent, X, Y) with
+	pre { true }
+	post { true }	
+	
 %% survey location for information
 %define survey(X, Y) with
 %	pre { true }
