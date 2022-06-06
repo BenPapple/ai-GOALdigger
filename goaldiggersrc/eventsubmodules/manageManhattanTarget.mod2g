@@ -21,12 +21,14 @@ module manageManhattanTarget {
 				}
 		
 	% With block and as submittingAgent update goalzone target MD
-	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _), TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _), TaskStep >= SimStep, targetMd(X, Y, Target), 
+			targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
 		
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or goalzone)
 	% ToDo
-	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, targetMd(X, Y, Target)), (_).sent(otherAgentAt(NameSubmitter, A, B, _))
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
+			targetMd(X, Y, Target)), (_).sent(otherAgentAt(NameSubmitter, A, B, _))
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, otherAgentAt)) + insert(executeManhattan).
 	
 		
