@@ -87,7 +87,7 @@ and should not be measured anymore. We assume that the first measurement will be
 	*/	
 
 	%forall 
-	
+	/*
 	forall (Sender).sent(agentOffset(AgentName, OffsetX, OffsetY, _)) 
 	do	{
 		if bel(agentEntity(Sender,SenderName), agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
@@ -112,7 +112,7 @@ and should not be measured anymore. We assume that the first measurement will be
 			if bel(agentOffset(SenderName,_,_,_), agentOffset(AgentName,_,_,_))
 			then delete(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)).
 	} %end do
-	
+	*/
 	
 	
 	
