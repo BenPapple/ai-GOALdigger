@@ -50,7 +50,7 @@ module goaldiggerEvent {
 	 */
 	if true then syncPerceptDataIntoBelief.
 
-  * SUBMODULE TO SAY HELLO TO ALL OTHER AGENTS IF OTHER AGENTS SEEN
+ /* SUBMODULE TO SAY HELLO TO ALL OTHER AGENTS IF OTHER AGENTS SEEN
   *
   */
 
