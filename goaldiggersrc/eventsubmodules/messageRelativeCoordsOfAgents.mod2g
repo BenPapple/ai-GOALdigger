@@ -7,28 +7,28 @@ use "../goaldiggerProlog" as knowledge.
 
 % ToDo fix message system
 
-module handleRelativeCoordsOfAgents {
+module messageRelativeCoordsOfAgents {
 
-%	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
-%	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
-%		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
-%		
+	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
+	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
+		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
+		
 	% If I have sent a channelNamesRelativeXY message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
-%	forall percept(name(AgentReceiver)), (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
-%	
-%		% if relative coordinates for other agents are unknown
-%		if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)), not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
-%			% and no more than 2 agents have these relative position communicated
-%			if (Connect3).sent(seenOtherAgentAt(_, _,OtherX3, OtherY3, Step, _)), bel(Connect2 \= Connect3, (OtherX) =:= -1 * (OtherX3), (OtherY) =:= -1 * (OtherY3)) then {
-%				% if both agents coords are inverses of each other create confirmedOtherAgentAt belief with relative coords
-%				if bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
-%					bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
-%					then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).		
-%				}
-%			}
-%			
-%		}
-%		
+	forall percept(name(AgentReceiver)), (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
+	
+		% if relative coordinates for other agents are unknown
+		if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)), not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
+			% and no more than 2 agents have these relative position communicated
+			if true then {
+				% if both agents coords are inverses of each other create confirmedOtherAgentAt belief with relative coords
+				if bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
+					bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
+					then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).		
+				}
+			}
+			
+		}
+		
 %	% send goalzone coord, HACK: if instead forall sends only 1 goalzone field
 %	if bel(storedGoalZone(X, Y, _)), percept(name(AgentName)) then (channelGoalzone).send(sawGoalzoneAt(X, Y, AgentName)).
 %	
@@ -51,8 +51,8 @@ module handleRelativeCoordsOfAgents {
 %			not(bel(storedDispenser(X3, Y3, dispenser, Type, _, _))) then insert(storedDispenser(X3, Y3, dispenser, Type, 0, true)).
 %	
 %	}
-	
+%	
 	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
-	%if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
+	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
 	
 } % module

@@ -44,7 +44,7 @@ module logMiniPercept {
 
 		if bel(agentAt(X, Y), targetMd(A, B, Target)) then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).
 		
-		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType).
+		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType, ClientServer, NameSubmitter)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType| ClientServer| NameSubmitter).
 		
 		if bel(targetDispenserAt(X2, Y2, BlockTypeNew, Md)) then print("TargetDispenser: "| X2| Y2+"Block+Distance: "| BlockTypeNew| Md).
 		

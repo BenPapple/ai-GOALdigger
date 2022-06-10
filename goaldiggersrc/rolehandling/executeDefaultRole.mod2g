@@ -12,7 +12,7 @@ use "../pathfinding/executeRandomMove" as module.
 
 module executeDefaultRole {
 
-    	% if oppurtunity arises adapt worker role until complex role module ready
+    	% if oppurtunity arises adapt targetRole role until complex role module ready
     	if percept(roleZone(0, 0), step(Step), Step > 3), bel(targetRole(TargetRole)) then postActionCleanup + adapt(TargetRole).
     	
     	% Movement according to Manhatten Distance

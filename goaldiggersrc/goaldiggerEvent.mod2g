@@ -4,13 +4,16 @@ use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/handleLastActionResult" as module.
-use "./eventsubmodules/handleRelativeCoordsOfAgents" as module.
+use "./eventsubmodules/messageRelativeCoordsOfAgents" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/worldSizeEvents" as module.
 use "./eventsubmodules/greetAgents" as module.
-use "./eventsubmodules/chooseExplorerRole" as module.
+use "./eventsubmodules/updateAssignExplorerRole" as module.
+use "./eventsubmodules/messageAssignExplorerRole" as module.
+use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
+use "./eventsubmodules/messageMultiTaskCoordination" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -19,6 +22,8 @@ use "./eventsubmodules/chooseExplorerRole" as module.
 
 module goaldiggerEvent {
 	
+
+	% ToDo add Isaac
 	
 	/**
 	 * SUBMODULE REINITIALIZE BELIEF AFTER SIMULATION CHANGES
@@ -27,10 +32,11 @@ module goaldiggerEvent {
 	if percept(step(0)) then reinitBeliefOnSimChange.
 	
 	/**
-	 * SUBMODULE Choose RandomAgent for Explorer
+	 * SUBMODULES Choose RandomAgent for Explorer
 	 *
 	 */
-	if true then chooseExplorerRole.
+	if percept(step(1)) then messageAssignExplorerRole.
+	if true then updateAssignExplorerRole.
 	
 	/**
 	 * SUBMODULE TO MEASURE THE WORLD
@@ -47,6 +53,12 @@ module goaldiggerEvent {
 	 *
 	 */
 	if true then handleLastActionResult.
+	
+	/**
+	 * SUBMODULE Store percept data in belief
+	 *
+	 */
+	if true then syncPerceptDataIntoBelief.
 
 	/**
 	 * SUBMODULE TO SAY HELLO TO ALL OTHER AGENTS IF OTHER AGENTS SEEN
@@ -65,8 +77,15 @@ module goaldiggerEvent {
 	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER handleLastActionResult MOVE !!!
 	 *
 	 */
-	if true then handleRelativeCoordsOfAgents.
+	if true then messageRelativeCoordsOfAgents.
 
+	/**
+	 * SUBMODULE MANAGING MESSAGES CONCERNING TASK COORDINATION
+	 *
+	 */
+	% ToDo
+	%if percept(step(-11)) then messageMultiTaskCoordination.
+	if true then messageMultiTaskCoordination.
 	
 	/**
 	 * SUBMODULE UPDATE GOALZONE MAP
@@ -74,12 +93,23 @@ module goaldiggerEvent {
 	 */
 	if bel(haveBlockAttached(true, _)), percept(role(worker)) then updateGoalzoneData.
 
-
 	/**
 	 * SUBMODULE UPDATE DISPENSER MAP
 	 *
 	 */
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.	
+
+	/**
+	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
+	 *
+	 */	
+	 if true then manageManhattanSwitchStatus.		
+	
+	/**
+	 * SUBMODULE MANHATTAN TARGET MANIPULATION
+	 *
+	 */	
+	 if true then manageManhattanTarget.
 
 	/**
 	 * MISC SWITCH MANIPULATION
@@ -92,13 +122,6 @@ module goaldiggerEvent {
 	% check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then 
 		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
-
-	/**
-	 * SUBMODULE MANHATTAN SWITCH MANIPULATION
-	 *
-	 */	
-	 if true then manageManhattanSwitchStatus.		
-	
 	
 	/**
 	 * MISCELLANEOUS POST EVERYTHING
@@ -108,12 +131,6 @@ module goaldiggerEvent {
 	% change affinity direction after X steps
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then 
 		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
-	
-	/**
-	 * SUBMODULE MANHATTAN TARGET MANIPULATION
-	 *
-	 */	
-	 if true then manageManhattanTarget.
 	 
 	/**
 	 * ACTIVATE MAIN LOOP

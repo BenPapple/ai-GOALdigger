@@ -8,7 +8,7 @@ use "../goaldiggerProlog" as knowledge.
 module reinitBeliefOnSimChange {
 
 	% restore initial belief
-	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0)).
+	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0, placeholder, placeholder2)).
 	if bel(agentAt(V1, V2)) then delete(agentAt(V1, V2)) + insert(agentAt(0, 0)).
 	if bel(executeManhattan) then delete(executeManhattan).
 	if not(bel(haveMove)) then insert(haveMove).
@@ -19,6 +19,10 @@ module reinitBeliefOnSimChange {
 	if true then subscribe(channelGoalzone).
 	if true then subscribe(channelDispenser).
 	if true then subscribe (channelNamesRelativeXY).
+	
+	%reset assign Role
+	if bel(positionInHirarchie(Position)) then delete(positionInHirarchie(Position)) + insert(positionInHirarchie(0)).
+	if bel(targetRole(Role)) then delete(targetRole(Role)) + insert (targetRole(worker)).
 	
 	if bel(targetDispenserAt(X, Y, Z, A)) then delete(targetDispenserAt(X, Y, Z, A)) + insert (targetDispenserAt(70, 70, b0, 700)). % init with dummy values 
 	if bel(targetClosestOfAllDispensersAt(X, Y, Z, A)) then delete(targetClosestOfAllDispensersAt(X, Y, Z, A)) + insert (targetClosestOfAllDispensersAt(70, 70, b0, 700)). % init with dummy values 

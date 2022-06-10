@@ -1,0 +1,9 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+module messageAssignExplorerRole {
+
+%Message to determine which agent should adapt explorer role. 
+if percept(name(Name)), bel(randomSeed(RandomSeed)) then 
+		allother.send(messageChooseRole(RandomSeed, Name)).
+}

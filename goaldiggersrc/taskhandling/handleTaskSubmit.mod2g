@@ -12,7 +12,7 @@ use "../blockhandling/rotateBlockToSouth" as module.
 module handleTaskSubmit {
 
 	% submit block if it is south of agent
-	if bel(currentChosenTask(_, TaskStep, _, _, _, BlockType)), bel(step(SimStep), TaskStep >= SimStep) then {
+	if bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, submittingAgent,_)), bel(step(SimStep), TaskStep >= SimStep) then {
 		
 		% preconditions for submit achieved, submit task	
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), thing(V, W, block, BlockType), task(TaskFit,Step,_,[req(V, W, BlockType)])), 
