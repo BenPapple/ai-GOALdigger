@@ -4,6 +4,7 @@ use "pathfinding/executeRandomMove" as module.
 use "./actionhandling/postActionCleanup" as module.
 use "./rolehandling/executeDefaultRole" as module.
 use "./rolehandling/executeWorkerRole" as module.
+use "./rolehandling/executeExplorerRole" as module.
 
 exit=never.
 
@@ -34,6 +35,14 @@ module goaldiggerMain {
 		 *
 		 */
     	if percept(role(worker)) then executeWorkerRole.
+    	
+    	/**
+		 * Handle explorer role
+		 *
+		 */
+    	if percept(role(explorer)) then executeExplorerRole.
+    	
+    	
     
     } % if haveMove
 	

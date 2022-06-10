@@ -44,9 +44,6 @@ and should not be measured anymore. We assume that the first measurement will be
 
 
 	%% TO DO: THIS CODE IS REMOVED UNTIL WE DECIDE HOW TO STORE OTHER OBJECTS IN MEMORY. THING IS NOT USED CURRENTLY AND WOULD CAUSE THE PROGRAM TO CRASH.
-
-	
-
 	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
 	
 	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
@@ -86,6 +83,7 @@ and should not be measured anymore. We assume that the first measurement will be
 	by adding the offset from the message to its own offset.
 	*/	
 
+
 	%forall 
 	/*
 	forall (Sender).sent(agentOffset(AgentName, OffsetX, OffsetY, _)) 
@@ -122,7 +120,6 @@ and should not be measured anymore. We assume that the first measurement will be
 	% The agent processes received messages about other agents' positions it it already knows it offsets to those agents:
 	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, Y1 is Y0 + OffsetToEntityY,
 		worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do insert(otherAgentAt(Name, X2, Y2, Step)).
-
 
 	% Remove old otherAgentAt variables:
 	forall percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, 

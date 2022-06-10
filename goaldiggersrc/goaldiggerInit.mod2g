@@ -19,6 +19,11 @@ module goaldiggerInit {
 	if true then insert (haveMove). % Semaphore of decision for step
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
+	
+	% Assign Explorer and set worker as default role
+	if bel(randomNumber(Seed)) then insert(randomSeed(Seed)).
+	if true then insert (positionInHirarchie(0)).
+	if true then insert (targetRole(worker)).
 
 	% subscribing to message channels
 	if true then subscribe(channelGoalzone).

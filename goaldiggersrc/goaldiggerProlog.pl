@@ -38,6 +38,13 @@
 :- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0, greetAgents/0. % Flags to steer world measurements.
 :- dynamic worldSizeX/1, worldSizeY/1. % store the size of the world on X and Y
 
+
+% Variables related to choosing or Determine Role
+:- dynamic targetRole/1.
+:- dynamic randomSeed/1.
+:- dynamic messageChooseRole/2.
+:- dynamic positionInHirarchie/1.
+
 % Variables related to locating other agents in the world
 :- dynamic otherAgentAt/4, updateOtherAgentAt/4. % store / update other agents' positions
 :- dynamic agentOffset/4. % field name x y CalcStep
@@ -73,6 +80,9 @@ randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
 			integerToDirection(D, NewDir),
 			oppositeDirection(AltDir, OppositAltDir),
 			NewDir \= OppositAltDir.
+			
+% get a random number between 0 - 100
+randomNumber(RandomSeed) :- random_between (0, 100, RandomSeed).
 						
 % skip random steps
 skipRandomSteps(SkipSteps) :- random_between(0, 8, SkipSteps).
@@ -226,6 +236,7 @@ getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
 
 % modulo function for 2 values. It returns int values.
 getModInt(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
+
 
 % conditional modulo function: it only triggers if the world size is no longer 1000, it returns pos values
 getModInt(X1,Y1,SizeX,SizeY,X2,Y2) :-
