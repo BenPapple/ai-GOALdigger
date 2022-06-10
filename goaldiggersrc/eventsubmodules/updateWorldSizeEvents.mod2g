@@ -2,7 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 
-module worldSizeEvents {
+module updateWorldSizeEvents {
 
 % Update believe with percept information, insert new objects and delete disappeared objects
 

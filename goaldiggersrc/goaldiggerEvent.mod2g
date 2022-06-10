@@ -3,13 +3,13 @@ use goaldiggerAction as actionspec.
 use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
-use "./eventsubmodules/handleLastActionResult" as module.
+use "./eventsubmodules/messageHandleLastActionResult" as module.
 use "./eventsubmodules/messageRelativeCoordsOfAgents" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
-use "./eventsubmodules/worldSizeEvents" as module.
-use "./eventsubmodules/greetAgents" as module.
+use "./eventsubmodules/updateWorldSizeEvents" as module.
+use "./eventsubmodules/messageGreetAgents" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/messageAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
@@ -33,7 +33,7 @@ module goaldiggerEvent {
 	 *
 	 */
 
-	if true then worldSizeEvents.
+	if true then updateWorldSizeEvents.
 
 
 	% Update step counter with new step when new percept step available
@@ -50,7 +50,7 @@ module goaldiggerEvent {
 	 * SUBMODULE TO MEASURE THE WORLD
 	 *
 	 */
-	if true then worldSizeEvents.
+	if true then updateWorldSizeEvents.
 	
 	
 	% Update step counter with new step when new percept step available
@@ -60,7 +60,7 @@ module goaldiggerEvent {
 	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
 	 *
 	 */
-	if true then handleLastActionResult.
+	if true then messageHandleLastActionResult.
 
 	/**
 	 * SUBMODULE Store percept data in belief
@@ -72,14 +72,14 @@ module goaldiggerEvent {
   *
   */
 
-	if true then greetAgents.
+	if true then messageGreetAgents.
 
 	/**
 	 * SUBMODULE TO SAY HELLO TO ALL OTHER AGENTS IF OTHER AGENTS SEEN
 	 *
 	 */
 
-	if true then greetAgents.
+	if true then messageGreetAgents.
 
 	/**
 	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
@@ -88,7 +88,7 @@ module goaldiggerEvent {
 	if bel(lDebugOn) then logMiniPercept.
 
 	/**
-	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER handleLastActionResult MOVE !!!
+	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER messageHandleLastActionResult MOVE !!!
 	 *
 	 */
 	if true then messageRelativeCoordsOfAgents.

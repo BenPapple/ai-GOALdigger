@@ -1,7 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
-module greetAgents {
+module messageGreetAgents {
 	
 	/*
 

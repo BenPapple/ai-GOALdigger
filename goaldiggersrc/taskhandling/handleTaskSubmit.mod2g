@@ -1,7 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../pathfinding/executeRandomMove" as module.
-use "../actionhandling/postActionCleanup" as module.
+use "../actionhandling/preActionCleanup" as module.
 use "../blockhandling/rotateBlockToSouth" as module.
 
 /**
@@ -16,7 +16,7 @@ module handleTaskSubmit {
 		
 		% preconditions for submit achieved, submit task	
     	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W)), percept(attached(V, W), thing(V, W, block, BlockType), task(TaskFit,Step,_,[req(V, W, BlockType)])), 
-    		bel(step(SimStep), Step >= SimStep) then postActionCleanup + submit(TaskFit).
+    		bel(step(SimStep), Step >= SimStep) then preActionCleanup + submit(TaskFit).
     	    	
     } % if
 
