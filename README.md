@@ -6,7 +6,7 @@
 
 ### Introduction
 
-This is the work of a 5 person student team at University of Hagen for the practical course in AI. The goal of the course is oriented at the [The Multi-Agent Programming Contest](https://multiagentcontest.org/).
+This is the work of a 4 person student team at University of Hagen for the practical course in AI. The goal of the course is oriented at the [The Multi-Agent Programming Contest](https://multiagentcontest.org/).
 
 The [multi-agent system (MAS)](https://en.wikipedia.org/wiki/Multi-agent_system) is written in the [GOAL agent programming language](https://en.wikipedia.org/wiki/GOAL_agent_programming_language).
 
