@@ -12,16 +12,16 @@ exit = always.
 module manhattanCalcModule {
 
 	% Calculate ManhattanDistance for fields nswe of agent and stores distance value
-	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculateMinusOne(Y1,Y3), calculateXYMd(X1,Y3,X2,Y2,Md)) then {
+	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculateMinusOne(Y1,Y3), worldSizeX(SizeX), worldSizeY(SizeY), calculateXYMd(X1,Y3,X2,Y2,SizeX,SizeY,Md)) then {
 		if bel(nMd(Dis)) then delete(nMd(Dis)) + insert(nMd(Md)) .
 	}
-	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculatePlusOne(Y1,Y3), calculateXYMd(X1,Y3,X2,Y2,Md)) then {
+	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculatePlusOne(Y1,Y3), worldSizeX(SizeX), worldSizeY(SizeY), calculateXYMd(X1,Y3,X2,Y2,SizeX,SizeY,Md)) then {
 		if bel(sMd(Dis)) then delete(sMd(Dis)) + insert(sMd(Md)) .
 	}
-	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculateMinusOne(X1,X3), calculateXYMd(X3,Y1,X2,Y2,Md)) then {
+	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculateMinusOne(X1,X3), worldSizeX(SizeX), worldSizeY(SizeY), calculateXYMd(X3,Y1,X2,Y2,SizeX,SizeY,Md)) then {
 		if bel(wMd(Dis)) then delete(wMd(Dis)) + insert(wMd(Md)) .
 	}
-	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculatePlusOne(X1,X3), calculateXYMd(X3,Y1,X2,Y2,Md)) then {
+	if bel(agentAt(X1,Y1), targetMd(X2,Y2, _), calculatePlusOne(X1,X3), worldSizeX(SizeX), worldSizeY(SizeY), calculateXYMd(X3,Y1,X2,Y2,SizeX,SizeY,Md)) then {
 		if bel(eMd(Dis)) then delete(eMd(Dis)) + insert(eMd(Md)) .	
 	}
 		
