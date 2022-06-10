@@ -14,8 +14,6 @@ use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/messageAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
-use "./eventsubmodules/worldSizeEvents" as module.
-use "./eventsubmodules/greetAgents" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
