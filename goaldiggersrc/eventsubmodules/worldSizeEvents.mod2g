@@ -19,28 +19,27 @@ and should not be measured anymore. We assume that the first measurement will be
 
 	% Fill a list with worldSizeX values:
 	if not(bel(worldUpdatedX)) then {forall (_).sent(worldSizeX(SizeX))
-		do { if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])) +print(worldListX(WorldListX)). }}
+		do { if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])). }}
 	
 	% Fill a list with worldSizeY values:
 	if not(bel(worldUpdatedY)) then {forall (_).sent(worldSizeY(SizeY))
-		do { if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY]))+print(worldListY(WorldListY)). }}
+		do { if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY])). }}
 
 	% Update world sizes with the most common values in the X and Y mesasurement lists once both lists lenghts are equal or greater than 10
 	if bel(worldListX(WorldListX), length(WorldListX, LengthX), LengthX >= 10, worldListY(WorldListY), length(WorldListY, LengthY), LengthY >= 10,
 		worldSizeX(OldWorldSizeX), worldSizeX(OldWorldSizeY), 
 		msort(WorldListX, SListX), rle(SListX, RLEX), sort(RLEX, SRLEX),last(SRLEX, [FreqX, MostCommonX]), length(WorldListX, ListLenX), FreqX > ListLenX/2,
 		msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), length(WorldListY, ListLenY), FreqY > ListLenY/2)
-	then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommonX)) + insert (worldUpdateX) + insert(worldUpdatedX) + print(worldListX(WorldListX))
-		 + delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommonY)) + insert (worldUpdateY) + insert(worldUpdatedY) + print(worldListY(WorldListY)).
+	then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommonX)) + insert (worldUpdateX) + insert(worldUpdatedX)
+		 + delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommonY)) + insert (worldUpdateY) + insert(worldUpdatedY).
 
 	% Flag to know that an agent has already picked both worldSizeX values:
-	if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
+	%if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
 
 
 
 	% After updating one agent's belief about world size, the agent updates its own position.
-	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1))
-	+ print("Updated own position from / to", agentAt(X0,Y0), agentAt(X1,Y1)).
+	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
 
 
 	%% TO DO: THIS CODE IS REMOVED UNTIL WE DECIDE HOW TO STORE OTHER OBJECTS IN MEMORY. THING IS NOT USED CURRENTLY AND WOULD CAUSE THE PROGRAM TO CRASH.
@@ -49,9 +48,8 @@ and should not be measured anymore. We assume that the first measurement will be
 	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
 		then { 
 			forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), getModPos(X1, Y1, SizeX, SizeY, X2, Y2))
-			do delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool)) 
-			+ print("Updated dispensers from / to:", storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool), SizeX, SizeY).
-		} % end then
+			do delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool)).
+			}
 
 		
 	
@@ -85,7 +83,6 @@ and should not be measured anymore. We assume that the first measurement will be
 
 
 	%forall 
-	/*
 	forall (Sender).sent(agentOffset(AgentName, OffsetX, OffsetY, _)) 
 	do	{
 		if bel(agentEntity(Sender,SenderName), agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
@@ -110,7 +107,7 @@ and should not be measured anymore. We assume that the first measurement will be
 			if bel(agentOffset(SenderName,_,_,_), agentOffset(AgentName,_,_,_))
 			then delete(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)).
 	} %end do
-	*/
+
 	
 	
 	
@@ -191,8 +188,9 @@ and should not be measured anymore. We assume that the first measurement will be
 			(SeenAgentPosX \= KnownAgentPosX; SeenAgentPosY \= KnownAgentPosY),
 			distanceBetweenPoints(KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY, ApparentDeltaX, ApparentDeltaY),
 			getWorldSize(ApparentDeltaX, OldWorldX, NewWorldX),	getWorldSize(ApparentDeltaY, OldWorldY, NewWorldY))	
-		then all.send(worldSizeX(NewWorldX)) + all.send(worldSizeY(NewWorldY)).
-		} % end do
+		then { if bel(NewWorldX \== OldWorldX) then all.send(worldSizeX(NewWorldX)).
+			   if bel(NewWorldY \== OldWorldY) then all.send(worldSizeY(NewWorldY)).
+		}} % end do
 	} % end if
 
 	% Remove old distanceStepNamePosition messages.
