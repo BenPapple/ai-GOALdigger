@@ -8,7 +8,7 @@ use "../actionhandling/preActionCleanup" as module.
  *
  */
 
-module executeAroundSubmittingAgent {
+module executeMoveAroundSubmittingAgent {
 	
 	% handle situation when agent on point of delivery
 	%ToDo

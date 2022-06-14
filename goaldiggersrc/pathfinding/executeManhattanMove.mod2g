@@ -1,7 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use helperManhattanCalcModule as module.
 use helperManhattanChoiceModule as module.
-use executeAndRequestAroundDispenser as module.
 use executeRandomMove as module.
 
 /**
