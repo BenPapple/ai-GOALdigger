@@ -4,6 +4,11 @@ use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 
+/**
+ * ToDo module blurb
+ *
+ */
+
 module executeExplorerRole {
 	    
 	    % explore

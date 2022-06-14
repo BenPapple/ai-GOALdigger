@@ -3,15 +3,16 @@ use "../goaldiggerAction" as actionspec.
 
 module updateAssignExplorerRole {
 	
+	% ToDo comment for every possible team size number
 	% When positionInHirarchie is 5 or 6 agent will switch to explorer. 
-	%positionInHirsrchie will increase for every lower other agent's randomSeed
+	% positionInHirsrchie will increase for every lower other agent's randomSeed
 	forall allother.sent(messageChooseRole(OtherRandomSeed, Name)) do
 	{
 		if bel(randomSeed(RandomSeed), positionInHirarchie(PositionInHirarchie), RandomSeed > OtherRandomSeed, NewPositionInHirarchie is PositionInHirarchie + 1) then
 			delete(positionInHirarchie(PositionInHirarchie)) + insert (positionInHirarchie(NewPositionInHirarchie)).
 	}
 	
-	%Change targetRole to explorer
+	% Change targetRole to explorer
 	if percept(teamSize(TeamSize), role(default)), bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), CheckSum is TeamSize - PositionInHirarchie, CheckSum =< 2) then
 		delete(targetRole(Role)) + insert (targetRole(explorer)).
 }

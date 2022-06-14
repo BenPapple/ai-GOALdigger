@@ -1,27 +1,32 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
+/**
+ * ToDo module blurb
+ *
+ */
 
 module updateOtherAgentPositionData {
 
 
 	% The agent processes received messages about other agents' positions it it already knows it offsets to those agents:
 	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, Y1 is Y0 + OffsetToEntityY,
-		worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do insert(otherAgentAt(Name, X2, Y2, Step)).
+		worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) 
+			do insert(otherAgentAt(Name, X2, Y2, Step)).
 
 	% Remove old otherAgentAt variables:
 	forall percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, 
 		otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
-	do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 	
+			do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 	
 	
 	% Fetch all distStepNamePosition messages from other agents:
 	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
-	do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
+		do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
 	
 	% Delete all myDistStepNamePosition messages which are compatible with more than one distStepNamePosition messages.
 	forall bel(distStepNamePosition(DistX, DistY, Step, Agent1Name, _, _), distStepNamePosition(DistX, DistY, Step, Agent2Name, _, _),
 		Agent1Name \== Agent2Name, myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), MyDistX =:= -DistX, MyDistY =:= -DistY)
-	do delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
+			do delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
 
 	
 }

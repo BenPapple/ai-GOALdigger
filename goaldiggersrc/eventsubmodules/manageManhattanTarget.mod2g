@@ -14,11 +14,12 @@ module manageManhattanTarget {
 		
 	% when role worker and without block set dispenser as target
 	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), TaskStep >= SimStep, 
-		targetDispenserAt(AltX, AltY, AltBlockType, _), BlockType == AltBlockType) 
-			then {
+		targetDispenserAt(AltX, AltY, AltBlockType, _), BlockType == AltBlockType) then {
+		
 				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + insert(targetMd(AltX, AltY, dispenser)).	
 				if not(bel(executeManhattan)) then insert(executeManhattan).
-				}
+				
+	}
 		
 	% With block and as submittingAgent update goalzone target MD
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _), TaskStep >= SimStep, targetMd(X, Y, Target), 
@@ -30,7 +31,7 @@ module manageManhattanTarget {
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
 			targetMd(X, Y, Target)),
 			(_).sent(otherAgentAt(NameSubmitter, A, B, _)), bel(localize(A, B, OffsetX, OffsetY, C, D))
-		then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
+				then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
 	
 		
 } % end module

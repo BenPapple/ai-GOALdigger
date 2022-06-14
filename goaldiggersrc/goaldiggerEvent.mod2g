@@ -8,7 +8,6 @@ use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/updateWorldSizeEvents" as module.
-use "./eventsubmodules/messageGreetAgents" as module.
 use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
 use "./eventsubmodules/messageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.

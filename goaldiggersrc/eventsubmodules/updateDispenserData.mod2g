@@ -8,20 +8,6 @@ use "../goaldiggerAction" as actionspec.
 
 module updateDispenserData {
 
-  % Question: Does this need to be deleted??
-  % STORE unknown dispensers from percept with MD field
-	%forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3), worldSizeX(SizeX), worldSizeY(SizeY),
-	%getModPos(X3, Y3, SizeX, SizeY, X4, Y4)), not(bel((storedDispenser(X4, Y4, dispenser, Details, _, _))))
-	%	do insert(storedDispenser(X4, Y4, dispenser, Details, 0, false)).
-
-
-	% TO DO: We need to get rid of hardcoded percept distances, like here in the =< 5. Such calculations should be made with stored percept distances from the beliefs.
-
-	% DELETE dispenser from belief if not seen in percept
-	%forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), agentAt(X2, Y2), worldSizeX(SizeX), worldSizeY(SizeY),
-	%getPerceivedDistance(X1,X2,SizeX,5,X3), getPerceivedDistance(Y1,Y2,SizeY,5,Y3), abs(X3) + abs(Y3) =< 5), not(percept(thing(X3, Y3, dispenser, _)))
-	%	do delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)). 
-
 	% RESET old MD values in targetDispenserAt to high number expected to not occur in simulation
 	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt))
 		+ insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
@@ -40,10 +26,11 @@ module updateDispenserData {
 	}
 
 	% COMPARE lowest MD value for ALL stored dispensers
-	forall bel(storedDispenser(X, Y, dispenser, BlockType, MDValue, _), haveBlockAttached(false,_)), percept(role(worker))
-		do {
+	forall bel(storedDispenser(X, Y, dispenser, BlockType, MDValue, _), haveBlockAttached(false,_)), percept(role(worker)) do {
+	
 		if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) +
 			insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).
+			
 	}
 
 } % module
