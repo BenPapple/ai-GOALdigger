@@ -13,9 +13,9 @@
   
   "multi-entities": [
     {
-      "name-prefix": "Connection1",
-      "username-prefix": "Team1",
-      "password": "Team1",
+      "name-prefix": "connectionA",
+      "username-prefix": "agentA",
+      "password": "1",
       "print-iilang": false,
       "print-json": false,
       "start-index": 1,

@@ -1,6 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "../actionhandling/postActionCleanup" as module.
+use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 

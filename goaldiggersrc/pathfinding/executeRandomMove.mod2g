@@ -1,9 +1,9 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "../actionhandling/postActionCleanup" as module.
-use "./moveManhattanWithBlock" as module.
-use "./moveWithoutBlock" as module.
-use "./moveWithBlock" as module.
+use "../actionhandling/preActionCleanup" as module.
+use "./helperMoveManhattanWithBlock" as module.
+use "./helperMoveWithoutBlock" as module.
+use "./helperMoveWithBlock" as module.
 
 exit = always.
 
@@ -15,13 +15,13 @@ exit = always.
 module executeRandomMove {
 
 	% move with block
-	if  bel(haveBlockAttached(true, _)) then moveWithBlock.
+	if  bel(haveBlockAttached(true, _)) then helperMoveWithBlock.
 	
 	% move without block
-	if  bel(haveBlockAttached(false, _)) then moveWithoutBlock.
+	if  bel(haveBlockAttached(false, _)) then helperMoveWithoutBlock.
 
 	% obligatory skip
-	if true then postActionCleanup + skip.   
+	if true then preActionCleanup + skip.   
 	
 } % module executeRandomMove
 

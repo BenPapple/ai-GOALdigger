@@ -1,0 +1,73 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+
+module handleMessageDistStepNamePosition {	
+		
+	/*	
+	This block manages the identification of newly met agents.
+	Every agent reads the distStepNamePosition messages related to agent encounters
+	which are compatible with its own encounter of an agent. So if Agent1 sees an agent at position (2,3) relative to its own position,
+	and Agent2 sees an agent at position (-2,-3), and there are no other agents with these relative distances,
+	Agent1 assumes it is seeing Agent2, and Agent2 assumes it is seeing agent 1.
+	From the position of Agent2 in Agent2's own coordinate system communicated in the distStepNamePosition message and the position of Agent2 in
+	Agent1's coordinate system, Agent1 calculates an offset. So, if it receives a message from Agent2 later telling it its position, Agent1 can
+	translate Agent2's position to its own coordinate system.
+	
+	This is done only the first time that both agents meet and only two compatible messages are available, to avoid confusion.
+	After knowing each other's Offset, this procedure is not repeated.
+	The knewly calculated offsets are communicated to everyone so that they can calculate their offsets with the offsets' transitive property.
+	
+	Note: Since messages can experience some delay between to turns, only saved messages from a previous turn are analyzed to avoid
+	the information being incomplete (and thus wrongly believing there are only two compatible messages.	
+	*/
+
+	% If I have sent a distStepNamePosition message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
+	
+	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY))
+	do { if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit, distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY),
+			AgentDistX =:= -MyDistX, AgentDistY =:= -MyDistY), not(bel(agentOffset(AgentNameSender,_,_,_))), bel(ApparentPosX is MyPosX+MyDistX, ApparentPosY is MyPosY+MyDistY), 
+			bel(distanceBetweenPoints(ApparentPosX, ApparentPosY, AgentPosX, AgentPosY, OffsetX, OffsetY))	
+		then insert(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)) + delete (distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY))
+			+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)).	
+	}
+
+	% Keep only most recent agentOffset entry:
+	%forall bel(lastSeen(AgentNameSender, A, B, C, D, Step1), lastSeen(AgentNameSender, _, _, _, _, Step2), Step1 < Step2) do delete(lastSeen(AgentNameSender, A, B, C, D, Step1)). 
+	
+	% Assign agent names to entity names:
+	forall (Agent).sent(distStepNamePosition(_, _, _, Name, _, _)), not(bel(agentEntity(Agent, Name))) do insert(agentEntity(Agent, Name)).
+
+	/*
+	
+	This block mesasures the world with distanceStepNamePosition messages.
+	This is done by comparing the expected position of an agent with the observed position at a new encounter.
+	If they are different, it means an agent have turned around the world relatively to other.
+	The difference in any of the directions is the size of the world in that direction.
+	
+	*/
+	
+	% Agent sieht anderen Agenten dann bemisst er die Welt als die Diff in einer/beiden Richtung(en) und sendet an alle anderen Agenten
+	
+	if not(bel(worldUpdatedX, worldUpdatedY)), percept(step(CurrentStep)) then {	
+
+	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY), 
+		MyDistX =:= -AgentDistX, MyDistY =:= -AgentDistY, otherAgentAt(AgentNameSender, KnownAgentPosX,KnownAgentPosY, Step), 
+		messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit)
+	do {
+		if bel( SeenAgentPosX is MyPosX + MyDistX, SeenAgentPosY is MyPosY + MyDistY, worldSizeX(OldWorldX), worldSizeY(OldWorldY),
+			(SeenAgentPosX \= KnownAgentPosX; SeenAgentPosY \= KnownAgentPosY),
+			distanceBetweenPoints(KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY, ApparentDeltaX, ApparentDeltaY),
+			getWorldSize(ApparentDeltaX, OldWorldX, NewWorldX),	getWorldSize(ApparentDeltaY, OldWorldY, NewWorldY))	
+		then { if bel(NewWorldX \== OldWorldX) then all.send(worldSizeX(NewWorldX)).
+			   if bel(NewWorldY \== OldWorldY) then all.send(worldSizeY(NewWorldY)).
+		}} % end do
+	} % end if
+
+	% Remove old distanceStepNamePosition messages.
+	forall bel(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)) do
+		{ if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, Step < StepLimit) 
+		 then delete(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)).
+		} % end if	
+	
+}

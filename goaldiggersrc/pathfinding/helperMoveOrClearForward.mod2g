@@ -1,6 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "../actionhandling/postActionCleanup" as module.
+use "../actionhandling/preActionCleanup" as module.
 
 order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
 
@@ -9,26 +9,26 @@ order = linearrandom. % random choice between equal values requires random; line
  *
  */
 
-module moveOrClearForward {
+module helperMoveOrClearForward {
 
     % Move into main affinity direction if possible
     % double speed; ToDo reactivate when allowed again for competition
     if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), percept(role(worker)), 
     	not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)), not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser)) then 
-    		postActionCleanup + move(Dir, Dir) + print("I FEEL THE NEED, THE NEED FOR SPEED").
+    		preActionCleanup + move(Dir, Dir) + print("I FEEL THE NEED, THE NEED FOR SPEED").
     % normal speed
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)) then 
-    	postActionCleanup + move(Dir).
+    	preActionCleanup + move(Dir).
     	
     % clear main affinity direction of obstacles and blocks
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, obstacle,_)) then postActionCleanup + clear(Xn, Yn).
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, block,_)) then postActionCleanup + clear(Xn, Yn).
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, obstacle,_)) then preActionCleanup + clear(Xn, Yn).
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, block,_)) then preActionCleanup + clear(Xn, Yn).
     
     % clear if altmove blocked
     if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
     	if  bel( directionToCoordinate(AltMove, Xm, Ym)), percept(thing(Xm, Ym, obstacle,_)) then {
-    		if percept(thing(Xn, Yn, obstacle,_))   then postActionCleanup + clear(Xn, Yn).
-    		if percept(thing(Xn, Yn, block,_))   then postActionCleanup + clear(Xn, Yn).
+    		if percept(thing(Xn, Yn, obstacle,_))   then preActionCleanup + clear(Xn, Yn).
+    		if percept(thing(Xn, Yn, block,_))   then preActionCleanup + clear(Xn, Yn).
 		}
     } % 
 	
