@@ -2,7 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 
-module worldSizeEvents {	
+module handleMessageDistStepNamePosition {	
 		
 	/*	
 	This block manages the identification of newly met agents.
