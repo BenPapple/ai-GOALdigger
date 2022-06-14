@@ -72,6 +72,8 @@ module logMiniPercept {
 		
 		if percept(thing(0, 0, dispenser, X)) then print("Agent is on Dispenser"+X).
 		
+		if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(X), worldSizeY(Y)) then print("Agent "+Name+" knows this world size: "+X+", "+Y+"."). 
+		
 		if true then print("====== End Mini Percept =====").
 		
 		% logging percept base, message base, believe base

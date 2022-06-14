@@ -252,7 +252,8 @@ getPerceivedDistance(ObjectAt, AgentAt, WorldSize, PerceptDistance, Z) :-
 
 % world size calculator
 getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :- 
-	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, NewWorldSize is abs(PosDiff)); 
+	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) > abs(PosDiff), NewWorldSize is abs(PosDiff));
+	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) < abs(PosDiff), NewWorldSize is OldWorldSize - abs(PosDiff));
 	(PosDiff = 0, NewWorldSize is OldWorldSize); 
 	(abs(PosDiff) >= OldWorldSize, NewWorldSize is OldWorldSize).
 

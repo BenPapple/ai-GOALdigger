@@ -10,10 +10,16 @@ use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/updateWorldSizeEvents" as module.
 use "./eventsubmodules/messageGreetAgents" as module.
+use "./eventsubmodules/handleLastActionResult" as module.
+use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
+use "./eventsubmodules/messageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/messageAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
+use "./eventsubmodules/updateWorldSizeData" as module.
+use "./eventsubmodules/handleMessageAgentOffset" as module.
+use "./eventsubmodules/updateOtherAgentPositionData" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -27,14 +33,6 @@ module goaldiggerEvent {
 	 *
 	 */
 	if percept(step(0)) then reinitBeliefOnSimChange.
-
-	/**
-	 * SUBMODULE TO MEASURE THE WORLD
-	 *
-	 */
-
-	if true then updateWorldSizeEvents.
-
 
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
@@ -50,8 +48,10 @@ module goaldiggerEvent {
 	 * SUBMODULE TO MEASURE THE WORLD
 	 *
 	 */
-	if true then updateWorldSizeEvents.
-	
+	if true then updateWorldSizeData.
+	if true then handleMessageAgentOffset.
+	if true then updateOtherAgentPositionData.
+	if true then handleMessageDistStepNamePosition.
 	
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
@@ -71,27 +71,13 @@ module goaldiggerEvent {
  /* SUBMODULE TO SAY HELLO TO ALL OTHER AGENTS IF OTHER AGENTS SEEN
   *
   */
-
-	if true then messageGreetAgents.
-
-	/**
-	 * SUBMODULE TO SAY HELLO TO ALL OTHER AGENTS IF OTHER AGENTS SEEN
-	 *
-	 */
-
-	if true then messageGreetAgents.
+	if true then messageDistStepNamePosition.
 
 	/**
 	 * SUBMODULE DEBUG WITH OUR MINI PERCEPT
 	 *
 	 */
 	if bel(lDebugOn) then logMiniPercept.
-
-	/**
-	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER messageHandleLastActionResult MOVE !!!
-	 *
-	 */
-	if true then messageRelativeCoordsOfAgents.
 
 	/**
 	 * SUBMODULE MANAGING MESSAGES CONCERNING TASK COORDINATION
