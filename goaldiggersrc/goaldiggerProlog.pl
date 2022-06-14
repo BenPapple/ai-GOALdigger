@@ -26,31 +26,29 @@
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
 :- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
 
-:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
-:- dynamic sawGoalzoneAt/3. % data for message (X,X, MyAgentName)
-:- dynamic sawDispenserAt/4. % data for messages (X,Y, Type, MyAgentName)
+%:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
+%:- dynamic sawGoalzoneAt/3. % data for message (X,X, MyAgentName)
+%:- dynamic sawDispenserAt/4. % data for messages (X,Y, Type, MyAgentName)
 
 % Variables related to world measurement
 :- dynamic worldListX/1, worldListY/1. % lists containing world X and Y sizes
 :- dynamic messageProcessingDelay/1. % how long does it take for a distStepNamePosition message to get processed (the greater the delay, the most sure we can be to have received all messages sent during a concrete step)
 :- dynamic messagePersitanceAfterDelay/1. % how long does a distStepNamePosition message still lingers around after being processed
-:- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0, greetAgents/0. % Flags to steer world measurements.
+:- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0. % Flags to steer world measurements.
 :- dynamic worldSizeX/1, worldSizeY/1. % store the size of the world on X and Y
 
 
 % Variables related to choosing or Determine Role
 :- dynamic targetRole/1.
 :- dynamic randomSeed/1.
-:- dynamic messageChooseRole/2.
 :- dynamic positionInHirarchie/1.
 
 % Variables related to locating other agents in the world
-:- dynamic otherAgentAt/4, updateOtherAgentAt/4. % store / update other agents' positions
+:- dynamic otherAgentAt/4. % store / update other agents' positions
 :- dynamic agentOffset/4. % field name x y CalcStep
 :- dynamic savedOffsetMessage/5. % Saves offset messages from other to use them later
 :- dynamic ownTeam/1, ownName/1. %These variables contain the own team name and own name 
-:- dynamic dummy/1.% Dummy variable to see if something evaluates
 :- dynamic agentEntity/2. %Variable to know which entity is assigned to each agent in order to address the correct agents.
 :- dynamic distStepNamePosition/6. % message passed to everyone else if other agents seen / saved (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
 :- dynamic myDistStepNamePosition/5. % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
@@ -64,12 +62,12 @@ transformXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 1.
 
 % Update position XY in relation to agent position X2 Y2
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
-%ToDo
-delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1). % X1Y1 gets localized by X2Y2 (add negative values, substract positive values)
+%ToDo check delocalize
+%delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1). % X1Y1 gets localized by X2Y2 (add negative values, substract positive values)
 
 % Offset calculator
-calculateAgentOffset(RecieverBaseX, RecieverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is RecieverBaseX - SenderBaseX + PerceptOffsetX, 
-	OffsetY is RecieverBaseY - SenderBaseY + PerceptOffsetY.
+%calculateAgentOffset(RecieverBaseX, RecieverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is RecieverBaseX - SenderBaseX + PerceptOffsetX, 
+%	OffsetY is RecieverBaseY - SenderBaseY + PerceptOffsetY.
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
@@ -90,9 +88,6 @@ skipRandomSteps(SkipSteps) :- random_between(0, 8, SkipSteps).
 % get random 90 degree direction to initial affinity direction		
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
-
-% get random role ToDo STILL NECESSARY???
-%randomRole(Role) :- random_between(0, 1, RD), numbertoRoles(RD, Role).
 
 % get random rotate direction
 randomRotate(Dir) :- random_between(0, 1, R),
@@ -235,20 +230,20 @@ getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
     (getModPos(X1,SizeX,X2), getModPos(Y1,SizeY,Y2)).
 
 % modulo function for 2 values. It returns int values.
-getModInt(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
+%getModInt(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
 
-
+% ToDo still necessary???
 % conditional modulo function: it only triggers if the world size is no longer 1000, it returns pos values
-getModInt(X1,Y1,SizeX,SizeY,X2,Y2) :-
-    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
-    (getModInt(X1,SizeX,X2), getModInt(Y1,SizeY,Y2)). 
+%getModInt(X1,Y1,SizeX,SizeY,X2,Y2) :-
+%    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
+%    (getModInt(X1,SizeX,X2), getModInt(Y1,SizeY,Y2)). 
 
 % calculates the distance between an object and an agent according to the agent perception limits and the size of the world
-getPerceivedDistance(ObjectAt, AgentAt, WorldSize, PerceptDistance, Z) :-
-	(Delta is ObjectAt - AgentAt), ((   Delta >= 0, Delta =< PerceptDistance, Z is Delta );
-                       (   Delta >= 0, Delta > PerceptDistance, V is Delta - WorldSize, ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)));
-                       (   Delta < 0, abs(Delta) =< PerceptDistance, Z is Delta);
-                       (   Delta < 0, abs(Delta) > PerceptDistance, getModPos(Delta, WorldSize, V), ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)))).
+%getPerceivedDistance(ObjectAt, AgentAt, WorldSize, PerceptDistance, Z) :-
+%	(Delta is ObjectAt - AgentAt), ((   Delta >= 0, Delta =< PerceptDistance, Z is Delta );
+%                       (   Delta >= 0, Delta > PerceptDistance, V is Delta - WorldSize, ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)));
+%                       (   Delta < 0, abs(Delta) =< PerceptDistance, Z is Delta);
+%                       (   Delta < 0, abs(Delta) > PerceptDistance, getModPos(Delta, WorldSize, V), ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)))).
 
 % world size calculator
 getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :- 

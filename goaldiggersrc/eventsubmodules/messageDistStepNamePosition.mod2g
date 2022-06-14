@@ -13,7 +13,7 @@ module messageDistStepNamePosition {
 	% name and team appear in every percept too, no need to put in belief
 	if not(bel(ownName(Name))), percept(name(Name)) then insert(ownName(Name)) + print(ownName(Name)).
 	if not(bel(ownTeam(Team))), percept(team(Team)) then insert(ownTeam(Team)) + print(ownTeam(Team)).
-	
+
 	% send sync message to other agents to coordinate coordinates :D
 	forall percept(thing(DistX, DistY, entity, Details), step(Step)), bel(ownTeam(Team), Details = Team),
 		bel(DistX \== 0, DistY \== 0),

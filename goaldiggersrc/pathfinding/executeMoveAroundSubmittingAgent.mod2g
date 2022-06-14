@@ -11,7 +11,7 @@ use "../actionhandling/preActionCleanup" as module.
 module executeMoveAroundSubmittingAgent {
 	
 	% handle situation when agent on point of delivery
-	%ToDo
+	%ToDo handle situation when agent on point of delivery
 %	if bel(haveBlockAttached(false, _), currentChosenTask(_, _, _, _, _, BlockType,_,_)), percept(thing(0, 0, dispenser, BlockType), role(worker)) 
 %		then executeRandomMove.
 

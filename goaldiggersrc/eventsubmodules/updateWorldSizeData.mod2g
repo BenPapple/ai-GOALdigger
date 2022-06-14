@@ -2,16 +2,13 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * ToDo module blurb
+ * Manage worldsizes of all agents and update believe when worldsize known with recalculated coordinates
  *
  */
 
 module updateWorldSizeData {
 
-% Update believe with percept information, insert new objects and delete disappeared objects
-
-
-	% Fill a list with worldSizeX values:
+	% Fill a list with worldSizeX values
 	if not(bel(worldUpdatedX)) then {
 	
 		forall (_).sent(worldSizeX(SizeX))	do {
@@ -23,7 +20,7 @@ module updateWorldSizeData {
 			
 	}
 	
-	% Fill a list with worldSizeY values:
+	% Fill a list with worldSizeY values
 	if not(bel(worldUpdatedY)) then {
 	
 		forall (_).sent(worldSizeY(SizeY))	do {
@@ -43,7 +40,6 @@ module updateWorldSizeData {
 		then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommonX)) + insert (worldUpdateX) + insert(worldUpdatedX)
 			 + delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommonY)) + insert (worldUpdateY) + insert(worldUpdatedY).
 
-    % ToDo no freefloating comments between code blocks
 	% Flag to know that an agent has already picked both worldSizeX values:
 	%if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
 
@@ -51,8 +47,6 @@ module updateWorldSizeData {
 	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then 
 		delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
 
-
-	%% TO DO: THIS CODE IS REMOVED UNTIL WE DECIDE HOW TO STORE OTHER OBJECTS IN MEMORY. THING IS NOT USED CURRENTLY AND WOULD CAUSE THE PROGRAM TO CRASH.
 	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
 	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
 		then { 
@@ -67,7 +61,6 @@ module updateWorldSizeData {
 				delete(otherAgentAt(AgentName, X0, Y0, Step)) + insert(otherAgentAt(AgentName, X1, Y1, Step)).
 		} % end then		
 
-    % ToDo no freefloating comments between code blocks
 	/*
 	% The values of the variable updateOtherAgentAt are added to new otherAgentAt variables.	
 	forall bel(updateOtherAgentAt(AgentName, X, Y, Step)) do insert(otherAgentAt(AgentName, X, Y, Step)) + delete (updateOtherAgentAt(AgentName, X, Y, Step)).

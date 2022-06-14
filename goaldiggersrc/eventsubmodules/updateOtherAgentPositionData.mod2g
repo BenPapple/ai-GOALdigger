@@ -2,14 +2,15 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * ToDo module blurb
+ * Manages belief data concerning messages about positions of other agents
  *
  */
 
 module updateOtherAgentPositionData {
 
+	% ToDo too complex agent only needs to store it once not delayed or cached, just overwrite old value with new
 
-	% The agent processes received messages about other agents' positions it it already knows it offsets to those agents:
+	% The agent processes received messages about other agents' positions if it already knows it offsets to those agents:
 	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, Y1 is Y0 + OffsetToEntityY,
 		worldSizeX(SizeX), worldSizeY(SizeY), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) 
 			do insert(otherAgentAt(Name, X2, Y2, Step)).
@@ -19,9 +20,11 @@ module updateOtherAgentPositionData {
 		otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
 			do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 	
 	
-	% Fetch all distStepNamePosition messages from other agents:
+	% Fetch and store all distStepNamePosition messages from other agents into belief
 	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
 		do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
+
+	% ToDo myDistStepNamePosition does not get deleted at all or enough and accumulates in belief
 	
 	% Delete all myDistStepNamePosition messages which are compatible with more than one distStepNamePosition messages.
 	forall bel(distStepNamePosition(DistX, DistY, Step, Agent1Name, _, _), distStepNamePosition(DistX, DistY, Step, Agent2Name, _, _),
