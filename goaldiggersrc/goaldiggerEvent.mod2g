@@ -14,6 +14,7 @@ use "./eventsubmodules/messageAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
+use "./eventsubmodules/handleMessageAgentOffset" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -51,6 +52,7 @@ module goaldiggerEvent {
 	 *
 	 */
 	if true then updateWorldSizeData.
+	if true then handleMessageAgentOffset.
 	
 	if true then worldSizeEvents.
 	
