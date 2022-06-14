@@ -5,7 +5,7 @@ use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 
 /**
- * ToDo module blurb
+ * Main decision rules for role explorer
  *
  */
 

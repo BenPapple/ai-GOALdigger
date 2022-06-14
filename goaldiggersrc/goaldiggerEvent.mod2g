@@ -7,7 +7,6 @@ use "./eventsubmodules/updateLastActionResultData" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
-use "./eventsubmodules/updateWorldSizeEvents" as module.
 use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
 use "./eventsubmodules/messageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
@@ -56,8 +55,8 @@ module goaldiggerEvent {
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn) then logMiniPercept.
 
-	% SUBMODULE mananing messages concerning task coordination
-	% ToDo
+	% SUBMODULE managing messages concerning task coordination
+	% ToDo SUBMODULE managing messages concerning task coordination
 	%if percept(step(-11)) then messageMultiTaskCoordination.
 	if true then messageMultiTaskCoordination.
 

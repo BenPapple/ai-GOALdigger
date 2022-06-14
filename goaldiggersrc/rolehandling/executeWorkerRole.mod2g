@@ -53,15 +53,14 @@ module executeWorkerRole {
 	    	% submit task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
-	    	%ToDo
-	    	%Two Task
-	    	% Movement for supporting agent around submitting agent when with block for multitask
+	    	%ToDo 2Task movement
+    	 	% Movement for supporting agent around submitting agent when with block for multitask
 %		    if percept(step(SimStep), team(Team)), bel(currentChosenTask(_, TaskStep, _, _, _, _, _,_), TaskStep >= SimStep), percept(thing(A, B, entity, Team), abs(A) =< 1, abs(B) =< 1),
 %		    	 bel(targetMd(A, B, otherAgentAt), abs(A) =< 1, abs(B) =< 1)
 %		    	 then executeAroundSubmittingAgent.
 		    	 
 	    	% move to other agent to help in multitask 
-	    	% ToDo
+	    	% ToDo move to other agent to help in multitask 
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent,_), targetMd(_, _, otherAgentAt)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	    	
 	    	% Move to goal zone to submit block
