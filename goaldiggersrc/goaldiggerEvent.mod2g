@@ -13,6 +13,7 @@ use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/messageAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
+use "./eventsubmodules/updateWorldSizeData" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -49,6 +50,8 @@ module goaldiggerEvent {
 	 * SUBMODULE TO MEASURE THE WORLD
 	 *
 	 */
+	if true then updateWorldSizeData.
+	
 	if true then worldSizeEvents.
 	
 	
