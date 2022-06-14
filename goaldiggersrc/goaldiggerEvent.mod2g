@@ -4,7 +4,6 @@ use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/handleLastActionResult" as module.
-use "./eventsubmodules/messageRelativeCoordsOfAgents" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
@@ -87,11 +86,6 @@ module goaldiggerEvent {
 	 */
 	if bel(lDebugOn) then logMiniPercept.
 
-	/**
-	 * SUBMODULE MANAGING MESSAGES !!! PLACE AFTER handleLastActionResult MOVE !!!
-	 *
-	 */
-	if true then messageRelativeCoordsOfAgents.
 
 	/**
 	 * SUBMODULE MANAGING MESSAGES CONCERNING TASK COORDINATION
