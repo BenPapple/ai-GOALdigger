@@ -2,48 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 
-module worldSizeEvents {
-	
-	/*
-	This block handles messages about offsets sent by agents to everyone after they have measured any
-	offset to any other agent.
-	If Agent1 receives a message from Agent2 about the offset between Agent2 and Agent3,
-	and Agent1 already knows its own offset to Agent2, it can get its offset to Agent3
-	by adding the offset from the message to its own offset.
-	*/	
-
-
-	%forall 
-	forall (Sender).sent(agentOffset(AgentName, OffsetX, OffsetY, _)) 
-	do	{
-		if bel(agentEntity(Sender,SenderName), agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
-		Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
-		then insert(agentOffset(AgentName, X1, Y1, Step)) + print("Got offset from someone else:",agentOffset(AgentName, X1, Y1, Step)).	
-	} %end do
-	
-	forall (Sender).sent(agentOffSet(AgentName, OffsetX, OffsetY, _)) 
-	do	{
-		if bel(agentEntity(Sender,SenderName), not(agentOffset(SenderName,_,_,_)), not(agentOffset(AgentName,_, _,_))), percept(step(Step))
-		then insert(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)) + print("Saved offset message from someone else:",savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)). 
-	}
-	
-	forall bel(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, _)) do {
-		if bel(agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
-		Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
-		then insert(agentOffset(AgentName, X1, Y1, Step)) + print("Got offset from someone else stored message:",agentOffset(AgentName, X1, Y1, Step)).
-	}
-	
-	forall bel(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)) 
-		do {
-			if bel(agentOffset(SenderName,_,_,_), agentOffset(AgentName,_,_,_))
-			then delete(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)).
-	} %end do
-
-	
-	
-	
-	
-	
+module worldSizeEvents {	
 
 	% The agent processes received messages about other agents' positions it it already knows it offsets to those agents:
 	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, Y1 is Y0 + OffsetToEntityY,
