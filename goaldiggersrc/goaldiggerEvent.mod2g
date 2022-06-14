@@ -3,7 +3,7 @@ use goaldiggerAction as actionspec.
 use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
-use "./eventsubmodules/messageHandleLastActionResult" as module.
+use "./eventsubmodules/updateLastActionResultData" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
@@ -58,7 +58,7 @@ module goaldiggerEvent {
 	 * SUBMODULE MANAGING SUCCESS AND PARTIAL_SUCCESS PERCEPTS
 	 *
 	 */
-	if true then messageHandleLastActionResult.
+	if true then updateLastActionResultData.
 
 	/**
 	 * SUBMODULE Store percept data in belief

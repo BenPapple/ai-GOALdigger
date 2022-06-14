@@ -3,8 +3,8 @@ use "../goaldiggerAction" as actionspec.
 use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
-use "../pathfinding/executeAndRequestAroundDispenser" as module.
-use "../pathfinding/executeAroundSubmittingAgent" as module.
+use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
+use "../pathfinding/executeMoveAroundSubmittingAgent" as module.
 use "../taskhandling/chooseTask" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
@@ -27,7 +27,7 @@ module executeWorkerRole {
 	    	
 	        % Movement around dispenser when without block
 		    if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep), percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1)
-		    	 then executeAndRequestAroundDispenser.
+		    	 then executeMoveAndRequestAroundDispenser.
 	    	
 	    	% manhattan move to dispenser
 	    	if percept(step(SimStep)), bel(targetMd(_, _, dispenser), executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep >= SimStep) then executeManhattanMove.
