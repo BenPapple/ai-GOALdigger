@@ -16,6 +16,7 @@ use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/handleMessageAgentOffset" as module.
 use "./eventsubmodules/updateOtherAgentPositionData" as module.
+use "./eventsubmodules/simpleworldcalculation/messageRelativeCoordsOfAgents" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -35,16 +36,19 @@ module goaldiggerEvent {
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULES to measure the world
-	if true then updateWorldSizeData.
-	if true then handleMessageAgentOffset.
-	if true then updateOtherAgentPositionData.
-	if true then handleMessageDistStepNamePosition.
+	%if true then updateWorldSizeData.
+	%if true then handleMessageAgentOffset.
+	%if true then updateOtherAgentPositionData.
+	%if true then handleMessageDistStepNamePosition.
 	
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
 	
 	% SUBMODULE managing success and partial_success percepts
 	if true then updateLastActionResultData.
+	
+	% SUBMODULE SimpleWorldcalculation
+	if true then messageRelativeCoordsOfAgents.
 
 	% SUBMODULE Store percept data in belief
 	if true then syncPerceptDataIntoBelief.
@@ -60,7 +64,7 @@ module goaldiggerEvent {
 	%if percept(step(-11)) then messageMultiTaskCoordination.
 	if true then messageMultiTaskCoordination.
 
-	% SUBMODULE dupdate goalzone map data
+	% SUBMODULE update goalzone map data
 	if bel(haveBlockAttached(true, _)), percept(role(worker)) then updateGoalzoneData.
 
 	% SUBMODULE update dispenser map data
