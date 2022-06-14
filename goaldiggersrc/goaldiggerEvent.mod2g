@@ -4,13 +4,11 @@ use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/messageHandleLastActionResult" as module.
-use "./eventsubmodules/messageRelativeCoordsOfAgents" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/updateWorldSizeEvents" as module.
 use "./eventsubmodules/messageGreetAgents" as module.
-use "./eventsubmodules/handleLastActionResult" as module.
 use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
 use "./eventsubmodules/messageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
