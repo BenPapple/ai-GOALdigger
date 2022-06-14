@@ -24,25 +24,14 @@ module goaldiggerMain {
     	% agents want to be free randomExploreMove for turn number skipThisStep    	
     	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep) then executeRandomMove.
     	
-	    /**
-		 * Handle DEFAULT role
-		 *
-		 */
+	    % Handle DEFAULT role
     	if percept(role(default)) then executeDefaultRole.
 
-	    /**
-		 * Handle WORKER role
-		 *
-		 */
+	    % Handle WORKER role
     	if percept(role(worker)) then executeWorkerRole.
     	
-    	/**
-		 * Handle explorer role
-		 *
-		 */
-    	if percept(role(explorer)) then executeExplorerRole.
-    	
-    	
+    	% Handle explorer role
+    	if percept(role(explorer)) then executeExplorerRole.   
     
     } % if haveMove
 	

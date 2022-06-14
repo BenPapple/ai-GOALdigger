@@ -1,6 +1,10 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
+/**
+ * ToDo module blurb
+ *
+ */
 
 module updateWorldSizeEvents {
 
@@ -19,52 +23,54 @@ and should not be measured anymore. We assume that the first measurement will be
 
 	% Fill a list with worldSizeX values:
 	if not(bel(worldUpdatedX)) then {forall (_).sent(worldSizeX(SizeX))
-		do { if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])) +print(worldListX(WorldListX)). }}
+		do { if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then 
+			delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])) +print(worldListX(WorldListX)). }}
 	
 	% Fill a list with worldSizeY values:
 	if not(bel(worldUpdatedY)) then {forall (_).sent(worldSizeY(SizeY))
-		do { if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY]))+print(worldListY(WorldListY)). }}
+		do { if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then 
+			delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY]))+print(worldListY(WorldListY)). }}
 
 	% Update world sizes with the most common values in the X and Y mesasurement lists once both lists lenghts are equal or greater than 10
 	if bel(worldListX(WorldListX), length(WorldListX, LengthX), LengthX >= 10, worldListY(WorldListY), length(WorldListY, LengthY), LengthY >= 10,
-		worldSizeX(OldWorldSizeX), worldSizeX(OldWorldSizeY), 
-		msort(WorldListX, SListX), rle(SListX, RLEX), sort(RLEX, SRLEX),last(SRLEX, [FreqX, MostCommonX]), length(WorldListX, ListLenX), FreqX > ListLenX/2,
-		msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), length(WorldListY, ListLenY), FreqY > ListLenY/2)
-	then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommonX)) + insert (worldUpdateX) + insert(worldUpdatedX) + print(worldListX(WorldListX))
-		 + delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommonY)) + insert (worldUpdateY) + insert(worldUpdatedY) + print(worldListY(WorldListY)).
+			worldSizeX(OldWorldSizeX), worldSizeX(OldWorldSizeY), 
+			msort(WorldListX, SListX), rle(SListX, RLEX), sort(RLEX, SRLEX),last(SRLEX, [FreqX, MostCommonX]), length(WorldListX, ListLenX), FreqX > ListLenX/2,
+			msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), length(WorldListY, ListLenY), FreqY > ListLenY/2)
+		then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommonX)) + insert (worldUpdateX) + insert(worldUpdatedX) + print(worldListX(WorldListX))
+			 + delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommonY)) + insert (worldUpdateY) + insert(worldUpdatedY) + print(worldListY(WorldListY)).
 
+	% ToDo delete No print in main
 	% Flag to know that an agent has already picked both worldSizeX values:
-	if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
+	if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) 
+		then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
 
-
-
+	% ToDo delete No print in main
 	% After updating one agent's belief about world size, the agent updates its own position.
-	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1))
-	+ print("Updated own position from / to", agentAt(X0,Y0), agentAt(X1,Y1)).
+	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then 
+		delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1))
+			+ print("Updated own position from / to", agentAt(X0,Y0), agentAt(X1,Y1)).
 
-
+	% ToDo delete No print in main
 	%% TO DO: THIS CODE IS REMOVED UNTIL WE DECIDE HOW TO STORE OTHER OBJECTS IN MEMORY. THING IS NOT USED CURRENTLY AND WOULD CAUSE THE PROGRAM TO CRASH.
 	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
+	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY)) then { 
 	
-	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
-		then { 
 			forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), getModPos(X1, Y1, SizeX, SizeY, X2, Y2))
-			do delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool)) 
-			+ print("Updated dispensers from / to:", storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool), SizeX, SizeY).
-		} % end then
+				do delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool)) 
+				+ print("Updated dispensers from / to:", storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool), SizeX, SizeY).
+	
+	} % end then
 
-		
-	
-	
 	% After updating one agent's belief about world size, the agent updates other agents' positions. The variable updateOtherAgentAt stores the values while deletig old values.
-		
-	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
-		then { 
+	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY)) then { 
+	
 			forall bel(otherAgentAt(AgentName, X0, Y0, Step), getModPos(X0, X0, SizeX, SizeY, X1, Y1))
-			do delete(otherAgentAt(AgentName, X0, Y0, Step)) + insert(otherAgentAt(AgentName, X1, Y1, Step)).
-		} % end then		
+				do delete(otherAgentAt(AgentName, X0, Y0, Step)) + insert(otherAgentAt(AgentName, X1, Y1, Step)).
+				
+	} % end then		
 
-/*
+    % ToDo no freefloating comments between code blocks
+   /*
 	% The values of the variable updateOtherAgentAt are added to new otherAgentAt variables.	
 	forall bel(updateOtherAgentAt(AgentName, X, Y, Step)) do insert(otherAgentAt(AgentName, X, Y, Step)) + delete (updateOtherAgentAt(AgentName, X, Y, Step)).
 	*/
@@ -73,8 +79,7 @@ and should not be measured anymore. We assume that the first measurement will be
 	if bel(worldUpdateX) then delete(worldUpdateX).
 	if bel(worldUpdateY) then delete(worldUpdateY).	
 
-
-	
+    % ToDo no freefloating comments between code blocks
 	/*
 	This block handles messages about offsets sent by agents to everyone after they have measured any
 	offset to any other agent.
@@ -111,11 +116,6 @@ and should not be measured anymore. We assume that the first measurement will be
 			then delete(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)).
 	} %end do
 	*/
-	
-	
-	
-	
-	
 
 	% The agent processes received messages about other agents' positions it it already knows it offsets to those agents:
 	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, Y1 is Y0 + OffsetToEntityY,
@@ -123,19 +123,19 @@ and should not be measured anymore. We assume that the first measurement will be
 
 	% Remove old otherAgentAt variables:
 	forall percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, 
-		otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
-	do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 	
+			otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
+		do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 	
 	
 	% Fetch all distStepNamePosition messages from other agents:
 	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
-	do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
+		do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
 	
 	% Delete all myDistStepNamePosition messages which are compatible with more than one distStepNamePosition messages.
 	forall bel(distStepNamePosition(DistX, DistY, Step, Agent1Name, _, _), distStepNamePosition(DistX, DistY, Step, Agent2Name, _, _),
-		Agent1Name \== Agent2Name, myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), MyDistX =:= -DistX, MyDistY =:= -DistY)
-	do delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
+			Agent1Name \== Agent2Name, myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), MyDistX =:= -DistX, MyDistY =:= -DistY)
+		do delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
 	
-	
+    % ToDo no freefloating comments between code blocks	
 	/*	
 	This block manages the identification of newly met agents.
 	Every agent reads the distStepNamePosition messages related to agent encounters
@@ -155,13 +155,14 @@ and should not be measured anymore. We assume that the first measurement will be
 	*/
 
 	% If I have sent a distStepNamePosition message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
+	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)) do { 
 	
-	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY))
-	do { if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit, distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY),
-			AgentDistX =:= -MyDistX, AgentDistY =:= -MyDistY), not(bel(agentOffset(AgentNameSender,_,_,_))), bel(ApparentPosX is MyPosX+MyDistX, ApparentPosY is MyPosY+MyDistY), 
-			bel(distanceBetweenPoints(ApparentPosX, ApparentPosY, AgentPosX, AgentPosY, OffsetX, OffsetY))	
-		then insert(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)) + delete (distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY))
-			+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)).	
+		if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit, distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY),
+				AgentDistX =:= -MyDistX, AgentDistY =:= -MyDistY), not(bel(agentOffset(AgentNameSender,_,_,_))), bel(ApparentPosX is MyPosX+MyDistX, ApparentPosY is MyPosY+MyDistY), 
+				bel(distanceBetweenPoints(ApparentPosX, ApparentPosY, AgentPosX, AgentPosY, OffsetX, OffsetY))	
+			then insert(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)) + delete (distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY))
+				+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)).	
+			
 	}
 
 	% Keep only most recent agentOffset entry:
@@ -170,6 +171,7 @@ and should not be measured anymore. We assume that the first measurement will be
 	% Assign agent names to entity names:
 	forall (Agent).sent(distStepNamePosition(_, _, _, Name, _, _)), not(bel(agentEntity(Agent, Name))) do insert(agentEntity(Agent, Name)).
 
+    % ToDo no freefloating comments between code blocks	
 	/*
 	
 	This block mesasures the world with distanceStepNamePosition messages.
@@ -180,25 +182,27 @@ and should not be measured anymore. We assume that the first measurement will be
 	*/
 	
 	% Agent sieht anderen Agenten dann bemisst er die Welt als die Diff in einer/beiden Richtung(en) und sendet an alle anderen Agenten
-	
 	if not(bel(worldUpdatedX, worldUpdatedY)), percept(step(CurrentStep)) then {	
 
-	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY), 
-		MyDistX =:= -AgentDistX, MyDistY =:= -AgentDistY, otherAgentAt(AgentNameSender, KnownAgentPosX,KnownAgentPosY, Step), 
-		messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit)
-	do {
-		if bel( SeenAgentPosX is MyPosX + MyDistX, SeenAgentPosY is MyPosY + MyDistY, worldSizeX(OldWorldX), worldSizeY(OldWorldY),
-			(SeenAgentPosX \= KnownAgentPosX; SeenAgentPosY \= KnownAgentPosY),
-			distanceBetweenPoints(KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY, ApparentDeltaX, ApparentDeltaY),
-			getWorldSize(ApparentDeltaX, OldWorldX, NewWorldX),	getWorldSize(ApparentDeltaY, OldWorldY, NewWorldY))	
-		then all.send(worldSizeX(NewWorldX)) + all.send(worldSizeY(NewWorldY)).
-		} % end do
+		forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY), 
+			MyDistX =:= -AgentDistX, MyDistY =:= -AgentDistY, otherAgentAt(AgentNameSender, KnownAgentPosX,KnownAgentPosY, Step), 
+			messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit)
+		do {
+			if bel( SeenAgentPosX is MyPosX + MyDistX, SeenAgentPosY is MyPosY + MyDistY, worldSizeX(OldWorldX), worldSizeY(OldWorldY),
+				(SeenAgentPosX \= KnownAgentPosX; SeenAgentPosY \= KnownAgentPosY),
+				distanceBetweenPoints(KnownAgentPosX, KnownAgentPosY, SeenAgentPosX, SeenAgentPosY, ApparentDeltaX, ApparentDeltaY),
+				getWorldSize(ApparentDeltaX, OldWorldX, NewWorldX),	getWorldSize(ApparentDeltaY, OldWorldY, NewWorldY))	
+			then all.send(worldSizeX(NewWorldX)) + all.send(worldSizeY(NewWorldY)).
+			} % end do
+		
 	} % end if
 
 	% Remove old distanceStepNamePosition messages.
-	forall bel(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)) do
-		{ if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, Step < StepLimit) 
-		 then delete(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)).
+	forall bel(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)) do {
+	
+		if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), StepLimit is CurrentStep - Delay - Persistance, Step < StepLimit) 
+			 then delete(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)).
+			 
 		} % end if	
 	
 }
