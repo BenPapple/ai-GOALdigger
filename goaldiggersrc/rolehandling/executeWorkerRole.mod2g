@@ -53,6 +53,9 @@ module executeWorkerRole {
 	    	% submit task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _)), percept(goalZone(0,0)), bel(step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
+	    	% Prepare for connect
+	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition)) then preActionCleanup + skip.
+	    	
 	    	%ToDo 2Task movement
     	 	% Movement for supporting agent around submitting agent when with block for multitask
 %		    if percept(step(SimStep), team(Team)), bel(currentChosenTask(_, TaskStep, _, _, _, _, _,_), TaskStep >= SimStep), percept(thing(A, B, entity, Team), abs(A) =< 1, abs(B) =< 1),
@@ -61,10 +64,13 @@ module executeWorkerRole {
 		    	 
 	    	% move to other agent to help in multitask 
 	    	% ToDo move to other agent to help in multitask 
-	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent,_), targetMd(_, _, otherAgentAt)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), targetMd(_, _, otherAgentAt)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+	    	 
+	    	% Move to supporting position for multi task
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), targetMd(_, _, supportingPosition)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	    	
 	    	% Move to goal zone to submit block
-		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent,_), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, submittingAgent, _), targetMd(_, _, goalzone)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	        	
 	    	% random movemement actions while having block attached
 	    	if bel(haveBlockAttached(true, DirBlock)) then executeRandomMove.

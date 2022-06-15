@@ -22,14 +22,21 @@ module manageManhattanTarget {
 	}
 		
 	% With block and as submittingAgent update goalzone target MD
-	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _), TaskStep >= SimStep, targetMd(X, Y, Target), 
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, submittingAgent, _), TaskStep >= SimStep, targetMd(X, Y, Target), 
 			targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
+		
+	% Moving around Submitting agent for docking sequence
+	if percept(team(Team), thing(X, Y, entity, Team), YBlock is Y+1, thing(XBlock, YBlock, block, _), X \== 0, Y \== 0, attached(X, YBlock)) then {
+		if bel(agentAt(Xself, Yself), currentChosenTask(TaskName, _, _, X3, Y3, BlockType, supportingAgent, _)), percept(task(TaskName, _, 40,[req(X1, Y1, BlockType),req(X2, Y2, BlockType2)])),
+			bel(Xtarget is X + X3 + Xself + 0, Ytarget is Y + Y3 + Yself + 1, targetMd(Xdel, Ydel, Zdel)) 
+				then delete(targetMd(Xdel, Ydel, Zdel)) + insert(targetMd(Xtarget, Ytarget, supportingPosition)).
+	}
 		
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or goalzone), coordinates converted from A,B to C,D
 	% ToDo delocalize gegen localize getauscht
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
-			targetMd(X, Y, Target)),
+			targetMd(X, Y, Target), Target \== supportingPosition),
 			(_).sent(otherAgentAt(NameSubmitter, A, B, _)), bel(localize(A, B, OffsetX, OffsetY, C, D))
 				then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
 	

@@ -62,7 +62,7 @@ module logMiniPercept {
 				
 		if percept(energy(Ener), deactivated(Status)) then print("Energy:"+Ener| "Deactivated:"+Status).
 		
-		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi)) then print("Affinity:"+Affi|"Change after:"+Change).
+		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi), randomSeed(Seed)) then print("Affinity:"+Affi|"Change after:"+Change|"Seed:"+Seed).
 		
 		if percept(attached(X, Y), thing(X, Y, block, BlockType), X =< 1, Y =< 1) then print("Attached:"| X| Y +BlockType).
 		
