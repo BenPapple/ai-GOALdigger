@@ -62,7 +62,7 @@ module executeMoveAroundSubmittingAgent {
 %		
 %	} % other entity around
 	
-	% Moving into position nswe of block of submiting agent 
+	% Moving into position nswe of block of submiting agent 		
 	if  bel(haveBlockAttached(false,_)), bel(currentChosenTask(TaskName, _, _, _, _, BlockType,_,_)), 
 		percept(task(TaskName,_, 40,[req(X1,Y1,BlockType),req(X3,Y4,BlockType2)])),
 		percept(team(Team), thing(A, B, entity, Team), abs(A) =< 1, abs(B) =< 1), percept(thing(A, B, block, _)) then {

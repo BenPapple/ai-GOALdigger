@@ -16,8 +16,9 @@ module updateAssignExplorerRole {
 			
 	}
 	
+	% ToDo Change 4 to 2, Debug Hack, Agent doesnt assigned to Explorer
 	% Change targetRole to explorer when reaching lowest 2 of hierarchy
-	if percept(teamSize(TeamSize), role(default)), bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), CheckSum is TeamSize - PositionInHirarchie, CheckSum =< 2) then
-		delete(targetRole(Role)) + insert (targetRole(explorer)).
+	%if percept(teamSize(TeamSize), role(default)), bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), CheckSum is TeamSize - PositionInHirarchie, CheckSum =< 2) then
+	%	delete(targetRole(Role)) + insert (targetRole(explorer)).
 		
 }

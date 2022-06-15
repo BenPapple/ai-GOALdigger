@@ -80,7 +80,7 @@ randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
 			NewDir \= OppositAltDir.
 			
 % get a random number between 0 - 100
-randomNumber(RandomSeed) :- random_between (0, 100, RandomSeed).
+randomNumber(RandomSeed) :- random_between (0, 10000, RandomSeed).
 						
 % skip random steps
 skipRandomSteps(SkipSteps) :- random_between(0, 8, SkipSteps).
