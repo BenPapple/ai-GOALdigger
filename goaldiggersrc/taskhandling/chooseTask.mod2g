@@ -15,8 +15,8 @@ module chooseTask {
 		then taskHandlingOneBlock.
 		 
 	% chose 2s task if 1s task isn't available
-	if bel(step(SimStep)), not(percept(task(_ ,TaskStep, 10,[req(_,_,_)]),TaskStep >= SimStep, TaskStep - SimStep >= 0)), 
-	   percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0)  
-	    then taskHandlingTwoBlock.
+%	if bel(step(SimStep)), not(percept(task(_ ,TaskStep, 10,[req(_,_,_)]),TaskStep >= SimStep, TaskStep - SimStep >= 0)), 
+%	   percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0)  
+%	    then taskHandlingTwoBlock.
 		
 } % module

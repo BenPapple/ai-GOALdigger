@@ -36,7 +36,7 @@ module goaldiggerEvent {
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULES to measure the world
-	if percept(step(Steps), Steps > 3) then {
+	if percept(step(Steps), Steps > 3333) then {
 		% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 		if true then updateWorldSizeData.
 		% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents

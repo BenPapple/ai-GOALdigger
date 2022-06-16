@@ -57,17 +57,19 @@ module helperMoveManhattanWithBlock {
 	
 		% rotate to free M,N to avoid non empty fields A,B in front of block
     	if bel(X =< Y, X =< Z, X =< V, DirBlock \== n, DirBlock \== s, clearAttachedDirection(n, DirBlock, A, B), rotateAgainstAffinity(n, DirBlock, Rot), rotateToDirection(DirBlock, Rot, TargetDir), 
-    		directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then preActionCleanup + rotate(Rot).
+    		directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) 
+    		    then preActionCleanup + rotate(Rot).
 	    if bel(Y =< X, Y =< Z, Y =< V, DirBlock \== s, DirBlock \== n, clearAttachedDirection(s, DirBlock, A, B), rotateAgainstAffinity(s, DirBlock, Rot), rotateToDirection(DirBlock, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then preActionCleanup + rotate(Rot).
+	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) 
+	    	    then preActionCleanup + rotate(Rot).
 	    if bel(Z =< Y, Z =< X, Z =< V, DirBlock \== e, DirBlock \== w, clearAttachedDirection(e, DirBlock, A, B), rotateAgainstAffinity(e, DirBlock, Rot), rotateToDirection(DirBlock, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then preActionCleanup + rotate(Rot).
-	    if bel(V =< Y, V =< Z, V =< X, DirBlock \== w, DirBlock \== e, clearAttachedDirection(w, DirBlock, A, B), 
-	           rotateAgainstAffinity(w, DirBlock, Rot), rotateToDirection(DirBlock, Rot, TargetDir), directionToCoordinate(TargetDir, M, N)),
-	       percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) 
+	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) 
+	    	    then preActionCleanup + rotate(Rot).
+	    if bel(V =< Y, V =< Z, V =< X, DirBlock \== w, DirBlock \== e, clearAttachedDirection(w, DirBlock, A, B), rotateAgainstAffinity(w, DirBlock, Rot), rotateToDirection(DirBlock, Rot, TargetDir), 
+	        directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) 
 	           then preActionCleanup + rotate(Rot).
 		
-		% rotate to free fields beside or behind agent cw
+		% rotate to free fields beside or behind agents movement direction cw
 		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
 		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
 		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
@@ -103,10 +105,10 @@ module helperMoveManhattanWithBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)), bel(skipThisStep(SkipStep), step(SimStep), 
 		skipRandomSteps(RandSteps)) then {
 	
-		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
-		if bel(Y =< X, Y =< Z, Y =< V), percept(thing(0, 1, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
-		if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
-		if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, Type,_), Type == entity) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
+		if bel(X =< Y, X =< Z, X =< V), percept(thing(0, -1, entity,_)) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
+		if bel(Y =< X, Y =< Z, Y =< V), percept(thing(0, 1, entity,_)) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
+		if bel(Z =< Y, Z =< X, Z =< V), percept(thing(1, 0, entity,_)) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
+		if bel(V =< Y, V =< Z, V =< X), percept(thing(-1, 0, entity,_)) then delete(skipThisStep(SkipStep)) + insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
 		
 	}
 
