@@ -39,7 +39,7 @@ module goaldiggerEvent {
 	% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 	if true then updateWorldSizeData.
 	% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
-	%if true then handleMessageAgentOffset.
+	if true then handleMessageAgentOffset.
 	% otherAgentAt (bel) to complexworld
 	%if true then updateOtherAgentPositionData.
 	% include in perma messages "Agent" connection name

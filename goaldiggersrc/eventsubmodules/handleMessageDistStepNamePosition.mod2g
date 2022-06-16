@@ -16,7 +16,7 @@ module handleMessageDistStepNamePosition {
 	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
 		do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
 
-	% CALCULATE and sends the agent's offset if having distStepNamePosition&myDistStepNamePosition message and there is no more than one other message which can be interpreted as its counterpart
+	% CALCULATE and sends the agent's OFFSET if having distStepNamePosition&myDistStepNamePosition message and there is no more than one other message which can be interpreted as its counterpart
 	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)) do {
 	
 		 if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit, distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY),
@@ -27,7 +27,7 @@ module handleMessageDistStepNamePosition {
 			
 	}
 
-	% CALCULATE and sends worldsize to other agents if he sees other agent with seemingly walked around world coordinates to start calculation
+	% CALCULATE and sends WORLDSIZE to other agents if he sees other agent with seemingly walked around world coordinates to start calculation
 	if not(bel(worldUpdatedX, worldUpdatedY)), percept(step(CurrentStep)) then {	
 
 		forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, _, _), 
