@@ -34,7 +34,6 @@ module manageManhattanTarget {
 	}
 		
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or goalzone), coordinates converted from A,B to C,D
-	% ToDo delocalize gegen localize getauscht
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
 			targetMd(X, Y, Target), Target \== supportingPosition),
 			(_).sent(otherAgentAt(NameSubmitter, A, B, _)), bel(localize(A, B, OffsetX, OffsetY, C, D))
