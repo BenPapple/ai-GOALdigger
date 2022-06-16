@@ -15,12 +15,14 @@ module messagePermaSendStatusToOthers {
 		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 		
 	% send sync message to other agents to coordinate coordinates :D
-	forall percept(thing(DistX, DistY, entity, Details), step(Step)), bel(ownTeam(Team), Details = Team),
-		   bel(DistX \== 0, DistY \== 0),
-		   bel(agentAt(AgentX,AgentY)), 
+	forall percept(thing(EntityX, EntityY, entity, EntityTeam), step(Step)), bel(ownTeam(MyTeam), EntityTeam == MyTeam),
+		   bel(EntityX \== 0, EntityY \== 0),
+		   bel(agentAt(MyX,MyY)), 
 		   bel(Step > 2),
-		   bel(ownName(AgentName))
-		       do allother.send(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY))
-		          + insert(myDistStepNamePosition(DistX, DistY, Step, AgentX, AgentY)).
+		   bel(ownName(MyName))
+		       do {
+		       if true then allother.send(distStepNamePosition(EntityX, EntityY, Step, MyName, MyX, MyY)).
+		          if not(bel(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY))) then insert(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY)).
+		   }
 	
 }
