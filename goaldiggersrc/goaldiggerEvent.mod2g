@@ -37,13 +37,13 @@ module goaldiggerEvent {
 	
 	% SUBMODULES to measure the world
 	% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-	%if true then updateWorldSizeData.
-	% seems clean
+	if true then updateWorldSizeData.
+	% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
 	%if true then handleMessageAgentOffset.
 	% otherAgentAt (bel) to complexworld
 	%if true then updateOtherAgentPositionData.
 	% include in perma messages "Agent" connection name
-	%if true then handleMessageDistStepNamePosition.
+	if true then handleMessageDistStepNamePosition.
 	
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
