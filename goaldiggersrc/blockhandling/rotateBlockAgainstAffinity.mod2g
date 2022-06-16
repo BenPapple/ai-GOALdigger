@@ -12,31 +12,33 @@ module rotateBlockAgainstAffinity {
 
 	 % rotate random if block in affinity direction
 	 if  bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(attached(A, B)), 
-	 bel(randomAffinity(DirAffi), DirBlock == DirAffi, randomRotate(Rot), oppositeRotate(Rot, AltRot), rotateToCoord(DirBlock, Rot, X, Y), rotateToCoord(DirBlock, AltRot, F, G)) then {
+	 bel(randomAffinity(DirAffi), DirBlock == DirAffi, randomRotate(Rot), oppositeRotate(Rot, AltRot), rotateToCoord(DirBlock, Rot, X, Y), 
+	     rotateToCoord(DirBlock, AltRot, F, G)) then {
 	 
 	 	 % rotate if free
-		 if not(percept(thing(X, Y, Type, _), Type \== dispenser)) then rotate(Rot) +  preActionCleanup.
-		 if not(percept(thing(F, G, Type, _), Type \== dispenser)) then rotate(AltRot) +  preActionCleanup.
+		 if not(percept(thing(X, Y, Type, _), Type \== dispenser)) then preActionCleanup + rotate(Rot).
+		 if not(percept(thing(F, G, Type, _), Type \== dispenser)) then preActionCleanup + rotate(AltRot).
 
 		 % clear blocked rotate targets
-		 if percept(thing(X, Y, obstacle, _)) then clear(X, Y) +  preActionCleanup.
-		 if percept(thing(X, Y, block, _)) then clear(X, Y) +  preActionCleanup.
-		 if percept(thing(F, G, obstacle, _)) then clear(F, G) +  preActionCleanup.
-		 if percept(thing(F, G, block, _)) then clear(F, G) +  preActionCleanup.
+		 if percept(thing(X, Y, obstacle, _)) then preActionCleanup + clear(X, Y).
+		 if percept(thing(X, Y, block, _)) then preActionCleanup + clear(X, Y).
+		 if percept(thing(F, G, obstacle, _)) then preActionCleanup + clear(F, G).
+		 if percept(thing(F, G, block, _)) then preActionCleanup + clear(F, G).
 	 	
 	 } % if rotate random
 
 	 % rotate random if block 90 degree to affinity direction
 	 if  bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), percept(attached(A, B)), 
-	 bel(randomAffinity(DirAffi), oppositeDirection(DirAffi, DirOppo), DirBlock \== DirAffi, DirBlock \== DirOppo, rotateAgainstAffinity(DirAffi, DirBlock, Rot), rotateToCoord(DirBlock, Rot, X, Y)) then {
+	     bel(randomAffinity(DirAffi), oppositeDirection(DirAffi, DirOppo), DirBlock \== DirAffi, DirBlock \== DirOppo, 
+	         rotateAgainstAffinity(DirAffi, DirBlock, Rot), rotateToCoord(DirBlock, Rot, X, Y)) then {
 	 
-		 if not(percept(thing(X, Y, Type, _), Type \== dispenser)) then rotate(Rot) +  preActionCleanup.
-		 if percept(thing(X, Y, obstacle, _)) then clear(X, Y) +  preActionCleanup.
-		 if percept(thing(X, Y, block, _)) then clear(X, Y) +  preActionCleanup.
+		 if not(percept(thing(X, Y, Type, _), Type \== dispenser)) then preActionCleanup + rotate(Rot).
+		 if percept(thing(X, Y, obstacle, _)) then preActionCleanup + clear(X, Y).
+		 if percept(thing(X, Y, block, _)) then preActionCleanup + clear(X, Y).
 
 	} % rotate random if block 90 degree
 	
 	% obligatory skip
-	if true then skip +  preActionCleanup.  
+	if true then preActionCleanup + skip.  
 	
 } % module
