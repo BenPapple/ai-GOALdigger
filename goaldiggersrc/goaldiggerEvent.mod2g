@@ -36,14 +36,16 @@ module goaldiggerEvent {
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULES to measure the world
-	% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-	if true then updateWorldSizeData.
-	% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
-	if true then handleMessageAgentOffset.
-	% otherAgentAt (bel) to complexworld
-	%if true then updateOtherAgentPositionData.
-	% include in perma messages "Agent" connection name
-	if true then handleMessageDistStepNamePosition.
+	if percept(step(Steps), Steps > 3) then {
+		% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
+		if true then updateWorldSizeData.
+		% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
+		if true then handleMessageAgentOffset.
+		% otherAgentAt (bel) to complexworld
+		%if true then updateOtherAgentPositionData.
+		% include in perma messages "Agent" connection name
+		if true then handleMessageDistStepNamePosition.
+	}
 	
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
@@ -69,10 +71,11 @@ module goaldiggerEvent {
 	if true then messageMultiTaskCoordination.
 
 	% SUBMODULE update goalzone map data
-	if bel(haveBlockAttached(true, _)), percept(role(worker)) then updateGoalzoneData.
+	if percept(step(SimStep),role(worker)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep >= SimStep) then updateGoalzoneData.
 
-	% SUBMODULE update dispenser map data
+	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
+	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) then updateDispenserData.
 
 	% SUBMODULE manhattan switch manipulation
 	if true then manageManhattanSwitchStatus.
