@@ -57,9 +57,9 @@ module goaldiggerInit {
 	if true then insert (skipThisStep(-2)). % turns to skip with random explore move
 	
 	% variables for world size calculation
-	if true then insert ( worldSizeX(1000), worldSizeY(1000) ).
+	if true then insert ( worldSizeX(54321), worldSizeY(54321) ).
 	if true then insert ( worldListX([]), worldListY([]) ).
 	if true then insert ( messageProcessingDelay(4), messagePersitanceAfterDelay(1) ).
-	if percept(team(Team)) then insert(ownTeam(Team)). %The agent leans its own team from the initial percept.
+	if percept(team(Team)) then insert(ownTeam(Team)). %The agent learns its own team from the initial percept.
 	if percept(name(Name)) then insert ( ownName(Name) ).	
 }
