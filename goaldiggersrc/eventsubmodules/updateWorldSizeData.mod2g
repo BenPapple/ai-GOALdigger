@@ -39,34 +39,26 @@ module updateWorldSizeData {
 			msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), length(WorldListY, ListLenY), FreqY > ListLenY/2)
 		then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommonX)) + insert (worldUpdateX) + insert(worldUpdatedX)
 			 + delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommonY)) + insert (worldUpdateY) + insert(worldUpdatedY).
-
-	% Flag to know that an agent has already picked both worldSizeX values:
-	%if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
-
+	
 	% ToDo agentAt change to agentAtComplexWorld
 	% After updating one agent's belief about world size, the agent updates its own position.
-	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then 
-		delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
+%	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then 
+%		delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
+%
+%	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
+%	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
+%		then { 
+%			forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do 
+%				delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool)).
+%			}
+%	
+%	% After updating one agent's belief about world size, the agent updates other agents' positions. The variable updateOtherAgentAt stores the values while deletig old values.
+%	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
+%		then { 
+%			forall bel(otherAgentAt(AgentName, X0, Y0, Step), getModPos(X0, X0, SizeX, SizeY, X1, Y1)) do 
+%				delete(otherAgentAt(AgentName, X0, Y0, Step)) + insert(otherAgentAt(AgentName, X1, Y1, Step)).
+%		} % end then		
 
-	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
-	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
-		then { 
-			forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do 
-				delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool)).
-			}
-	
-	% After updating one agent's belief about world size, the agent updates other agents' positions. The variable updateOtherAgentAt stores the values while deletig old values.
-	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
-		then { 
-			forall bel(otherAgentAt(AgentName, X0, Y0, Step), getModPos(X0, X0, SizeX, SizeY, X1, Y1)) do 
-				delete(otherAgentAt(AgentName, X0, Y0, Step)) + insert(otherAgentAt(AgentName, X1, Y1, Step)).
-		} % end then		
-
-	/*
-	% The values of the variable updateOtherAgentAt are added to new otherAgentAt variables.	
-	forall bel(updateOtherAgentAt(AgentName, X, Y, Step)) do insert(otherAgentAt(AgentName, X, Y, Step)) + delete (updateOtherAgentAt(AgentName, X, Y, Step)).
-	*/
-	
 	% remove conditionals update belief coord
 	if bel(worldUpdateX) then delete(worldUpdateX).
 	if bel(worldUpdateY) then delete(worldUpdateY).	

@@ -20,16 +20,4 @@ module updateOtherAgentPositionData {
 		otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
 			do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 	
 	
-	% Fetch and store all distStepNamePosition messages from other agents into belief
-	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
-		do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
-
-	% ToDo myDistStepNamePosition does not get deleted at all or enough and accumulates in belief
-	
-	% Delete all myDistStepNamePosition messages which are compatible with more than one distStepNamePosition messages.
-	forall bel(distStepNamePosition(DistX, DistY, Step, Agent1Name, _, _), distStepNamePosition(DistX, DistY, Step, Agent2Name, _, _),
-		Agent1Name \== Agent2Name, myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), MyDistX =:= -DistX, MyDistY =:= -DistY)
-			do delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
-
-	
 }

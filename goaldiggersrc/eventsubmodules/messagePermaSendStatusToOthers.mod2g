@@ -10,6 +10,10 @@ module messagePermaSendStatusToOthers {
 	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
 	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
 	
+	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
+	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
+		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
+		
 	% send sync message to other agents to coordinate coordinates :D
 	forall percept(thing(DistX, DistY, entity, Details), step(Step)), bel(ownTeam(Team), Details = Team),
 		   bel(DistX \== 0, DistY \== 0),
