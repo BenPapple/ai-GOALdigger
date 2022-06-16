@@ -8,7 +8,6 @@ use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
-use "./eventsubmodules/messageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/messageAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
@@ -16,6 +15,7 @@ use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/handleMessageAgentOffset" as module.
 use "./eventsubmodules/updateOtherAgentPositionData" as module.
+use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/simpleworldcalculation/messageRelativeCoordsOfAgents" as module.
 
 /**
@@ -36,9 +36,13 @@ module goaldiggerEvent {
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULES to measure the world
+	% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 	%if true then updateWorldSizeData.
+	% seems clean
 	%if true then handleMessageAgentOffset.
+	% otherAgentAt (bel) to complexworld
 	%if true then updateOtherAgentPositionData.
+	% include in perma messages "Agent" connection name
 	%if true then handleMessageDistStepNamePosition.
 	
 	% Update step counter with new step when new percept step available
@@ -49,12 +53,12 @@ module goaldiggerEvent {
 	
 	% SUBMODULE SimpleWorldcalculation
 	if true then messageRelativeCoordsOfAgents.
+	
+	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
+	if true then messagePermaSendStatusToOthers.	
 
 	% SUBMODULE Store percept data in belief
 	if true then syncPerceptDataIntoBelief.
-
-	% SUBMODULE to say hello to all other agents if other agents seen
-	if true then messageDistStepNamePosition.
 
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn) then logMiniPercept.

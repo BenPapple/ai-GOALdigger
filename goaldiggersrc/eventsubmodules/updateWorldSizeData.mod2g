@@ -43,6 +43,7 @@ module updateWorldSizeData {
 	% Flag to know that an agent has already picked both worldSizeX values:
 	%if bel(worldUpdatedX, worldUpdatedY, ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)) then print("World size updated by agent", ownName(Name), worldSizeX(SizeX), worldSizeY(SizeY)).
 
+	% ToDo agentAt change to agentAtComplexWorld
 	% After updating one agent's belief about world size, the agent updates its own position.
 	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then 
 		delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).

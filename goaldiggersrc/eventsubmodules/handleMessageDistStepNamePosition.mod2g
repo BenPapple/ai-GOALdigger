@@ -22,6 +22,7 @@ module handleMessageDistStepNamePosition {
 	% Keep only most recent agentOffset entry
 	%forall bel(lastSeen(AgentNameSender, A, B, C, D, Step1), lastSeen(AgentNameSender, _, _, _, _, Step2), Step1 < Step2) do delete(lastSeen(AgentNameSender, A, B, C, D, Step1)). 
 	
+	% ToDo include in perma messages "Agent" connection name
 	% Assign agent names to entity names
 	forall (Agent).sent(distStepNamePosition(_, _, _, Name, _, _)), not(bel(agentEntity(Agent, Name))) do insert(agentEntity(Agent, Name)).
 
