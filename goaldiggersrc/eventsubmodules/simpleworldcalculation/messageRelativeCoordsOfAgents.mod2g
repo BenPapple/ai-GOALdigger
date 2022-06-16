@@ -1,5 +1,10 @@
 use "../../goaldiggerProlog" as knowledge.
 
+/**
+ * Coordinate messages bewtween agents about relative coordinates
+ *
+ */
+
 module messageRelativeCoordsOfAgents {
 	
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
@@ -45,6 +50,5 @@ module messageRelativeCoordsOfAgents {
 %	
 %	}
 %	
-	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
-	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
+	
 }

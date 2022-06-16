@@ -12,12 +12,11 @@ module handleMessageAgentOffset {
 
 	% calculate offset of 3rd agent from message from 2nd agent
 	forall (Sender).sent(agentOffset(AgentName, OffsetX, OffsetY, _)) do {
-	
+
 			if bel(agentEntity(Sender,SenderName), agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
-				Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
-				then insert(agentOffset(AgentName, X1, Y1, Step)) 
-					+ print("Got offset from someone else:",agentOffset(AgentName, X1, Y1, Step)).	
-			
+			   Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
+			       then insert(agentOffset(AgentName, X1, Y1, Step)) +
+			            print("Got offset from someone else:",agentOffset(AgentName, X1, Y1, Step)).				
 	} 
 	
 	% store messages in belief
