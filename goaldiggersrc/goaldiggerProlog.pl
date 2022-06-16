@@ -116,7 +116,7 @@ absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-
 calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
 calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
 
-% return coordinates in front of attached block concerning move direction
+% return coordinates in front of attached block concerning move direction (DirMoving, BlockAttach, FrontBlockX, FrontBlockY)
 clearAttachedDirection(n, w, -1, -1).
 clearAttachedDirection(n, e, 1, -1).
 clearAttachedDirection(n, n, 0, -2).
@@ -184,7 +184,7 @@ oppositeDirection(e, w).
 oppositeRotate(cw, ccw).
 oppositeRotate(ccw, cw).
 
-% helper function 2 directions to rotation
+% helper function 2 directions to rotation (DirMove, DirBlock, Rotate)
 rotateAgainstAffinity(n, n, cw).
 rotateAgainstAffinity(n, w, ccw).
 rotateAgainstAffinity(n, e, cw).
@@ -198,7 +198,7 @@ rotateAgainstAffinity(e, e, cw).
 rotateAgainstAffinity(e, n, ccw).
 rotateAgainstAffinity(e, s, cw).
 
-% helper function rotation to nswe
+% helper function rotation to nswe (, Rotate, DirTarget)
 rotateToDirection(n, cw, e).
 rotateToDirection(n, ccw, w).
 rotateToDirection(s, cw, w).
@@ -208,7 +208,7 @@ rotateToDirection(w, ccw, s).
 rotateToDirection(e, cw, s).
 rotateToDirection(e, ccw, n).
 
-% helper function rotation to coordinate nswe
+% helper function rotation to coordinate nswe (DirBlock, Rotate, RotTargetX, RotTargetY)
 rotateToCoord(n, cw, 1, 0).
 rotateToCoord(n, ccw, -1, 0).
 rotateToCoord(s, cw, -1, 0).

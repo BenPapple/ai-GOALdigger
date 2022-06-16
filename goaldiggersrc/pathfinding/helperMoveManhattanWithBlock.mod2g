@@ -41,7 +41,7 @@ module helperMoveManhattanWithBlock {
 	}
 
 	% check for block/obstacles in front of move direction
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(D, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
+	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, E, F)), percept(attached(E, F)), bel(directionToCoordinate(DirAttached, E, F), nMd(X), sMd(Y), eMd(Z), wMd(V)) then {
 	
 		% clear obstacles in front of agent
 		if bel(X =< Y, X =< Z, X =< V, DirBlock \== n), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
@@ -56,43 +56,45 @@ module helperMoveManhattanWithBlock {
     	if bel(V =< Y, V =< Z, V =< X, DirBlock \== w), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
 	
 		% rotate to avoid non empty fields in front of block
-    	if bel(X =< Y, X =< Z, X =< V, D \== n, D \== s, clearAttachedDirection(n, D, A, B), rotateAgainstAffinity(n, D, Rot), rotateToDirection(D, Rot, TargetDir), 
+    	if bel(X =< Y, X =< Z, X =< V, DirBlock \== n, DirBlock \== s, clearAttachedDirection(n, DirBlock, A, B), rotateAgainstAffinity(n, DirBlock, Rot), rotateToDirection(n, Rot, TargetDir), 
     		directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then preActionCleanup + rotate(Rot).
-	    if bel(Y =< X, Y =< Z, Y =< V, D \== s, D \== n, clearAttachedDirection(s, D, A, B), rotateAgainstAffinity(s, D, Rot), rotateToDirection(D, Rot, TargetDir), 
+	    if bel(Y =< X, Y =< Z, Y =< V, DirBlock \== s, DirBlock \== n, clearAttachedDirection(s, DirBlock, A, B), rotateAgainstAffinity(s, D, Rot), rotateToDirection(s, Rot, TargetDir), 
 	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then preActionCleanup + rotate(Rot).
-	    if bel(Z =< Y, Z =< X, Z =< V, D \== e, D \== w, clearAttachedDirection(e, D, A, B), rotateAgainstAffinity(e, D, Rot), rotateToDirection(D, Rot, TargetDir), 
+	    if bel(Z =< Y, Z =< X, Z =< V, DirBlock \== e, DirBlock \== w, clearAttachedDirection(e, DirBlock, A, B), rotateAgainstAffinity(e, D, Rot), rotateToDirection(e, Rot, TargetDir), 
 	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then preActionCleanup + rotate(Rot).
-	    if bel(V =< Y, V =< Z, V =< X, D \== w, D \== e, clearAttachedDirection(w, D, A, B), rotateAgainstAffinity(w, D, Rot), rotateToDirection(D, Rot, TargetDir), 
-	    	directionToCoordinate(TargetDir, M, N)), percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) then preActionCleanup + rotate(Rot).
+	    if bel(V =< Y, V =< Z, V =< X, DirBlock \== w, DirBlock \== e, clearAttachedDirection(w, DirBlock, A, B), 
+	           rotateAgainstAffinity(w, D, Rot), rotateToDirection(w, Rot, TargetDir), directionToCoordinate(TargetDir, M, N)),
+	       percept(thing(A, B, Type,_), Type \== dispenser), not(percept( thing(M, N, Type,_), Type \== dispenser)) 
+	           then preActionCleanup + rotate(Rot).
 		
 		% rotate to free fields beside or behind agent
-		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
-		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
-		if bel(X =< Y, X =< Z, X =< V, D == n), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
-		if bel(V =< Y, V =< Z, V =< X, D == w), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(cw).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then preActionCleanup + rotate(ccw).
 	
 		% clear rotate position closest to south
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(1, 0, obstacle,_)) then preActionCleanup + clear(1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(1, 0, obstacle,_)) then preActionCleanup + clear(1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, 1, obstacle,_)) then preActionCleanup + clear(0, 1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, 1, obstacle,_)) then preActionCleanup + clear(0, 1).
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(1, 0, obstacle,_)) then preActionCleanup + clear(1, 0).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(1, 0, obstacle,_)) then preActionCleanup + clear(1, 0).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, 1, obstacle,_)) then preActionCleanup + clear(0, 1).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, 1, obstacle,_)) then preActionCleanup + clear(0, 1).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
 		
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
-		if bel(X =< Y, X =< Z, X =< V, D == n), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, D == s), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, D == e), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
-		if bel(V =< Y, V =< Z, V =< X, D == w), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
 				   		    	
 	} % check block in front of move direction
 	
