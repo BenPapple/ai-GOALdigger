@@ -8,6 +8,8 @@ use "../pathfinding/executeMoveAroundSubmittingAgent" as module.
 use "../taskhandling/chooseTask" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
+use "../blockhandling/rotateBlockToNorth" as module.
+use "../blockhandling/connectBlocks" as module.
 
 /**
  * Main decision rules for role worker
@@ -56,8 +58,9 @@ module executeWorkerRole {
 	    	% submit task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgent, _)), percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
-	    	% Prepare for connect
-	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition)) then preActionCleanup + skip.
+	    	% Prepare for connect by rotating block to north and if north connect
+	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition), DirBlock \= n) then rotateBlockToNorth.
+	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition)) then preActionCleanup + connectBlocks.
 	    	
 	    	%ToDo 2Task movement
     	 	% Movement for supporting agent around submitting agent when with block for multitask

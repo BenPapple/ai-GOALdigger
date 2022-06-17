@@ -1,0 +1,33 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../pathfinding/executeRandomMove" as module.
+use "../actionhandling/preActionCleanup" as module.
+
+/**
+ * Rotate block into north position
+ *
+ */
+
+module rotateBlockToNorth {
+	
+	% prefer rotate to south position and clear route to it if necessary
+    if bel(haveBlockAttached(true, DirBlock)) then {
+
+		% rotate block to south position if free target fields
+		if bel(DirBlock == w), not(percept(thing(0, -1, Type, _), Type \== dispenser)) then preActionCleanup + rotate(cw).
+		if bel(DirBlock == e), not(percept(thing(0, -1, Type, _), Type \== dispenser)) then preActionCleanup + rotate(ccw).
+		if bel(DirBlock == s), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then preActionCleanup + rotate(cw).
+		if bel(DirBlock == s), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then preActionCleanup + rotate(ccw).
+		if bel(DirBlock == n) then preActionCleanup + skip.
+		
+		% clear fields west, east and north from obstacle and blocks to enable rotate to south or closer positions	
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, block, _)) then preActionCleanup + clear(-1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, obstacle, _)) then preActionCleanup + clear(-1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, block, _)) then preActionCleanup + clear(1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, obstacle, _)) then preActionCleanup + clear(1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== -1), percept(thing(0, -1, block, _)) then preActionCleanup + clear(0, 1).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== -1), percept(thing(0, -1, obstacle, _)) then preActionCleanup + clear(0, 1).
+	
+	}
+	
+}
