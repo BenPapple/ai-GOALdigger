@@ -3,6 +3,10 @@ use "../goaldiggerAction" as actionspec.
 use "../pathfinding/executeRandomMove" as module.
 use "../actionhandling/preActionCleanup" as module.
 use "../blockhandling/rotateBlockToSouth" as module.
+use "../blockhandling/connectBlocks" as module.
+
+% ToDo Hack linearrandom so connect and submit changes randomly instead of recognizing connect, do that later
+order = linearrandom.
 
 /**
  * Rotate logic clearing block/obstacles at rotate target and then rotates prefering south, if block south submit action
@@ -11,8 +15,16 @@ use "../blockhandling/rotateBlockToSouth" as module.
 
 module handleTaskSubmit {
 
+
+
 	% submit block if it is south of agent
 	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, submittingAgent,_)), bel(step(SimStep), TaskStep >= SimStep) then {
+		
+		%
+		if percept(lastActionResult(success), lastAction(connect)) then preActionCleanup + submit(TaskFit).
+		
+		%
+		if true then connectBlocks.
 		
 		% preconditions for submit achieved, submit task	
     	if bel(haveBlockAttached(true, DirBlock), DirBlock == s) then preActionCleanup + submit(TaskFit).

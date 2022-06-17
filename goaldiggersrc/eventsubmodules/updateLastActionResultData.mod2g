@@ -41,7 +41,7 @@ module updateLastActionResultData {
 		  delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)).		
 
 		% rotate update attached coordinates
-		if percept(lastAction(rotate), lastActionParams([Dir])), bel(haveBlockAttached(true, Dold), directionToCoordinate(Dnew, A, B), rotateToDirection(Dold, Dir, Dnew)), 
+		if percept(lastAction(rotate), lastActionParams([Dir])), bel(haveBlockAttached(true, Dold), rotateToDirection(Dold, Dir, Dnew), directionToCoordinate(Dnew, A, B)), 
 			percept(attached(A, B)) then delete(haveBlockAttached(true, Dold)) + insert(haveBlockAttached(true, Dnew)).		
 		
 		% successful dispenser request

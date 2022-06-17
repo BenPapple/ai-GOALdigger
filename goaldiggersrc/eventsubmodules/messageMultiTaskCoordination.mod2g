@@ -15,23 +15,23 @@ module messageMultiTaskCoordination {
 		then (channnelMultiTask).send(needTaskSideKick(NameOwn, Seed, TaskName, BlockType2, OwnX, OwnY, Step)). % GoalX, GoalY
 	
 	% receive message for multitask	
-	forall percept(name(NameOwn)),(_).sent(needTaskSideKick(NameOwn2, RandomNo2, TaskName2, BlockType2, OwnX2, OwnY2, Step1)), 
-		bel(NameOwn \= NameOwn2), bel(randomSeed(Seed), agentAt(OwnX, OwnY))
+	forall percept(name(NameOwn)),(_).sent(needTaskSideKick(NameOther, RandomNo2, TaskName2, BlockType2, OwnX2, OwnY2, Step1)), 
+		bel(NameOwn \= NameOther), bel(randomSeed(Seed), agentAt(OwnX, OwnY))
 			do {
 				% ToDo Check currentChosenTask by more Tasks
 				% become a client (submittingAgent), give instructions to supportingAgent if first req has 0, 1
-				if bel(Seed > RandomNo2, currentChosenTask(V1, V2, V3, 0, 1, V6, msgCoordinationPending, V8)), percept(task(V1 ,_, 40,[req(_,_,_),req(X2,Y2,BlockType2)])) then { 
-					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOwn2, X2, Y2)).
+				if bel(Seed > RandomNo2, currentChosenTask(V1, V2, V3, 0, 1, V6, msgCoordinationPending, V8)), percept(task(V1 ,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)])) then { 
+					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOther, X2, Y2)).
 					if true then delete(currentChosenTask(V1, V2, V3, 0, 1, V6, msgCoordinationPending,V8)) + 
-						insert(currentChosenTask(V1, V2, V3, 0, 1, V6, submittingAgent,NameOwn)).
+						insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType1, submittingAgent,NameOther)).
 					
 				}
 				
 				% become a client (submittingAgent), give instructions to supportingAgent if second req has 0, 1
 				if bel(Seed > RandomNo2, currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)), percept(task(V1 ,_, 40,[req(X2, Y2, BlockType1),req(0, 1,BlockType2)])) then { 
-					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOwn2, X2, Y2)).
+					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOther, X2, Y2)).
 					if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending,V8)) + 
-						insert(currentChosenTask(V1, V2, V3, X2, Y2, BlockType1, submittingAgent,NameOwn)).
+						insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType2, submittingAgent,NameOther)).
 					
 				}
 			}
