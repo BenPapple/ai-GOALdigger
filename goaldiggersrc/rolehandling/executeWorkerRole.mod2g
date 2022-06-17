@@ -45,7 +45,7 @@ module executeWorkerRole {
 
 			% as worker change task when task expired or initial task has -1 million steps
 	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) then chooseTask.
-	    	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), not(percept(task(TaskName , _, _,[req(_,_,_)]))) then chooseTask.
+	    	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), not(percept(task(TaskName , _, _, _))) then chooseTask.
     	
 	    	% detach block if task does not fit
 	    	if bel(directionToCoordinate(DirBlock, A, B)), percept(thing(A, B, block, BlockTypeAttached), step(SimStep)), 
