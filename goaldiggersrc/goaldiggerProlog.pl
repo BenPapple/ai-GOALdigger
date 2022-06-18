@@ -43,6 +43,7 @@
 :- dynamic targetRole/1.
 :- dynamic randomSeed/1.
 :- dynamic positionInHirarchie/1.
+:- dynamic submitterLeader/0.
 
 % Variables related to locating other agents in the world
 :- dynamic otherAgentAt/4. % store / update other agents' positions
