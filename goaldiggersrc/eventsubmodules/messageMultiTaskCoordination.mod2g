@@ -10,31 +10,53 @@ module messageMultiTaskCoordination {
 
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
 	% sending: Eigennamen, Zufallszahl, Taskname, Blocktyp, Zielkoordinate (sonst eigene Koordinaten), Step  
-	if percept(name(NameOwn)), bel(randomBetween(0, 10000, RandomNo), randomSeed(Seed), currentChosenTask(TaskName, TaskStep, _, _, _, _, msgCoordinationPending,_), agentAt(OwnX,OwnY), step(Step), TaskStep >= Step )
-		, percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)]))
-		then (channnelMultiTask).send(needTaskSideKick(NameOwn, Seed, TaskName, BlockType2, OwnX, OwnY, Step)). % GoalX, GoalY
+%	if percept(name(NameOwn)), bel(randomBetween(0, 10000, RandomNo), randomSeed(Seed), currentChosenTask(TaskName, TaskStep, _, _, _, _, msgCoordinationPending,_), agentAt(OwnX,OwnY), step(Step), TaskStep >= Step )
+%		, percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)]))
+%		then (channnelMultiTask).send(needTaskSideKick(NameOwn, Seed, TaskName, BlockType2, OwnX, OwnY, Step)). % GoalX, GoalY
 	
 	% receive message for multitask	
-	forall percept(name(NameOwn)),(_).sent(needTaskSideKick(NameOther, RandomNo2, TaskName2, BlockType2, OwnX2, OwnY2, Step1)), 
-		bel(NameOwn \= NameOther), bel(randomSeed(Seed), agentAt(OwnX, OwnY))
-			do {
-				% ToDo Check currentChosenTask by more Tasks
-				% become a client (submittingAgent), give instructions to supportingAgent if first req has 0, 1
-				if bel(Seed > RandomNo2, currentChosenTask(V1, V2, V3, 0, 1, V6, msgCoordinationPending, V8)), percept(task(V1 ,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)])) then { 
-					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOther, X2, Y2)).
-					if true then delete(currentChosenTask(V1, V2, V3, 0, 1, V6, msgCoordinationPending,V8)) + 
-						insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType1, submittingAgent,NameOther)).
-					
+	if bel(submitterLeader, currentChosenTask(V1, V2, V3, 0, 1, V6, submittingAgentTwoTask, V8))
+		then {
+	
+			if percept(task(V1 ,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)]), name(SubmitterName))
+				then {
+					if (_).sent(otherAgentStatus(SupporterName, X, Y, Step, Seed, BlockTypeAttached)), bel(BlockTypeAttached == BlockType2) 
+						then {
+							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, SupporterName, X2, Y2)).
+							if true then delete(currentChosenTask(V1, V2, V3, 0, 1, V6, submittingAgentTwoTask,V8)) + 
+								insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType1, submittingAgentTwoTask, SupporterName)).
+						}
 				}
 				
-				% become a client (submittingAgent), give instructions to supportingAgent if second req has 0, 1
-				if bel(Seed > RandomNo2, currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)), percept(task(V1 ,_, 40,[req(X2, Y2, BlockType1),req(0, 1,BlockType2)])) then { 
-					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOther, X2, Y2)).
-					if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending,V8)) + 
-						insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType2, submittingAgent,NameOther)).
-					
+			if percept(task(V1 ,_, 40,[req(X2,Y2,BlockType1),req(0,1,BlockType2)]), name(SubmitterName))
+				then {
+					if (_).sent(otherAgentStatus(SupporterName, X, Y, Step, Seed, BlockTypeAttached)), bel(BlockTypeAttached == BlockType1) 
+						then {
+							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, SupporterName, X2, Y2)).
+							if true then delete(currentChosenTask(V1, V2, V3, 0, 1, V6, submittingAgentTwoTask,V8)) + 
+								insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType1, submittingAgentTwoTask, SupporterName)).
+						}
 				}
-			}
+				
+		}
+					
+				% ToDo Check currentChosenTask by more Tasks
+				% become a client (submittingAgent), give instructions to supportingAgent if first req has 0, 1
+%				if bel(Seed > RandomNo2, currentChosenTask(V1, V2, V3, 0, 1, V6, msgCoordinationPending, V8)), percept(task(V1 ,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)])) then { 
+%					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOther, X2, Y2)).
+%					if true then delete(currentChosenTask(V1, V2, V3, 0, 1, V6, msgCoordinationPending,V8)) + 
+%						insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType1, submittingAgent, NameOther)).
+%					
+%				}
+%				
+%				% become a client (submittingAgent), give instructions to supportingAgent if second req has 0, 1
+%				if bel(Seed > RandomNo2, currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)), percept(task(V1 ,_, 40,[req(X2, Y2, BlockType1),req(0, 1,BlockType2)])) then { 
+%					if true then (channnelMultiTask).send(informSupportingAgent(NameOwn, supportingAgent, NameOther, X2, Y2)).
+%					if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending,V8)) + 
+%						insert(currentChosenTask(V1, V2, V3, 0, 1, BlockType2, submittingAgent,NameOther)).
+%					
+%				}
+			
 	
 	% become supportingAgent, check block for task and target		
 	if percept(name(NameOwn)), (_).sent(informSupportingAgent(NameSender, supportingAgent, NameOwn, GoalX, GoalY)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, msgCoordinationPending, V8)) ,
@@ -51,4 +73,4 @@ module messageMultiTaskCoordination {
 			% get the right block
 			%if bel(haveBlockAttached(false, _), currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)), percept(task(TaskName ,TaskStep, 40,[req(Xt,Yt,BlockType),req(Xt2,Yt2,BlockType2)])) 
 				%then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + insert(currentChosenTask(V1, V2, V3, V4, V5, BlockType2, supportingAgent, NameSubmitter)).
-}
+ }

@@ -16,6 +16,7 @@ use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/handleMessageAgentOffset" as module.
 use "./eventsubmodules/updateOtherAgentPositionData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
+use "./eventsubmodules/updateSubmitterRanking" as module.
 use "./eventsubmodules/simpleworldcalculation/messageRelativeCoordsOfAgents" as module.
 
 /**
@@ -34,6 +35,7 @@ module goaldiggerEvent {
 	% SUBMODULES Choose RandomAgent for Explorer
 	if percept(step(1)) then messageAssignExplorerRole.
 	if true then updateAssignExplorerRole.
+	if true then updateSubmitterRanking.
 	
 	% SUBMODULES to measure the world
 	if percept(step(Steps), Steps > 3333) then {

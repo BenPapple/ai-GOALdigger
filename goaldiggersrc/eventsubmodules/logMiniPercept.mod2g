@@ -61,6 +61,8 @@ module logMiniPercept {
 		
 		if percept(attached(X, Y), thing(X, Y, block, BlockType), X =< 1, Y =< 1) then print("Attached:"| X| Y +BlockType).
 		
+		if bel(submitterLeader) then print("submitterLeader").
+		
 		% Separator
 		if true then print("++++++ MISC DATA ++++++++++++").
 		
