@@ -12,18 +12,22 @@ module syncPerceptDataIntoBelief {
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
 	
 	% STORE unknown dispensers from percept with MD field
-	forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedDispenser(X3, Y3, dispenser, Details, _, _)))) do 
-		insert(storedDispenser(X3, Y3, dispenser, Details, 0, false)).		
+	forall percept(thing(X, Y, dispenser, Details)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), 
+	       not(bel((storedDispenser(X3, Y3, dispenser, Details, _, _)))) do 
+	    insert(storedDispenser(X3, Y3, dispenser, Details, 0, false)).		
 
 	% DELETE dispenser from belief if not seen in percept		
-	forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), agentAt(X2, Y2), X3 is X1 - X2, Y3 is Y1 - Y2, abs(X3) + abs(Y3) =< 5), not(percept(thing(X3, Y3, dispenser, _))) 
+	forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), agentAt(X2, Y2), X3 is X1 - X2, 
+	           Y3 is Y1 - Y2, abs(X3) + abs(Y3) =< 5), not(percept(thing(X3, Y3, dispenser, _))) 
 		do delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)). 
 		
 	% DELETE disappeared goalzones
-	forall bel(storedGoalZone(X, Y, Md)), bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5), not(percept((goalZone(X3, Y3)))) do delete(storedGoalZone(X, Y, Md)).
+	forall bel(storedGoalZone(X, Y, Md)), bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5), 
+	       not(percept((goalZone(X3, Y3)))) do delete(storedGoalZone(X, Y, Md)).
 	
 	% STORE unknown goalzones with MD field
-	forall percept(goalZone(X, Y)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedGoalZone(X3, Y3, _)))) do 
+	forall percept(goalZone(X, Y)), bel(agentAt(X2, Y2), localize(X, Y, X2, Y2, X3, Y3)), 
+	       not(bel((storedGoalZone(X3, Y3, _)))) do 
 		insert(storedGoalZone(X3, Y3, 0)).
 	
 }

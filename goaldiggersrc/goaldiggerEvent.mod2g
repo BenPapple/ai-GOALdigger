@@ -29,8 +29,8 @@ module goaldiggerEvent {
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)) then reinitBeliefOnSimChange.
 
-	% Update step counter with new step when new percept step available
-	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
+	% SUBMODULE Store percept data in belief
+	if true then syncPerceptDataIntoBelief.
 
 	% SUBMODULES Choose RandomAgent for Explorer
 	if percept(step(1)) then messageAssignExplorerRole.
@@ -38,7 +38,7 @@ module goaldiggerEvent {
 	if true then updateSubmitterRanking.
 	
 	% SUBMODULES to measure the world
-	if percept(step(Steps), Steps > 3333) then {
+	if percept(step(Steps), Steps > 3) then {
 		% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 		if true then updateWorldSizeData.
 		% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
@@ -49,9 +49,6 @@ module goaldiggerEvent {
 		if true then handleMessageDistStepNamePosition.
 	}
 	
-	% Update step counter with new step when new percept step available
-	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
-	
 	% SUBMODULE managing success and partial_success percepts
 	if true then updateLastActionResultData.
 	
@@ -60,9 +57,6 @@ module goaldiggerEvent {
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
-
-	% SUBMODULE Store percept data in belief
-	if true then syncPerceptDataIntoBelief.
 
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn) then logMiniPercept.
