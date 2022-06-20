@@ -2,9 +2,9 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * Module messages about offsets sent by agents to everyone after they have measured any offset to any other agent. If Agent1 receives a message from Agent2
- * about the offset between Agent2 and Agent3, and Agent1 already knows its own offset to Agent2, it can get its offset to Agent3 by adding the offset from the 
- * message to its own offset.
+ * Manages messages about offsets sent by agents to everyone after they have measured any offset to any other agent. If 
+ * Agent1 receives a message from Agent2 about the offset between Agent2 and Agent3, and Agent1 already knows its own 
+ * offset to Agent2, it can get its offset to Agent3 by adding the offset from the message to its own offset.
  *
  */
 
@@ -13,7 +13,8 @@ module handleMessageAgentOffset {
     % STORE messages in belief
 	forall (Sender).sent(agentOffSet(AgentName, OffsetX, OffsetY, _)) do {
 	
-			if bel(agentEntity(Sender,SenderName), not(agentOffset(SenderName,_,_,_)), not(agentOffset(AgentName,_, _,_))), percept(step(Step))
+			if bel(agentEntity(Sender,SenderName), not(agentOffset(SenderName,_,_,_)), 
+			   not(agentOffset(AgentName,_, _,_))), percept(step(Step))
 				then insert(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)). 
 		
 	}
@@ -21,17 +22,18 @@ module handleMessageAgentOffset {
 	% CALCULATE offset of 3rd agent from message from 2nd agent
 	forall (Sender).sent(agentOffset(AgentName, OffsetX, OffsetY, _)) do {
 
-			if bel(agentEntity(Sender,SenderName), agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
-			   Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
+			if bel(agentEntity(Sender,SenderName), agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), 
+			   not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
+			       Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
 			       then insert(agentOffset(AgentName, X1, Y1, Step)).				
 	} 
 	
 	% CALCULATE offset from stored messages
 	forall bel(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, _)) do {
 	
-		if bel(agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
-			Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
-				then insert(agentOffset(AgentName, X1, Y1, Step)).
+		if bel(agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), not(agentOffset(AgentName,_, _,_)), 
+		      X1 is OffsetX + OffsetToSenderX, Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
+			then insert(agentOffset(AgentName, X1, Y1, Step)).
 			
 	}
 	

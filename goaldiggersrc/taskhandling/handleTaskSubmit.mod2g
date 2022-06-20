@@ -15,22 +15,22 @@ order = linearrandom.
 
 module handleTaskSubmit {
 
+    % submit 1-task if block is south of agent
+    if bel(haveBlockAttached(true, DirBlock), DirBlock == s),
+       bel(currentChosenTask(TaskFit, _, _, _, _, _, submittingAgentOneTask, _)) 
+        then preActionCleanup + submit(TaskFit).
 
-
-	% submit block if it is south of agent
-	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, submittingAgent,_)), bel(step(SimStep), TaskStep >= SimStep)
-		then {
-		
-			%
+	% submit 2-task if block is south of agent
+	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, submittingAgentTwoTask, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep), bel(haveBlockAttached(true, DirBlock), DirBlock == s) then {		
+			
+			% submit after succesful connect
 			if percept(lastActionResult(success), lastAction(connect)) then preActionCleanup + submit(TaskFit).
 			
-			%
+			% try to connect blocks
 			if true then connectBlocks.
-			
-			% preconditions for submit achieved, submit task	
-	    	if bel(haveBlockAttached(true, DirBlock), DirBlock == s) then preActionCleanup + submit(TaskFit).
     	    	
-    } % if
+    } 
 
 	% prefer rotate to south position and clear route to it if necessary
     if true then rotateBlockToSouth.

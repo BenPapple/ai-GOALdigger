@@ -9,16 +9,20 @@ use "../goaldiggerAction" as actionspec.
 module updateAssignExplorerRole {
 	
 	% position in hierarchy will increase for every lower other agent's randomSeed
-	forall allother.sent(messageChooseRole(OtherRandomSeed, _)) do {
+	forall (_).sent(messageChooseRole(OtherRandomSeed, _)) do {
 	
-		if bel(randomSeed(RandomSeed), positionInHirarchie(PositionInHirarchie), RandomSeed > OtherRandomSeed, NewPositionInHirarchie is PositionInHirarchie + 1) then
-			delete(positionInHirarchie(PositionInHirarchie)) + insert (positionInHirarchie(NewPositionInHirarchie)).
+		if bel(randomSeed(RandomSeed), positionInHirarchie(PositionInHirarchie), RandomSeed > OtherRandomSeed, 
+		       NewPositionInHirarchie is PositionInHirarchie + 1) 
+		    then delete(positionInHirarchie(PositionInHirarchie)) + 
+		         insert (positionInHirarchie(NewPositionInHirarchie)).
 			
 	}
 	
 	% ToDo Change 4 to 2, Debug Hack, Agent doesnt assigned to Explorer
 	% Change targetRole to explorer when reaching lowest 2 of hierarchy
-	%if percept(teamSize(TeamSize), role(default)), bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), CheckSum is TeamSize - PositionInHirarchie, CheckSum =< 2) then
+	%if percept(teamSize(TeamSize), role(default)), 
+	%bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), CheckSum is TeamSize - PositionInHirarchie, 
+	%CheckSum =< 2) then
 	%	delete(targetRole(Role)) + insert (targetRole(explorer)).
 		
 }

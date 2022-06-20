@@ -4,19 +4,22 @@ use "../taskhandling/taskHandlingOneBlock" as module.
 use "../taskhandling/taskHandlingTwoBlock" as module.
 
 /**
- * Choose task from options when having corresponding role; waterfall chosing, advanced choices come first in file: first true fit gets chosen and exits module
+ * Choose task from options when having corresponding role; waterfall chosing, advanced choices come first in file: 
+ * first true fit gets chosen and exits module
  *
  */
 
 module chooseTask {
 
-	% chose 1s task if one is available
-	if percept(task(_ ,TaskStep, 10,[req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) 
+	% chose 1s task if one is available and not believe submitterLeader
+	if percept(task(_ ,TaskStep, 10,[req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0),
+	   not(bel(submitterLeader))
 		then taskHandlingOneBlock.
 		 
-	% chose 2s task if 1s task isn't available
-	if bel(step(SimStep)), not(percept(task(_ ,TaskStep, 10,[req(_,_,_)]),TaskStep >= SimStep, TaskStep - SimStep >= 0)), 
-	   percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0)  
+	% chose 2-task as submitterLeader if available
+	if bel(submitterLeader, step(SimStep)), 
+	   percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)])), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0)  
 	    then taskHandlingTwoBlock.
 		
 } % module

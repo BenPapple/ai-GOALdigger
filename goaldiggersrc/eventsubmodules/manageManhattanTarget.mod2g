@@ -9,33 +9,43 @@ use "../goaldiggerAction" as actionspec.
 module manageManhattanTarget {
 
 	% when role default store first seen RoleZone coordinates as targetMd
-	if percept(roleZone(X, Y), role(default)), bel(agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)), not(bel(executeManhattan)) then 
-		delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, rolezone)) + insert(executeManhattan).
+	if percept(roleZone(X, Y), role(default)), 
+	   bel(agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)), not(bel(executeManhattan)) 
+	    then delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, rolezone)) + insert(executeManhattan).
 		
 	% when role worker and without block set dispenser as target
-	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), TaskStep >= SimStep, 
-		targetDispenserAt(AltX, AltY, AltBlockType, _), BlockType == AltBlockType) then {
-		
-				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + insert(targetMd(AltX, AltY, dispenser)).	
+	if percept(step(SimStep), role(worker)), 
+	   bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), TaskStep >= SimStep, 
+		   targetDispenserAt(AltX, AltY, AltBlockType, _), BlockType == AltBlockType) then {		
+				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + 
+				                                      insert(targetMd(AltX, AltY, dispenser)).	
 				if not(bel(executeManhattan)) then insert(executeManhattan).
 	}
 		
 	% With block and as submittingAgent update goalzone target MD
-	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, submittingAgent, _), TaskStep >= SimStep, targetMd(X, Y, Target), 
-			targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567)
+	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
+	       TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567),
+	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask)
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
 		
-	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or goalzone), coordinates converted from A,B to C,D
-	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
-			targetMd(X, Y, Target), Target \== supportingPosition),
-			(_).sent(otherAgentAt(NameSubmitter, A, B, _)), bel(localize(A, B, OffsetX, OffsetY, C, D))
-				then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
+	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or 
+	% goalzone), coordinates converted from A,B to C,D
+	if bel(haveBlockAttached(true, _), step(SimStep), 
+	       currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
+	       confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
+		   targetMd(X, Y, Target), Target \== supportingPosition),
+	   (_).sent(otherAgentAt(NameSubmitter, A, B, _)), 
+	   bel(localize(A, B, OffsetX, OffsetY, C, D))
+		then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
 	
 	% Moving around Submitting agent for docking sequence
-	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), YBlock is YSubmit+1, thing(XSubmit, YBlock, block, _), XSubmit \== 0, YSubmit \== 0, attached(XSubmit, YBlock)) then {
-		if bel(agentAt(Xself, Yself), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, _)), percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
-			bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, targetMd(Xdel, Ydel, Zdel))
-				then delete(targetMd(Xdel, Ydel, Zdel)) + insert(targetMd(Xtarget, Ytarget, supportingPosition)).
+	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), YBlock is YSubmit+1, thing(XSubmit, YBlock, block, _), 
+	           XSubmit \== 0, YSubmit \== 0, attached(XSubmit, YBlock)) then {
+		if bel(agentAt(Xself, Yself), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, _)), 
+		   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
+		   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
+		       targetMd(Xdel, Ydel, Zdel))
+		    then delete(targetMd(Xdel, Ydel, Zdel)) + insert(targetMd(Xtarget, Ytarget, supportingPosition)).
 	}	
 		
 } % end module
