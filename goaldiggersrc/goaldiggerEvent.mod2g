@@ -33,9 +33,9 @@ module goaldiggerEvent {
 	if true then syncPerceptDataIntoBelief.
 
 	% SUBMODULES Choose RandomAgent for Explorer
-	if percept(step(2)) then messageAssignExplorerRole.
+	if percept(step(3)) then messageAssignExplorerRole.
 	if true then updateAssignExplorerRole.
-	if true then updateSubmitterRanking.
+	if percept(step(6)) then updateSubmitterRanking.
 	
 	% SUBMODULES to measure the world
 	if percept(step(Steps), Steps > 3333) then {

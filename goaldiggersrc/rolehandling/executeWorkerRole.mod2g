@@ -50,9 +50,10 @@ module executeWorkerRole {
 		 */		  
     	if bel(haveBlockAttached(true,DirBlock)) then {
 
-			% as worker change task when task expired or initial task has -1 million steps
+			% change task when task expired
 	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) 
 	    	    then chooseTask.
+	    	% change task when task expired when chosen task not in percept anymore
 	    	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), not(percept(task(TaskName , _, _, _))) 
 	    	    then chooseTask.
     	
