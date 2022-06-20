@@ -18,16 +18,17 @@ module handleTaskSubmit {
 
 
 	% submit block if it is south of agent
-	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, submittingAgent,_)), bel(step(SimStep), TaskStep >= SimStep) then {
+	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, submittingAgent,_)), bel(step(SimStep), TaskStep >= SimStep)
+		then {
 		
-		%
-		if percept(lastActionResult(success), lastAction(connect)) then preActionCleanup + submit(TaskFit).
-		
-		%
-		if true then connectBlocks.
-		
-		% preconditions for submit achieved, submit task	
-    	if bel(haveBlockAttached(true, DirBlock), DirBlock == s) then preActionCleanup + submit(TaskFit).
+			%
+			if percept(lastActionResult(success), lastAction(connect)) then preActionCleanup + submit(TaskFit).
+			
+			%
+			if true then connectBlocks.
+			
+			% preconditions for submit achieved, submit task	
+	    	if bel(haveBlockAttached(true, DirBlock), DirBlock == s) then preActionCleanup + submit(TaskFit).
     	    	
     } % if
 
