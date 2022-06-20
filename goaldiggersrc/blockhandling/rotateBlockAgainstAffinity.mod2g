@@ -21,9 +21,9 @@ module rotateBlockAgainstAffinity {
 
 		 % clear blocked rotate targets
 		 if percept(thing(X, Y, obstacle, _)) then preActionCleanup + clear(X, Y).
-		 if percept(thing(X, Y, block, _), X \= A, Y \= B) then preActionCleanup + clear(X, Y).
+		 if percept(thing(X, Y, block, _), X \= A, Y \= B), not(percept(attached(X, Y))) then preActionCleanup + clear(X, Y).
 		 if percept(thing(F, G, obstacle, _)) then preActionCleanup + clear(F, G).
-		 if percept(thing(F, G, block, _), F \= A, G \= B) then preActionCleanup + clear(F, G).
+		 if percept(thing(F, G, block, _), F \= A, G \= B), not(percept(attached(X, Y))) then preActionCleanup + clear(F, G).
 	 	
 	 } % if rotate random
 
@@ -34,7 +34,7 @@ module rotateBlockAgainstAffinity {
 	 
 		 if not(percept(thing(X, Y, Type, _), Type \== dispenser)) then preActionCleanup + rotate(Rot).
 		 if percept(thing(X, Y, obstacle, _)) then preActionCleanup + clear(X, Y).
-		 if percept(thing(X, Y, block, _), X \= A, Y \= B) then preActionCleanup + clear(X, Y).
+		 if percept(thing(X, Y, block, _), X \= A, Y \= B), not(percept(attached(X, Y))) then preActionCleanup + clear(X, Y).
 
 	} % rotate random if block 90 degree
 	
