@@ -50,10 +50,10 @@ module helperMoveManhattanWithBlock {
     	if bel(V =< Y, V =< Z, V =< X, DirBlock \== w), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
     	
     	% clear blocks in front of agent
-    	if bel(X =< Y, X =< Z, X =< V, DirBlock \== n), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
-		if bel(Y =< X, Y =< Z, Y =< V, DirBlock \== s), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
-    	if bel(Z =< Y, Z =< X, Z =< V, DirBlock \== e), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
-    	if bel(V =< Y, V =< Z, V =< X, DirBlock \== w), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
+    	if bel(X =< Y, X =< Z, X =< V, DirBlock \== n), percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) then preActionCleanup + clear(0, -1).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock \== s), percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) then preActionCleanup + clear(0, 1).
+    	if bel(Z =< Y, Z =< X, Z =< V, DirBlock \== e), percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) then preActionCleanup + clear(1, 0).
+    	if bel(V =< Y, V =< Z, V =< X, DirBlock \== w), percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) then preActionCleanup + clear(-1, 0).
 	
 		% rotate to free M,N to avoid non empty fields A,B in front of block
     	if bel(X =< Y, X =< Z, X =< V, DirBlock \== n, DirBlock \== s, clearAttachedDirection(n, DirBlock, A, B), rotateAgainstAffinity(n, DirBlock, Rot), rotateToDirection(DirBlock, Rot, TargetDir), 
@@ -85,19 +85,19 @@ module helperMoveManhattanWithBlock {
 		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(1, 0, obstacle,_)) then preActionCleanup + clear(1, 0).
 		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, 1, obstacle,_)) then preActionCleanup + clear(0, 1).
 		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, 1, obstacle,_)) then preActionCleanup + clear(0, 1).
-		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
-		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) then preActionCleanup + clear(1, 0).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) then preActionCleanup + clear(1, 0).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) then preActionCleanup + clear(0, 1).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) then preActionCleanup + clear(0, 1).
 		% clear rotate position north or south closest to south
 		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
 		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
 		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
 		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
-		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
-		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).
-		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
-		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
+		if bel(X =< Y, X =< Z, X =< V, DirBlock == n), percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) then preActionCleanup + clear(-1, 0).
+		if bel(Y =< X, Y =< Z, Y =< V, DirBlock == s), percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) then preActionCleanup + clear(-1, 0).
+		if bel(Z =< Y, Z =< X, Z =< V, DirBlock == e), percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) then preActionCleanup + clear(0, -1).
+		if bel(V =< Y, V =< Z, V =< X, DirBlock == w), percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) then preActionCleanup + clear(0, -1).
 				   		    	
 	} % check block in front of move direction
 	

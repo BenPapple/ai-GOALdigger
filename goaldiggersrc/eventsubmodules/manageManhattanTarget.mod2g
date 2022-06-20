@@ -21,12 +21,34 @@ module manageManhattanTarget {
 				                                      insert(targetMd(AltX, AltY, dispenser)).	
 				if not(bel(executeManhattan)) then insert(executeManhattan).
 	}
+	
+	% target dispenser from percept
+	if bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
+	       agentAt(AgentX, AgentY)),
+	   percept(step(SimStep), role(worker), thing(DispX, DispY, dispenser, BlockType)),
+	   bel(TaskStep >= SimStep, AltX is DispX + AgentX, AltY is DispY + AgentY)
+	    then {		
+				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + 
+				                                      insert(targetMd(AltX, AltY, dispenser)).	
+				if not(bel(executeManhattan)) then insert(executeManhattan).
+	}
 		
 	% With block and as submittingAgent update goalzone target MD
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
 	       TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567),
 	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask)
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
+		
+	% target goalzone from percept
+	if bel(haveBlockAttached(true,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
+	       agentAt(AgentX, AgentY)),
+	   percept(step(SimStep), role(worker), goalZone(GoalX, GoalY)),
+	   bel(TaskStep >= SimStep, AltX is GoalX + AgentX, AltY is GoalY + AgentY)
+	    then {		
+				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + 
+				                                      insert(targetMd(AltX, AltY, goalzone)).	
+				if not(bel(executeManhattan)) then insert(executeManhattan).
+	}
 		
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or 
 	% goalzone), coordinates converted from A,B to C,D
@@ -40,7 +62,7 @@ module manageManhattanTarget {
 	
 	% Moving around Submitting agent for docking sequence
 	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), YBlock is YSubmit+1, thing(XSubmit, YBlock, block, _), 
-	           XSubmit \== 0, YSubmit \== 0, attached(XSubmit, YBlock)) then {
+	           XSubmit + YSubmit \== 0, attached(XSubmit, YBlock)) then {
 		if bel(agentAt(Xself, Yself), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, _)), 
 		   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
 		   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 

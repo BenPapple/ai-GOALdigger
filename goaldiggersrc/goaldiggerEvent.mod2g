@@ -68,7 +68,8 @@ module goaldiggerEvent {
 
 	% SUBMODULE update goalzone map data
 	if percept(step(SimStep),role(worker)), bel(haveBlockAttached(true, _), 
-	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep >= SimStep) 
+	           currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
+	           TaskStep >= SimStep) 
 	    then updateGoalzoneData.
 
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task

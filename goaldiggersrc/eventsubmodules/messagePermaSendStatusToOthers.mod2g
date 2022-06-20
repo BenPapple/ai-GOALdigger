@@ -13,8 +13,8 @@ module messagePermaSendStatusToOthers {
 	
 	% send a status to all other agents while having block attached
 	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
-		percept(name(OwnName), step(Step), thing(A, B, block, BlockTypeAttached)) then
-			allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, BlockTypeAttached)).
+		percept(name(OwnName), step(Step),role(Role), thing(A, B, block, BlockTypeAttached)) then
+			allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, BlockTypeAttached)).
 	
 	% send a status to all other agents without having block attached		
 	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(false, DirBlock)), 
