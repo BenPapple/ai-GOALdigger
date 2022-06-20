@@ -8,18 +8,22 @@ use "../goaldiggerProlog" as knowledge.
 module messagePermaSendStatusToOthers {
 
 	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
-	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
+	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then 
+	    (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
 	
-	% send a status to all other agents.
+	% send a status to all other agents while having block attached
 	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 		percept(name(OwnName), step(Step), thing(A, B, block, BlockTypeAttached)) then
 			allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, BlockTypeAttached)).
-			
-	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(false, DirBlock)), percept(name(OwnName), role(Role), step(Step)) then
-		allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, noBlock)).
+	
+	% send a status to all other agents without having block attached		
+	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(false, DirBlock)), 
+	   percept(name(OwnName), role(Role), step(Step)) then
+	    allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, noBlock)).
 	
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
-	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
+	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), 
+	       bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
 		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 		
 	% send sync message to other agents to coordinate coordinates :D
@@ -27,10 +31,10 @@ module messagePermaSendStatusToOthers {
 		   bel(EntityX \== 0, EntityY \== 0),
 		   bel(agentAt(MyX,MyY)), 
 		   bel(Step > 2),
-		   bel(ownName(MyName))
-		       do {
+		   bel(ownName(MyName)) do {
 		       if true then allother.send(distStepNamePosition(EntityX, EntityY, Step, MyName, MyX, MyY)).
-		          if not(bel(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY))) then insert(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY)).
-		   }
+		          if not(bel(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY))) then 
+		              insert(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY)).
+	}
 	
-}
+} % end module

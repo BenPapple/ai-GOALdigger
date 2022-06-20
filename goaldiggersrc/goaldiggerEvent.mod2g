@@ -33,12 +33,12 @@ module goaldiggerEvent {
 	if true then syncPerceptDataIntoBelief.
 
 	% SUBMODULES Choose RandomAgent for Explorer
-	if percept(step(1)) then messageAssignExplorerRole.
+	if percept(step(2)) then messageAssignExplorerRole.
 	if true then updateAssignExplorerRole.
 	if true then updateSubmitterRanking.
 	
 	% SUBMODULES to measure the world
-	if percept(step(Steps), Steps > 3) then {
+	if percept(step(Steps), Steps > 3333) then {
 		% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 		if true then updateWorldSizeData.
 		% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
@@ -67,11 +67,15 @@ module goaldiggerEvent {
 	if true then messageMultiTaskCoordination.
 
 	% SUBMODULE update goalzone map data
-	if percept(step(SimStep),role(worker)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep >= SimStep) then updateGoalzoneData.
+	if percept(step(SimStep),role(worker)), bel(haveBlockAttached(true, _), 
+	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep >= SimStep) 
+	    then updateGoalzoneData.
 
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
-	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(true, _), currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) then updateDispenserData.
+	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(true, _), 
+	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) 
+	    then updateDispenserData.
 
 	% SUBMODULE manhattan switch manipulation
 	if true then manageManhattanSwitchStatus.
@@ -85,7 +89,8 @@ module goaldiggerEvent {
 	 */
 
 	% check old dispenser request and set switch to false
-	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
+	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) 
+	    then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
 
 	% check attached block direction for block and if none found switch haveBlockAttached false
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then
@@ -97,8 +102,9 @@ module goaldiggerEvent {
 	 */
 
 	% change affinity direction after X steps
-	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) then
-		delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
+	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), 
+	   bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) 
+	    then delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
 
 	/**
 	 * ACTIVATE MAIN LOOP
