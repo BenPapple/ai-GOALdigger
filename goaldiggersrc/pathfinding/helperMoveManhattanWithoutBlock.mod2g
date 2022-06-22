@@ -24,10 +24,10 @@ module helperMoveManhattanWithoutBlock {
     	if bel(W =< S, W =< E, W =< N), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
     	
     	% clear blocks
-    	if bel(N =< S, N =< E, N =< W), percept(thing(0, -1, block,_)) then preActionCleanup + clear(0, -1).
-		if bel(S =< N, S =< E, S =< W), percept(thing(0, 1, block,_)) then preActionCleanup + clear(0, 1).
-    	if bel(E =< S, E =< N, E =< W), percept(thing(1, 0, block,_)) then preActionCleanup + clear(1, 0).
-    	if bel(W =< S, W =< E, W =< N), percept(thing(-1, 0, block,_)) then preActionCleanup + clear(-1, 0).						    	
+    	if bel(N =< S, N =< E, N =< W), percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) then preActionCleanup + clear(0, -1).
+		if bel(S =< N, S =< E, S =< W), percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) then preActionCleanup + clear(0, 1).
+    	if bel(E =< S, E =< N, E =< W), percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) then preActionCleanup + clear(1, 0).
+    	if bel(W =< S, W =< E, W =< N), percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) then preActionCleanup + clear(-1, 0).						    	
 
 	} % if 
 	

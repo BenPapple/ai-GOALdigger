@@ -1,11 +1,11 @@
 use "../../goaldiggerProlog" as knowledge.
 
 /**
- * ToDo 2task hack: Coordinate messages bewtween agents about relative coordinates
+ * ToDo 2task hack: Coordinate messages between agents about relative coordinates
  *
  */
 
-module messageRelativeCoordsOfAgents {
+module handleMessageAgentOffsetLegacy {
 	
 	% If I have sent a channelNamesRelativeXY message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
 	forall percept(name(AgentReceiver)), (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
@@ -45,6 +45,6 @@ module messageRelativeCoordsOfAgents {
 %			not(bel(storedDispenser(X3, Y3, dispenser, Type, _, _))) then insert(storedDispenser(X3, Y3, dispenser, Type, 0, true)).
 %	
 %	}
-%	
+
 	
 }

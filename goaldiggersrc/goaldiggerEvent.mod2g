@@ -15,7 +15,7 @@ use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/handleMessageAgentOffset" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
-use "./eventsubmodules/simpleworldcalculation/messageRelativeCoordsOfAgents" as module.
+use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -47,7 +47,7 @@ module goaldiggerEvent {
 	}
 	
 	% SUBMODULE SimpleWorldcalculation
-	if true then messageRelativeCoordsOfAgents.
+	if true then handleMessageAgentOffsetLegacy.
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	

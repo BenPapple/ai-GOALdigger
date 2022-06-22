@@ -2,7 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * Assign agent names to Connection names; calculate worldsize and send, delete message cache
+ * calculate worldsize and send, delete message cache
  *
  */
 
