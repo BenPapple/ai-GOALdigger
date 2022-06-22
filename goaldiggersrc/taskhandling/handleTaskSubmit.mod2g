@@ -6,7 +6,7 @@ use "../blockhandling/rotateBlockToSouth" as module.
 use "../blockhandling/connectBlocks" as module.
 
 % ToDo Hack linearrandom so connect and submit changes randomly instead of recognizing connect, do that later
-order = linearrandom.
+%order = linearrandom.
 
 /**
  * Rotate logic clearing block/obstacles at rotate target and then rotates prefering south, if block south submit action

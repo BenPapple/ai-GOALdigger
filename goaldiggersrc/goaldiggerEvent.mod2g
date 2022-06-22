@@ -56,8 +56,6 @@ module goaldiggerEvent {
 	if bel(lDebugOn) then logMiniPercept.
 
 	% SUBMODULE managing messages concerning task coordination
-	% ToDo SUBMODULE managing messages concerning task coordination
-	%if percept(step(-11)) then messageMultiTaskCoordination.
 	if true then messageMultiTaskCoordination.
 
 	% SUBMODULE update goalzone map data
