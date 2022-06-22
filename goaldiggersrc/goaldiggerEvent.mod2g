@@ -29,6 +29,9 @@ module goaldiggerEvent {
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)) then reinitBeliefOnSimChange.
 
+	% SUBMODULE managing success and partial_success percepts
+	if true then updateLastActionResultData.
+
 	% SUBMODULE Store percept data in belief
 	if true then syncPerceptDataIntoBelief.
 
@@ -48,9 +51,6 @@ module goaldiggerEvent {
 		% include in perma messages "Agent" connection name
 		if true then handleMessageDistStepNamePosition.
 	}
-	
-	% SUBMODULE managing success and partial_success percepts
-	if true then updateLastActionResultData.
 	
 	% SUBMODULE SimpleWorldcalculation
 	if true then messageRelativeCoordsOfAgents.
