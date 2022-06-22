@@ -9,7 +9,6 @@ use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
-use "./eventsubmodules/messageAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
@@ -35,9 +34,8 @@ module goaldiggerEvent {
 	if true then syncPerceptDataIntoBelief.
 
 	% SUBMODULES Choose RandomAgent for Explorer
-	if percept(step(3)) then messageAssignExplorerRole.
+	if percept(step(SimStep), SimStep >= 4) then updateSubmitterRanking.
 	if true then updateAssignExplorerRole.
-	if percept(step(6)) then updateSubmitterRanking.
 	
 	% SUBMODULES to measure the world
 	if percept(step(SimStep), SimStep > 3333) then {

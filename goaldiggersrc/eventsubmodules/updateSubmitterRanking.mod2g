@@ -1,9 +1,27 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
+/**
+ * Handle ranking of agents and assign submitterLeader to one agent
+ *
+ */
 
 module updateSubmitterRanking {
 	
+	% RESET
+	if bel(positionInHirarchie(PositionInHirarchie)) then delete(positionInHirarchie(PositionInHirarchie)) 
+	                                                          + insert(positionInHirarchie(0)).	
+	
+	% position in hierarchy will increase for every lower other agent's randomSeed
+	forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _)) do {
+	    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), MyRandomSeed > OtherAgentSeed, 
+		       NewPositionInHirarchie is PositionInHirarchie + 1) 
+		    then delete(positionInHirarchie(PositionInHirarchie)) + 
+		         insert (positionInHirarchie(NewPositionInHirarchie)).
+			
+	}
+	
+	% assign submitterLeader
 	if percept(teamSize(SizeTeam)), 
 	   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1)
 		then insert(submitterLeader).
