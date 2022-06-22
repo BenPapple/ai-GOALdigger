@@ -39,14 +39,16 @@ module syncPerceptDataIntoBelief {
 
 	% DELETE dispenser from belief if not seen in percept		
 	forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) do {
-	    if bel( agentAt(X2, Y2), X3 is X1 - X2, Y3 is Y1 - Y2, abs(X3) + abs(Y3) =< 5), 
+	    if bel( agentAt(X2, Y2), X3 is X1 - X2, Y3 is Y1 - Y2, abs(X3) + abs(Y3) =< 5),
+	       bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)),
 	       not(percept(thing(X3, Y3, dispenser, _))) 
 		    then delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)).
     }
 		
 	% DELETE disappeared goalzones
 	forall bel(storedGoalZone(X, Y, Md)) do{
-	    if bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5), 
+	    if bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5),
+	       bel(storedGoalZone(X, Y, Md)),
 	       not(percept((goalZone(X3, Y3)))) then delete(storedGoalZone(X, Y, Md)).
 	}
 	
