@@ -47,11 +47,10 @@
 
 % Variables related to locating other agents in the world
 :- dynamic otherAgentAt/4. % store / update other agents' positions
-:- dynamic storedOtherAgentStatus/8. % ()
+:- dynamic storedOtherAgentStatus/8. % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)
 :- dynamic agentOffset/4. % field name x y CalcStep
 :- dynamic savedOffsetMessage/5. % Saves offset messages from other to use them later
 :- dynamic ownTeam/1, ownName/1. %These variables contain the own team name and own name 
-:- dynamic agentEntity/2. %Variable to know which entity is assigned to each agent in order to address the correct agents.
 :- dynamic distStepNamePosition/6. % message passed to everyone else if other agents seen / saved (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
 :- dynamic myDistStepNamePosition/5. % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
 

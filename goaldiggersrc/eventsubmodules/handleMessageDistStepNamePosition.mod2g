@@ -8,10 +8,6 @@ use "../goaldiggerAction" as actionspec.
 
 module handleMessageDistStepNamePosition {	
 
-	% ToDo include in perma messages "Agent" connection name
-	% Assign agent names to entity names
-	forall (Agent).sent(distStepNamePosition(_, _, _, Name, _, _)), not(bel(agentEntity(Agent, Name))) do insert(agentEntity(Agent, Name)).
-
 	% STORE all distStepNamePosition messages from other agents into belief
 	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
 		do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).

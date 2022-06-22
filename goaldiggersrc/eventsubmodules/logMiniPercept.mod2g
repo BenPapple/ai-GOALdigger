@@ -28,7 +28,8 @@ module logMiniPercept {
 	
 	    if true then print("====== Our Mini Percept =====").
 	
-	    if bel(submitterLeader) then print("Agent is submitterLeader").
+	    if bel(submitterLeader) then print("Agent hierarchy position: submitterLeader").
+	    if not(bel(submitterLeader)) ,bel(positionInHirarchie(PositionInHirarchie)) then print("Agent hierarchy position:"| PositionInHirarchie).
 	
 		% lastactionresults gets handles multiple times because of possible changing number of arguments with var lastActionParams
 		
