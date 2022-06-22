@@ -1,0 +1,25 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../taskhandling/chooseTask" as module.
+
+/**
+ * Check if task can be changed
+ *
+ */
+
+module changeTaskCheck {
+
+		% as worker change task when task expired or initial task has -1 million steps
+    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) 
+    	    then chooseTask.
+    	    
+    	% change task when task expired when chosen task not in percept anymore
+    	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), not(percept(task(TaskName , _, _, _))) 
+    	    then chooseTask.
+    	    
+    	% change from 1-task to 2-task as submitterLeader
+    	if percept(step(SimStep)), bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
+    	   bel(currentChosenTask(_, TaskStep2, 40, _, _, _,_,_), TaskStep2 > SimStep, submitterLeader)
+    	    then chooseTask.
+	
+}
