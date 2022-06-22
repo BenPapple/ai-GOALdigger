@@ -4,7 +4,6 @@ use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
-use "../pathfinding/executeMoveAroundSubmittingAgent" as module.
 use "../taskhandling/changeTaskCheck" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
