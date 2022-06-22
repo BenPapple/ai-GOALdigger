@@ -5,7 +5,7 @@ use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
 use "../pathfinding/executeMoveAroundSubmittingAgent" as module.
-use "../taskhandling/chooseTask" as module.
+use "../taskhandling/changeTaskCheck" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
@@ -24,12 +24,8 @@ module executeWorkerRole {
 		 */	
 		if bel(haveBlockAttached(false,_)) then {
 		
-			% as worker change task when task expired or initial task has -1 million steps
-	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) 
-	    	    then chooseTask.
-	    	% change task when task expired when chosen task not in percept anymore
-	    	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), not(percept(task(TaskName , _, _, _))) 
-	    	    then chooseTask.
+			% Check if agent can change task
+			if true then changeTaskCheck.
 	    	
 	        % Movement around dispenser when without block
 		    if percept(step(SimStep)), 
@@ -53,12 +49,8 @@ module executeWorkerRole {
 		 */		  
     	if bel(haveBlockAttached(true,DirBlock)) then {
 
-			% change task when task expired
-	    	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) 
-	    	    then chooseTask.
-	    	% change task when task expired when chosen task not in percept anymore
-	    	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), not(percept(task(TaskName , _, _, _))) 
-	    	    then chooseTask.
+			% Check if agent can change task
+			if true then changeTaskCheck.
     	
 	    	% detach block if task does not fit
 	    	if bel(directionToCoordinate(DirBlock, A, B)), 
