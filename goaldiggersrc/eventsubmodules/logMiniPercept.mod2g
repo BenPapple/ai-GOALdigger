@@ -26,27 +26,27 @@ module logMiniPercept {
 		%start timer
 		%if true then starttimer(calculationTimer,100,1800). % starttimer name,interval,duration
 	
+	    if true then print("====== Our Mini Percept =====").
+	
+	    if bel(submitterLeader) then print("Agent is submitterLeader").
+	
 		% lastactionresults gets handles multiple times because of possible changing number of arguments with var lastActionParams
 		
 		if percept(step(Step), role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([])) then 
-			print("====== Our Mini Percept =====") 
-			+ print(Step|Role+"Agent: "+Result+LastAction).
+			print(Step|Role+"Agent: "+Result+LastAction).
 			
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para])) then 
-			print("====== Our Mini Percept =====") 
-			+ print(Step|Role+"Agent: "+Result+LastAction+Para).
+			print(Step|Role+"Agent: "+Result+LastAction+Para).
 			
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2])) then 
-			print("====== Our Mini Percept =====") 
-			+ print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
+			print(Step|Role+"Agent: "+Result+LastAction| Para| Param2).
 			
 		if percept(step(Step),role(Role), lastActionResult(Result), lastAction(LastAction),lastActionParams([Para, Param2, Param3])) then 
-			print("====== Our Mini Percept =====") 
-			+ print(Step|Role+"Agent: "+Result+LastAction| Para| Param2| Param3).
+			print(Step|Role+"Agent: "+Result+LastAction| Para| Param2| Param3).
 			
 		% some extra extra custom percept logging because conditional can be false, others for formatting
 
-		if bel(agentAt(X, Y), targetMd(A, B, Target)) then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).
+        if bel(agentAt(X, Y), targetMd(A, B, Target)) then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).
 		
 		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType, ClientServer, NameSubmitter)) then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType| ClientServer| NameSubmitter).
 		
@@ -60,8 +60,6 @@ module logMiniPercept {
 		if bel(haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).	
 		
 		if percept(attached(X, Y), thing(X, Y, block, BlockType), X =< 1, Y =< 1) then print("Attached:"| X| Y +BlockType).
-		
-		if bel(submitterLeader) then print("submitterLeader").
 		
 		% Separator
 		if true then print("++++++ MISC DATA ++++++++++++").

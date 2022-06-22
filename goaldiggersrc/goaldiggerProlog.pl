@@ -47,6 +47,7 @@
 
 % Variables related to locating other agents in the world
 :- dynamic otherAgentAt/4. % store / update other agents' positions
+:- dynamic storedOtherAgentStatus/8. % ()
 :- dynamic agentOffset/4. % field name x y CalcStep
 :- dynamic savedOffsetMessage/5. % Saves offset messages from other to use them later
 :- dynamic ownTeam/1, ownName/1. %These variables contain the own team name and own name 
