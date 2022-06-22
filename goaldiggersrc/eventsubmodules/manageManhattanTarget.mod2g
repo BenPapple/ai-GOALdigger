@@ -40,7 +40,7 @@ module manageManhattanTarget {
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, goalzone)) + insert(executeManhattan).
 		
 	% target goalzone from percept
-	if bel(haveBlockAttached(true,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
+	if bel(haveBlockAttached(true,_), currentChosenTask(_, TaskStep, _, _, _, _, _, _), 
 	       agentAt(AgentX, AgentY)),
 	   percept(step(SimStep), role(worker), goalZone(GoalX, GoalY)),
 	   bel(TaskStep >= SimStep, AltX is GoalX + AgentX, AltY is GoalY + AgentY)
@@ -56,7 +56,7 @@ module manageManhattanTarget {
 	       currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
 	       confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target), Target \== supportingPosition),
-	   (_).sent(otherAgentAt(NameSubmitter, A, B, _)), 
+	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _)), 
 	   bel(localize(A, B, OffsetX, OffsetY, C, D))
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
 	

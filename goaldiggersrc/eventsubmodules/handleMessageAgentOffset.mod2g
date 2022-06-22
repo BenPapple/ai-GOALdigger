@@ -13,7 +13,8 @@ module handleMessageAgentOffset {
     % STORE messages in belief
 	forall (Sender).sent(agentOffSet(AgentName, OffsetX, OffsetY, _)) do {
 	
-			if bel(agentEntity(Sender,SenderName), not(agentOffset(SenderName,_,_,_)), 
+			if bel(storedOtherAgentStatus(SenderName, _, _, _, Sender, _, _, _)),
+			   bel(not(agentOffset(SenderName,_,_,_)), 
 			   not(agentOffset(AgentName,_, _,_))), percept(step(Step))
 				then insert(savedOffsetMessage(SenderName, AgentName, OffsetX, OffsetY, Step)). 
 		
@@ -22,8 +23,9 @@ module handleMessageAgentOffset {
 	% CALCULATE offset of 3rd agent from message from 2nd agent
 	forall (Sender).sent(agentOffset(AgentName, OffsetX, OffsetY, _)) do {
 
-			if bel(agentEntity(Sender,SenderName), agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), 
-			   not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
+			if bel(storedOtherAgentStatus(SenderName, _, _, _, Sender, _, _, _)),
+			   bel(agentOffset(SenderName,OffsetToSenderX, OffsetToSenderY,_), 
+			       not(agentOffset(AgentName,_, _,_)), X1 is OffsetX + OffsetToSenderX, 
 			       Y1 is OffsetY + OffsetToSenderY), percept(step(Step))
 			       then insert(agentOffset(AgentName, X1, Y1, Step)).				
 	} 

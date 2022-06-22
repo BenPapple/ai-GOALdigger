@@ -12,7 +12,7 @@ module messageMultiTaskCoordination {
 	if bel(submitterLeader, currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) then {
 	
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)]), name(SubmitterName)) then {
-					if (_).sent(otherAgentStatus(SupporterName, _, _, _, _, worker, BlockTypeAttached)), 
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached)), 
 					   bel(BlockTypeAttached == BlockType2, SubmitterName \= SupporterName) 
 						then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
@@ -25,7 +25,7 @@ module messageMultiTaskCoordination {
 			}
 				
 			if percept(task(TaskName ,_, 40,[req(X2,Y2,BlockType1),req(0,1,_)]), name(SubmitterName)) then {
-					if (_).sent(otherAgentStatus(SupporterName, _, _, _, _, worker, BlockTypeAttached)), 
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached)), 
 					   bel(BlockTypeAttached == BlockType1, SubmitterName \= SupporterName) then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).
@@ -42,7 +42,7 @@ module messageMultiTaskCoordination {
 	if bel(submitterLeader, currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) then {
 	
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {
-					if (_).sent(otherAgentStatus(SupporterName, _, _, _, _, worker, _)),
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _)),
 					 bel(SubmitterName \= SupporterName) then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).
@@ -54,7 +54,7 @@ module messageMultiTaskCoordination {
 			}
 				
 			if percept(task(TaskName ,_, 40,[req(X2,Y2,BlockType1),req(0,1,_)]), name(SubmitterName)) then {
-					if (_).sent(otherAgentStatus(SupporterName, _, _, _, _, worker, _)),
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _)),
 					 bel(SubmitterName \= SupporterName) then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).

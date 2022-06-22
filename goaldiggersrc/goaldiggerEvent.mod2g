@@ -14,7 +14,6 @@ use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/handleMessageAgentOffset" as module.
-use "./eventsubmodules/updateOtherAgentPositionData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
 use "./eventsubmodules/simpleworldcalculation/messageRelativeCoordsOfAgents" as module.
@@ -41,14 +40,11 @@ module goaldiggerEvent {
 	if percept(step(6)) then updateSubmitterRanking.
 	
 	% SUBMODULES to measure the world
-	if percept(step(Steps), Steps > 3333) then {
+	if percept(step(SimStep), SimStep > 3333) then {
 		% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 		if true then updateWorldSizeData.
 		% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
 		if true then handleMessageAgentOffset.
-		% otherAgentAt (bel) to complexworld
-		%if true then updateOtherAgentPositionData.
-		% include in perma messages "Agent" connection name
 		if true then handleMessageDistStepNamePosition.
 	}
 	
