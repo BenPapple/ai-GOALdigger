@@ -8,8 +8,7 @@ use "../goaldiggerAction" as actionspec.
 
 module updateAssignExplorerRole {
 	
-	% ToDo restore explorer function
-	% ToDo Change 4 to 2, Debug Hack, Agent doesnt assigned to Explorer
+	% ToDo restore explorer function, Change 4 to 2, Debug Hack, Agent doesnt assigned to Explorer
 	% Change targetRole to explorer when reaching lowest 2 of hierarchy
 	%if percept(teamSize(TeamSize), role(default)), 
 	%bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), CheckSum is TeamSize - PositionInHirarchie, 

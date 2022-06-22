@@ -14,19 +14,35 @@ module rotateBlockToSouth {
     if bel(haveBlockAttached(true, DirBlock)) then {
 
 		% rotate block to south position if free target fields
-		if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then preActionCleanup + rotate(ccw).
-		if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) then preActionCleanup + rotate(cw).
-		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) then preActionCleanup + rotate(cw).
-		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) then preActionCleanup + rotate(ccw).
-		if bel(DirBlock == s) then preActionCleanup + skip.
+		if bel(DirBlock == w), not(percept(thing(0, 1, Type, _), Type \== dispenser)) 
+		    then preActionCleanup + rotate(ccw).
+		if bel(DirBlock == e), not(percept(thing(0, 1, Type, _), Type \== dispenser)) 
+		    then preActionCleanup + rotate(cw).
+		if bel(DirBlock == n), not(percept(thing(1, 0, Type, _), Type \== dispenser)) 
+		    then preActionCleanup + rotate(cw).
+		if bel(DirBlock == n), not(percept(thing(-1, 0, Type, _), Type \== dispenser)) 
+		    then preActionCleanup + rotate(ccw).
+		if bel(DirBlock == s) then exit-module.
 		
 		% clear fields west, east and south from obstacle and blocks to enable rotate to south or closer positions	
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, block, _)) then preActionCleanup + clear(-1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), percept(thing(-1, 0, obstacle, _)) then preActionCleanup + clear(-1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, block, _)) then preActionCleanup + clear(1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), percept(thing(1, 0, obstacle, _)) then preActionCleanup + clear(1, 0).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, block, _)) then preActionCleanup + clear(0, 1).
-		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), percept(thing(0, 1, obstacle, _)) then preActionCleanup + clear(0, 1).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), 
+		   percept(thing(-1, 0, block, _)), not(percept(attached(-1, 0)))
+		    then preActionCleanup + clear(-1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== -1, W \== 0), 
+		   percept(thing(-1, 0, obstacle, _)) 
+		    then preActionCleanup + clear(-1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), 
+		   percept(thing(1, 0, block, _)), not(percept(attached(1, 0)))
+		    then preActionCleanup + clear(1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 1, W \== 0), 
+		   percept(thing(1, 0, obstacle, _)) 
+		    then preActionCleanup + clear(1, 0).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), 
+		   percept(thing(0, 1, block, _)), not(percept(attached(0, 1)))
+		    then preActionCleanup + clear(0, 1).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== 1), 
+		   percept(thing(0, 1, obstacle, _)) 
+		    then preActionCleanup + clear(0, 1).
 	
 	}
 	
