@@ -3,7 +3,7 @@ use "../goaldiggerAction" as actionspec.
 use "../taskhandling/chooseTask" as module.
 
 /**
- * Check if task can be changed
+ * Check if task can be changed because task expired (from percept or delivery step) or bigger task available
  *
  */
 

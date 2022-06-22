@@ -9,7 +9,8 @@ use "../goaldiggerAction" as actionspec.
 module messageMultiTaskCoordination {
 
 	% set other agent with needed block as supporter and oneself as submitter
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) then {
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) 
+	    then {
 	
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)]), name(SubmitterName)) then {
 					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached)), 
@@ -19,8 +20,8 @@ module messageMultiTaskCoordination {
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
-								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType1, submittingAgentTwoTask, 
-								                SupporterName)).
+								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType1, 
+								                submittingAgentTwoTask, SupporterName)).
 						}
 			}
 				
@@ -31,15 +32,16 @@ module messageMultiTaskCoordination {
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
-								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, submittingAgentTwoTask, 
-								                SupporterName)).
+								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
+								         submittingAgentTwoTask, SupporterName)).
 					}
 			}
 				
 	} % other agent has block
 	
 	% set other agent without fitting block
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) then {
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) 
+	    then {
 	
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {
 					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _)),
@@ -48,8 +50,8 @@ module messageMultiTaskCoordination {
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
-								         insert(currentChosenTask(TaskName, V2, V3, V4, V5, BlockType1, submittingAgentTwoTask, 
-								                SupporterName)).
+								         insert(currentChosenTask(TaskName, V2, V3, V4, V5, BlockType1, 
+								         submittingAgentTwoTask, SupporterName)).
 						}
 			}
 				
@@ -60,8 +62,8 @@ module messageMultiTaskCoordination {
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
-								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, submittingAgentTwoTask, 
-								                SupporterName)).
+								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
+								         submittingAgentTwoTask, SupporterName)).
 					}
 			}
 				

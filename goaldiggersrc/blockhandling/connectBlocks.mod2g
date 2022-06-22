@@ -12,12 +12,12 @@ module connectBlocks {
 
 	% connect as supporting agent
 	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition), haveBlockAttached(true,DirBlock), DirBlock == n,
-	       currentChosenTask(V1, V2, V3, V4, V5, V6, V7, AgentName))
+	       currentChosenTask(_, _, _, _, _, _, _, AgentName))
 		then preActionCleanup + connect(AgentName, 0, -1).
 	
 	% connect as submitting agent
-	if bel(agentAt(X, Y), haveBlockAttached(true,DirBlock), DirBlock == s), percept(goalZone(0,0)),
-	       bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, AgentName)) 
+	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), percept(goalZone(0,0)),
+	       bel(currentChosenTask(_, _, _, _, _, _, _, AgentName)) 
 		then preActionCleanup + connect(AgentName, 0, 1).
 	
 }
