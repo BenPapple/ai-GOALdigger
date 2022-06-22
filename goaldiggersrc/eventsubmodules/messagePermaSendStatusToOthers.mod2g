@@ -7,10 +7,6 @@ use "../goaldiggerProlog" as knowledge.
  
 module messagePermaSendStatusToOthers {
 
-	% send raw coordinates, name and step into channel channelNamesRelativeXY ToDo later, not necessary for competition
-%	if bel(agentAt(X, Y)), percept(name(OwnName), step(Step)) then 
-%	    (channelNamesRelativeXY).send(otherAgentAt(OwnName, X, Y, Step)).
-	
 	% send a status to all other agents while having block attached
 	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 		percept(name(OwnName), step(Step),role(Role), thing(A, B, block, BlockTypeAttached)) then
