@@ -17,7 +17,7 @@
 :- dynamic randomAffinity/1. % nswe direction preferred for exploration
 :- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. % Variables for Manhatten Distance 
 :- dynamic targetDispenserAt/4. % (X,Y,BlockType,MD) of dispenser to search out for
-:- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)
+:- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)d
 :- dynamic skipThisStep/1. % do skip/explore until this step
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
 :- dynamic currentChosenTask/8. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType, Client/Server, NameSubmitter)
@@ -38,6 +38,12 @@
 :- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0. % Flags to steer world measurements.
 :- dynamic worldSizeX/1, worldSizeY/1. % store the size of the world on X and Y
 
+
+% Variables related to goal zone and dispenser messaging
+:- dynamic messageGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
+:- dynamic messageDispenser/6. % dispenser data plus sender name (X,Y,Type,Details,SenderName)
+:- dynamic messageNeedGoalZone/1. % message containing just the sender name
+:- dynamic messageNeedDispenser/2. % message containing the requested dispenser details (BlockType) and the sender name
 
 % Variables related to choosing or Determine Role
 :- dynamic targetRole/1.

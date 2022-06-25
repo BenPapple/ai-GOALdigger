@@ -61,5 +61,5 @@ module goaldiggerInit {
 	if true then insert ( worldListX([]), worldListY([]) ).
 	if true then insert ( messageProcessingDelay(4), messagePersitanceAfterDelay(1) ).
 	if percept(team(Team)) then insert(ownTeam(Team)). %The agent learns its own team from the initial percept.
-	if percept(name(Name)) then insert ( ownName(Name) ).	
+	if percept(name(Name)) then insert ( ownName(Name) ). % TO DO: I have observed this doesn't get inserted in most cases. Why?
 }
