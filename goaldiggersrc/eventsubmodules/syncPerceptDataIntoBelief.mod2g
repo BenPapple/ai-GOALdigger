@@ -42,14 +42,16 @@ module syncPerceptDataIntoBelief {
 	    if bel( agentAt(X2, Y2), X3 is X1 - X2, Y3 is Y1 - Y2, abs(X3) + abs(Y3) =< 5),
 	       bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)),
 	       not(percept(thing(X3, Y3, dispenser, _))) 
-		    then delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)).
+		    then delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + print("Deleted "+ storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)).
+		    % TO DO: Remove the print
     }
 		
 	% DELETE disappeared goalzones
 	forall bel(storedGoalZone(X, Y, Md)) do{
 	    if bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5),
 	       bel(storedGoalZone(X, Y, Md)),
-	       not(percept((goalZone(X3, Y3)))) then delete(storedGoalZone(X, Y, Md)).
+	       not(percept((goalZone(X3, Y3)))) then delete(storedGoalZone(X, Y, Md)) + print("Deleted storedGoalZone" + storedGoalZone(X, Y, Md)).
+	       % TO DO: Remove the print
 	}
 	
 	% ToDo too complex agent only needs to store it once not delayed or cached, just overwrite old value with new

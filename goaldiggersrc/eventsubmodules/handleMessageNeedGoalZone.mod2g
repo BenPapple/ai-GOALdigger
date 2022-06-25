@@ -1,0 +1,10 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+module handleMessageNeedGoalZone {
+
+	% Send stored goal zones to every connection that has asked this agent for them
+	if bel(storedGoalZone(X,Y,_)), percept(name(MyName)) then {
+		forall (SenderConnection).sent(messageNeedGoalZone(_)) do (SenderConnection).send(messageGoalZone(X,Y,MyName)).
+	}
+}
