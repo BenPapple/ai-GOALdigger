@@ -58,7 +58,7 @@ module updateLastActionResultData {
 		% successful submit suubmittingAgent set to find new partner
 		if percept(lastAction(submit)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, V8)) then
 		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, V8)) + 
-		    insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)).
+		    insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submittingAgentTwoTask, needNewTask)).
 	 
 	}% lastaction success
 	
