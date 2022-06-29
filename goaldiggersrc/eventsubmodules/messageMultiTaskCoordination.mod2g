@@ -12,7 +12,8 @@ module messageMultiTaskCoordination {
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) then {
 	
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)]), name(SubmitterName)) then {
-					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached)), 
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached),
+					       confirmedOtherAgentAt(_, _, SupporterName)), 
 					   bel(BlockTypeAttached == BlockType2, SubmitterName \= SupporterName) 
 						then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
@@ -20,19 +21,20 @@ module messageMultiTaskCoordination {
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType1, submittingAgentTwoTask, 
-								                SupporterName)).
+								                SupporterName)) + exit-module.
 						}
 			}
 				
 			if percept(task(TaskName ,_, 40,[req(X2,Y2,BlockType1),req(0,1, BlockType2)]), name(SubmitterName)) then {
-					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached)), 
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached),
+					       confirmedOtherAgentAt(_, _, SupporterName)), 
 					   bel(BlockTypeAttached == BlockType1, SubmitterName \= SupporterName) then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, submittingAgentTwoTask, 
-								                SupporterName)).
+								                SupporterName)) + exit-module.
 					}
 			}
 				
@@ -42,26 +44,28 @@ module messageMultiTaskCoordination {
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) then {
 	
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {
-					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _)),
-					 bel(SubmitterName \= SupporterName) then {
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _), 
+					       confirmedOtherAgentAt(_, _, SupporterName)),
+					   bel(SubmitterName \= SupporterName) then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, V4, V5, BlockType1, submittingAgentTwoTask, 
-								                SupporterName)).
+								                SupporterName)) + exit-module.
 						}
 			}
 				
 			if percept(task(TaskName ,_, 40,[req(X2,Y2, _),req(0,1, BlockType2)]), name(SubmitterName)) then {
-					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _)),
+					if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _),
+					       confirmedOtherAgentAt(_, _, SupporterName)),
 					 bel(SubmitterName \= SupporterName) then {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
 							                    supporterPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, submittingAgentTwoTask, 
-								                SupporterName)).
+								                SupporterName)) + exit-module.
 					}
 			}
 				

@@ -11,13 +11,18 @@ module handleMessageAgentOffsetLegacy {
 	forall percept(name(AgentReceiver)), (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
 	
 		% if relative coordinates for other agents are unknown
-		if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)), not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
-			% and no more than 2 agents have these relative position communicated
-			if true then {
-				% if both agents coords are inverses of each other create confirmedOtherAgentAt belief with relative coords
-				if bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
-					bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
-					then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).		
+		if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+		   bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
+		   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
+				
+			if not((Coonection3).sent(seenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), AgentNameSender \== AgentNameSender3)) then {
+				
+				% and no more than 2 agents have these relative position communicated
+				if true then {
+					% if both agents coords are inverses of each other create confirmedOtherAgentAt belief with relative coords
+					if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
+						then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).		
+					}
 				}
 			}
 			
