@@ -41,6 +41,7 @@
 
 % Variables related to goal zone and dispenser messaging
 :- dynamic messageGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
+:- dynamic messageDeletedGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
 :- dynamic messageDispenser/6. % dispenser data plus sender name (X,Y,Type,Details,SenderName)
 :- dynamic messageNeedGoalZone/1. % message containing just the sender name
 :- dynamic messageNeedDispenser/2. % message containing the requested dispenser details (BlockType) and the sender name

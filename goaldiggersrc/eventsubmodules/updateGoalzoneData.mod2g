@@ -7,7 +7,7 @@ use "../goaldiggerAction" as actionspec.
  */
 
 module updateGoalzoneData {
-		
+	
 	% RESET old MD values in storedgoalzones to high number expected to not occur in simulation
 	forall bel(storedGoalZone(XAlt, YAlt, MdAlt)) do delete(storedGoalZone(XAlt, YAlt, MdAlt))
 		+ insert(storedGoalZone(XAlt, YAlt, 123456)).

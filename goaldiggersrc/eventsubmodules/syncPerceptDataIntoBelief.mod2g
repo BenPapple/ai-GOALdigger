@@ -49,8 +49,9 @@ module syncPerceptDataIntoBelief {
 	% DELETE disappeared goalzones
 	forall bel(storedGoalZone(X, Y, Md)) do{
 	    if bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5),
-	       bel(storedGoalZone(X, Y, Md)),
-	       not(percept((goalZone(X3, Y3)))) then delete(storedGoalZone(X, Y, Md)) + print("Deleted storedGoalZone" + storedGoalZone(X, Y, Md)).
+	       bel(storedGoalZone(X, Y, Md)), percept(name(MyName)),
+	       not(percept((goalZone(X3, Y3)))) then delete(storedGoalZone(X, Y, Md)) + print("Deleted storedGoalZone" + storedGoalZone(X, Y, Md))
+	       + allother.send(messageDeletedGoalZone(X, Y, MyName)).
 	       % TO DO: Remove the print
 	}
 	
