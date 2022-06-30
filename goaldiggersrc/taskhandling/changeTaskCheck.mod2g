@@ -9,7 +9,7 @@ use "../taskhandling/chooseTask" as module.
 
 module changeTaskCheck {
 
-		% as worker change task when task expired or initial task has -1 million steps
+		% as worker change task when task expired or initial task has negative steps
     	if percept(step(Step)), bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) 
     	    then chooseTask.
     	    
