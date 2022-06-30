@@ -39,10 +39,10 @@ module rotateBlockToNorth {
 		    then preActionCleanup + clear(1, 0).
 		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== -1), 
 		   percept(thing(0, -1, block, _)), not(percept(attached(0, -1)))
-		    then preActionCleanup + clear(0, 1).
+		    then preActionCleanup + clear(0, -1).
 		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, V, W), V \== 0, W \== -1), 
 		   percept(thing(0, -1, obstacle, _)) 
-		    then preActionCleanup + clear(0, 1).
+		    then preActionCleanup + clear(0, -1).
 	
 	}
 	

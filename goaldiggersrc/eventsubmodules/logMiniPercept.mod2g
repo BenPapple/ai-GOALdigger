@@ -63,7 +63,8 @@ module logMiniPercept {
 		
 		if bel(haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _)) then print("HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).	
 		
-		if percept(attached(X, Y), thing(X, Y, block, BlockType), X =< 1, Y =< 1) then print("Attached:"| X| Y +BlockType).
+		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)),
+		   percept(attached(X, Y), thing(X, Y, block, BlockType)) then print("Attached:"| X| Y +BlockType).
 		
 		% Separator
 		if true then print("++++++ MISC DATA ++++++++++++").

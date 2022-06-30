@@ -38,7 +38,7 @@ module goaldiggerEvent {
         then delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
 
 	% SUBMODULES Choose RandomAgent for Explorer
-	if percept(step(SimStep), SimStep >= 4) then updateSubmitterRanking.
+	if percept(step(SimStep), SimStep >= 6) then updateSubmitterRanking.
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULES to measure the world
