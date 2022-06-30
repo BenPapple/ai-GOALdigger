@@ -48,6 +48,11 @@ module executeWorkerRole {
 		 */		  
     	if bel(haveBlockAttached(true,DirBlock)) then {
 
+			% detach after connect success as supportingAgent
+			if percept(lastActionResult(success), lastAction(connect)),
+			   not(bel(submitterLeader))
+			    then preActionCleanup + detach(DirBlock).
+			
 			% Check if agent can change task
 			if true then changeTaskCheck.
     	
@@ -57,6 +62,17 @@ module executeWorkerRole {
 	    	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
 	    	       BlockType \== BlockTypeAttached, TaskStep >= SimStep) 
 	    	    then preActionCleanup + detach(DirBlock).
+	    	    
+	    	% as submitterLeader don't wait on goalzone and on dispenser
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgentTwoTask, _)),
+	    	   percept(goalZone(0,0), thing(0, 0, dispenser, _), step(SimStep), TaskStep >= SimStep) 
+	    	    then executeRandomMove.
+	    	    
+	        % as submitter move on occupied south position
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _)),
+	    	   percept(goalZone(0,0), thing(0, 1, entity, _), step(SimStep), TaskStep >= SimStep),
+	    	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask) 
+	    	    then executeRandomMove.
 	    
 	    	% submit task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,OneOrTwoTask, _)),
@@ -64,12 +80,15 @@ module executeWorkerRole {
 	    	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
 	    	
 	    	% Prepare for connect by rotating block to north and if north connect
-	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition), DirBlock \= n) then rotateBlockToNorth.
-	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition)) then preActionCleanup + connectBlocks.
+	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition), DirBlock \= n)
+	    	    then rotateBlockToNorth.
+	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition))
+	    	    then preActionCleanup + connectBlocks.
     	 
 	    	% move to other agent to help in multitask 
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
-	    	       targetMd(_, _, otherAgentAt)), bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
+	    	       targetMd(_, _, otherAgentAt)), 
+	    	   bel(step(SimStep), TaskStep >= SimStep) then executeManhattanMove.
 	    	 
 	    	% Move to supporting position for multi task
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 

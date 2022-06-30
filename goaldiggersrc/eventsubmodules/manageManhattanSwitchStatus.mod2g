@@ -16,14 +16,16 @@ module manageManhattanSwitchStatus {
 	    then delete(executeManhattan).
 	if bel(executeManhattan, targetMd(_, _, dispenser), haveBlockAttached(true, _)), percept(role(worker)) 
 	    then delete(executeManhattan).
-	if bel(agentAt(X, Y),executeManhattan, targetMd(X, Y, supportingPosition), haveBlockAttached(true, _)), 
-	   percept(role(worker)) then delete(executeManhattan).
+	% 
+%	if bel(agentAt(X, Y), executeManhattan, targetMd(X, Y, supportingPosition), haveBlockAttached(true, _)), 
+%	   percept(role(worker)) then delete(executeManhattan).
 	
 	% don't use dummy values of targetClosestGoalZone
-	if bel(haveBlockAttached(true, _), executeManhattan, targetClosestGoalZone(_, _, MdAlt), MdAlt >= 123456) 
+	if bel(haveBlockAttached(true, _), executeManhattan, targetMd(_, _, goalzone), 
+	       targetClosestGoalZone(_, _, MdAlt), MdAlt >= 123456) 
 	    then delete(executeManhattan).
 	
 	% when at manhattan target deactivate manhattan switch, XY same Coord
-	if bel(targetMd(X, Y, _), agentAt(A, B), X == A, Y == B, executeManhattan) then delete(executeManhattan).
+	if bel(targetMd(X, Y, _), agentAt(X, Y), executeManhattan) then delete(executeManhattan).
 
 }
