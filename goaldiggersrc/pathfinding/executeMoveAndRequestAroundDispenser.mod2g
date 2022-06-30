@@ -22,10 +22,10 @@ module executeMoveAndRequestAroundDispenser {
 	if  bel(haveBlockAttached(false,_)), bel(haveDispenserDelivery(true, X), step(Step), X  =< Step + 1, currentChosenTask(_, _, _, _, _, BlockType,_,_)),
 	 percept(thing(A, B, block, BlockType), abs(A) =< 1, abs(B) =< 1) then {
 	
-		if percept(thing(1, 0, block,_), thing(1, 0, dispenser,_)), not(percept(attached(1, 0))) then preActionCleanup + attach(e).
-		if percept(thing(-1, 0, block,_), thing(-1, 0, dispenser,_)), not(percept(attached(-1, 0))) then preActionCleanup + attach(w).
-		if percept(thing(0, -1, block,_), thing(0, -1, dispenser,_)), not(percept(attached(0, -1))) then preActionCleanup + attach(n).
-		if percept(thing(0, 1, block,_), thing(0, 1, dispenser,_)), not(percept(attached(0, 1))) then preActionCleanup + attach(s).
+		if percept(thing(1, 0, block,_), thing(1, 0, dispenser, BlockType)), not(percept(attached(1, 0))) then preActionCleanup + attach(e).
+		if percept(thing(-1, 0, block,_), thing(-1, 0, dispenser, BlockType)), not(percept(attached(-1, 0))) then preActionCleanup + attach(w).
+		if percept(thing(0, -1, block,_), thing(0, -1, dispenser, BlockType)), not(percept(attached(0, -1))) then preActionCleanup + attach(n).
+		if percept(thing(0, 1, block,_), thing(0, 1, dispenser, BlockType)), not(percept(attached(0, 1))) then preActionCleanup + attach(s).
 	
 	}
 
@@ -34,10 +34,10 @@ module executeMoveAndRequestAroundDispenser {
 		percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1) then {
 	
 		% request block when nswe of dispenser
-		if percept(thing(1, 0, dispenser,_)), not(percept(thing(1, 0, block,_))) then preActionCleanup + request(e).
-		if percept(thing(-1, 0, dispenser,_)), not(percept(thing(-1, 0, block,_))) then preActionCleanup + request(w).
-		if percept(thing(0, 1, dispenser,_)), not(percept(thing(0, 1, block,_))) then preActionCleanup + request(s).
-		if percept(thing(0, -1, dispenser,_)), not(percept(thing(0, -1, block,_))) then preActionCleanup + request(n).
+		if percept(thing(1, 0, dispenser, BlockType)), not(percept(thing(1, 0, block,_))) then preActionCleanup + request(e).
+		if percept(thing(-1, 0, dispenser, BlockType)), not(percept(thing(-1, 0, block,_))) then preActionCleanup + request(w).
+		if percept(thing(0, 1, dispenser, BlockType)), not(percept(thing(0, 1, block,_))) then preActionCleanup + request(s).
+		if percept(thing(0, -1, dispenser, BlockType)), not(percept(thing(0, -1, block,_))) then preActionCleanup + request(n).
 		
 		% clear block when nswe of dispenser
 		if percept(thing(1, 0, dispenser,_)), percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) then preActionCleanup + clear(1, 0).
