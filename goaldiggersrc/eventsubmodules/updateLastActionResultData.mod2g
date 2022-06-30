@@ -53,12 +53,15 @@ module updateLastActionResultData {
 		% successful connect supportingAgent set to find new task
 		if percept(lastAction(connect)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) then
 		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) + 
-		    insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0, placeholder, placeholder2)).
+		    insert(currentChosenTask(task0, -1, 10 , 0, 1, b0, needNewTask, needNewTask)).
 		    
 		% successful submit suubmittingAgent set to find new partner
-		if percept(lastAction(submit)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, V8)) then
-		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, V8)) + 
-		    insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submittingAgentTwoTask, needNewTask)).
+		if percept(lastAction(submit), name(MyName)), 
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, NameOldSupporter)),
+		   bel(storedOtherAgentStatus(NameOldSupporter, _, _, _, ConnectOtherAgent, _, _, _))
+		    then (ConnectOtherAgent).send(informCeaseSupporting(MyName)) +
+		         delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, NameOldSupporter)) + 
+		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submittingAgentTwoTask, needNewTask)).
 	 
 	}% lastaction success
 	
