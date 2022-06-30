@@ -7,49 +7,29 @@ use "../../goaldiggerProlog" as knowledge.
 
 module handleMessageAgentOffsetLegacy {
 	
-	% If I have sent a channelNamesRelativeXY message and there is no more than one other message which can be interpreted as its counterpart, calculate the agent's offset.
-	forall percept(name(AgentReceiver)), (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
-	
-		% if relative coordinates for other agents are unknown
-		if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
-		   bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
-		   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
-				
-			if not((Coonection3).sent(seenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), AgentNameSender \== AgentNameSender3)) then {
-				
-				% and no more than 2 agents have these relative position communicated
-				if true then {
-					% if both agents coords are inverses of each other create confirmedOtherAgentAt belief with relative coords
-					if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
-						then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).		
+	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders
+	forall percept(name(AgentReceiver)), 
+	       (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)),
+	       not((_).sent(seenOtherAgentAt( _, _, OtherX, OtherY, Step, AgentNameSender2), 
+	                    AgentReceiver \== AgentNameSender2))
+		 do {
+		
+			% if relative coordinates for other agents are unknown
+			if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+			   bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
+			   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
+					
+				if not((_).sent(seenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
+				                AgentNameSender \== AgentNameSender3)) then {
+					
+					% and no more than 2 agents have these relative position communicated
+					if true then {
+						 if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
+							 then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).		
 					}
 				}
 			}
-			
-		}
+				
+		 } % do
 		
-%	% send goalzone coord, HACK: if instead forall sends only 1 goalzone field
-%	if bel(storedGoalZone(X, Y, _)), percept(name(AgentName)) then (channelGoalzone).send(sawGoalzoneAt(X, Y, AgentName)).
-%	
-%	% send dispenser coord
-%	forall bel(storedDispenser(X, Y, dispenser, Type, Step, false)), percept(name(AgentName)) 
-%		do (channelDispenser).send(sawDispenserAt(X, Y, Type, AgentName)) + delete(storedDispenser(X, Y, dispenser, Type, Step, false)) + insert(storedDispenser(X, Y, dispenser, Type, Step, true)).	
-%	
-%	% store received goalzones in belief
-%	forall (_).sent(sawGoalzoneAt(X1, Y1, AgentName)) do {
-%	
-%		if percept(name(MyName)), bel(MyName \= AgentName, confirmedOtherAgentAt(X2, Y2, AgentName), localize(X1, Y1, X2, Y2, X3, Y3)), 
-%			not(bel(storedGoalZone(X3, Y3, _))) then insert(storedGoalZone(X3, Y3, 0)).
-%	
-%	}
-%	
-%	% store messaged dispenser data in belief
-%	forall (_).sent(sawDispenserAt(X1, Y1, Type, AgentName)) do {
-%	
-%			if percept(name(MyName)), bel(MyName \= AgentName, confirmedOtherAgentAt(X2, Y2, AgentName), localize(X1, Y1, X2, Y2, X3, Y3)), 
-%			not(bel(storedDispenser(X3, Y3, dispenser, Type, _, _))) then insert(storedDispenser(X3, Y3, dispenser, Type, 0, true)).
-%	
-%	}
-
-	
-}
+} % end module

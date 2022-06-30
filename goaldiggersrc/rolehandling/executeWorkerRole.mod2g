@@ -68,6 +68,11 @@ module executeWorkerRole {
 	    	   percept(goalZone(0,0), thing(0, 0, dispenser, _), step(SimStep), TaskStep >= SimStep) 
 	    	    then executeRandomMove.
 	    	    
+	    	% as submitterLeader don't have block on dispenser
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgentTwoTask, _)),
+	    	   percept(goalZone(0,0), thing(0, 1, dispenser, _), step(SimStep), TaskStep >= SimStep) 
+	    	    then executeRandomMove.
+	    	    
 	        % as submitter move on occupied south position
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _)),
 	    	   percept(goalZone(0,0), thing(0, 1, entity, _), step(SimStep), TaskStep >= SimStep),

@@ -23,8 +23,8 @@ module chooseTask {
 	    then taskHandlingTwoBlock.
 	    
 	% chose 1-task as submitterLeader if 2task not available
-	if bel(submitterLeader), 
-	   not(percept(task(_ ,_, 40,[req(_,_,_),req(_,_,_)]))) 
+	if bel(submitterLeader, step(SimStep)), 
+	   not(percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)]), TaskStep >= SimStep)) 
 	    then taskHandlingOneBlock.
 		
 } % module
