@@ -80,7 +80,7 @@ module goaldiggerEvent {
 	    then updateGoalzoneData.
 
 	%SUBMODULE delete goal zones if other agents have found that they don't exist anymore
-	if (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
+	% if (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
 
 	% SUBMODULE ask for a dispenser if none known
 	if percept(role(worker), step(SimStep)), bel(haveBlockAttached(false, _), 
