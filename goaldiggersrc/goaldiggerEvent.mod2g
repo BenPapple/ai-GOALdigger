@@ -32,6 +32,10 @@ module goaldiggerEvent {
 
 	% SUBMODULE Store percept data in belief
 	if true then syncPerceptDataIntoBelief.
+	
+	% check attached block direction for block and if none found switch haveBlockAttached false
+    if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) 
+        then delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
 
 	% SUBMODULES Choose RandomAgent for Explorer
 	if percept(step(SimStep), SimStep >= 4) then updateSubmitterRanking.
@@ -51,9 +55,6 @@ module goaldiggerEvent {
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
-
-	% SUBMODULE debug with our mini percept
-	if bel(lDebugOn) then logMiniPercept.
 
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
@@ -85,10 +86,6 @@ module goaldiggerEvent {
 	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) 
 	    then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
 
-	% check attached block direction for block and if none found switch haveBlockAttached false
-	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) then
-		delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
-
 	/**
 	 * MISCELLANEOUS POST EVERYTHING
 	 *
@@ -98,6 +95,9 @@ module goaldiggerEvent {
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), 
 	   bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) 
 	    then delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
+
+	% SUBMODULE debug with our mini percept
+	if bel(lDebugOn) then logMiniPercept.
 
 	/**
 	 * ACTIVATE MAIN LOOP
