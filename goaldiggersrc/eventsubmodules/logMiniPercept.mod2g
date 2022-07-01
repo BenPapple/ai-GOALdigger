@@ -33,6 +33,12 @@ module logMiniPercept {
 	
 	    if bel(submitterLeader, positionInHirarchie(PositionInHirarchie)) then print("Agent hierarchy position:"| PositionInHirarchie| "submitterLeader").
 	    if not(bel(submitterLeader)) ,bel(positionInHirarchie(PositionInHirarchie)) then print("Agent hierarchy position:"| PositionInHirarchie).
+	    
+	    % 2Task success 
+		if bel(submitterLeader, step(Step), simCount(SimCount)), 
+		   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+		   bel(currentChosenTask(TaskName, _, 40, _, _, _, _, _))
+		    then print("Agent made 40 Points  On Step " + Step + " In Sim " + SimCount).
 	
 		% lastactionresults gets handles multiple times because of possible changing number of arguments with var lastActionParams
 		
@@ -83,8 +89,6 @@ module logMiniPercept {
 		
 		if bel(worldSizeX(X), worldSizeY(Y)) then print("Agent knows this world size: "+X+", "+Y+"."). 
 		if bel(worldListX(ListX), worldListY(ListY)) then print("Agent knows this world size: "+ListX+", "+ListY+".").
-		
-		% ToDo print("Agent made 40 Points  On Step " + Step + " In Sim " + SimCount)
 		
 		if true then print("====== End Mini Percept =====").
 		

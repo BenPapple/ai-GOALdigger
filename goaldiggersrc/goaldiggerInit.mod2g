@@ -10,6 +10,9 @@ module goaldiggerInit {
 	% debug and custom competition rules
 	if true then insert (lDebugOn). % Variable für Debug, zB elapseStepTime
 	%if true then insert (activateDoubleSpeed). % switch to deactivate because not allowed in competition1
+	% To count sim changes
+	if not(bel(simCount(_))) then insert(simCount(0)). 
+	if bel(simCount(SimCount), NewSimCount is SimCount + 1) then delete(simCount(SimCount)) + insert(simCount(NewSimCount)). 
 	
 	% global values
 	if true then insert(expectDifferentSimulations). % switch to recognize simulations have different characteristics on sim change

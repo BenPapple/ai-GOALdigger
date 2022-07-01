@@ -8,7 +8,7 @@ use "../goaldiggerProlog" as knowledge.
 module reinitBeliefOnSimChange {
 
 	% To count sim changes
-	if not(bel(simCount(_))) then insert(simCount(0)). 
+	%if not(bel(simCount(_))) then insert(simCount(0)). 
 	if bel(simCount(SimCount), NewSimCount is SimCount + 1) then delete(simCount(SimCount)) + insert(simCount(NewSimCount)). 
 
 	% restore initial belief
