@@ -15,6 +15,7 @@ use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/handleMessageAgentOffset" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
+use "./eventsubmodules/updateNearestAgentData" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as module.
 
 /**
@@ -70,6 +71,9 @@ module goaldiggerEvent {
 	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(true, _), 
 	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) 
 	    then updateDispenserData.
+	    
+	% SUBMODULE update nearest Agent on map for submitterleader
+	if bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentData.
 
 	% SUBMODULE manhattan switch manipulation
 	if true then manageManhattanSwitchStatus.

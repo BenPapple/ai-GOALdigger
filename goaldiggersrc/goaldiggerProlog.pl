@@ -7,6 +7,7 @@
 :- dynamic activateDoubleSpeed/0.  % switch to deactivate double speed for workers
 :- dynamic haveMove/0. % Switch that signals Main Module to get active
 :- dynamic expectDifferentSimulations/0. % switch to recognize simulations have different characteristics on sim change
+:- dynamic simCount/1. %Counter for sim in tournament mode
 
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
@@ -25,6 +26,7 @@
 :- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
 :- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
+:- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
 
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 %:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)

@@ -32,8 +32,8 @@ module goaldiggerInit {
 	if true then subscribe(channnelMultiTask).
 	
 	% dispenser targets
-	if true then insert (targetDispenserAt(70, 70, b0, 700)). % init with dummy values 
-	if true then insert (targetClosestOfAllDispensersAt(70, 70, b0, 700)). % init with dummy values 
+	if true then insert (targetDispenserAt(70, 70, b9, 700)). % init with dummy values 
+	if true then insert (targetClosestOfAllDispensersAt(70, 70, b9, 700)). % init with dummy values 
 	
 	% goalzone targets
 	if true then insert (targetClosestGoalZone(111, 111, 123456)). % init with dummy values 	

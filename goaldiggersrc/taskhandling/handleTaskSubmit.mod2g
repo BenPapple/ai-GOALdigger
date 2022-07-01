@@ -22,8 +22,8 @@ module handleTaskSubmit {
 	   bel(step(SimStep), TaskStep >= SimStep), bel(haveBlockAttached(true, DirBlock), DirBlock == s) then {		
 			
 			% submit after succesful connect
-			if percept(lastActionResult(success), lastAction(connect)) then preActionCleanup + submit(TaskFit)
-			                                                                + print("Agent made 40 Points!!!!").
+			if percept(lastActionResult(success), lastAction(connect)) 
+				then preActionCleanup + submit(TaskFit).
 			
 			% try to connect blocks
 			if true then connectBlocks.

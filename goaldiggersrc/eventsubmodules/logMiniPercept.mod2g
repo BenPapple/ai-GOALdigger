@@ -84,6 +84,8 @@ module logMiniPercept {
 		if bel(worldSizeX(X), worldSizeY(Y)) then print("Agent knows this world size: "+X+", "+Y+"."). 
 		if bel(worldListX(ListX), worldListY(ListY)) then print("Agent knows this world size: "+ListX+", "+ListY+".").
 		
+		% ToDo print("Agent made 40 Points  On Step " + Step + " In Sim " + SimCount)
+		
 		if true then print("====== End Mini Percept =====").
 		
 		if true then print("                ").
