@@ -64,7 +64,7 @@ module manageManhattanTarget {
 	% Moving around Submitting agent for docking sequence
 	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), YBlock is YSubmit+1, 
 	           thing(XBlock, YBlock, block, SouthBlock), 
-	           XBlock \== 0, YBlock \== 1, XSubmit == XBlock, attached(XSubmit, YBlock)),
+	           XBlock + YBlock \== 0, XSubmit == XBlock, attached(XSubmit, YBlock)),
 	   bel(haveBlockAttached(true, _)) then {
 		if bel(agentAt(Xself, Yself), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
 		       SubmitterName)),

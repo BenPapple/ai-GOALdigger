@@ -1,0 +1,28 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Calculate nearest known agent.
+ *
+ */
+
+module updateNearestAgentData {
+
+	if not(bel(targetNearestAgent(_, _, _, _))) 
+		then insert(targetNearestAgent(placeholder, 10000000000, 10000000000, 10000000000)).
+
+	if bel(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) 
+		then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
+		     insert(targetNearestAgent(placeholder, 10000000000, 10000000000, 10000000000)).
+		     
+	forall bel(storedOtherAgentStatus(OtherAgentName, _, _, _, _, OtherX, OtherY, _), 
+	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName))
+		do {
+			if bel(agentAt(OwnX, OwnY), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
+			   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+			       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+			    then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
+			         insert(targetNearestAgent(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
+		}
+	
+}

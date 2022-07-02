@@ -35,15 +35,15 @@ module messagePermaSendStatusToOthers {
 	       bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
 		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 		
-	% send sync message to other agents to coordinate coordinates :D
-	forall percept(thing(EntityX, EntityY, entity, EntityTeam), step(Step)), bel(ownTeam(MyTeam), EntityTeam == MyTeam),
-		   bel(EntityX \== 0, EntityY \== 0),
-		   bel(agentAt(MyX,MyY)), 
-		   bel(Step > 2),
-		   bel(ownName(MyName)) do {
-		       if true then allother.send(distStepNamePosition(EntityX, EntityY, Step, MyName, MyX, MyY)).
-		          if not(bel(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY))) then 
-		              insert(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY)).
-	}
+%	% send sync message to other agents to coordinate coordinates :D
+%	forall percept(thing(EntityX, EntityY, entity, EntityTeam), step(Step)), bel(ownTeam(MyTeam), EntityTeam == MyTeam),
+%		   bel(EntityX \== 0, EntityY \== 0),
+%		   bel(agentAt(MyX,MyY)), 
+%		   bel(Step > 2),
+%		   bel(ownName(MyName)) do {
+%		       if true then allother.send(distStepNamePosition(EntityX, EntityY, Step, MyName, MyX, MyY)).
+%		          if not(bel(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY))) then 
+%		              insert(myDistStepNamePosition(EntityX, EntityY, Step, MyX, MyY)).
+%	}
 	
 } % end module

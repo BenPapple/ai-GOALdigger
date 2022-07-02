@@ -48,9 +48,8 @@ module messageMultiTaskCoordination {
 	    then {
 	
 		if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {
-				if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _), 
-				       confirmedOtherAgentAt(_, _, SupporterName)),
-				   bel(SubmitterName \= SupporterName) then {
+				if bel(targetNearestAgent(SupporterName, _, _, _))
+					then {
 						if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                      SupporterName, X2, Y2, TaskName)).
 						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
@@ -62,9 +61,8 @@ module messageMultiTaskCoordination {
 		}
 			
 		if percept(task(TaskName ,_, 40,[req(X2,Y2, _),req(0,1, BlockType2)]), name(SubmitterName)) then {
-				if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, _),
-				       confirmedOtherAgentAt(_, _, SupporterName)),
-				 bel(SubmitterName \= SupporterName) then {
+				if bel(targetNearestAgent(SupporterName, _, _, _)) 
+					then {
 						if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                      SupporterName, X2, Y2, TaskName)).
 						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 

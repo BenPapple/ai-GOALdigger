@@ -1,0 +1,26 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Store (or delete if messages get old) messages from percept into belief
+ *
+ */
+
+module syncMessageDataIntoBelief {
+	
+	% STORE seenOtherAgent messages
+	forall (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)) do {
+	
+		if not(bel(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)))
+			then insert(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)). 
+		
+	}
+	
+	% DELETE stored seenOtherAgent messages from belief when ~6 steps old
+	forall bel(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), percept(step(SimStep))
+		do {
+			if bel(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step =< SimStep - 7)
+				       then delete(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
+	}
+	
+}
