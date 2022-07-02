@@ -21,7 +21,7 @@ module handleMessageAgentOffsetLegacy {
 	               AgentReceiver \== AgentNameSender2))
 		    then {
 
-			% if relative coordinates for other agents are unknown
+			% if only 1x inverse coordinates are found
 			if bel(storedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
 			   bel(AgentReceiver \= AgentNameSender, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
 			   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
@@ -29,10 +29,11 @@ module handleMessageAgentOffsetLegacy {
 				if not(bel(storedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
 				                AgentNameSender \== AgentNameSender3)) then {
 
-					% and no more than 2 agents have these relative position communicated
+					% calculate offset
 					if true then {
 						 if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
-							 then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).
+							 then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender))
+							      + allother.send(myOffsetOfOtherAgent(AgentReceiver, OffsetX, OffsetY, AgentNameSender)).
 					}
 				}
 			}
