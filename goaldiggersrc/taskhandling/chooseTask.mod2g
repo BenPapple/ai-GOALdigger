@@ -19,7 +19,7 @@ module chooseTask {
 	% chose 2-task as submitterLeader if available
 	if bel(submitterLeader, step(SimStep)), 
 	   percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0)  
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70)  
 	    then taskHandlingTwoBlock.
 	    
 	% chose 1-task as submitterLeader if 2task not available

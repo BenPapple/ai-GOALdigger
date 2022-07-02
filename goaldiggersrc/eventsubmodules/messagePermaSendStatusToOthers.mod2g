@@ -32,7 +32,7 @@ module messagePermaSendStatusToOthers {
 	
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
 	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherX \= 0, OtherY \= 0, name(OwnName)), 
-	       bel(agentAt(OwnX,OwnY), step(Step), Step > 2)
+	       bel(agentAt(OwnX,OwnY), step(Step))
 		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 		
 %	% send sync message to other agents to coordinate coordinates :D

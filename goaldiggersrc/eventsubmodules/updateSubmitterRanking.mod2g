@@ -8,6 +8,14 @@ use "../goaldiggerAction" as actionspec.
 
 module updateSubmitterRanking {
 	
+	% seed collision choose new seed
+	forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _)) do {
+	    if bel(randomSeed(MyRandomSeed), MyRandomSeed == OtherAgentSeed) then {
+		    if bel(randomNumber(NewSeed)) then delete(randomSeed(MyRandomSeed)) + 
+		         insert (randomSeed(NewSeed)).
+		    }
+    }
+	
 	% RESET
 	if bel(positionInHirarchie(PositionInHirarchie)) then delete(positionInHirarchie(PositionInHirarchie)) 
 	                                                          + insert(positionInHirarchie(0)).	

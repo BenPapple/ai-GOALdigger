@@ -12,10 +12,8 @@ module messageMultiTaskCoordination {
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) 
 	    then {
 	
-		if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockType2)]), name(SubmitterName)) then {
-				if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached),
-				       confirmedOtherAgentAt(_, _, SupporterName)), 
-				   bel(BlockTypeAttached == BlockType2, SubmitterName \= SupporterName) 
+		if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {
+				if bel(targetNearestAgentWithNeededBlock(SupporterName, _, _, _), SupporterName \= placeholder) 
 					then {
 						if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                      SupporterName, X2, Y2, TaskName)).
@@ -27,10 +25,8 @@ module messageMultiTaskCoordination {
 					}
 		}
 			
-		if percept(task(TaskName ,_, 40,[req(X2,Y2,BlockType1),req(0,1, BlockType2)]), name(SubmitterName)) then {
-				if bel(storedOtherAgentStatus(SupporterName, _, worker, _, _, _, _, BlockTypeAttached),
-				       confirmedOtherAgentAt(_, _, SupporterName)), 
-				   bel(BlockTypeAttached == BlockType1, SubmitterName \= SupporterName) then {
+		if percept(task(TaskName ,_, 40,[req(X2,Y2,_),req(0,1, BlockType2)]), name(SubmitterName)) then {
+				if bel(targetNearestAgentWithNeededBlock(SupporterName, _, _, _), SupporterName \= placeholder) then {
 						if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                      SupporterName, X2, Y2, TaskName)).
 						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
@@ -48,7 +44,7 @@ module messageMultiTaskCoordination {
 	    then {
 	
 		if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {
-				if bel(targetNearestAgent(SupporterName, _, _, _))
+				if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder)
 					then {
 						if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                      SupporterName, X2, Y2, TaskName)).
@@ -61,7 +57,7 @@ module messageMultiTaskCoordination {
 		}
 			
 		if percept(task(TaskName ,_, 40,[req(X2,Y2, _),req(0,1, BlockType2)]), name(SubmitterName)) then {
-				if bel(targetNearestAgent(SupporterName, _, _, _)) 
+				if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
 					then {
 						if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                      SupporterName, X2, Y2, TaskName)).
@@ -84,7 +80,7 @@ module messageMultiTaskCoordination {
 	
 	% RECEIVE become supportingAgent, check block for task and target		
 	if percept(name(NameOwn)), (_).sent(informSupportingAgent(NameSender, supportingAgent, NameOwn, _, _, TaskName)), 
-	   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) ,
+	   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)),
 	   percept(task(TaskName ,TaskStep, 40,[req(X3, Y3, BlockType1),req(X4, Y4, BlockType2)])),
 	   not(bel(submitterLeader)) then {
 			if bel(X3 == 0, Y3 == 1) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
