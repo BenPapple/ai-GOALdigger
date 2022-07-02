@@ -45,7 +45,8 @@ module reinitBeliefOnSimChange {
 		forall bel(storedGoalZone(V1, V2, V3)) do delete(storedGoalZone(V1, V2, V3)).
 		forall bel(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)) do delete(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)).
 		forall bel(confirmedOtherAgentAt(V1, V2, V3)) do delete(confirmedOtherAgentAt(V1, V2, V3)).
-	
+	    forall bel(storedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)) do delete(storedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)).
+	    
 	}
 	
 }

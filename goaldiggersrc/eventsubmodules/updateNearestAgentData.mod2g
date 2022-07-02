@@ -7,14 +7,17 @@ use "../goaldiggerAction" as actionspec.
  */
 
 module updateNearestAgentData {
-
+    
+    % Init not existent var reset for calc
 	if not(bel(targetNearestAgent(_, _, _, _))) 
 		then insert(targetNearestAgent(placeholder, 10000000000, 10000000000, 10000000000)).
 
+    % Update var for calc
 	if bel(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) 
 		then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
 		     insert(targetNearestAgent(placeholder, 10000000000, 10000000000, 10000000000)).
-		     
+	
+	% Find lowest MD for known agents with offsets	     
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, _, _, _, OtherX, OtherY, _), 
 	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName))
 		do {
@@ -24,5 +27,41 @@ module updateNearestAgentData {
 			    then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
 			         insert(targetNearestAgent(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
 		}
+		
+	% Init not existent var reset for calc
+	if not(bel(targetNearestAgentWithNeededBlock(_, _, _, _))) 
+		then insert(targetNearestAgentWithNeededBlock(placeholder, 10000000000, 10000000000, 10000000000)).
+
+    % Update var for calc
+	if bel(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) 
+		then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+		     insert(targetNearestAgentWithNeededBlock(placeholder, 10000000000, 10000000000, 10000000000)).
 	
-}
+	% Find lowest MD for known agents with offsets	     
+	forall bel(storedOtherAgentStatus(OtherAgentName, _, _, _, _, OtherX, OtherY, BlockTypeAttached), 
+	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName)),
+	       bel(currentChosenTask(TaskName, _, _, _, _, _, _, _)) 
+		do {
+		
+			if percept(task(TaskName,_, 40,[req(0,1,_),req(_,_,BlockTypeTask)]), BlockTypeTask == BlockTypeAttached) then {
+	            if bel(agentAt(OwnX, OwnY), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+				         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
+		    }
+		    
+		    if percept(task(TaskName,_, 40,[req(_,_,BlockTypeTask),req(0,1,_)]), BlockTypeTask == BlockTypeAttached) then {
+	            if bel(agentAt(OwnX, OwnY), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+				         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
+		    }
+			
+
+		
+			
+		} % do
+	
+} % end module

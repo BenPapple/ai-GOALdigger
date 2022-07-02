@@ -7,12 +7,16 @@ use "../../goaldiggerProlog" as knowledge.
 
 module handleMessageAgentOffsetLegacy {
 
+    % delete last sim survived messages
+    forall percept(step(SimStep)), bel(storedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6), MsgStep > SimStep) 
+        do delete(storedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6)).
+
 	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders and cashed messages older than 4 steps
-	forall percept(name(AgentReceiver), step(SimStep)), 
-	       bel(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver), Step < SimStep -4),
-	       not(bel(storedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
-	                    AgentReceiver \== AgentNameSender2))
-		 do {
+	forall bel(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
+	    if percept(name(AgentReceiver), step(SimStep), Step < SimStep -4), 
+           not(bel(storedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
+	               AgentReceiver \== AgentNameSender2))
+		    then {
 
 			% if relative coordinates for other agents are unknown
 			if bel(storedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
@@ -29,6 +33,7 @@ module handleMessageAgentOffsetLegacy {
 					}
 				}
 			}
+		}
 
 		 } % do
 	

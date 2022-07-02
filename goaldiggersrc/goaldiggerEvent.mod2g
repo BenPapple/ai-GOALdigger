@@ -20,8 +20,6 @@ use "./eventsubmodules/updateNearestAgentData" as module.
 use "./eventsubmodules/handleMessageGoalZone" as module.
 use "./eventsubmodules/handleMessageDeletedGoalZone" as module.
 use "./eventsubmodules/handleMessageDispenser" as module.
-use "./eventsubmodules/handleMessageNeedGoalZone" as module.
-use "./eventsubmodules/handleMessageNeedDispenser" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as module.
 
 /**
@@ -58,7 +56,6 @@ module goaldiggerEvent {
 		if true then handleMessageAgentOffset.
 		if true then handleMessageDistStepNamePosition.
 	}
-	
 	
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffsetLegacy.
