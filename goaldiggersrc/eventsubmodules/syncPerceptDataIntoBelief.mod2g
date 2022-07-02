@@ -15,7 +15,10 @@ module syncPerceptDataIntoBelief {
 	forall percept(step(SimStep)),
 	       bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached),
 	           MsgStep > SimStep) 
-	    do delete(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
+	    do {
+	    if bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached))
+	        then delete(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
+	}
 	
 	% CREATE belief about status messages
 	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
