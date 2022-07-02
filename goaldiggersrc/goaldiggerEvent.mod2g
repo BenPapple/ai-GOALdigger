@@ -10,6 +10,7 @@ use "./eventsubmodules/manageManhattanTarget" as module.
 use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
+use "./eventsubmodules/syncMessageDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/handleMessageAgentOffset" as module.
@@ -31,8 +32,9 @@ module goaldiggerEvent {
 	% SUBMODULE managing success and partial_success percepts
 	if true then updateLastActionResultData.
 
-	% SUBMODULE Store percept data in belief
+	% SUBMODULE Store percept/message data in belief
 	if true then syncPerceptDataIntoBelief.
+	if true then syncMessageDataIntoBelief.
 	
 	% check attached block direction for block and if none found switch haveBlockAttached false
     if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) 

@@ -6,20 +6,20 @@ use "../../goaldiggerProlog" as knowledge.
  */
 
 module handleMessageAgentOffsetLegacy {
-	
-	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders
-	forall percept(name(AgentReceiver)), 
-	       (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)),
-	       not((_).sent(seenOtherAgentAt( _, _, OtherX, OtherY, Step, AgentNameSender2), 
+
+	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders and cashed messages older than 4 steps
+	forall percept(name(AgentReceiver), step(SimStep)), 
+	       bel(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver), Step < SimStep -4),
+	       not(bel(storedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
 	                    AgentReceiver \== AgentNameSender2))
 		 do {
 		
 			% if relative coordinates for other agents are unknown
-			if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
-			   bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
+			if bel(storedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+			   bel(AgentReceiver \= AgentNameSender, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
 			   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
 					
-				if not((_).sent(seenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
+				if not(bel(storedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
 				                AgentNameSender \== AgentNameSender3)) then {
 					
 					% and no more than 2 agents have these relative position communicated
@@ -31,5 +31,30 @@ module handleMessageAgentOffsetLegacy {
 			}
 				
 		 } % do
+	
+%	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders
+%	forall percept(name(AgentReceiver)), 
+%	       (Connect1).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)),
+%	       not((_).sent(seenOtherAgentAt( _, _, OtherX, OtherY, Step, AgentNameSender2), 
+%	                    AgentReceiver \== AgentNameSender2))
+%		 do {
+%		
+%			% if relative coordinates for other agents are unknown
+%			if (Connect2).sent(seenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+%			   bel(Connect1 \= Connect2, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
+%			   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
+%					
+%				if not((_).sent(seenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
+%				                AgentNameSender \== AgentNameSender3)) then {
+%					
+%					% and no more than 2 agents have these relative position communicated
+%					if true then {
+%						 if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
+%							 then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender)).		
+%					}
+%				}
+%			}
+%				
+%		 } % do
 		
 } % end module

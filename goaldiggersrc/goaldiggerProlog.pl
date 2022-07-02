@@ -27,6 +27,7 @@
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
 :- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
 :- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
+:- dynamic storedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
 
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 %:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
