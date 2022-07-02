@@ -10,7 +10,7 @@ module handleMessageGoalZone {
 	% Check received messageGoalzone messages.
 	forall (_).sent(messageGoalZone(X,Y,SenderName)) do {
 			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
-			   not(storedGoalZone(X1,Y1,_))) then insert(storedGoalZone(X1,Y1,12345)) + print("Inserted "+storedGoalZone(X1,Y1,12345)+" Offset "+confirmedOtherAgentAt(OffsetX,OffsetY,SenderName)).
+			   not(storedGoalZone(X1,Y1,_))) then insert(storedGoalZone(X1,Y1,12345)).
 		}
 	
 	% Ask for stored goal zones if none are known
