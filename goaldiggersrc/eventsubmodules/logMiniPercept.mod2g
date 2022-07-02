@@ -39,6 +39,9 @@ module logMiniPercept {
 		   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
 		   bel(currentChosenTask(TaskName, _, 40, _, _, _, _, _))
 		    then print("Agent made 40 Points  On Step " + Step + " In Sim " + SimCount).
+		    
+		% Simulation counter
+		if bel(simCount(SimCount)) then print("This is simulation: " + SimCount).
 	
 		% lastactionresults gets handles multiple times because of possible changing number of arguments with var lastActionParams
 		

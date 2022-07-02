@@ -17,6 +17,11 @@ use "./eventsubmodules/handleMessageAgentOffset" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
 use "./eventsubmodules/updateNearestAgentData" as module.
+use "./eventsubmodules/handleMessageGoalZone" as module.
+use "./eventsubmodules/handleMessageDeletedGoalZone" as module.
+use "./eventsubmodules/handleMessageDispenser" as module.
+use "./eventsubmodules/handleMessageNeedGoalZone" as module.
+use "./eventsubmodules/handleMessageNeedDispenser" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as module.
 
 /**
@@ -25,6 +30,7 @@ use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as
  */
 
 module goaldiggerEvent {
+
 
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)) then reinitBeliefOnSimChange.
@@ -53,8 +59,16 @@ module goaldiggerEvent {
 		if true then handleMessageDistStepNamePosition.
 	}
 	
+	
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffsetLegacy.
+	
+	% TO DO: Add both these submodules to messagePermaSendStatusToOthers
+	% SUBMODULE to answer to goal zone queries from other agents
+	%if (_).sent(messageNeedGoalZone(_)), bel(storedGoalZone(_,_,_)) then handleMessageNeedGoalZone.
+	
+	% SUBMODULE to answer to goal zone queries from other agents
+	%if (_).sent(messageNeedDispenser(BlockType,_)), bel(storedDispenser(_,_,_,BlockType,_,_)) then print("Dispenser condition")+handleMessageNeedDispenser.	
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
@@ -68,8 +82,20 @@ module goaldiggerEvent {
 	           TaskStep >= SimStep) 
 	    then updateGoalzoneData.
 
+	%SUBMODULE delete goal zones if other agents have found that they don't exist anymore
+	% if (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
+
+	% SUBMODULE ask for a dispenser if none known
+	if percept(role(worker), step(SimStep)), bel(haveBlockAttached(false, _), 
+			   currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep, not(storedDispenser(_,_,_,BlockType,_,_)))
+	   then handleMessageDispenser.
+	
+	% SUBMODULE ask for a goal zone if none known
+	if percept(role(worker)), not(bel(storedGoalZone(_,_,_))) then handleMessageGoalZone.
+
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
+	
 	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(true, _), 
 	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) 
 	    then updateDispenserData.

@@ -7,6 +7,19 @@ use "../goaldiggerProlog" as knowledge.
  
 module messagePermaSendStatusToOthers {
 
+
+
+	% Send stored dispensers to every connection that has asked this agent for them	
+	forall (SenderConnection).sent(messageNeedDispenser(BlockType,_)) do {
+		if bel(storedDispenser(X,Y,dispenser,BlockType,_,Bool)), percept(name(MyName)) then 
+			(SenderConnection).send(messageDispenser(X,Y,dispenser,BlockType,Bool,MyName)).
+	}
+
+	% Send stored goal zones to every connection that has asked this agent for them
+	if bel(storedGoalZone(X,Y,_)), percept(name(MyName)) then {
+		forall (SenderConnection).sent(messageNeedGoalZone(_)) do (SenderConnection).send(messageGoalZone(X,Y,MyName)).
+	}
+
 	% send a status to all other agents while having block attached
 	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 		percept(name(OwnName), step(Step),role(Role), thing(A, B, block, BlockTypeAttached)) then

@@ -48,8 +48,11 @@ module syncPerceptDataIntoBelief {
 	% DELETE disappeared goalzones
 	forall bel(storedGoalZone(X, Y, Md)) do{
 	    if bel(agentAt(X2, Y2), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5),
-	       bel(storedGoalZone(X, Y, Md)),
-	       not(percept((goalZone(X3, Y3)))) then delete(storedGoalZone(X, Y, Md)).
+	       bel(storedGoalZone(X, Y, Md)), not(percept((goalZone(X3, Y3)))) then delete(storedGoalZone(X, Y, Md)).
+	       % TO DO: In order to activate the messages for deletd goal zones, add:
+	       % To the conditions: percept(name(MyName))
+	       % To the actions: allother.send(messageDeletedGoalZone(X, Y, MyName))
+	       
 	}
 	
 	% ToDo too complex agent only needs to store it once not delayed or cached, just overwrite old value with new

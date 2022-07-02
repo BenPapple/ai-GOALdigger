@@ -1,0 +1,23 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "./updateGoalzoneData" as module.
+
+module handleMessageGoalZone {
+	
+	% TO DO: When the new Offset calculation is ready, change confirmedOtherAgentAt with agentOffset
+	% TO DO: When the world measurement is ready, adapt coordinates additionaly to world size
+	
+	% Check received messageGoalzone messages.
+	forall (_).sent(messageGoalZone(X,Y,SenderName)) do {
+			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
+			   not(storedGoalZone(X1,Y1,_))) then insert(storedGoalZone(X1,Y1,12345)).
+		}
+	
+	% Ask for stored goal zones if none are known
+	% TO DO: When the new Offset calculation is ready, change confirmedOtherAgentAt with agentOffset
+	if not(bel(storedGoalZone(_,_,_))), percept(name(MyName)) then {
+		forall bel(confirmedOtherAgentAt(_,_,SenderName), storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _))
+		do (SenderConnect).send(messageNeedGoalZone(MyName)).
+	}
+	
+}
