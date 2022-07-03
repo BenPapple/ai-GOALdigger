@@ -18,7 +18,7 @@ module updateNearestAgentData {
 		     insert(targetNearestAgent(placeholder, 10000000000, 10000000000, 10000000000)).
 	
 	% Find lowest MD for known agents with offsets	     
-	forall bel(storedOtherAgentStatus(OtherAgentName, _, _, _, _, OtherX, OtherY, _), 
+	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _), 
 	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName))
 		do {
 			if bel(agentAt(OwnX, OwnY), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
@@ -38,7 +38,7 @@ module updateNearestAgentData {
 		     insert(targetNearestAgentWithNeededBlock(placeholder, 10000000000, 10000000000, 10000000000)).
 	
 	% Find lowest MD for known agents with offsets	     
-	forall bel(storedOtherAgentStatus(OtherAgentName, _, _, _, _, OtherX, OtherY, BlockTypeAttached), 
+	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, BlockTypeAttached), 
 	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName)),
 	       bel(currentChosenTask(TaskName, _, _, _, _, _, _, _)) 
 		do {

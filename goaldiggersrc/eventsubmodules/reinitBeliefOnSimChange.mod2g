@@ -10,6 +10,8 @@ module reinitBeliefOnSimChange {
 	% To count sim changes
 	%if not(bel(simCount(_))) then insert(simCount(0)). 
 	if bel(simCount(SimCount), NewSimCount is SimCount + 1) then delete(simCount(SimCount)) + insert(simCount(NewSimCount)). 
+	
+	if bel(count2Task(Num2Task, V2)) then delete(count2Task(Num2Task, V2)) + insert(count2Task(0, 0)).
 
 	% restore initial belief
 	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0, placeholder, placeholder2)).

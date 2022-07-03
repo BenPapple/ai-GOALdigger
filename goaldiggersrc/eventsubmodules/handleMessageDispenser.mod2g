@@ -17,8 +17,8 @@ module handleMessageDispenser {
 	% Ask for stored dispensers of the needed type if none are known
 	% TO DO: When the new Offset calculation is ready, change confirmedOtherAgentAt with agentOffset
 			
-	if bel(currentChosenTask(_, _, _, _, _, BlockType, _,_)), not(bel(storedDispenser(_,_,_,BlockType,_,_))),
-	   percept(name(MyName)) then {
+	if bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_)), not(bel(storedDispenser(_,_,_,BlockType,_,_))),
+	   percept(name(MyName), role(worker), step(SimStep), TaskStep > SimStep) then {
 			forall bel(storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _), confirmedOtherAgentAt(_,_,SenderName))
 				do (SenderConnect).send(messageNeedDispenser(BlockType, MyName)).
 	}
