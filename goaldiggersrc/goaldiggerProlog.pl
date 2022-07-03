@@ -26,11 +26,14 @@
 :- dynamic currentChosenTask/8. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType, Client/Server, NameSubmitter)
 :- dynamic storedDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
 :- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
+:- dynamic storedRoleZone/3. % rolezone percept data plus MD (X,Y,MD)
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
+:- dynamic targetClosestRoleZone/3. % rolezone XY plus MD field (X,Y,MD)
 :- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
 :- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgentWithNeededBlock/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic storedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
+:- dynamic calculatedNewOffset/0. % switch to send calculated offsets to everyone
 
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 %:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)

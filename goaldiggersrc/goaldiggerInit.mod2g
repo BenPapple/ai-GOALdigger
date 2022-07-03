@@ -14,11 +14,11 @@ module goaldiggerInit {
 	if not(bel(simCount(_))) then insert(simCount(0)). 
 	if not(bel(count2Task(_, _))) then insert(count2Task(0, 0)). 
 	if not(bel(cashedCount2Task(_))) then insert(cashedCount2Task(0)). 
-	if bel(simCount(SimCount), NewSimCount is SimCount + 1) then delete(simCount(SimCount)) + insert(simCount(NewSimCount)). 
+	%if bel(simCount(SimCount), NewSimCount is SimCount + 1) then delete(simCount(SimCount)) + insert(simCount(NewSimCount)). 
 	
 	% global values
 	if true then insert(expectDifferentSimulations). % switch to recognize simulations have different characteristics on sim change
-	if true then insert(limitChangeStepMinMax(10 , 20)). % lowest and highest limit after which agent changes explore direction
+	if true then insert(limitChangeStepMinMax(15 , 40)). % lowest and highest limit after which agent changes explore direction
 	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
@@ -41,7 +41,10 @@ module goaldiggerInit {
 	if true then insert (targetClosestOfAllDispensersAt(70, 70, b9, 700)). % init with dummy values 
 	
 	% goalzone targets
-	if true then insert (targetClosestGoalZone(111, 111, 123456)). % init with dummy values 	
+	if true then insert (targetClosestGoalZone(111, 111, 123456)). % init with dummy values 
+	
+	% rolezone targets
+	if true then insert (targetClosestRoleZone(111, 111, 123456)). % init with dummy values 		
 	
 	% tasks
 	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0, placeholder, placeholder2)). % filler task -11001001 so it gets replaced when real task available

@@ -1,6 +1,10 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "./updateGoalzoneData" as module.
+
+/**
+ * ask for and store send goalzone messages
+ *
+ */
 
 module handleMessageGoalZone {
 	
@@ -8,9 +12,10 @@ module handleMessageGoalZone {
 	% TO DO: When the world measurement is ready, adapt coordinates additionaly to world size
 	
 	% Check received messageGoalzone messages.
-	forall (_).sent(messageGoalZone(X,Y,SenderName)) do {
-			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
-			   not(storedGoalZone(X1,Y1,_))) then insert(storedGoalZone(X1,Y1, message)).
+	forall (_).sent(msgGoalZoneData(X,Y,SenderName)) do {
+			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY),
+			   not(bel(storedGoalZone(X1,Y1,_)))
+			 then insert(storedGoalZone(X1,Y1, gzStoredFromMessage)).
 		}
 	
 	% Ask for stored goal zones if none are known

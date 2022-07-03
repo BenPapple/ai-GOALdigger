@@ -34,7 +34,10 @@ module reinitBeliefOnSimChange {
 	if bel(targetClosestOfAllDispensersAt(X, Y, Z, A)) then delete(targetClosestOfAllDispensersAt(X, Y, Z, A)) + insert (targetClosestOfAllDispensersAt(70, 70, b9, 700)). % init with dummy values 
 	
 	% goalzone targets
-	if bel(targetClosestGoalZone(X, Y, Z)) then delete(targetClosestGoalZone(X, Y, Z)) + insert (targetClosestGoalZone(111, 111, 123456)). % init with dummy values 	
+	if bel(targetClosestGoalZone(X, Y, Z)) then delete(targetClosestGoalZone(X, Y, Z)) + insert (targetClosestGoalZone(111, 111, 123456)). % init with dummy values 
+	
+	% rolezone targets
+	if bel(targetClosestRoleZone(X, Y, Z)) then delete(targetClosestRoleZone(X, Y, Z)) + insert (targetClosestRoleZone(111, 111, 123456)). % init with dummy values 	
 	
 	if bel(targetMd(X, Y, Z)) then delete(targetMd(X, Y, Z)) + insert (targetMd(-999, -999, placeholdertarget)). % init Manhatten Distance 
 	
