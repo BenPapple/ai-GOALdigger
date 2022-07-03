@@ -70,6 +70,9 @@ module goaldiggerEvent {
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
 
+	% SUBMODULE update nearest Agent on map for submitterleader
+	if bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentData.
+
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
 
@@ -97,9 +100,6 @@ module goaldiggerEvent {
 	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) 
 	    then updateDispenserData.
 	    
-	% SUBMODULE update nearest Agent on map for submitterleader
-	if bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentData.
-
 	% SUBMODULE manhattan switch manipulation
 	if true then manageManhattanSwitchStatus.
 

@@ -8,6 +8,8 @@
 :- dynamic haveMove/0. % Switch that signals Main Module to get active
 :- dynamic expectDifferentSimulations/0. % switch to recognize simulations have different characteristics on sim change
 :- dynamic simCount/1. %Counter for sim in tournament mode
+:- dynamic count2Task/2. % submitterLeader counts his submitted 2tasks
+:- dynamic cashedCount2Task/1. % cashed so it survives map change for score table
 
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
