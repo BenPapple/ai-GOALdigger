@@ -2,6 +2,7 @@ use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
 use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
+use "./eventsubmodules/updateRolezoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
 use "./eventsubmodules/updateLastActionResultData" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
@@ -13,11 +14,11 @@ use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/syncMessageDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
-use "./eventsubmodules/handleMessageAgentOffset" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
 use "./eventsubmodules/updateNearestAgentData" as module.
 use "./eventsubmodules/handleMessageGoalZone" as module.
+use "./eventsubmodules/handleMessageRoleZone" as module.
 use "./eventsubmodules/handleMessageDeletedGoalZone" as module.
 use "./eventsubmodules/handleMessageDispenser" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as module.
@@ -52,8 +53,6 @@ module goaldiggerEvent {
 	if percept(step(SimStep), SimStep > 3333) then {
 		% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 		if true then updateWorldSizeData.
-		% seems clean, replace 2task hack later with this, hack: messageRelativeCoordsOfAgents
-		if true then handleMessageAgentOffset.
 		if true then handleMessageDistStepNamePosition.
 	}
 	
@@ -76,6 +75,9 @@ module goaldiggerEvent {
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
 
+    % SUBMODULE update rolezone map data
+    if percept(role(default)) then updateRolezoneData.
+
 	% SUBMODULE update goalzone map data
 	if percept(step(SimStep),role(worker)), bel(haveBlockAttached(true, _), 
 	           currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
@@ -86,12 +88,16 @@ module goaldiggerEvent {
 	% if (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
 
 	% SUBMODULE ask for a dispenser if none known
-	if percept(role(worker), step(SimStep)), bel(haveBlockAttached(false, _), 
-			   currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep, not(storedDispenser(_,_,_,BlockType,_,_)))
-	   then handleMessageDispenser.
+	if percept(role(worker), step(SimStep)), 
+	   bel(haveBlockAttached(false, _), currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep),
+       not(bel(storedDispenser(_,_,_,BlockType,_,_)))
+	    then handleMessageDispenser.
 	
 	% SUBMODULE ask for a goal zone if none known
 	if percept(role(worker)), not(bel(storedGoalZone(_,_,_))) then handleMessageGoalZone.
+	
+	% SUBMODULE ask for a role zone if none known
+	if percept(role(default)), not(bel(storedRoleZone(_,_,_))) then handleMessageRoleZone.	
 
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.

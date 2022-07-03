@@ -8,6 +8,11 @@ use "../goaldiggerAction" as actionspec.
  
 module manageManhattanTarget {
 
+	% With block and as submittingAgent update rolezone target MD
+	if percept(role(default)), 
+	   bel(targetMd(X, Y, Target), targetClosestRoleZone(A, B, MdAlt), MdAlt < 1234567)
+		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, rolezone)) + insert(executeManhattan).	
+	
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), 
 	   bel(agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)), not(bel(executeManhattan)) 
@@ -50,13 +55,14 @@ module manageManhattanTarget {
 				                                      insert(targetMd(AltX, AltY, goalzone)).	
 				if not(bel(executeManhattan)) then insert(executeManhattan).
 	}
-		
+	
+	% ToDo removed, still stable??? - targetMd(X, Y, Target), Target \== supportingPosition),	
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or 
 	% goalzone), coordinates converted from A,B to C,D
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
 	       confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
-		   targetMd(X, Y, Target), Target \== supportingPosition),
+		   targetMd(X, Y, Target)),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _)), 
 	   bel(localize(A, B, OffsetX, OffsetY, C, D))
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).

@@ -1,0 +1,30 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Handles calculating distance of goalzones to agent and manages inserting goalzone data from percept into belief
+ *
+ */
+
+module updateRolezoneData {
+	
+	% RESET old MD values in storedgoalzones to high number expected to not occur in simulation
+	forall bel(storedRoleZone(XAlt, YAlt, MdAlt)) do delete(storedRoleZone(XAlt, YAlt, MdAlt))
+		+ insert(storedRoleZone(XAlt, YAlt, 123456)).
+
+	% RESET old MD values in targetgoalzones to high number expected to not occur in simulation
+	if bel(targetClosestRoleZone(XAlt, YAlt, MdAlt)) 
+	    then delete(targetClosestRoleZone(XAlt, YAlt, MdAlt)) + insert(targetClosestRoleZone(XAlt, YAlt, 1234567)).
+
+	% CALCULATE MD for all stored in bel goalzones
+	forall bel(storedRoleZone(X, Y, MdAlt)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {
+		if bel(storedRoleZone(X, Y, MdAlt)) then delete(storedRoleZone(X, Y, MdAlt)) + insert(storedRoleZone(X, Y, Md)).
+	}
+
+	% COMPARE lowest MD value for ALL stored goalzones
+	forall bel(storedRoleZone(X2, Y2, MDZone)) do {
+			if bel(targetClosestRoleZone(X, Y, MDTarget), MDZone < MDTarget) 
+			    then delete(targetClosestRoleZone(X, Y, MDTarget)) + insert(targetClosestRoleZone(X2, Y2, MDZone)).
+	}
+
+} % module

@@ -10,12 +10,13 @@ module manageManhattanSwitchStatus {
 	
 	% deactivate target and executeManhattan when role, targetMd and haveBlock does not match
 	if bel(executeManhattan, targetMd(_, _, dispenser)), percept(role(default)) then delete(executeManhattan).
-	if bel(executeManhattan, targetMd(_, _, goalzone)), percept(role(default)) then delete(executeManhattan).
-	if bel(executeManhattan, targetMd(_, _, rolezone)), percept(role(worker)) then delete(executeManhattan).
-	if bel(executeManhattan, targetMd(_, _, goalzone), haveBlockAttached(false, _)), percept(role(worker)) 
-	    then delete(executeManhattan).
 	if bel(executeManhattan, targetMd(_, _, dispenser), haveBlockAttached(true, _)), percept(role(worker)) 
 	    then delete(executeManhattan).
+	if bel(executeManhattan, targetMd(_, _, goalzone)), percept(role(default)) then delete(executeManhattan).
+	if bel(executeManhattan, targetMd(_, _, goalzone), haveBlockAttached(false, _)), percept(role(worker)) 
+	    then delete(executeManhattan).
+	if bel(executeManhattan, targetMd(_, _, rolezone)), percept(role(worker)) then delete(executeManhattan).
+
 	% 
 %	if bel(agentAt(X, Y), executeManhattan, targetMd(X, Y, supportingPosition), haveBlockAttached(true, _)), 
 %	   percept(role(worker)) then delete(executeManhattan).
@@ -23,6 +24,11 @@ module manageManhattanSwitchStatus {
 	% don't use dummy values of targetClosestGoalZone
 	if bel(haveBlockAttached(true, _), executeManhattan, targetMd(_, _, goalzone), 
 	       targetClosestGoalZone(_, _, MdAlt), MdAlt >= 123456) 
+	    then delete(executeManhattan).
+	    
+	% don't use dummy values of targetClosestRoleZone
+	if bel(executeManhattan, targetMd(_, _, rolezone), 
+	       targetClosestRoleZone(_, _, MdAlt), MdAlt >= 123456) 
 	    then delete(executeManhattan).
 	
 	% when at manhattan target deactivate manhattan switch, XY same Coord
