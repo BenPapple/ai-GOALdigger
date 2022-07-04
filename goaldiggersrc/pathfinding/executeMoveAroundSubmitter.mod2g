@@ -1,0 +1,323 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "executeRandomMove" as module.
+use "../actionhandling/preActionCleanup" as module.
+
+/**
+ * Handling movement around submitting agent with tear drop pattern
+ *
+ */
+
+module executeMoveAroundSubmitter {
+
+    %
+	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
+	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
+	   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
+	   bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, SubmitterName)),
+	   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
+		   SubmitterBlockTypeAttached == SouthBlock)
+	    then {
+
+	    % submitter below agent
+	    if bel(XSubmit == 0, YSubmit == 1), bel(haveBlockAttached(true, BlockDir)) then {
+
+		    % move west when free and own block east
+		    if bel(BlockDir == e),
+		       not(percept(thing(-1, 0, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(w).
+
+		    % move east when free and own block west
+		    if bel(BlockDir == w),
+		       not(percept(thing(1, 0, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(e).
+
+		    % clear east to move onto
+		    if percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) 
+		        then preActionCleanup + clear(1, 0).
+		    if percept(thing(1, 0, obstacle,_))
+		        then preActionCleanup + clear(1, 0).
+
+		    % rotate to east position
+		    if bel(BlockDir == n),
+		       not(percept(thing(1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).
+		   
+		    % clear west to move onto
+		    if percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) 
+		        then preActionCleanup + clear(-1, 0).
+		    if percept(thing(-1, 0, obstacle,_))
+		        then preActionCleanup + clear(-1, 0).
+
+		    % rotate to west position
+		    if bel(BlockDir == n),
+		       not(percept(thing(-1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).
+
+	    }
+	    
+	    % submitter on right side
+	    if bel(XSubmit == 1, YSubmit == -1), bel(haveBlockAttached(true, BlockDir)) then {
+		    
+		    % clear south to move onto
+		    if percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(0, 1).
+		    if percept(thing(0, 1, obstacle,_))
+		        then preActionCleanup + clear(0, 1).
+		   
+		    % move south when free and own block north
+		    if bel(BlockDir == n),
+		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(s).
+		    
+		    % clear north for attached block
+		    if percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) 
+		        then preActionCleanup + clear(0, -1).
+		    if percept(thing(0, -1, obstacle,_))
+		        then preActionCleanup + clear(0, -1).
+
+		    % rotate to north position from east
+		    if bel(BlockDir == e),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).	
+	
+		    % rotate to north position from west
+		    if bel(BlockDir == w),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).	
+		        
+		    % rotate to west position
+		    if bel(BlockDir == s),
+		       not(percept(thing(-1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).
+		        
+		    % clear west for rotate
+		    if percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) 
+		        then preActionCleanup + clear(-1, 0).
+		    if percept(thing(-1, 0, obstacle,_))
+		        then preActionCleanup + clear(-1, 0).
+	    }
+	    
+	    % submitter on right side
+	    if bel(XSubmit == 1, YSubmit == 0), bel(haveBlockAttached(true, BlockDir)) then {
+		    
+		    % clear south to move onto
+		    if percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(0, 1).
+		    if percept(thing(0, 1, obstacle,_))
+		        then preActionCleanup + clear(0, 1).
+		   
+		    % move south when free and own block north
+		    if bel(BlockDir == n),
+		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(s).
+		    
+		    % clear north for attached block
+		    if percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) 
+		        then preActionCleanup + clear(0, -1).
+		    if percept(thing(0, -1, obstacle,_))
+		        then preActionCleanup + clear(0, -1).
+
+		    % rotate to north position from east
+		    if bel(BlockDir == e),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).	
+	
+		    % rotate to north position from west
+		    if bel(BlockDir == w),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).	
+		        
+		    % rotate to west position
+		    if bel(BlockDir == s),
+		       not(percept(thing(-1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).
+		        
+		    % clear west for rotate
+		    if percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) 
+		        then preActionCleanup + clear(-1, 0).
+		    if percept(thing(-1, 0, obstacle,_))
+		        then preActionCleanup + clear(-1, 0).
+	    }	    
+	    
+	    % submitter on right side
+	    if bel(XSubmit == 1, YSubmit == 1), bel(haveBlockAttached(true, BlockDir)) then {
+		    
+		    % clear south to move onto
+		    if percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(0, 1).
+		    if percept(thing(0, 1, obstacle,_))
+		        then preActionCleanup + clear(0, 1).
+		   
+		    % move south when free and own block north
+		    if bel(BlockDir == n),
+		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(s).
+		    
+		    % clear north for attached block
+		    if percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) 
+		        then preActionCleanup + clear(0, -1).
+		    if percept(thing(0, -1, obstacle,_))
+		        then preActionCleanup + clear(0, -1).
+
+		    % rotate to north position from east
+		    if bel(BlockDir == e),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).	
+	
+		    % rotate to north position from west
+		    if bel(BlockDir == w),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).	
+		        
+		    % rotate to west position
+		    if bel(BlockDir == s),
+		       not(percept(thing(-1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).
+		        
+		    % clear west for rotate
+		    if percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) 
+		        then preActionCleanup + clear(-1, 0).
+		    if percept(thing(-1, 0, obstacle,_))
+		        then preActionCleanup + clear(-1, 0).
+	    }	    
+
+	    % submitter on left side
+	    if bel(XSubmit == -1, YSubmit == -1), bel(haveBlockAttached(true, BlockDir)) then {
+		    
+		    % clear south to move onto
+		    if percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(0, 1).
+		    if percept(thing(0, 1, obstacle,_))
+		        then preActionCleanup + clear(0, 1).
+		   
+		    % move south when free and own block north
+		    if bel(BlockDir == n),
+		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(s).
+		    
+		    % clear north for attached block
+		    if percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) 
+		        then preActionCleanup + clear(0, -1).
+		    if percept(thing(0, -1, obstacle,_))
+		        then preActionCleanup + clear(0, -1).
+
+		    % rotate to north position from west
+		    if bel(BlockDir == w),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).	
+	
+		    % rotate to north position from east
+		    if bel(BlockDir == e),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).	
+		        
+		    % rotate to east position
+		    if bel(BlockDir == s),
+		       not(percept(thing(1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).
+		        
+		    % clear east for rotate
+		    if percept(thing(1, 0, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(1, 0).
+		    if percept(thing(1, 0, obstacle,_))
+		        then preActionCleanup + clear(1, 0).
+	    }
+
+	    % submitter on left side
+	    if bel(XSubmit == -1, YSubmit == 0), bel(haveBlockAttached(true, BlockDir)) then {
+		    
+		    % clear south to move onto
+		    if percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(0, 1).
+		    if percept(thing(0, 1, obstacle,_))
+		        then preActionCleanup + clear(0, 1).
+		   
+		    % move south when free and own block north
+		    if bel(BlockDir == n),
+		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(s).
+		    
+		    % clear north for attached block
+		    if percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) 
+		        then preActionCleanup + clear(0, -1).
+		    if percept(thing(0, -1, obstacle,_))
+		        then preActionCleanup + clear(0, -1).
+
+		    % rotate to north position from west
+		    if bel(BlockDir == w),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).	
+	
+		    % rotate to north position from east
+		    if bel(BlockDir == e),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).	
+		        
+		    % rotate to east position
+		    if bel(BlockDir == s),
+		       not(percept(thing(1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).
+		        
+		    % clear east for rotate
+		    if percept(thing(1, 0, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(1, 0).
+		    if percept(thing(1, 0, obstacle,_))
+		        then preActionCleanup + clear(1, 0).
+	    }
+	    
+	    
+	    % submitter on left side
+	    if bel(XSubmit == -1, YSubmit == 1), bel(haveBlockAttached(true, BlockDir)) then {
+		    
+		    % clear south to move onto
+		    if percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(0, 1).
+		    if percept(thing(0, 1, obstacle,_))
+		        then preActionCleanup + clear(0, 1).
+		   
+		    % move south when free and own block north
+		    if bel(BlockDir == n),
+		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(s).
+		    
+		    % clear north for attached block
+		    if percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) 
+		        then preActionCleanup + clear(0, -1).
+		    if percept(thing(0, -1, obstacle,_))
+		        then preActionCleanup + clear(0, -1).
+
+		    % rotate to north position from west
+		    if bel(BlockDir == w),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).	
+	
+		    % rotate to north position from east
+		    if bel(BlockDir == e),
+		       not(percept(thing(0, -1, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).	
+		        
+		    % rotate to east position
+		    if bel(BlockDir == s),
+		       not(percept(thing(1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).
+		        
+		    % clear east for rotate
+		    if percept(thing(1, 0, block,_)), not(percept(attached(0, 1))) 
+		        then preActionCleanup + clear(1, 0).
+		    if percept(thing(1, 0, obstacle,_))
+		        then preActionCleanup + clear(1, 0).
+	    }
+	        
+
+	    
+	    
+	    
+	    
+	    
+	    
+	} % percept submitter
+	
+	
+} % end module

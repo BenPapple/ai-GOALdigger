@@ -34,4 +34,10 @@ module updateSubmitterRanking {
 	   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1)
 		then insert(submitterLeader).
 		
+    % remove submitterLeader
+	if percept(teamSize(SizeTeam)), 
+	   bel(submitterLeader, positionInHirarchie(PositionInHirarchie), 
+	       PosCheck is SizeTeam - PositionInHirarchie, PosCheck \= 1)
+		then delete(submitterLeader).
+		
 } % end module
