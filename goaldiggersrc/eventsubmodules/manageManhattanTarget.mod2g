@@ -8,14 +8,14 @@ use "../goaldiggerAction" as actionspec.
  
 module manageManhattanTarget {
 
-	% With block and as submittingAgent update rolezone target MD
+	% update rolezone target MD
 	if percept(role(default)), 
 	   bel(targetMd(X, Y, Target), targetClosestRoleZone(A, B, MdAlt), MdAlt < 1234567)
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(A, B, rolezone)) + insert(executeManhattan).	
 	
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), 
-	   bel(agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)), not(bel(executeManhattan)) 
+	   bel(agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)) 
 	    then delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, rolezone)) + insert(executeManhattan).
 		
 	% when role worker and without block set dispenser as target
@@ -26,17 +26,17 @@ module manageManhattanTarget {
 				                                      insert(targetMd(AltX, AltY, dispenser)).	
 				if not(bel(executeManhattan)) then insert(executeManhattan).
 	}
-	
-	% target dispenser from percept
-	if bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
-	       agentAt(AgentX, AgentY)),
-	   percept(step(SimStep), role(worker), thing(DispX, DispY, dispenser, BlockType)),
-	   bel(TaskStep >= SimStep, AltX is DispX + AgentX, AltY is DispY + AgentY)
-	    then {		
-				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + 
-				                                      insert(targetMd(AltX, AltY, dispenser)).	
-				if not(bel(executeManhattan)) then insert(executeManhattan).
-	}
+% ToDo still necessary or deadlock problem?	
+%	% target dispenser from percept
+%	if bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
+%	       agentAt(AgentX, AgentY)),
+%	   percept(step(SimStep), role(worker), thing(DispX, DispY, dispenser, BlockType)),
+%	   bel(TaskStep >= SimStep, AltX is DispX + AgentX, AltY is DispY + AgentY)
+%	    then {		
+%				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + 
+%				                                      insert(targetMd(AltX, AltY, dispenser)).	
+%				if not(bel(executeManhattan)) then insert(executeManhattan).
+%	}
 		
 	% With block and as submittingAgent update goalzone target MD
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
@@ -64,13 +64,14 @@ module manageManhattanTarget {
 	       confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target)),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _)), 
-	   bel(localize(A, B, OffsetX, OffsetY, C, D))
+	   bel(localize(A, B, OffsetX, OffsetY, C, D) ),
+	   not(bel(X == C, Y == D))
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
 	
 	% Moving around Submitting agent for docking sequence
-	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), YBlock is YSubmit+1, 
-	           thing(XBlock, YBlock, block, SouthBlock), 
-	           XBlock + YBlock \== 0, XSubmit == XBlock, attached(XSubmit, YBlock)),
+	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
+	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
 	   bel(haveBlockAttached(true, _)) then {
 		if bel(agentAt(Xself, Yself), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
 		       SubmitterName)),

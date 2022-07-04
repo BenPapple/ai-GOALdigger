@@ -12,7 +12,7 @@ module taskHandlingOneBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)), 
 	   percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockTypeAttached)])),
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) then {
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 8) then {
 		
 		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
 		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
@@ -26,7 +26,7 @@ module taskHandlingOneBlock {
 	% choose/change 1-block tasks if closest dispenser has fitting block
 	if bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \== bx), 
 	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),  
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) then {
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20) then {
 		
 	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
 	        delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
@@ -39,7 +39,7 @@ module taskHandlingOneBlock {
 	% choose 1-block tasks of target Dispenser concerning currenttaskBlockType+targetDispenserAt calc in EventModule
 	if bel(targetDispenserAt(_, _, BlockType, _), BlockType \== bx), 
 	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),  
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0)
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20)
 	    then {
 		
 		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
@@ -53,7 +53,7 @@ module taskHandlingOneBlock {
 	% choose 1-block tasks if random known dispenser has fitting block
 	if bel(storedDispenser(_, _, dispenser, BlockType, _, _)), 
 	   percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])),  
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) then {
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 30) then {
 		
 	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
 	        delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
@@ -66,7 +66,7 @@ module taskHandlingOneBlock {
 
 	% choose 1-block tasks if it exists
 	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0) then {
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
 		
 		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
 		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 

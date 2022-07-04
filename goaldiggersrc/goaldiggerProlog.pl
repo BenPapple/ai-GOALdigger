@@ -83,8 +83,8 @@ localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
 %delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1). % X1Y1 gets localized by X2Y2 (add negative values, substract positive values)
 
 % Offset calculator
-calculateAgentOffset(RecieverBaseX, RecieverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is RecieverBaseX - SenderBaseX + PerceptOffsetX, 
-	OffsetY is RecieverBaseY - SenderBaseY + PerceptOffsetY.
+calculateAgentOffset(ReceiverBaseX, ReceiverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is ReceiverBaseX + PerceptOffsetX - SenderBaseX, 
+	OffsetY is ReceiverBaseY + PerceptOffsetY - SenderBaseY .
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
@@ -97,7 +97,7 @@ randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
 			NewDir \= OppositAltDir.
 			
 % get a random number between 0 - 100
-randomNumber(RandomSeed) :- random_between (0, 10000, RandomSeed).
+getRandomNumberSeed(RandomSeed) :- random_between (0, 10000, RandomSeed).
 						
 % skip random steps
 skipRandomSteps(SkipSteps) :- random_between(0, 8, SkipSteps).

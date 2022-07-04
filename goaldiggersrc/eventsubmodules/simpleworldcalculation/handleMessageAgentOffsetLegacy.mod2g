@@ -32,7 +32,8 @@ module handleMessageAgentOffsetLegacy {
 
 			% if only 1x inverse coordinates are found
 			if bel(storedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
-			   bel(AgentReceiver \= AgentNameSender, (OtherX) =:= -1 * (OtherX1), (OtherY) =:= -1 * (OtherY1)), 
+			   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
+			   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative), 
 			   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))) then {
 					
 				if not(bel(storedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 

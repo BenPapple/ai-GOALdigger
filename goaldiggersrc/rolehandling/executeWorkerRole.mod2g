@@ -80,13 +80,20 @@ module executeWorkerRole {
 	    	   percept(goalZone(0,0), thing(0, 1, entity, _), step(SimStep), TaskStep >= SimStep),
 	    	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask) 
 	    	    then executeRandomMove.
+
+	    	% submit task if in goal zone with block and corresponding task available
+	    	if bel(currentChosenTask(TaskName, TaskStep, _, _, _, _,submittingAgentOneTask, _)),
+	    	   percept(task(TaskName ,TaskStep, 10,[req(_,_,_)])),
+	    	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
+	    	 
+	    	% as 1tasksubmitter with no active task explore  
+	    	if bel(currentChosenTask(TaskName, TaskStep, _, _, _, _,submittingAgentOneTask, _)),
+	    	   not(percept(task(TaskName ,TaskStep, 10,[req(_,_,_)]))) then executeRandomMove.
 	    
 	    	% submit task if in goal zone with block and corresponding task available
-	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,OneOrTwoTask, _)),
-	    	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask), 
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgentTwoTask, _)),
 	    	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
-	    	
-	    	
+ 	    	
 	    	% Prepare for connect by rotating block to north and if north connect
 	    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition), DirBlock \= n)
 	    	    then rotateBlockToNorth.
