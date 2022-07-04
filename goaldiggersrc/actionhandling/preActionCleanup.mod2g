@@ -12,6 +12,6 @@ module preActionCleanup {
 	if not(bel(haveMove)) then insert(haveMove).
 	
 	% stops debug timer
-	if bel(lDebugOn) then canceltimer(calculationTimer).
+	if bel(activateTimer) then canceltimer(calculationTimer).
 	
 } % end module
