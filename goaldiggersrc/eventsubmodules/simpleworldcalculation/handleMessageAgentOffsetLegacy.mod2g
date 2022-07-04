@@ -32,6 +32,7 @@ module handleMessageAgentOffsetLegacy {
 
 			% if only 1x inverse coordinates are found
 			if bel(storedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+			   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))),
 			   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
 			   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative) 
 			    then {
@@ -41,23 +42,16 @@ module handleMessageAgentOffsetLegacy {
 
 					% calculate offset
 					if true then {
-						 if not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))),
-						    bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
+						 if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
 							 then insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender))
-							      + insert(calculatedNewOffset).
-							      
-					     if bel(confirmedOtherAgentAt(V1, V2, AgentNameSender)),
-						    bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY)),
-						    bel(V1 \= OffsetX, V2 \= OffsetY)
-							 then delete(confirmedOtherAgentAt(V1, V2, AgentNameSender)) 
-							      + insert(confirmedOtherAgentAt(OffsetX, OffsetY, AgentNameSender))
-							      + insert(calculatedNewOffset).
+							      + insert(calculatedNewOffset).							      
+
 					}
 				}
 			}
 		}
 
-		 } % do
+	} % do
 
     % CALCULATE offset of 3rd agent from message from 2nd agent
 	forall (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName)) do {
