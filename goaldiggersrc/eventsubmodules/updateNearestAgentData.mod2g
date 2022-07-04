@@ -21,7 +21,7 @@ module updateNearestAgentData {
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _), 
 	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName))
 		do {
-			if bel(agentAt(OwnX, OwnY), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
+			if bel(agentAt(OwnX, OwnY, _), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
 			   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
 			       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
 			    then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
@@ -44,7 +44,7 @@ module updateNearestAgentData {
 		do {
 		
 			if percept(task(TaskName,_, 40,[req(0,1,_),req(_,_,BlockTypeTask)]), BlockTypeTask == BlockTypeAttached) then {
-	            if bel(agentAt(OwnX, OwnY), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+	            if bel(agentAt(OwnX, OwnY, _), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
 				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
 				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
 				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
@@ -52,7 +52,7 @@ module updateNearestAgentData {
 		    }
 		    
 		    if percept(task(TaskName,_, 40,[req(_,_,BlockTypeTask),req(0,1,_)]), BlockTypeTask == BlockTypeAttached) then {
-	            if bel(agentAt(OwnX, OwnY), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+	            if bel(agentAt(OwnX, OwnY, _), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
 				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
 				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
 				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +

@@ -26,18 +26,18 @@ module messagePermaSendStatusToOthers {
 	}
 
 	% send a status to all other agents while having block attached
-	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
+	if bel(randomSeed(Seed), agentAt(X, Y, _), haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 		percept(name(OwnName), step(Step),role(Role), thing(A, B, block, BlockTypeAttached)) then
 			allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, BlockTypeAttached)).
 	
 	% send a status to all other agents without having block attached		
-	if bel(randomSeed(Seed), agentAt(X, Y), haveBlockAttached(false, _)), 
+	if bel(randomSeed(Seed), agentAt(X, Y, _), haveBlockAttached(false, _)), 
 	   percept(name(OwnName), role(Role), step(Step)) then
 	    allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, noBlock)).
 	
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
 	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), OtherCalc is OtherX + OtherY, OtherCalc \= 0, name(OwnName)), 
-	       bel(agentAt(OwnX,OwnY), step(Step))
+	       bel(agentAt(OwnX,OwnY, _), step(Step))
 		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 		
 %	% send sync message to other agents to coordinate coordinates :D

@@ -107,9 +107,9 @@ module executeWorkerRole {
     	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) then handleTaskSubmit.
     	
     	% Prepare for connect by rotating block to north and if north connect
-    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition), DirBlock \= n)
+    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition), DirBlock \= n)
     	    then rotateBlockToNorth.
-    	if bel(agentAt(X, Y), targetMd(X, Y, supportingPosition))
+    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition))
     	    then preActionCleanup + connectBlocks.
 	 
     	% move to other agent to help in multitask 

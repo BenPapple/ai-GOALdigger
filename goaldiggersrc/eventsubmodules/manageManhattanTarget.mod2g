@@ -15,7 +15,7 @@ module manageManhattanTarget {
 	
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), 
-	   bel(agentAt(X2, Y2), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)) 
+	   bel(agentAt(X2, Y2, _), targetMd(X4, Y4, Target), localize(X, Y, X2, Y2, X3, Y3)) 
 	    then delete(targetMd(X4, Y4, Target)) + insert(targetMd(X3, Y3, rolezone)) + insert(executeManhattan).
 		
 	% when role worker and without block set dispenser as target
@@ -46,7 +46,7 @@ module manageManhattanTarget {
 		
 	% target goalzone from percept as submitter
 	if bel(haveBlockAttached(true,_), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
-	       agentAt(AgentX, AgentY)), 
+	       agentAt(AgentX, AgentY, _)), 
 	   percept(step(SimStep), role(worker), goalZone(GoalX, GoalY)),
 	   bel(TaskStep >= SimStep, AltX is GoalX + AgentX, AltY is GoalY + AgentY),
 	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask)
@@ -72,7 +72,7 @@ module manageManhattanTarget {
 	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
 	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
 	   bel(haveBlockAttached(true, _)) then {
-		if bel(agentAt(Xself, Yself), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
+		if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
 		       SubmitterName)),
 		   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
 		       SubmitterBlockTypeAttached == SouthBlock), 

@@ -58,7 +58,7 @@ module goaldiggerInit {
 
 	% misc
 	if true then insert ( step(-1)). % init server steps
-	if true then insert (agentAt(0,0)). % agent starting coordinate	
+	if true then insert (agentAt(0, 0, 0)). % agent starting coordinate	
 	if bel(randomDirection(X)) then insert (randomAffinity(X)). % random general direction to explore for agent
 	if bel(limitChangeStepMinMax(X, Y), randomBetween(X, Y, Out)) then insert (changeAffinityAfterTheseSteps(Out)). % self explaining
 	if true then insert (elapseStepTime(0)). % Time measurement between step

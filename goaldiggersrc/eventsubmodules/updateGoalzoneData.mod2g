@@ -17,7 +17,7 @@ module updateGoalzoneData {
 	    then delete(targetClosestGoalZone(XAlt, YAlt, MdAlt)) + insert(targetClosestGoalZone(XAlt, YAlt, 1234567)).
 
 	% CALCULATE MD for all stored in bel goalzones
-	forall bel(storedGoalZone(X, Y, MdAlt)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {
+	forall bel(storedGoalZone(X, Y, MdAlt)), bel(agentAt(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md)) do {
 		if bel(storedGoalZone(X, Y, MdAlt)) then delete(storedGoalZone(X, Y, MdAlt)) + insert(storedGoalZone(X, Y, Md)).
 	}
 
