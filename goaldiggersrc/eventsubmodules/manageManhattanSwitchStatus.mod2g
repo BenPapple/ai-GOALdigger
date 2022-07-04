@@ -32,6 +32,6 @@ module manageManhattanSwitchStatus {
 	    then delete(executeManhattan).
 	
 	% when at manhattan target deactivate manhattan switch, XY same Coord
-	if bel(targetMd(X, Y, _), agentAt(X, Y), executeManhattan) then delete(executeManhattan).
+	if bel(targetMd(X, Y, _), agentAt(X, Y, _), executeManhattan) then delete(executeManhattan).
 
 }

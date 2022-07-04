@@ -17,7 +17,7 @@ module updateRolezoneData {
 	    then delete(targetClosestRoleZone(XAlt, YAlt, MdAlt)) + insert(targetClosestRoleZone(XAlt, YAlt, 1234567)).
 
 	% CALCULATE MD for all stored in bel goalzones
-	forall bel(storedRoleZone(X, Y, MdAlt)), bel(agentAt(X2, Y2), calculateXYMd(X, Y, X2, Y2, Md)) do {
+	forall bel(storedRoleZone(X, Y, MdAlt)), bel(agentAt(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md)) do {
 		if bel(storedRoleZone(X, Y, MdAlt)) then delete(storedRoleZone(X, Y, MdAlt)) + insert(storedRoleZone(X, Y, Md)).
 	}
 

@@ -80,7 +80,7 @@ module logMiniPercept {
 			
 		% some extra extra custom percept logging because conditional can be false, others for formatting
 
-        if bel(agentAt(X, Y), targetMd(A, B, Target)) then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).
+        if bel(agentAt(X, Y, _), targetMd(A, B, Target)) then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).
         
         if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, NameSupporter)),
            bel(storedOtherAgentStatus(NameSupporter, _, _, _, _, X, Y, Block)),
