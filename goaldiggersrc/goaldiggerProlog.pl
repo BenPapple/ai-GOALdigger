@@ -10,6 +10,7 @@
 :- dynamic simCount/1. %Counter for sim in tournament mode
 :- dynamic count2Task/2. % submitterLeader counts his submitted 2tasks
 :- dynamic cashedCount2Task/1. % cashed so it survives map change for score table
+:- dynamic activateTimer/0. % switch timing step calculation of agent
 
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
