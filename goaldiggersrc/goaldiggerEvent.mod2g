@@ -30,9 +30,12 @@ use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as
 
 module goaldiggerEvent {
 
-
 	% SUBMODULE reinitialize belief after simulation changes
-	if percept(step(0)) then reinitBeliefOnSimChange.
+	if percept(step(0)),
+	   not(bel(thisIsTheFirstSim)) then reinitBeliefOnSimChange.
+	   
+	% prevent first reinitBeliefOnSimChange activation
+	if bel(thisIsTheFirstSim) then delete(thisIsTheFirstSim).
 
 	% SUBMODULE managing success and partial_success percepts
 	if true then updateLastActionResultData.
@@ -92,7 +95,6 @@ module goaldiggerEvent {
 
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
-	
 	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(true, _), 
 	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) 
 	    then updateDispenserData.

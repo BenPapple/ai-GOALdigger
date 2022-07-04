@@ -11,10 +11,10 @@ module goaldiggerInit {
 	if true then insert (lDebugOn). % Variable für Debug, zB elapseStepTime
 	if true then insert (activateDoubleSpeed). % switch to deactivate because not allowed in competition1
 	% To count sim changes
-	if not(bel(simCount(_))) then insert(simCount(0)). 
+	if not(bel(simCount(_))) then insert(simCount(1)). 
 	if not(bel(count2Task(_, _))) then insert(count2Task(0, 0)). 
 	if not(bel(cashedCount2Task(_))) then insert(cashedCount2Task(0)). 
-	%if bel(simCount(SimCount), NewSimCount is SimCount + 1) then delete(simCount(SimCount)) + insert(simCount(NewSimCount)). 
+	if true then insert(thisIsTheFirstSim).
 	
 	% global values
 	if true then insert(expectDifferentSimulations). % switch to recognize simulations have different characteristics on sim change
@@ -26,7 +26,7 @@ module goaldiggerInit {
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
 	
 	% Assign Explorer and set worker as default role
-	if bel(getRandomNumberSeed(Seed)) then insert(randomSeed(Seed)).
+	if true then insert(randomSeed(0)).
 	if true then insert (positionInHirarchie(0)).
 	if true then insert (targetRole(worker)).
 
@@ -68,6 +68,5 @@ module goaldiggerInit {
 	if true then insert ( worldSizeX(54321), worldSizeY(54321) ).
 	if true then insert ( worldListX([]), worldListY([]) ).
 	if true then insert ( messageProcessingDelay(4), messagePersitanceAfterDelay(1) ).
-	if percept(team(Team)) then insert(ownTeam(Team)). %The agent learns its own team from the initial percept.
-	if percept(name(Name)) then insert ( ownName(Name) ). % TO DO: I have observed this doesn't get inserted in most cases. Why?
+
 }
