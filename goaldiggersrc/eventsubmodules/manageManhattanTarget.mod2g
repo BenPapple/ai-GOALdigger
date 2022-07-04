@@ -56,16 +56,15 @@ module manageManhattanTarget {
 				if not(bel(executeManhattan)) then insert(executeManhattan).
 	}
 	
-	% ToDo removed, still stable??? - targetMd(X, Y, Target), Target \== supportingPosition),	
+	% ToDo removed, still stable??? - targetMd(X, Y, Target), Target \== supportingPosition),,  not(bel(X == C, Y == D))	
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or 
 	% goalzone), coordinates converted from A,B to C,D
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
 	       confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
-		   targetMd(X, Y, Target)),
+		   targetMd(X, Y, Target), Target \== supportingPosition),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _)), 
-	   bel(localize(A, B, OffsetX, OffsetY, C, D) ),
-	   not(bel(X == C, Y == D))
+	   bel(localize(A, B, OffsetX, OffsetY, C, D) )
 		then delete(targetMd(X, Y, Target)) + insert(targetMd(C, D, otherAgentAt)) + insert(executeManhattan).
 	
 	% Moving around Submitting agent for docking sequence

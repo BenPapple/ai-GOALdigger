@@ -59,13 +59,6 @@ module goaldiggerEvent {
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffsetLegacy.
 	
-	% TO DO: Add both these submodules to messagePermaSendStatusToOthers
-	% SUBMODULE to answer to goal zone queries from other agents
-	%if (_).sent(messageNeedGoalZone(_)), bel(storedGoalZone(_,_,_)) then handleMessageNeedGoalZone.
-	
-	% SUBMODULE to answer to goal zone queries from other agents
-	%if (_).sent(messageNeedDispenser(BlockType,_)), bel(storedDispenser(_,_,_,BlockType,_,_)) then print("Dispenser condition")+handleMessageNeedDispenser.	
-	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
 
@@ -93,8 +86,9 @@ module goaldiggerEvent {
 	           TaskStep >= SimStep) 
 	    then updateGoalzoneData.
 	    
-	%SUBMODULE delete goal zones if other agents have found that they don't exist anymore
-	% if (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
+	% SUBMODULE delete goal zones if other agents have found that they don't exist anymore
+	if percept(step(SimStep), SimStep > 3333),
+	   (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
 
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
