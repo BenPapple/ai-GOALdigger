@@ -2,7 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * ask for and store send rolezone messages
+ * ask for(while role default) and store send rolezone messages
  *
  */
 
@@ -16,10 +16,9 @@ module handleMessageRoleZone {
 		}
 	
 	% Ask for stored role zones if none are known
-	if not(bel(storedRoleZone(_,_,_))), 
-	   percept(name(MyName), role(default)) then {
+	if percept(name(MyName), role(default)) then {
 		forall bel(confirmedOtherAgentAt(_,_,SenderName), storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _))
-		do (SenderConnect).send(messageNeedGoalZone(MyName)).
+		do (SenderConnect).send(messageNeedRoleZone(MyName)).
 	}
 	
 }

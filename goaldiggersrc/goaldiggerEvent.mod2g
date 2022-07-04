@@ -74,6 +74,15 @@ module goaldiggerEvent {
 
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
+	
+	% SUBMODULE ask for a goal zone if none known
+	if true then handleMessageGoalZone.
+	
+	% SUBMODULE ask for a role zone if none known
+	if percept(role(default)) then handleMessageRoleZone.
+	
+	% SUBMODULE ask for a dispenser if none known
+	if true then handleMessageDispenser.	
 
     % SUBMODULE update rolezone map data
     if percept(role(default)) then updateRolezoneData.
@@ -83,21 +92,9 @@ module goaldiggerEvent {
 	           currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
 	           TaskStep >= SimStep) 
 	    then updateGoalzoneData.
-
+	    
 	%SUBMODULE delete goal zones if other agents have found that they don't exist anymore
 	% if (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
-
-	% SUBMODULE ask for a dispenser if none known
-	if percept(role(worker), step(SimStep)), 
-	   bel(haveBlockAttached(false, _), currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep),
-       not(bel(storedDispenser(_,_,_,BlockType,_,_)))
-	    then handleMessageDispenser.
-	
-	% SUBMODULE ask for a goal zone if none known
-	if percept(role(worker)), not(bel(storedGoalZone(_,_,_))) then handleMessageGoalZone.
-	
-	% SUBMODULE ask for a role zone if none known
-	if percept(role(default)), not(bel(storedRoleZone(_,_,_))) then handleMessageRoleZone.	
 
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.

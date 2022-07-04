@@ -18,7 +18,7 @@ module goaldiggerInit {
 	
 	% global values
 	if true then insert(expectDifferentSimulations). % switch to recognize simulations have different characteristics on sim change
-	if true then insert(limitChangeStepMinMax(15 , 40)). % lowest and highest limit after which agent changes explore direction
+	if true then insert(limitChangeStepMinMax(10 , 20)). % lowest and highest limit after which agent changes explore direction
 	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
@@ -26,7 +26,7 @@ module goaldiggerInit {
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
 	
 	% Assign Explorer and set worker as default role
-	if bel(randomNumber(Seed)) then insert(randomSeed(Seed)).
+	if bel(getRandomNumberSeed(Seed)) then insert(randomSeed(Seed)).
 	if true then insert (positionInHirarchie(0)).
 	if true then insert (targetRole(worker)).
 
