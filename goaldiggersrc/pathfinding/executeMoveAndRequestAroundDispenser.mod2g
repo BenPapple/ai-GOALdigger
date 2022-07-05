@@ -91,7 +91,7 @@ module executeMoveAndRequestAroundDispenser {
 		
 	} % if
 	
-	% obligatory skip.
-	if true then preActionCleanup + skip.
+	% obligatory random/skip.
+	if true then preActionCleanup + executeRandomMove.
 	
 } % module

@@ -37,7 +37,8 @@ module taskHandlingTwoBlock {
 	% choose 2-block tasks if it exists and dispenser known
 	if percept(task(TaskName ,TaskStep, 40,[req(Xt, Yt, BlockType),req(Xt2, Yt2, BlockType2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90) 
-	    then {		
+	    then {
+	        if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8), Xt == 0, Yt == 1, 
 			       storedDispenser(_, _, dispenser, BlockType, _, _)) then 
 				delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
