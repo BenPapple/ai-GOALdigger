@@ -4,6 +4,7 @@ use "./eventsubmodules/updateDispenserData" as module.
 use "./eventsubmodules/updateGoalzoneData" as module.
 use "./eventsubmodules/updateRolezoneData" as module.
 use "./eventsubmodules/logMiniPercept" as module.
+use "./eventsubmodules/logScoringBoard" as module.
 use "./eventsubmodules/updateLastActionResultData" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
@@ -37,6 +38,9 @@ module goaldiggerEvent {
 	   
 	% prevent first reinitBeliefOnSimChange activation
 	if bel(thisIsTheFirstSim) then delete(thisIsTheFirstSim).
+	
+	% Logging made points by agents
+	if true then logScoringBoard.
 
 	% SUBMODULE managing success and partial_success percepts
 	if true then updateLastActionResultData.

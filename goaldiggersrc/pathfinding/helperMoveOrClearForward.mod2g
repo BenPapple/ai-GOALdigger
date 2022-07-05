@@ -19,7 +19,7 @@ module helperMoveOrClearForward {
        percept(role(worker)), 
        not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)), 
        not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser)) 
-        then preActionCleanup + move(Dir, Dir) + print("I FEEL THE NEED, THE NEED FOR SPEED").
+        then preActionCleanup + move(Dir, Dir).
     % normal speed
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
        not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)) 

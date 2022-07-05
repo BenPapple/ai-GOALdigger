@@ -45,7 +45,7 @@ module messageMultiTaskCoordination {
 				
 	} % other agent has block
 	
-	% set other agent without fitting block
+	% set nearest agent without fitting block
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)),
 	   bel(confirmedOtherAgentAt(_, _, _)) 
 	    then {
