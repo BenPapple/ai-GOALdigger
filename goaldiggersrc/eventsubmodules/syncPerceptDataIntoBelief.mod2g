@@ -36,15 +36,18 @@ module syncPerceptDataIntoBelief {
 	% STORE unknown dispensers from percept with MD field
 	forall percept(thing(X, Y, dispenser, Details), name(MyName)) do {
 	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), 
-	    not(bel((storedDispenser(X3, Y3, dispenser, Details, _, _)))) then 
-	        insert(storedDispenser(X3, Y3, dispenser, Details, 0, false))
-	        + allother.send(msgDispenserData(X3, Y3, dispenser, Details, false, MyName)).
+	    not(bel((storedDispenser(X3, Y3, dispenser, Details, _, _)))) then {
+	        if true then insert(storedDispenser(X3, Y3, dispenser, Details, 0, false))
+	        + allother.send(msgDispenserData(X3, Y3, dispenser, Details, false, MyName)).	        
+	    }
 	}	
 	
 	% STORE unknown goalzones with MD field
 	forall percept(goalZone(X, Y)) do {
-	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedGoalZone(X3, Y3, _)))) then 
-		    insert(storedGoalZone(X3, Y3, 0)).
+	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), not(bel((storedGoalZone(X3, Y3, _)))) then {
+		    if true then insert(storedGoalZone(X3, Y3, 0)).
+		    if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
+		}
     }
     
     % STORE unknown rolezones with MD field

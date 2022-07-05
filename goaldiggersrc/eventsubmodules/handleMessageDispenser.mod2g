@@ -15,7 +15,10 @@ module handleMessageDispenser {
 	forall (_).sent(msgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) do {
 			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
 			   not(bel(storedDispenser(X1,Y1,_,_,_,_))) 
-			    then insert(storedDispenser(X1,Y1,dispenser,BlockType,12345,Bool)).
+			    then {
+			    if true then insert(storedDispenser(X1,Y1,dispenser,BlockType,12345,Bool)).
+			    if not(bel(calculateNewDispenserMD)) then insert(calculateNewDispenserMD).
+			}
 	}
 	
 	% Ask for stored dispensers of the needed type if none are known

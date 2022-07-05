@@ -12,6 +12,9 @@
 :- dynamic cashedCount2Task/1. % cashed so it survives map change for score table
 :- dynamic activateTimer/0. % switch timing step calculation of agent
 :- dynamic thisIsTheFirstSim/0. % prevents reinit in first sim
+:- dynamic calculatedNewOffset/0. % switch to send calculated offsets to everyone
+:- dynamic calculateNewDispenserMD/0. % switch to recalculate dispenses distance
+:- dynamic calculateNewGoalzoneMD/0. % switch to recalculate goalzone distance
 
 :- dynamic haveBlockAttached/2. % (Bool, Dir)
 :- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
@@ -35,7 +38,7 @@
 :- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgentWithNeededBlock/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic storedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
-:- dynamic calculatedNewOffset/0. % switch to send calculated offsets to everyone
+
 
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 %:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
