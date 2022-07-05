@@ -1,5 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
+use "../eventsubmodules/updateNearestAgentData" as module.
 
 /**
  * coordination for tasks greater than 1 (submittingAgent & supportingAgent)
@@ -7,6 +8,10 @@ use "../goaldiggerAction" as actionspec.
  */
  
 module messageMultiTaskCoordination {
+
+	% SUBMODULE update nearest Agent on map for submitterleader when necessary
+	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterPending)),
+	   bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentData.
 
 	% set other agent with needed block as supporter and oneself as submitter
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)) 

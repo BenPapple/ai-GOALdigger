@@ -1,5 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
+use "../eventsubmodules/updateDispenserData" as module.
 
 /**
  * Use the 1s task
@@ -8,12 +9,17 @@ use "../goaldiggerAction" as actionspec.
 
 module taskHandlingOneBlock {
 
+    % update dispenser distance
+    % SUBMODULE update dispenser map data as worker with no block and as worker with no active task
+	if not(bel(calculateNewDispenserMD)) then updateDispenserData.
+
 	% chose task if your attached block fits task	
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)), 
 	   percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockTypeAttached)])),
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 8) then {
 		
+		if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
 		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
 		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
 		    insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockTypeAttached, submittingAgentOneTask, 

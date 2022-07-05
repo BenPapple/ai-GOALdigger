@@ -40,8 +40,10 @@ module updateLastActionResultData {
 		} % move	
 		
 		% succesfull attach action handling
-		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(BoolOld2, Dold)) then 
-		  delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)).		
+		if percept(lastAction(attach), lastActionParams([Dir])), bel(haveBlockAttached(BoolOld2, Dold)) then {
+		    if true then delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(true, Dir)).
+		    if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
+		}		
 
 		% succesfull detach action handling
 		if percept(lastAction(detach)), bel(haveBlockAttached(BoolOld2, Dold)) then 
@@ -61,6 +63,13 @@ module updateLastActionResultData {
 		if percept(lastAction(connect)), bel(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) then
 		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) + 
 		    insert(currentChosenTask(task0, -1, 10 , 0, 1, b5, needNewTask, needNewTask)).
+	
+		% successful submit 1task agent set to find new task
+		if percept(lastAction(submit)), 
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentOneTask, V8))
+		    then 
+		         delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentOneTask, V8)) + 
+		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).	
 		    
 		% successful submit suubmittingAgent set to find new partner
 		if percept(lastAction(submit)), 

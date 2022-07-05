@@ -22,6 +22,7 @@ use "./eventsubmodules/handleMessageRoleZone" as module.
 use "./eventsubmodules/handleMessageDeletedGoalZone" as module.
 use "./eventsubmodules/handleMessageDispenser" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as module.
+use "./taskhandling/changeTaskCheck" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -65,39 +66,39 @@ module goaldiggerEvent {
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
 
-	% SUBMODULE update nearest Agent on map for submitterleader
-	if bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentData.
+%	% SUBMODULE update nearest Agent on map for submitterleader
+%	if bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentData.
+
+	% SUBMODULE ask for a dispenser if none known
+	if true then handleMessageDispenser.	
+		
+	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
+	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
+    
+    % SUBMODULE chose new task if necessary
+    if true then changeTaskCheck.
 
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
 	
-	% SUBMODULE ask for a goal zone if none known
-	if true then handleMessageGoalZone.
-	
 	% SUBMODULE ask for a role zone if none known
 	if percept(role(default)) then handleMessageRoleZone.
-	
-	% SUBMODULE ask for a dispenser if none known
-	if true then handleMessageDispenser.	
 
     % SUBMODULE update rolezone map data
     if percept(role(default)) then updateRolezoneData.
 
-	% SUBMODULE update goalzone map data
-	if percept(step(SimStep),role(worker)), bel(haveBlockAttached(true, _), 
-	           currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
-	           TaskStep >= SimStep) 
-	    then updateGoalzoneData.
+	% SUBMODULE ask for a goal zone if none known
+	if true then handleMessageGoalZone.
 	    
 	% SUBMODULE delete goal zones if other agents have found that they don't exist anymore
 	if percept(step(SimStep), SimStep > 3333),
 	   (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
-
-	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
-	if bel(haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
-	if percept(step(SimStep), role(worker)), bel(haveBlockAttached(true, _), 
-	           currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) 
-	    then updateDispenserData.
+	   
+	% SUBMODULE update goalzone map data
+	if percept(step(SimStep),role(worker)), bel(calculateNewGoalzoneMD, haveBlockAttached(true, _), 
+	           currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
+	           TaskStep >= SimStep) 
+	    then updateGoalzoneData.
 	    
 	% SUBMODULE manhattan switch manipulation
 	if true then manageManhattanSwitchStatus.
@@ -123,6 +124,10 @@ module goaldiggerEvent {
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), 
 	   bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) 
 	    then delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
+	    
+	% remove switch
+	if bel(calculateNewDispenserMD) then delete(calculateNewDispenserMD).
+	if bel(calculateNewGoalzoneMD) then delete(calculateNewGoalzoneMD).	
 
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn) then logMiniPercept.
