@@ -46,8 +46,10 @@ module updateLastActionResultData {
 		}		
 
 		% succesfull detach action handling
-		if percept(lastAction(detach)), bel(haveBlockAttached(BoolOld2, Dold)) then 
-		  delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(false, Dold)).	
+		if percept(lastAction(detach)), bel(haveBlockAttached(BoolOld2, Dold)) then { 
+		  if true then delete(haveBlockAttached(BoolOld2, Dold)) + insert(haveBlockAttached(false, Dold)).	
+		  if not(bel(calculateNewDispenserMD)) then insert(calculateNewDispenserMD).
+		  }
 
 		% rotate update attached coordinates
 		if percept(lastAction(rotate), lastActionParams([Dir])), 

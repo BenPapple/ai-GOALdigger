@@ -1,7 +1,9 @@
 use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
 use helperManhattanCalcModule as module.
 use helperManhattanChoiceModule as module.
 use executeRandomMove as module.
+use "../actionhandling/preActionCleanup" as module.
 
 /**
  * Manhattan Distance Controller organizing modules to execute move with Calculation and Actions
@@ -12,5 +14,11 @@ module executeManhattanMove {
 	
 	% Manhattan Magic first calculate nswe then choose direction
 	if true then helperManhattanCalcModule + helperManhattanChoiceModule.
+	
+	% random move
+	if true then executeRandomMove.
+	
+	% skip
+	if true then preActionCleanup + skip.
 	
 } % module

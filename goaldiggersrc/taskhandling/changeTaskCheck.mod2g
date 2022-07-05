@@ -18,7 +18,8 @@ module changeTaskCheck {
     	    then chooseTask.
     	    
     	% change from 1-task to 2-task as submitterLeader
-    	if percept(step(SimStep)), 
+    	if bel(confirmedOtherAgentAt(_, _, _)),
+    	   percept(step(SimStep)), 
     	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep, submitterLeader),
     	   percept(task(_ ,TaskStep2, 40,[req(_,_,_),req(_,_,_)]), TaskStep2 > SimStep)
     	    then chooseTask.
