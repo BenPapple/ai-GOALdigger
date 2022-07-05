@@ -21,8 +21,11 @@ module updateDispenserData {
 		delete(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) + insert(storedDispenser(X, Y, dispenser, Details, Md, CheckSend)).
 
 	% COMPARE lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
-	forall bel(currentChosenTask(_, _, _, _, _, BlockType, _,_), haveBlockAttached(false, _), storedDispenser(X, Y, dispenser, BlockType, MDValue, _)), percept(role(worker)) do {
-		if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
+	forall bel(currentChosenTask(_, _, _, _, _, BlockType, _,_), haveBlockAttached(false, _), 
+	           storedDispenser(X, Y, dispenser, BlockType, MDValue, _)), percept(role(worker)) do {
+		if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt) 
+		 then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) 
+		      + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
 	}
 
 	% COMPARE lowest MD value for ALL stored dispensers

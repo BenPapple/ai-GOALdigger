@@ -79,7 +79,7 @@ module goaldiggerEvent {
     if true then changeTaskCheck.
 
 	% SUBMODULE managing messages concerning task coordination
-	if bel(confirmedOtherAgentAt(_, _, _)) then messageMultiTaskCoordination.
+	if true then messageMultiTaskCoordination.
 	
 	% SUBMODULE ask for a role zone if none known
 	if percept(role(default)) then handleMessageRoleZone.
