@@ -1,5 +1,5 @@
-use "../goaldiggerProlog" as knowledge.
-use "../goaldiggerAction" as actionspec.
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
 
 /**
  * Manage worldsizes of all agents and update believe when worldsize known with recalculated coordinates

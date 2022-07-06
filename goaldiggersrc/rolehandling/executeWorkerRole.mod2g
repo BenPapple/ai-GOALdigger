@@ -5,8 +5,6 @@ use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
 use "../pathfinding/executeMoveAroundSubmitter" as module.
-use "../eventsubmodules/handleMessageGoalZone" as module.
-use "../eventsubmodules/handleMessageDispenser" as module.
 use "../taskhandling/changeTaskCheck" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.

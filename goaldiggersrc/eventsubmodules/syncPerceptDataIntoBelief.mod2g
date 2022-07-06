@@ -20,19 +20,6 @@ module syncPerceptDataIntoBelief {
 	        then delete(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
 	}
 	
-	% CREATE belief about status messages
-	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
-	    if not(bel(storedOtherAgentStatus(SenderName, _, _, _, _, _, _, _))) then 
-	        insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
-	}
-	    
-	% UPDATE belief about status messages
-	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
-	    if bel(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8), MsgStep > OldMsgStep) then 
-	        delete(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8)) + 
-	        insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
-	}
-	
 	% STORE unknown dispensers from percept with MD field
 	forall percept(thing(X, Y, dispenser, Details), name(MyName)) do {
 	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), 
@@ -68,7 +55,7 @@ module syncPerceptDataIntoBelief {
 	forall bel(mapGoalZone(X, Y, Md)) do{
 	    if bel(mapGoalZone(X, Y, Md)), bel(agentAt(X2, Y2, _), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5),
 	       not(percept((goalZone(X3, Y3)))) then delete(mapGoalZone(X, Y, Md)).
-	       % TO DO: In order to activate the messages for deletd goal zones, add:
+	       % ToDo: In order to activate the messages for deletd goal zones, add:
 	       % To the conditions: percept(name(MyName))
 	       % To the actions: allother.send(messageDeletedGoalZone(X, Y, MyName))	       
 	}

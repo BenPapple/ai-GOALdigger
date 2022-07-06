@@ -22,5 +22,18 @@ module syncMessageDataIntoBelief {
 			if bel(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step =< SimStep - 7)
 				       then delete(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
 	}
+		
+	% CREATE belief about status messages
+	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
+	    if not(bel(storedOtherAgentStatus(SenderName, _, _, _, _, _, _, _))) then 
+	        insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
+	}
+	    
+	% UPDATE belief about status messages
+	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
+	    if bel(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8), MsgStep > OldMsgStep) then 
+	        delete(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8)) + 
+	        insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
+	}
 	
-}
+} % end module
