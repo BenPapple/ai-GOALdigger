@@ -1,17 +1,17 @@
 use "../../goaldiggerProlog" as knowledge.
 
 /**
- * ToDo 2task hack: Coordinate messages between agents about relative coordinates
+ * Coordinate messages between agents about relative coordinates
  *
  */
 
-module handleMessageAgentOffsetLegacy {
+module handleMessageAgentOffset {
 
     % delete last sim survived messages
-    forall percept(step(SimStep)), bel(storedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6), MsgStep > SimStep) 
+    forall percept(step(SimStep)), bel(cashedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6), MsgStep > SimStep) 
         do {
-        if bel(storedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6))
-            then delete(storedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6)).
+        if bel(cashedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6))
+            then delete(cashedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6)).
     }
 
     % on switch send calculated offset to other agents
@@ -24,20 +24,20 @@ module handleMessageAgentOffsetLegacy {
     if bel(calculatedNewOffset) then delete(calculatedNewOffset).
 
 	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders and cashed messages older than 4 steps
-	forall bel(storedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
+	forall bel(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
 	    if percept(name(AgentReceiver), step(SimStep), Step < SimStep -4), 
-           not(bel(storedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
+           not(bel(cashedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
 	               AgentReceiver \== AgentNameSender2))
 		    then {
 
 			% if only 1x inverse coordinates are found
-			if bel(storedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+			if bel(cashedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
 			   not(bel(confirmedOtherAgentAt(_, _, AgentNameSender))),
 			   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
 			   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative) 
 			    then {
 					
-				if not(bel(storedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
+				if not(bel(cashedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
 				                AgentNameSender \== AgentNameSender3)) then {
 
 					% calculate offset

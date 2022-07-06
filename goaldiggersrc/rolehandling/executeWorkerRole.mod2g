@@ -26,10 +26,7 @@ module executeWorkerRole {
 	 */	
 	if bel(haveBlockAttached(false,_)) then {
 	
-%		% Check if agent can change task
-%		if true then changeTaskCheck.
-    	
-        % Movement around dispenser when without block
+ 	    % Movement around dispenser when without block
 	    if percept(step(SimStep)), 
 	       bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep), 
 	       percept(thing(A, B, dispenser, BlockType), abs(A) =< 1, abs(B) =< 1)
@@ -55,9 +52,6 @@ module executeWorkerRole {
 		if percept(lastActionResult(success), lastAction(connect)),
 		   not(bel(submitterLeader))
 		    then preActionCleanup + detach(DirBlock).
-		
-%		% Check if agent can change task
-%		if true then changeTaskCheck.
 	
     	% detach block if task does not fit
     	if bel(directionToCoordinate(DirBlock, A, B)), 

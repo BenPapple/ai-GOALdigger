@@ -1,4 +1,5 @@
-use "../goaldiggerProlog" as knowledge.
+use "../../goaldiggerProlog" as knowledge.
+use logScoringBoard as module.
 
 /**
  * Handles logging custom data in Our Mini Percept
@@ -39,30 +40,8 @@ module logMiniPercept {
 	    if not(bel(submitterLeader)) ,bel(positionInHirarchie(PositionInHirarchie)) 
 	        then print("Agent hierarchy position:"| PositionInHirarchie).
 	    
-%	    % score table sim end
-%	    if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(0)),
-%	       bel(cashedCount2Task(Num2Task),simCount(SimCountOld), SimCount is SimCountOld -1) then 
-%			print("Simulation"+SimCount+"ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task)
-%			+ delete(cashedCount2Task(Num2Task)) + insert(cashedCount2Task(0)).
-%		if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(749)),
-%		   bel(simCount(SCount), SCount >= 5, cashedCount2Task(Num2Task)) then 
-%			print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task)
-%			+ delete(cashedCount2Task(Num2Task)) + insert(cashedCount2Task(0)).
-	    
-%	    % 2Task success logging
-%		if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
-%		   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
-%		   bel(currentChosenTask(TaskName, _, 40, _, _, _, _, _), count2Task(Num2Task, OldStep), 
-%		       NewCount is Num2Task +1, CurrentStep > OldStep)
-%		    then {
-%		        if bel(count2Task(Num2Task, OldStep)) 
-%		            then delete(count2Task(Num2Task, OldStep)) 
-%		                 + insert(count2Task(NewCount, CurrentStep))
-%		                 + print("Agent made 40 Points  On Step " + CurrentStep + " In Sim " + 
-%		                         SimCount+"2TaskGoals: "+NewCount).
-%		        if bel(count2Task(NumUpd, _), cashedCount2Task(V1)) 
-%		            then delete(cashedCount2Task(V1)) + insert(cashedCount2Task(NumUpd)).
-%		 }
+	    % log score board
+        if true then logScoringBoard.
 		    
 		% Simulation counter
 		if bel(simCount(SimCount)) then print("This is simulation: " + SimCount).

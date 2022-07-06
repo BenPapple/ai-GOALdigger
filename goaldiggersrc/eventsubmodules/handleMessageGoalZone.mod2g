@@ -14,15 +14,15 @@ module handleMessageGoalZone {
 	% Check received messageGoalzone messages.
 	forall (_).sent(msgGoalZoneData(X,Y,SenderName)) do {
 			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY),
-			   not(bel(storedGoalZone(X1,Y1,_))) then {
-			 if true then insert(storedGoalZone(X1,Y1, gzStoredFromMessage)).
+			   not(bel(mapGoalZone(X1,Y1,_))) then {
+			 if true then insert(mapGoalZone(X1,Y1, gzStoredFromMessage)).
 			 if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
 			 }
 	}
 	
 	% Ask for stored goal zones if none are known
 	% TO DO: When the new Offset calculation is ready, change confirmedOtherAgentAt with agentOffset
-	if not(bel(storedGoalZone(_,_,_))), percept(name(MyName), role(worker)),
+	if not(bel(mapGoalZone(_,_,_))), percept(name(MyName), role(worker)),
 	   bel(haveBlockAttached(true, _)) then {
 		forall bel(confirmedOtherAgentAt(_,_,SenderName), storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _))
 		do (SenderConnect).send(messageNeedGoalZone(MyName)).

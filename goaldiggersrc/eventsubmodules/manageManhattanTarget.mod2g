@@ -1,5 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
+use "../pathfinding/helperManhattanCalc" as module.
 
 /**
  * Manages Manhattan targets
@@ -26,19 +27,7 @@ module manageManhattanTarget {
 				                                      insert(targetMd(AltX, AltY, dispenser)).	
 				if not(bel(executeManhattan)) then insert(executeManhattan).
 	}
-	
-% ToDo still necessary or deadlock problem?	
-%	% target dispenser from percept
-%	if bel(haveBlockAttached(false,_), currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
-%	       agentAt(AgentX, AgentY)),
-%	   percept(step(SimStep), role(worker), thing(DispX, DispY, dispenser, BlockType)),
-%	   bel(TaskStep >= SimStep, AltX is DispX + AgentX, AltY is DispY + AgentY)
-%	    then {		
-%				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)) + 
-%				                                      insert(targetMd(AltX, AltY, dispenser)).	
-%				if not(bel(executeManhattan)) then insert(executeManhattan).
-%	}
-		
+
 	% With block and as submittingAgent update goalzone target MD
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
 	       TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567),
@@ -80,6 +69,9 @@ module manageManhattanTarget {
 		   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
 		       targetMd(Xdel, Ydel, Zdel))
 		    then delete(targetMd(Xdel, Ydel, Zdel)) + insert(targetMd(Xtarget, Ytarget, supportingPosition)).
-	}	
+	}
+	
+	% Manhattan Magic calculate nswe
+	if bel(executeManhattan) then helperManhattanCalc.	
 		
 } % end module

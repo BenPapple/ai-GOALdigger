@@ -29,15 +29,15 @@
 :- dynamic skipThisStep/1. % do skip/explore until this step
 :- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
 :- dynamic currentChosenTask/8. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType, Client/Server, NameSubmitter)
-:- dynamic storedDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
-:- dynamic storedGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
-:- dynamic storedRoleZone/3. % rolezone percept data plus MD (X,Y,MD)
+:- dynamic mapDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
+:- dynamic mapGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
+:- dynamic mapRoleZone/3. % rolezone percept data plus MD (X,Y,MD)
 :- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
 :- dynamic targetClosestRoleZone/3. % rolezone XY plus MD field (X,Y,MD)
 :- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
 :- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgentWithNeededBlock/4. % nearest Agent (Name, X, Y, MD).
-:- dynamic storedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
+:- dynamic cashedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
 
 
 :- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
@@ -53,12 +53,12 @@
 :- dynamic worldSizeX/1, worldSizeY/1. % store the size of the world on X and Y
 
 
-% Variables related to goal zone and dispenser messaging
-:- dynamic messageGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
-:- dynamic messageDeletedGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
-:- dynamic messageDispenser/6. % dispenser data plus sender name (X,Y,Type,Details,SenderName)
-:- dynamic messageNeedGoalZone/1. % message containing just the sender name
-:- dynamic messageNeedDispenser/2. % message containing the requested dispenser details (BlockType) and the sender name
+% messages can be commented out and still work; Variables related to goal zone and dispenser messaging
+%:- dynamic messageGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
+%:- dynamic messageDeletedGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
+%:- dynamic messageDispenser/6. % dispenser data plus sender name (X,Y,Type,Details,SenderName)
+%:- dynamic messageNeedGoalZone/1. % message containing just the sender name
+%:- dynamic messageNeedDispenser/2. % message containing the requested dispenser details (BlockType) and the sender name
 
 % Variables related to choosing or Determine Role
 :- dynamic targetRole/1.
@@ -70,8 +70,6 @@
 :- dynamic otherAgentAt/4. % store / update other agents' positions
 :- dynamic storedOtherAgentStatus/8. % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)
 :- dynamic agentOffset/4. % field name x y CalcStep
-:- dynamic savedOffsetMessage/5. % Saves offset messages from other to use them later
-:- dynamic ownTeam/1, ownName/1. %These variables contain the own team name and own name 
 :- dynamic distStepNamePosition/6. % message passed to everyone else if other agents seen / saved (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
 :- dynamic myDistStepNamePosition/5. % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
 
@@ -90,8 +88,6 @@ transformTwoTimesXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 2.
 
 % Update position XY in relation to agent position X2 Y2
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
-%ToDo check delocalize
-%delocalize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + (X2 * -1), Y3 is Y1 + (Y2 * -1). % X1Y1 gets localized by X2Y2 (add negative values, substract positive values)
 
 % Offset calculator
 calculateAgentOffset(ReceiverBaseX, ReceiverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is ReceiverBaseX + PerceptOffsetX - SenderBaseX, 
@@ -259,7 +255,7 @@ getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
 % modulo function for 2 values. It returns int values.
 %getModInt(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
 
-% ToDo still necessary???
+% ToDo worldsize reactivate
 % conditional modulo function: it only triggers if the world size is no longer 1000, it returns pos values
 %getModInt(X1,Y1,SizeX,SizeY,X2,Y2) :-
 %    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);

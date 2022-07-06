@@ -14,7 +14,6 @@ order = linearrandom.
 module helperMoveOrClearForward {
 
     % Move into main affinity direction if possible
-    % double speed; ToDo reactivate when allowed again for competition
     if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
        percept(role(worker)), 
        not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)), 

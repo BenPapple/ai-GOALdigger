@@ -9,7 +9,7 @@ exit = always.
  *
  */
 
-module helperManhattanCalcModule {
+module helperManhattanCalc {
 
 	% Calculate ManhattanDistance for fields nswe of agent and stores distance value
 	if bel(agentAt(X1,Y1, _), targetMd(X2,Y2, _), calculateMinusOne(Y1,Y3), calculateXYMd(X1,Y3,X2,Y2,Md)) then {

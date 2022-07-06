@@ -46,13 +46,13 @@ module reinitBeliefOnSimChange {
 	% on switch delete custom belief data belonging to old simulation
 	if bel(expectDifferentSimulations) then {
 	
-		forall bel(storedDispenser(V1, V2, V3, V4, V5, V6)) do delete(storedDispenser(V1, V2, V3, V4, V5, V6)).
-		forall bel(storedGoalZone(V1, V2, V3)) do delete(storedGoalZone(V1, V2, V3)).
-		forall bel(storedRoleZone(V1, V2, V3)) do delete(storedRoleZone(V1, V2, V3)).
+		forall bel(mapDispenser(V1, V2, V3, V4, V5, V6)) do delete(mapDispenser(V1, V2, V3, V4, V5, V6)).
+		forall bel(mapGoalZone(V1, V2, V3)) do delete(mapGoalZone(V1, V2, V3)).
+		forall bel(mapRoleZone(V1, V2, V3)) do delete(mapRoleZone(V1, V2, V3)).
 		
 		forall bel(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)) do delete(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)).
 		forall bel(confirmedOtherAgentAt(V1, V2, V3)) do delete(confirmedOtherAgentAt(V1, V2, V3)).
-	    forall bel(storedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)) do delete(storedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)).
+	    forall bel(cashedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)) do delete(cashedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)).
 	    
 	}
 	

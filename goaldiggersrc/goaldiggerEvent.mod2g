@@ -1,11 +1,11 @@
 use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
-use "./eventsubmodules/updateDispenserData" as module.
-use "./eventsubmodules/updateGoalzoneData" as module.
-use "./eventsubmodules/updateRolezoneData" as module.
-use "./eventsubmodules/logMiniPercept" as module.
-use "./eventsubmodules/logScoringBoard" as module.
-use "./eventsubmodules/updateLastActionResultData" as module.
+use "./eventsubmodules/updateDispenserDistance" as module.
+use "./eventsubmodules/updateGoalzoneDistance" as module.
+use "./eventsubmodules/updateRolezoneDistance" as module.
+use "./eventsubmodules/debugtools/logMiniPercept" as module.
+use "./eventsubmodules/debugtools/logScoringBoard" as module.
+use "./eventsubmodules/syncLastActionResultDataIntoBelief" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
@@ -17,12 +17,11 @@ use "./eventsubmodules/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
-use "./eventsubmodules/updateNearestAgentData" as module.
 use "./eventsubmodules/handleMessageGoalZone" as module.
 use "./eventsubmodules/handleMessageRoleZone" as module.
 use "./eventsubmodules/handleMessageDeletedGoalZone" as module.
 use "./eventsubmodules/handleMessageDispenser" as module.
-use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffsetLegacy" as module.
+use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffset" as module.
 use "./taskhandling/changeTaskCheck" as module.
 
 /**
@@ -40,10 +39,10 @@ module goaldiggerEvent {
 	if bel(thisIsTheFirstSim) then delete(thisIsTheFirstSim).
 	
 	% Logging made points by agents
-	if true then logScoringBoard.
+	if not(bel(lDebugOn)) then logScoringBoard.
 
 	% SUBMODULE managing success and partial_success percepts
-	if true then updateLastActionResultData.
+	if true then syncLastActionResultDataIntoBelief.
 
 	% SUBMODULE Store percept/message data in belief
 	if true then syncPerceptDataIntoBelief.
@@ -59,13 +58,13 @@ module goaldiggerEvent {
 	
 	% SUBMODULES to measure the world
 	if percept(step(SimStep), SimStep > 3333) then {
-		% add agentAtComplexWorld, storedDispenserComplexWorld, otherAgentAtComplexWorld (bel)
+		% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 		if true then updateWorldSizeData.
 		if true then handleMessageDistStepNamePosition.
 	}
 	
 	% SUBMODULE SimpleWorldcalculation
-	if true then handleMessageAgentOffsetLegacy.
+	if true then handleMessageAgentOffset.
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
@@ -77,7 +76,7 @@ module goaldiggerEvent {
 	if true then handleMessageDispenser.	
 		
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
-	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserData.
+	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserDistance.
     
     % SUBMODULE chose new task if necessary
     if true then changeTaskCheck.
@@ -89,7 +88,7 @@ module goaldiggerEvent {
 	if percept(role(default)) then handleMessageRoleZone.
 
     % SUBMODULE update rolezone map data
-    if percept(role(default)) then updateRolezoneData.
+    if percept(role(default)) then updateRolezoneDistance.
 
 	% SUBMODULE ask for a goal zone if none known
 	if true then handleMessageGoalZone.
@@ -102,7 +101,7 @@ module goaldiggerEvent {
 	if percept(step(SimStep),role(worker)), bel(calculateNewGoalzoneMD, haveBlockAttached(true, _), 
 	           currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
 	           TaskStep >= SimStep) 
-	    then updateGoalzoneData.
+	    then updateGoalzoneDistance.
 	    
 	% SUBMODULE manhattan switch manipulation
 	if true then manageManhattanSwitchStatus.
