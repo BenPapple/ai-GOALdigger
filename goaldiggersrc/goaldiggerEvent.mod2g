@@ -9,18 +9,18 @@ use "./eventsubmodules/syncLastActionResultDataIntoBelief" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
-use "./eventsubmodules/handleMessageDistStepNamePosition" as module.
+use "./eventsubmodules/simpleworldcalculation/handleMessageDistStepNamePosition" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/syncMessageDataIntoBelief" as module.
 use "./eventsubmodules/messageMultiTaskCoordination" as module.
-use "./eventsubmodules/updateWorldSizeData" as module.
+use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
-use "./eventsubmodules/handleMessageGoalZone" as module.
-use "./eventsubmodules/handleMessageRoleZone" as module.
-use "./eventsubmodules/handleMessageDeletedGoalZone" as module.
-use "./eventsubmodules/handleMessageDispenser" as module.
+use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
+use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
+use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
+use "./eventsubmodules/sharedmap/handleMessageDispenser" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffset" as module.
 use "./taskhandling/changeTaskCheck" as module.
 
