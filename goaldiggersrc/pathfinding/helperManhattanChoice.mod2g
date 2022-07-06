@@ -10,7 +10,7 @@ use "../actionhandling/preActionCleanup" as module.
  *
  */
 
-module helperManhattanChoiceModule {
+module helperManhattanChoice {
 
 	% manhattan movement with 1 or 2 blocks attached
 	if bel(haveBlockAttached(true, _)) then helperMoveManhattanWithBlock.

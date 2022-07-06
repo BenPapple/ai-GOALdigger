@@ -48,8 +48,8 @@ module updateWorldSizeData {
 %	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
 %	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
 %		then { 
-%			forall bel(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do 
-%				delete(storedDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(storedDispenser(X2, Y2, dispenser, Details, MDValue, Bool)).
+%			forall bel(mapDispenser(X1, Y1, dispenser, Details, MDValue, Bool), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do 
+%				delete(mapDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(mapDispenser(X2, Y2, dispenser, Details, MDValue, Bool)).
 %			}
 %	
 %	% After updating one agent's belief about world size, the agent updates other agents' positions. The variable updateOtherAgentAt stores the values while deletig old values.

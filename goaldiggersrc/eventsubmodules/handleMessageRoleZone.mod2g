@@ -11,8 +11,8 @@ module handleMessageRoleZone {
 	% Check received messageRolezone messages.
 	forall (_).sent(msgRoleZoneData(X,Y,SenderName)) do {
 			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
-			   not(bel(storedRoleZone(X1,Y1,_))) 
-			    then insert(storedRoleZone(X1,Y1, rzStoredFromMessage)).
+			   not(bel(mapRoleZone(X1,Y1,_))) 
+			    then insert(mapRoleZone(X1,Y1, rzStoredFromMessage)).
 		}
 	
 	% Ask for stored role zones if none are known

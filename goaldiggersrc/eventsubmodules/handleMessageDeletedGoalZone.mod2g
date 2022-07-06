@@ -1,18 +1,21 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "./updateGoalzoneData" as module.
+
+/**
+ * Delete goalzone by message
+ *
+ */
 
 module handleMessageDeletedGoalZone {
 	
-	% TO DO: When the new Offset calculation is ready, change confirmedOtherAgentAt with agentOffset
 	% TO DO: When the world measurement is ready, adapt coordinates additionaly to world size
 	
 	% Check received messageDeletedGoalzone messages.
 	forall (_).sent(messageDeletedGoalZone(X,Y,SenderName)) do {
 			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
-			   storedGoalZone(X1,Y1,Md)) 
-			    then delete (storedGoalZone(X1,Y1,Md)) 
-			         + print("Deleted"+storedGoalZone(X1,Y1,12345)+" Offset "+
+			   mapGoalZone(X1,Y1,Md)) 
+			    then delete (mapGoalZone(X1,Y1,Md)) 
+			         + print("Deleted"+mapGoalZone(X1,Y1,12345)+" Offset "+
 			                 confirmedOtherAgentAt(OffsetX,OffsetY,SenderName)).
 		}
 }

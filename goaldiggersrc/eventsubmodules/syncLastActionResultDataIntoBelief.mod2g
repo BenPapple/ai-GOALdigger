@@ -6,7 +6,7 @@ use "../goaldiggerAction" as actionspec.
  *
  */
 
-module updateLastActionResultData {
+module syncLastActionResultDataIntoBelief {
 
 	% Managing action partial_success action messages
 	forall percept(lastActionResult(partial_success)) do {	

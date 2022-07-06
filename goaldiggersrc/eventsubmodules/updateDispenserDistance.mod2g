@@ -6,7 +6,7 @@ use "../goaldiggerAction" as actionspec.
  *
  */
 
-module updateDispenserData {
+module updateDispenserDistance {
 
 	% RESET old MD values in targetDispenserAt to high number expected to not occur in simulation
 	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt))
@@ -17,19 +17,19 @@ module updateDispenserData {
 		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
 
 	% CALCULATE MD for all stored in bel dispensers
-	forall bel(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md)) do
-		delete(storedDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) + insert(storedDispenser(X, Y, dispenser, Details, Md, CheckSend)).
+	forall bel(mapDispenser(X, Y, dispenser, Details, MDValue, CheckSend), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md)) do
+		delete(mapDispenser(X, Y, dispenser, Details, MDValue, CheckSend)) + insert(mapDispenser(X, Y, dispenser, Details, Md, CheckSend)).
 
 	% COMPARE lowest MD value for all stored dispensers CONCERNING ONE BLOCKTYPE
 	forall bel(currentChosenTask(_, _, _, _, _, BlockType, _,_), haveBlockAttached(false, _), 
-	           storedDispenser(X, Y, dispenser, BlockType, MDValue, _)), percept(role(worker)) do {
+	           mapDispenser(X, Y, dispenser, BlockType, MDValue, _)), percept(role(worker)) do {
 		if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt) 
 		 then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt)) 
 		      + insert(targetDispenserAt(X, Y, BlockType, MDValue)).
 	}
 
 	% COMPARE lowest MD value for ALL stored dispensers
-	forall bel(storedDispenser(X, Y, dispenser, BlockType, MDValue, _), haveBlockAttached(false,_)), percept(role(worker)) do {
+	forall bel(mapDispenser(X, Y, dispenser, BlockType, MDValue, _), haveBlockAttached(false,_)), percept(role(worker)) do {
 	
 		if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), MDValue < MDAlt) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) +
 			insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).
