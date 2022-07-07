@@ -13,7 +13,7 @@ module goaldiggerInit {
 	% To count sim changes
 	if not(bel(simCount(_))) then insert(simCount(1)). 
 	if not(bel(count2Task(_, _))) then insert(count2Task(0, 0)). 
-	if not(bel(cashedCount2Task(_))) then insert(cashedCount2Task(0)). 
+	if not(bel(cachedCount2Task(_))) then insert(cachedCount2Task(0)). 
 	if true then insert(thisIsTheFirstSim).
 	
 	% global values

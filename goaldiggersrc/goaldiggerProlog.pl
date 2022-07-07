@@ -9,7 +9,7 @@
 :- dynamic expectDifferentSimulations/0. % switch to recognize simulations have different characteristics on sim change
 :- dynamic simCount/1. %Counter for sim in tournament mode
 :- dynamic count2Task/2. % submitterLeader counts his submitted 2tasks
-:- dynamic cashedCount2Task/1. % cashed so it survives map change for score table
+:- dynamic cachedCount2Task/1. % cached so it survives map change for score table
 :- dynamic activateTimer/0. % switch timing step calculation of agent
 :- dynamic thisIsTheFirstSim/0. % prevents reinit in first sim
 :- dynamic calculatedNewOffset/0. % switch to send calculated offsets to everyone
@@ -37,10 +37,10 @@
 :- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
 :- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgentWithNeededBlock/4. % nearest Agent (Name, X, Y, MD).
-:- dynamic cashedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
+:- dynamic cachedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
 
 
-:- dynamic confirmedOtherAgentAt/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
+:- dynamic confirmedOffsetOfAgent/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 %:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
 %:- dynamic sawGoalzoneAt/3. % data for message (X,X, MyAgentName)
 %:- dynamic sawDispenserAt/4. % data for messages (X,Y, Type, MyAgentName)

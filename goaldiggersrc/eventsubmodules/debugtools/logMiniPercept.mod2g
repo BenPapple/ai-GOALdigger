@@ -66,7 +66,7 @@ module logMiniPercept {
 	    
 	    if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, NameSupporter)),
 	       bel(storedOtherAgentStatus(NameSupporter, _, _, _, _, X, Y, Block)),
-	       bel(confirmedOtherAgentAt(OffsetX,OffsetY,NameSupporter)),
+	       bel(confirmedOffsetOfAgent(OffsetX,OffsetY,NameSupporter)),
 	       bel(XNew is X + OffsetX, YNew is Y + OffsetY)
 	     then print("Supporter AgentAt: "| XNew| YNew+"Block: "| Block).
 		
