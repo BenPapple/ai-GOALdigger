@@ -14,7 +14,7 @@ module reinitBeliefOnSimChange {
 	if bel(count2Task(Num2Task, V2)) then delete(count2Task(Num2Task, V2)) + insert(count2Task(0, 0)).
 
 	% restore initial belief
-	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, b0, placeholder, placeholder2)).
+	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)).
 	if bel(agentAt(V1, V2, V3)) then delete(agentAt(V1, V2, V3)) + insert(agentAt(0, 0, 0)).
 	if bel(executeManhattan) then delete(executeManhattan).
 	if not(bel(haveMove)) then insert(haveMove).
@@ -30,8 +30,8 @@ module reinitBeliefOnSimChange {
 	if bel(positionInHirarchie(Position)) then delete(positionInHirarchie(Position)) + insert(positionInHirarchie(0)).
 	if bel(targetRole(Role)) then delete(targetRole(Role)) + insert (targetRole(worker)).
 	
-	if bel(targetDispenserAt(X, Y, Z, A)) then delete(targetDispenserAt(X, Y, Z, A)) + insert (targetDispenserAt(70, 70, b9, 700)). % init with dummy values 
-	if bel(targetClosestOfAllDispensersAt(X, Y, Z, A)) then delete(targetClosestOfAllDispensersAt(X, Y, Z, A)) + insert (targetClosestOfAllDispensersAt(70, 70, b9, 700)). % init with dummy values 
+	if bel(targetDispenserAt(X, Y, Z, A)) then delete(targetDispenserAt(X, Y, Z, A)) + insert (targetDispenserAt(70, 70, bx, 700)). % init with dummy values 
+	if bel(targetClosestOfAllDispensersAt(X, Y, Z, A)) then delete(targetClosestOfAllDispensersAt(X, Y, Z, A)) + insert (targetClosestOfAllDispensersAt(70, 70, bx, 700)). % init with dummy values 
 	
 	% goalzone targets
 	if bel(targetClosestGoalZone(X, Y, Z)) then delete(targetClosestGoalZone(X, Y, Z)) + insert (targetClosestGoalZone(111, 111, 123456)). % init with dummy values 
@@ -53,6 +53,10 @@ module reinitBeliefOnSimChange {
 		forall bel(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)) do delete(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)).
 		forall bel(confirmedOffsetOfAgent(V1, V2, V3)) do delete(confirmedOffsetOfAgent(V1, V2, V3)).
 	    forall bel(cachedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)) do delete(cachedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)).
+	    forall bel(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, 
+	               Step)) 
+	            do delete(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, 
+	                                                 UnknownAgentName, Step)).
 	    
 	}
 	

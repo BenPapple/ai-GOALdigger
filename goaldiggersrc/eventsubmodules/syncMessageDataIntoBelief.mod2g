@@ -22,6 +22,30 @@ module syncMessageDataIntoBelief {
 			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step =< SimStep - 7)
 				       then delete(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
 	}
+	
+	% STORE myOffsetOfOtherAgent messages
+	forall percept(step(SimStep)),
+	       (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step)),
+	       bel(Step =< SimStep) 
+	       do {
+	
+		if  not(bel(confirmedOffsetOfAgent(_, _, KnownSenderName))),
+		    not(bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))),
+		    not(bel(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, 
+		                                       Step)))
+			 then insert(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, 
+			                                        Step)). 
+		
+	}	
+	
+	% DELETE stored myOffsetOfOtherAgent messages from belief when offset known
+	forall bel(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step))
+		do {
+			if percept(step(SimStep), Step =< SimStep),
+			   bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))
+				       then delete(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, 
+				                                              UnknownAgentName, Step)).
+	}	
 		
 	% CREATE belief about status messages
 	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {

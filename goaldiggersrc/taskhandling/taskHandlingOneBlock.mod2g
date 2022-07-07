@@ -9,7 +9,6 @@ use "../eventsubmodules/updateDispenserDistance" as module.
 
 module taskHandlingOneBlock {
 
-    % update dispenser distance
     % SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if not(bel(calculateNewDispenserMD)) then updateDispenserDistance.
 
@@ -70,17 +69,17 @@ module taskHandlingOneBlock {
 		
 	} % if
 
-%	% choose 1-block tasks if it exists
-%	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])), 
-%	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
-%		
-%		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
-%		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
-%		    insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, submittingAgentOneTask, 
-%		           oneTaskSubmitter)) 
-%		    + print("ModuleChoseTask 1task Just Any Taks Fit") +
-%		     exit-module.
-%		
-%	} % if	
+	% choose 1-block tasks if it exists
+	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
+		
+		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
+		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
+		    insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, submittingAgentOneTask, 
+		           oneTaskSubmitter)) 
+		    + print("ModuleChoseTask 1task Just Any Taks Fit") +
+		     exit-module.
+		
+	} % if	
 	
 } % end module

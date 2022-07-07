@@ -2,7 +2,6 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../taskhandling/taskHandlingOneBlock" as module.
 use "../taskhandling/taskHandlingTwoBlock" as module.
-use "../eventsubmodules/updateDispenserDistance" as module.
 
 /**
  * Choose task from options when having corresponding role; waterfall chosing, advanced choices come first in file: 

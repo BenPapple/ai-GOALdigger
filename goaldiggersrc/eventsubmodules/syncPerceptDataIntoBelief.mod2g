@@ -25,7 +25,8 @@ module syncPerceptDataIntoBelief {
 	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), 
 	    not(bel((mapDispenser(X3, Y3, dispenser, Details, _, _)))) then {
 	        if true then insert(mapDispenser(X3, Y3, dispenser, Details, 0, false))
-	        + allother.send(msgDispenserData(X3, Y3, dispenser, Details, false, MyName)).	        
+	        + allother.send(msgDispenserData(X3, Y3, dispenser, Details, false, MyName)).
+	        if not(bel(calculateNewDispenserMD)) then insert(calculateNewDispenserMD).        
 	    }
 	}	
 	
