@@ -21,18 +21,18 @@ module logScoringBoard {
 	                 + insert(count2Task(NewCount, CurrentStep))
 	                 + print("Agent made 40 Points  On Step " + CurrentStep + " In Sim " + 
 	                         SimCount+"2TaskGoals: "+NewCount).
-	        if bel(count2Task(NumUpd, _), cashedCount2Task(V1)) 
-	            then delete(cashedCount2Task(V1)) + insert(cashedCount2Task(NumUpd)).
+	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
+	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).
 	 }
 
 	% score table sim end
     if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(0)),
-       bel(cashedCount2Task(Num2Task),simCount(SimCountOld), SimCount is SimCountOld -1) then 
+       bel(cachedCount2Task(Num2Task),simCount(SimCountOld), SimCount is SimCountOld -1) then 
 		print("Simulation"+SimCount+"ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task)
-		+ delete(cashedCount2Task(Num2Task)) + insert(cashedCount2Task(0)).
+		+ delete(cachedCount2Task(Num2Task)) + insert(cachedCount2Task(0)).
 	if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(749)),
-	   bel(simCount(SCount), SCount >= 5, cashedCount2Task(Num2Task)) then 
+	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task)) then 
 		print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task)
-		+ delete(cashedCount2Task(Num2Task)) + insert(cashedCount2Task(0)).
+		+ delete(cachedCount2Task(Num2Task)) + insert(cachedCount2Task(0)).
 
 }

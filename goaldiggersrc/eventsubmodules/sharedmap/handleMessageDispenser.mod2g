@@ -13,7 +13,7 @@ module handleMessageDispenser {
 	
 	% Check received messageDispenser messages.
 	forall (_).sent(msgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) do {
-			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
+			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
 			   not(bel(mapDispenser(X1,Y1,_,_,_,_))) 
 			    then {
 			    if true then insert(mapDispenser(X1,Y1,dispenser,BlockType,12345,Bool)).
@@ -25,7 +25,7 @@ module handleMessageDispenser {
 	if bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_)), 
 	   not(bel(mapDispenser(_,_,_,BlockType,_,_))),
 	   percept(name(MyName), role(worker), step(SimStep), TaskStep > SimStep) then {
-			forall bel(storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _), confirmedOtherAgentAt(_,_,SenderName))
+			forall bel(storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _), confirmedOffsetOfAgent(_,_,SenderName))
 				do (SenderConnect).send(messageNeedDispenser(BlockType, MyName)).
 	}
 	

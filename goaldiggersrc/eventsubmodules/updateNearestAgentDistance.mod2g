@@ -19,7 +19,7 @@ module updateNearestAgentDistance {
 	
 	% Find lowest MD for known agents with offsets	     
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _), 
-	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName))
+	           confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName))
 		do {
 			if bel(agentAt(OwnX, OwnY, _), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
 			   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
@@ -39,7 +39,7 @@ module updateNearestAgentDistance {
 	
 	% Find lowest MD for known agents with offsets	     
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, BlockTypeAttached), 
-	           confirmedOtherAgentAt(OffsetX, OffsetY, OtherAgentName)),
+	           confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)),
 	       bel(currentChosenTask(TaskName, _, _, _, _, _, _, _)) 
 		do {
 		

@@ -11,16 +11,16 @@ module syncMessageDataIntoBelief {
 	% STORE seenOtherAgent messages
 	forall (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)) do {
 	
-		if not(bel(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)))
-			then insert(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)). 
+		if not(bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)))
+			then insert(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)). 
 		
 	}
 	
 	% DELETE stored seenOtherAgent messages from belief when ~6 steps old
-	forall bel(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), percept(step(SimStep))
+	forall bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), percept(step(SimStep))
 		do {
-			if bel(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step =< SimStep - 7)
-				       then delete(cashedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
+			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step =< SimStep - 7)
+				       then delete(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
 	}
 		
 	% CREATE belief about status messages

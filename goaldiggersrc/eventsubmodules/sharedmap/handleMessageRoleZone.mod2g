@@ -10,14 +10,14 @@ module handleMessageRoleZone {
 	
 	% Check received messageRolezone messages.
 	forall (_).sent(msgRoleZoneData(X,Y,SenderName)) do {
-			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
+			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
 			   not(bel(mapRoleZone(X1,Y1,_))) 
 			    then insert(mapRoleZone(X1,Y1, rzStoredFromMessage)).
 		}
 	
 	% Ask for stored role zones if none are known
 	if percept(name(MyName), role(default)) then {
-		forall bel(confirmedOtherAgentAt(_,_,SenderName), storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _))
+		forall bel(confirmedOffsetOfAgent(_,_,SenderName), storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _))
 		do (SenderConnect).send(messageNeedRoleZone(MyName)).
 	}
 	

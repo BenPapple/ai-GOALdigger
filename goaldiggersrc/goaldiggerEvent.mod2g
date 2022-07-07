@@ -70,7 +70,7 @@ module goaldiggerEvent {
 	if true then messagePermaSendStatusToOthers.	
 
 %	% SUBMODULE update nearest Agent on map for submitterleader
-%	if bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentData.
+%	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) then updateNearestAgentData.
 
 	% SUBMODULE ask for a dispenser if none known
 	if true then handleMessageDispenser.	

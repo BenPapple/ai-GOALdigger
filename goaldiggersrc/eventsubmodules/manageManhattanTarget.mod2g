@@ -50,7 +50,7 @@ module manageManhattanTarget {
 	% goalzone), coordinates converted from A,B to C,D
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
-	       confirmedOtherAgentAt(OffsetX, OffsetY, NameSubmitter),
+	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target), Target \== supportingPosition),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _)), 
 	   bel(localize(A, B, OffsetX, OffsetY, C, D) )

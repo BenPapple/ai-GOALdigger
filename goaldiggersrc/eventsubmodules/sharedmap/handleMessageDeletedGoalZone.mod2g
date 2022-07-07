@@ -12,10 +12,10 @@ module handleMessageDeletedGoalZone {
 	
 	% Check received messageDeletedGoalzone messages.
 	forall (_).sent(messageDeletedGoalZone(X,Y,SenderName)) do {
-			if bel(confirmedOtherAgentAt(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
+			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
 			   mapGoalZone(X1,Y1,Md)) 
 			    then delete (mapGoalZone(X1,Y1,Md)) 
 			         + print("Deleted"+mapGoalZone(X1,Y1,12345)+" Offset "+
-			                 confirmedOtherAgentAt(OffsetX,OffsetY,SenderName)).
+			                 confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName)).
 		}
 }

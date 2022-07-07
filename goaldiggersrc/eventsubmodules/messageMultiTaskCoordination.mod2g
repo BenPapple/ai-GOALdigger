@@ -11,11 +11,11 @@ module messageMultiTaskCoordination {
 
 	% SUBMODULE update nearest Agent on map for submitterleader when necessary
 	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterPending)),
-	   bel(submitterLeader, confirmedOtherAgentAt(_, _, _)) then updateNearestAgentDistance.
+	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) then updateNearestAgentDistance.
 
 	% set other agent with needed block as supporter and oneself as submitter
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)),
-	   bel(confirmedOtherAgentAt(_, _, _)) 
+	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
 	
 		if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {
@@ -47,7 +47,7 @@ module messageMultiTaskCoordination {
 	
 	% set nearest agent without fitting block
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)),
-	   bel(confirmedOtherAgentAt(_, _, _)) 
+	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
 	
 		if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) then {

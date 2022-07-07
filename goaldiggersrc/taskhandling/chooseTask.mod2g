@@ -19,14 +19,14 @@ module chooseTask {
 		 
 	% chose 2-task as submitterLeader if available
 	if bel(submitterLeader, step(SimStep)),
-	   bel(confirmedOtherAgentAt(_, _, _)),
+	   bel(confirmedOffsetOfAgent(_, _, _)),
 	   percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)])), 
 	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 70)  
 	    then taskHandlingTwoBlock.
 	    
-	% chose 1-task as submitterLeader if no confirmedOtherAgentAt known
+	% chose 1-task as submitterLeader if no confirmedOffsetOfAgent known
 	if bel(submitterLeader, step(SimStep)),
-	   not(bel(confirmedOtherAgentAt(_, _, _))),
+	   not(bel(confirmedOffsetOfAgent(_, _, _))),
 	   percept(task(_ ,TaskStep, 10,[req(_,_,_)]), TaskStep > SimStep)
 	   	then taskHandlingOneBlock.
 	    
