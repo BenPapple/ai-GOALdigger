@@ -16,8 +16,8 @@ module handleMessageAgentOffset {
 
     % on switch send calculated offset to other agents
     if bel(calculatedNewOffset) then {
-    forall bel(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)), percept(name(MyName)) 
-        do allother.send(myOffsetOfOtherAgent(MyName, OffsetX, OffsetY, AgentNameSender)).
+    forall bel(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)), percept(name(MyName), step(SimStep)) 
+        do allother.send(myOffsetOfOtherAgent(MyName, OffsetX, OffsetY, AgentNameSender, SimStep)).
     }
     
     % reset switch for offset send
@@ -54,7 +54,21 @@ module handleMessageAgentOffset {
 	} % do
 
     % CALCULATE offset of 3rd agent from message from 2nd agent
-	forall (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName)) do {
+	forall (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step)) do {
+
+			if percept(name(MyName), step(SimStep), Step =< SimStep),
+			   bel(UnknownAgentName \= MyName),
+			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, KnownSenderName)), 
+			   not(bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))),
+			   bel(X1 is OffsetX + OffsetToSenderX, 
+			       Y1 is OffsetY + OffsetToSenderY)
+			       then insert(confirmedOffsetOfAgent(X1, Y1, UnknownAgentName)).				
+	}
+	
+	% CALCULATE offset of 3rd agent from cached message from 2nd agent
+	forall percept(step(SimStep)),
+	       bel(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step),
+	           Step =< SimStep) do {
 
 			if percept(name(MyName)),
 			   bel(UnknownAgentName \= MyName),
@@ -63,6 +77,6 @@ module handleMessageAgentOffset {
 			   bel(X1 is OffsetX + OffsetToSenderX, 
 			       Y1 is OffsetY + OffsetToSenderY)
 			       then insert(confirmedOffsetOfAgent(X1, Y1, UnknownAgentName)).				
-	} 
+	}
 
 } % end module

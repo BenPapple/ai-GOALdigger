@@ -10,11 +10,11 @@ module updateDispenserDistance {
 
 	% RESET old MD values in targetDispenserAt to high number expected to not occur in simulation
 	if bel(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetDispenserAt(AltX, AltY, AltBlockType, MDAlt))
-		+ insert(targetDispenserAt(AltX, AltY, AltBlockType, 1234567)).
+		+ insert(targetDispenserAt(AltX, AltY, bx, 1234567)).
 
 	% RESET old MD values in targetClosestOfAllDispensersAt to high number expected to not occur in simulation
 	if bel(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt), haveBlockAttached(false,_)), percept(role(worker)) then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt))
-		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, 1234567)).
+		+ insert(targetClosestOfAllDispensersAt(AltX, AltY, bx, 1234567)).
 
 	% CALCULATE MD for all stored in bel dispensers
 	forall bel(mapDispenser(X, Y, dispenser, Details, MDValue, CheckSend), haveBlockAttached(false,_)), percept(role(worker)), bel(agentAt(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md)) do

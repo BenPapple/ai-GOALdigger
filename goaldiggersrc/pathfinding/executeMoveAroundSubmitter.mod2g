@@ -39,10 +39,10 @@ module executeMoveAroundSubmitter {
 		    if percept(thing(1, 0, obstacle,_))
 		        then preActionCleanup + clear(1, 0).
 
-		    % rotate to east position
+		    % rotate to west position
 		    if bel(BlockDir == n),
-		       not(percept(thing(1, 0, Type,_), Type \== dispenser))
-		        then preActionCleanup + rotate(cw).
+		       not(percept(thing(-1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(ccw).
 		   
 		    % clear west to move onto
 		    if percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) 
@@ -50,10 +50,10 @@ module executeMoveAroundSubmitter {
 		    if percept(thing(-1, 0, obstacle,_))
 		        then preActionCleanup + clear(-1, 0).
 
-		    % rotate to west position
+		    % rotate to east position
 		    if bel(BlockDir == n),
-		       not(percept(thing(-1, 0, Type,_), Type \== dispenser))
-		        then preActionCleanup + rotate(ccw).
+		       not(percept(thing(1, 0, Type,_), Type \== dispenser))
+		        then preActionCleanup + rotate(cw).
 
 	    }
 	    
@@ -219,7 +219,7 @@ module executeMoveAroundSubmitter {
 		        then preActionCleanup + rotate(ccw).
 		        
 		    % clear east for rotate
-		    if percept(thing(1, 0, block,_)), not(percept(attached(0, 1))) 
+		    if percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) 
 		        then preActionCleanup + clear(1, 0).
 		    if percept(thing(1, 0, obstacle,_))
 		        then preActionCleanup + clear(1, 0).
@@ -261,7 +261,7 @@ module executeMoveAroundSubmitter {
 		        then preActionCleanup + rotate(ccw).
 		        
 		    % clear east for rotate
-		    if percept(thing(1, 0, block,_)), not(percept(attached(0, 1))) 
+		    if percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) 
 		        then preActionCleanup + clear(1, 0).
 		    if percept(thing(1, 0, obstacle,_))
 		        then preActionCleanup + clear(1, 0).
@@ -271,18 +271,18 @@ module executeMoveAroundSubmitter {
 	    % submitter on left side
 	    if bel(XSubmit == -1, YSubmit == 1), bel(haveBlockAttached(true, BlockDir)) then {
 		    
+		    % move south when free and own block north
+		    if bel(BlockDir == n),
+		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
+		        then preActionCleanup + move(s).
+		        
 		    % clear south to move onto
 		    if percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) 
 		        then preActionCleanup + clear(0, 1).
 		    if percept(thing(0, 1, obstacle,_))
 		        then preActionCleanup + clear(0, 1).
 		   
-		    % move south when free and own block north
-		    if bel(BlockDir == n),
-		       not(percept(thing(0, 1, Type, _), Type \== dispenser))
-		        then preActionCleanup + move(s).
-		    
-		    % clear north for attached block
+ 		    % clear north for attached block
 		    if percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) 
 		        then preActionCleanup + clear(0, -1).
 		    if percept(thing(0, -1, obstacle,_))
@@ -304,7 +304,7 @@ module executeMoveAroundSubmitter {
 		        then preActionCleanup + rotate(ccw).
 		        
 		    % clear east for rotate
-		    if percept(thing(1, 0, block,_)), not(percept(attached(0, 1))) 
+		    if percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) 
 		        then preActionCleanup + clear(1, 0).
 		    if percept(thing(1, 0, obstacle,_))
 		        then preActionCleanup + clear(1, 0).

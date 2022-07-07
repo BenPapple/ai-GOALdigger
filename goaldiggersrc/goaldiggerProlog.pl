@@ -38,6 +38,7 @@
 :- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgentWithNeededBlock/4. % nearest Agent (Name, X, Y, MD).
 :- dynamic cachedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
+:- dynamic cachedMyOffsetOfOtherAgent/5. % message cached for offset
 
 
 :- dynamic confirmedOffsetOfAgent/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
