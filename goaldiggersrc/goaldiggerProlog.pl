@@ -55,6 +55,9 @@
 
 
 % messages can be commented out and still work; Variables related to goal zone and dispenser messaging
+:- dynamic cachedMsgGoalZoneData/3.
+:- dynamic cachedMsgRoleZoneData/3.
+:- dynamic cachedMsgDispenserData/6.
 %:- dynamic messageGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
 %:- dynamic messageDeletedGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
 %:- dynamic messageDispenser/6. % dispenser data plus sender name (X,Y,Type,Details,SenderName)

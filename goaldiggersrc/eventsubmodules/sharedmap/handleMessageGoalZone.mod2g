@@ -10,6 +10,17 @@ module handleMessageGoalZone {
 	
 	% ToDo: When the world measurement is ready, adapt coordinates additionaly to world size
 	
+	% Check cached msgGoalZoneData messages.
+	forall bel(cachedMsgGoalZoneData(X,Y,SenderName)) do {
+			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY) then {
+			    if not(bel(mapGoalZone(X1,Y1,_))) then {
+			    	if true then insert(mapGoalZone(X1,Y1, gzStoredFromMessage)).
+			    	if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
+			    	} % then
+			    if true then delete(cachedMsgGoalZoneData(X,Y,SenderName)).
+			    } % then
+	} %forall
+	
 	% Check received messageGoalzone messages.
 	forall (_).sent(msgGoalZoneData(X,Y,SenderName)) do {
 			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY),
@@ -17,13 +28,11 @@ module handleMessageGoalZone {
 			 if true then insert(mapGoalZone(X1,Y1, gzStoredFromMessage)).
 			 if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
 			 }
+			if not(bel(confirmedOffsetOfAgent(_,_,SenderName), cachedMsgGoalZoneData(X,Y,SenderName))) 
+			then insert(cachedMsgGoalZoneData(X,Y,SenderName)).
 	}
 	
-	% Ask for stored goal zones if none are known
-	if not(bel(mapGoalZone(_,_,_))), percept(name(MyName), role(worker)),
-	   bel(haveBlockAttached(true, _)) then {
-		forall bel(confirmedOffsetOfAgent(_,_,SenderName), storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _))
-		do (SenderConnect).send(messageNeedGoalZone(MyName)).
-	}
+	% Check cached msgGoalZoneData messages:
+
 	
 }

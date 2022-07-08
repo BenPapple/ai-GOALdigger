@@ -32,8 +32,8 @@ module syncPerceptDataIntoBelief {
 	
 	% STORE unknown goalzones with MD field
 	forall percept(goalZone(X, Y)) do {
-	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), not(bel((mapGoalZone(X3, Y3, _)))) then {
-		    if true then insert(mapGoalZone(X3, Y3, 0)).
+	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), not(bel((mapGoalZone(X3, Y3, _)))), percept(name(MyName)) then {
+		    if true then insert(mapGoalZone(X3, Y3, 0)) + allother.send(msgGoalZoneData(X3,Y3,MyName)).
 		    if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
 		}
     }
