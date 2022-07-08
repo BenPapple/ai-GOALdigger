@@ -14,7 +14,7 @@ module handleMessageGoalZone {
 	forall bel(cachedMsgGoalZoneData(X,Y,SenderName)) do {
 			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY) then {
 			    if not(bel(mapGoalZone(X1,Y1,_))) then {
-			    	if true then insert(mapGoalZone(X1,Y1, gzStoredFromMessage)).
+			    	if true then insert(mapGoalZone(X1,Y1, gzStoredFromMessage)) + print("Inserted GoalZone from cached message: " + mapGoalZone(X1,Y1, gzStoredFromMessage)).
 			    	if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
 			    	} % then
 			    if true then delete(cachedMsgGoalZoneData(X,Y,SenderName)).
@@ -25,14 +25,10 @@ module handleMessageGoalZone {
 	forall (_).sent(msgGoalZoneData(X,Y,SenderName)) do {
 			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY),
 			   not(bel(mapGoalZone(X1,Y1,_))) then {
-			 if true then insert(mapGoalZone(X1,Y1, gzStoredFromMessage)).
+			 if true then insert(mapGoalZone(X1,Y1, gzStoredFromMessage)) + print("Inserted GoalZone from message: " + mapGoalZone(X1,Y1, gzStoredFromMessage)).
 			 if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
 			 }
-			if not(bel(confirmedOffsetOfAgent(_,_,SenderName), cachedMsgGoalZoneData(X,Y,SenderName))) 
+			if bel(not(confirmedOffsetOfAgent(_,_,SenderName)), not(cachedMsgGoalZoneData(X,Y,SenderName))) 
 			then insert(cachedMsgGoalZoneData(X,Y,SenderName)).
-	}
-	
-	% Check cached msgGoalZoneData messages:
-
-	
+	}	
 }

@@ -40,8 +40,8 @@ module syncPerceptDataIntoBelief {
     
     % STORE unknown rolezones with MD field
 	forall percept(roleZone(X, Y)) do {
-	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), not(bel((mapRoleZone(X3, Y3, _)))) then 
-		    insert(mapRoleZone(X3, Y3, 0)).
+	    if bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3)), not(bel((mapRoleZone(X3, Y3, _)))), percept(name(MyName)) then 
+		    insert(mapRoleZone(X3, Y3, 0)) + allother.send(msgRoleZoneData(X3,Y3,MyName)).
     }
 
 	% DELETE dispenser from belief if not seen in percept		
