@@ -11,6 +11,10 @@ module syncPerceptDataIntoBelief {
 	% Update step counter with new step when new percept step available
 	if percept(step(X)), bel(step(Y), X\==Y, X>0) then delete(step(Y)) + insert(step(X)).
 	
+	% store explored Mark every two Rounds
+	if percept(step(Step), Remainder is Step mod 2, Remainder == 0), bel(agentAt(X, Y, _))
+		then insert(exploredMark(X, Y)).
+	
 	% DELETE out of step storedOtherAgentStatus
 	forall percept(step(SimStep)),
 	       bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached),

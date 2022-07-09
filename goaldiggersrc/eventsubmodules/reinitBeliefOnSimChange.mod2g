@@ -57,7 +57,7 @@ module reinitBeliefOnSimChange {
 	               Step)) 
 	            do delete(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, 
 	                                                 UnknownAgentName, Step)).
-	    
+	    forall bel(exploredMark(X, Y)) do delete(exploredMark(X, Y)).
 	}
 	
 }

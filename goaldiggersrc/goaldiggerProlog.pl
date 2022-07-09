@@ -73,7 +73,7 @@
 :- dynamic agentOffset/4. % field name x y CalcStep
 :- dynamic distStepNamePosition/6. % message passed to everyone else if other agents seen / saved (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
 :- dynamic myDistStepNamePosition/5. % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
-
+:- dynamic exploredMark/2. % stored mark of explored terrain
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.

@@ -24,6 +24,10 @@ module executeWorkerRole {
 	 */	
 	if bel(haveBlockAttached(false,_)) then {
 	
+		% Change Role to Explorer
+		if percept(roleZone(0, 0), step(Step), Step >= 0, role(Role)), bel(targetRole(TargetRole), Role \= TargetRole) 
+			then preActionCleanup + adapt(TargetRole).
+	
  	    % Movement around dispenser when without block
 	    if percept(step(SimStep)), 
 	       bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep), 
