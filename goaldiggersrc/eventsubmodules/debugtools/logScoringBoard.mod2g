@@ -30,9 +30,15 @@ module logScoringBoard {
        bel(cachedCount2Task(Num2Task),simCount(SimCountOld), SimCount is SimCountOld -1) then 
 		print("Simulation"+SimCount+"ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task)
 		+ delete(cachedCount2Task(Num2Task)) + insert(cachedCount2Task(0)).
+	% score last sim
 	if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(749)),
 	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task)) then 
 		print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task)
 		+ delete(cachedCount2Task(Num2Task)) + insert(cachedCount2Task(0)).
-
+	% score last sim alt
+	if percept(score(Score1), ranking(Ranked), simEnd, step(749)),
+	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task)) then 
+		print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+" 2Task: "+Num2Task)
+		+ delete(cachedCount2Task(Num2Task)) + insert(cachedCount2Task(0)).
+		
 }
