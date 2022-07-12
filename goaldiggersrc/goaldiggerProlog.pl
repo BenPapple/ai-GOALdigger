@@ -125,9 +125,9 @@ randomBetween(InLow, InHigh, RandOut) :- random_between(InLow, InHigh, RandOut).
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
 
 % Calculate distance XY coordinates concerning target targetMd and taking into account the world size
-calculateXYMdWorldSize(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-  
-	(SizeX == 54321, SizeY == 54321, calculateXYMd(X1, Y1, X2, Y2, Md));
-	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), Md is DistanceX + DistanceY).
+%calculateXYMdWorldSize(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-  
+%	(SizeX == 54321, SizeY == 54321, calculateXYMd(X1, Y1, X2, Y2, Md));
+%	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), Md is DistanceX + DistanceY).
 
 % Calculate absolute distance between two points taking into account the size of the world
 absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-

@@ -12,22 +12,22 @@ module handleMessageDistStepNamePosition {
 	forall (_).sent(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)) 
 		do insert(distStepNamePosition(DistX, DistY, Step, AgentName, AgentX, AgentY)).
 
-	% CALCULATE and sends the agent's OFFSET if having distStepNamePosition&myDistStepNamePosition message and there is no more than one other message which can be interpreted as its counterpart
-	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)) do {
-	
-		 if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit, distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY),
-				AgentDistX =:= -MyDistX, AgentDistY =:= -MyDistY), not(bel(agentOffset(AgentNameSender,_,_,_))), bel(ApparentPosX is MyPosX+MyDistX, ApparentPosY is MyPosY+MyDistY), 
-				bel(distanceBetweenPoints(ApparentPosX, ApparentPosY, AgentPosX, AgentPosY, OffsetX, OffsetY))
-					then insert(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)) + delete (distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY))
-						+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)).	
-			
-	}
+%	% CALCULATE and sends the agent's OFFSET if having distStepNamePosition&myDistStepNamePosition message and there is no more than one other message which can be interpreted as its counterpart
+%	forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)) do {
+%	
+%		 if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit, distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY),
+%				AgentDistX =:= -MyDistX, AgentDistY =:= -MyDistY), not(bel(agentOffset(AgentNameSender,_,_,_))), bel(ApparentPosX is MyPosX+MyDistX, ApparentPosY is MyPosY+MyDistY), 
+%				bel(distanceBetweenPoints(ApparentPosX, ApparentPosY, AgentPosX, AgentPosY, OffsetX, OffsetY))
+%					then insert(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)) + delete (distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, AgentPosX, AgentPosY))
+%						+ allother.send(agentOffset(AgentNameSender, OffsetX, OffsetY, Step)).	
+%			
+%	}
 
 	% CALCULATE and sends WORLDSIZE to other agents if he sees other agent with seemingly walked around world coordinates to start calculation
 	if not(bel(worldUpdatedX, worldUpdatedY)), percept(step(CurrentStep)) then {	
 
 		forall bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), distStepNamePosition(AgentDistX, AgentDistY, Step, AgentNameSender, _, _), 
-			MyDistX =:= -AgentDistX, MyDistY =:= -AgentDistY, otherAgentAt(AgentNameSender, KnownAgentPosX,KnownAgentPosY, Step), 
+			MyDistX =:= -AgentDistX, MyDistY =:= -AgentDistY, confirmedOffsetOfAgent(AgentNameSender, KnownAgentPosX,KnownAgentPosY), 
 			messageProcessingDelay(Delay), StepLimit is CurrentStep - Delay, Step < StepLimit) do {
 				
 				if bel( SeenAgentPosX is MyPosX + MyDistX, SeenAgentPosY is MyPosY + MyDistY, worldSizeX(OldWorldX), worldSizeY(OldWorldY),

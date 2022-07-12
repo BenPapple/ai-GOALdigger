@@ -57,7 +57,7 @@ module goaldiggerEvent {
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULES to measure the world
-	if percept(step(SimStep), SimStep > 3333) then {
+	if percept(step(SimStep), SimStep > 3) then {
 		% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 		if true then updateWorldSizeData.
 		if true then handleMessageDistStepNamePosition.
