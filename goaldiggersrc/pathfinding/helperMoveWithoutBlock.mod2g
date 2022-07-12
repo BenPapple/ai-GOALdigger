@@ -14,13 +14,12 @@ module helperMoveWithoutBlock {
 
     % random 90 degree move if blocked Obstacle main direction    
     if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
-    	if  bel(directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)),
-    	        bel(not(exploredMark(Xm, Ym))) then {
+    	if  bel(directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) then {
     		if percept(thing(Xn, Yn, entity,_)) then preActionCleanup + move(AltMove).
     		if percept(thing(Xn, Yn, block,_)), percept(attached(Xn, Yn)) then preActionCleanup + move(AltMove).
         }
         if  bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), 
-            not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)), bel(not(exploredMark(Xm, Ym))) then {
+            not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) then {
     	if percept(thing(Xn, Yn, entity,_)) then preActionCleanup + move(AltAltMove).
     	if percept(thing(Xn, Yn, block,_)), percept(attached(Xn, Yn)) then preActionCleanup + move(AltAltMove).
         }
