@@ -10,6 +10,7 @@ use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
 use "../blockhandling/connectBlocks" as module.
+use "../pathfinding/executeExploreMove" as module.
 
 /**
  * Main decision rules for role worker
@@ -27,6 +28,9 @@ module executeWorkerRole {
 		% Change Role to Explorer
 		if percept(roleZone(0, 0), step(Step), Step >= 0, role(Role)), bel(targetRole(TargetRole), Role \= TargetRole) 
 			then preActionCleanup + adapt(TargetRole).
+		
+		% Explorer map until one Dispenser and one goalZone is known
+		if bel(not(mapGoalZone(_, _, _)), not(mapDispenser(_, _, _, _, _, _))) then executeExploreMove.
 	
  	    % Movement around dispenser when without block
 	    if percept(step(SimStep)), 
