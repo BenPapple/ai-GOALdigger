@@ -29,13 +29,14 @@ module executeTestWorkerRole {
 	    if percept(thing(0,0,dispenser,_)) then executeMoveAroundBloke.
 	
 	    % manhattan move to dispenser
-    	if bel(targetMd(_, _, dispenser), executeManhattan) then executeManhattanMove.		
+    	if not(percept(thing(0,0,dispenser,_))), bel(targetMd(_, _, dispenser), executeManhattan) 
+    	   then executeManhattanMove.		
 	
 		% Move to goal zone
-	    if bel(executeManhattan, targetMd(_, _, goalzone)) then executeManhattanMove.
+	    %if bel(executeManhattan, targetMd(_, _, goalzone)) then executeManhattanMove.
 	    	
 	    % execute random explorer move without attached blokes with affinity to one direction
-		if true then executeRandomMove. 
+		if not(percept(thing(0,0,dispenser,_))) then executeRandomMove. 
 	
 	} % end haveBlockAttached(false,_)
     
