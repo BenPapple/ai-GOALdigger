@@ -72,7 +72,7 @@ module goaldiggerEvent {
 %	% SUBMODULE update nearest Agent on map for submitterleader
 %	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) then updateNearestAgentData.
 
-	% SUBMODULE ask for a dispenser if none known
+	% SUBMODULE check messages about dispensers if none known
 	if true then handleMessageDispenser.	
 		
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
@@ -84,13 +84,14 @@ module goaldiggerEvent {
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
 	
-	% SUBMODULE ask for a role zone if none known
-	if percept(role(default)) then handleMessageRoleZone.
+	% SUBMODULE check messages about role zones
+	%if percept(role(default)) then handleMessageRoleZone.
+	if true then handleMessageRoleZone.
 
     % SUBMODULE update rolezone map data
     if percept(role(default)) then updateRolezoneDistance.
 
-	% SUBMODULE ask for a goal zone if none known
+	% SUBMODULE check messages about goal zones
 	if true then handleMessageGoalZone.
 	    
 	% SUBMODULE delete goal zones if other agents have found that they don't exist anymore

@@ -15,10 +15,6 @@ module messagePermaSendStatusToOthers {
 			allother.send(msgDispenserData(X,Y,dispenser,BlockType,Bool,MyName)).
 	}
 
-	% Send stored goal zones to every connection that has asked this agent for them
-	if bel(mapGoalZone(X,Y,_)), percept(name(MyName)) then {
-		forall (_).sent(messageNeedGoalZone(_)) do allother.send(msgGoalZoneData(X,Y,MyName)).
-	}
 	
 	% Send stored role zones to every connection that has asked this agent for them
 	if bel(mapRoleZone(X,Y,_)), percept(name(MyName)) then {
