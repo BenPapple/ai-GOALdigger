@@ -35,6 +35,14 @@ module manageManhattanTarget {
 					then insert(executeManhattan).
 	}
 
+	% when role test worker and without bloke set dispenser as target
+	if bel(role(testWorker), haveBlockAttached(false,_), 
+		   mapDispenser(X,Y,dispenser,_,_,_)) then {		
+				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+				if true then insert(targetMd(X, Y, dispenser)).	
+				if not(bel(executeManhattan)) then insert(executeManhattan).
+	}
+
 	% With block and as submittingAgent update goalzone target MD
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
 	       TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567),

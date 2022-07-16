@@ -1,0 +1,54 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../actionhandling/preActionCleanup" as module.
+use "../pathfinding/executeManhattanMove" as module.
+use "../pathfinding/executeRandomMove" as module.
+use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
+use "../pathfinding/executeMoveAroundSubmitter" as module.
+use "../pathfinding/executeMoveAroundBloke" as module.
+use "../taskhandling/changeTaskCheck" as module.
+use "../taskhandling/handleTaskSubmit" as module.
+use "../blockhandling/rotateBlockAgainstAffinity" as module.
+use "../blockhandling/rotateBlockToNorth" as module.
+use "../blockhandling/connectBlocks" as module.
+
+/**
+ * Main decision rules for role test worker
+ *
+ */
+
+module executeTestWorkerRole {
+
+    /**
+	 * WITHOUT BLOKE	
+	 *
+	 */	
+	if bel(haveBlockAttached(false,_)) then {
+	
+ 	    % Attach other bloke
+	    if percept(thing(0,0,dispenser,_)) then executeMoveAroundBloke.
+	
+	    % manhattan move to dispenser
+    	if bel(targetMd(_, _, dispenser), executeManhattan) then executeManhattanMove.		
+	
+		% Move to goal zone
+	    if bel(executeManhattan, targetMd(_, _, goalzone)) then executeManhattanMove.
+	    	
+	    % execute random explorer move without attached blokes with affinity to one direction
+		if true then executeRandomMove. 
+	
+	} % end haveBlockAttached(false,_)
+    
+    /**
+	 * WITH BLOKE
+	 *
+	 */
+	 % ToDo: Get out of the way of other agents
+	 % ToDo: Get to a random place when more than one bloke attached
+	 		  
+	if bel(haveBlockAttached(true,DirBlock)) then {
+	
+	}
+
+	
+}

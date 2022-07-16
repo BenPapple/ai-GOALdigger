@@ -120,6 +120,7 @@
 %:- dynamic messageNeedDispenser/2. 
 
 % Variables related to choosing or Determine Role
+:- dynamic role/1. % role belief for non standard roles
 :- dynamic targetRole/1.
 :- dynamic randomSeed/1.
 :- dynamic positionInHirarchie/1.
