@@ -89,6 +89,13 @@ module syncPerceptDataIntoBelief {
 	           	then delete(mapRoleZone(X, Y, Md)).
   	}
 	
+	% DELETE detached blokes
+	forall bel(haveBlokeAttached(true,Dir)) do {
+		if not(percept(attached(Dir))), bel(attachedBlokes(Count), NewCount is Count - 1) 
+		then delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir))
+		     + delete(attachedBlokes(Count)) + insert(attachedBlokes(NewCount)). 
+	}
+	
 	% ToDo too complex agent only needs to store it once not delayed or cached, just overwrite old value with new
     % ToDo sent(otherAgentAt replaced with storedOtherAgentStatus... in belief
 	% The agent processes received messages about other agents' positions if it already knows it offsets to those agents

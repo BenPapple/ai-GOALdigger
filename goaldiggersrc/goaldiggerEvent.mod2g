@@ -32,7 +32,8 @@ use "./taskhandling/changeTaskCheck" as module.
 module goaldiggerEvent {
 
 	% Get testWorker role
-	if percept(name(MyName), MyName == "agentA1", role(worker)), not(bel(role(testWorker))) then insert(role(testWorker)).
+	if percept(name(MyName), MyName == "agentA1", role(worker)), not(bel(role(testWorker))) then 
+	   insert(role(testWorker)) + insert(attachedBlokes(0)).
 	
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)),

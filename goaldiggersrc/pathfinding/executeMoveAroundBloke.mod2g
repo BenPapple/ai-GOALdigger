@@ -15,8 +15,8 @@ module executeMoveAroundBloke {
 
 
 	% Bloke attaching if in position
-	if  bel(haveBlockAttached(false,_)),
-	 percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1) then {
+	if  bel(attachedBlokes(Count), Count < 2),
+	 percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1), not(percept(attached(A,B))) then {
 	
 		if percept(thing(1, 0, entity,_)), not(percept(attached(1, 0))) then preActionCleanup + attach(e).
 		if percept(thing(-1, 0, entity,_)), not(percept(attached(-1, 0))) then preActionCleanup + attach(w).

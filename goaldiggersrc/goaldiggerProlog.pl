@@ -126,6 +126,10 @@
 :- dynamic positionInHirarchie/1.
 :- dynamic submitterLeader/0.
 
+% Variables related to testWorker role
+:- dynamic haveBlokeAttached/2. % Boolean and direction
+:- dynamic attachedBlokes/1. % Count of attached blokes
+
 % Variables related to locating other agents in the world
 % store / update other agents' positions
 %:- dynamic otherAgentAt/4. 

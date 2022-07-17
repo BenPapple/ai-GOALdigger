@@ -23,7 +23,11 @@ module executeTestWorkerRole {
 	 * WITHOUT BLOKE	
 	 *
 	 */	
-	if bel(haveBlockAttached(false,_)) then {
+	
+		 
+	if bel(attachedBlokes(Count), Count < 2) then {
+
+		if true then executeMoveAroundBloke.
 	
  	    % Attach other bloke
 	    if percept(thing(0,0,dispenser,_)) then executeMoveAroundBloke.
@@ -47,8 +51,8 @@ module executeTestWorkerRole {
 	 % ToDo: Get out of the way of other agents
 	 % ToDo: Get to a random place when more than one bloke attached
 	 		  
-	if bel(haveBlockAttached(true,DirBlock)) then {
-	
+	if bel(attachedBlokes(Count), Count == 2) then {
+		
 	}
 
 	
