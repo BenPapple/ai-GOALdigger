@@ -3,7 +3,7 @@ use "../goaldiggerAction" as actionspec.
 use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
-use "../pathfinding/executeExploreMove" as module.
+use "../pathfinding/helperMoveWithoutBlock" as module.
 
 /**
  * Main decision rules for role explorer
@@ -13,6 +13,11 @@ use "../pathfinding/executeExploreMove" as module.
 module executeExplorerRole {
 	    
 	    % explore
-	    if true then executeExploreMove. 
+	    % Explorer map
+		if bel(exploreDirection(Dir), randomAffinity(Dir2)) 
+			then {
+				if bel(Dir == r) then executeRandomMove.
+				if true then delete(randomAffinity(Dir2)) + insert(randomAffinity(Dir)) + helperMoveWithoutBlock.
+			}
 	
 }

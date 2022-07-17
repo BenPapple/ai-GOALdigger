@@ -5,12 +5,12 @@ use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
 use "../pathfinding/executeMoveAroundSubmitter" as module.
+use "../pathfinding/helperMoveWithoutBlock" as module.
 use "../taskhandling/changeTaskCheck" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
 use "../blockhandling/connectBlocks" as module.
-use "../pathfinding/executeExploreMove" as module.
 
 /**
  * Main decision rules for role worker
@@ -30,7 +30,12 @@ module executeWorkerRole {
 			then preActionCleanup + adapt(TargetRole).
 		
 		% Explorer map until one Dispenser and one goalZone is known
-		if bel(not(mapGoalZone(_, _, _)), not(mapDispenser(_, _, _, _, _, _))) then executeExploreMove.
+		if bel(not(mapGoalZone(_, _, _)), not(mapDispenser(_, _, _, _, _, _))),
+		   bel(exploreDirection(Dir), randomAffinity(Dir2)) 
+			then { 
+				if bel(Dir == r) then executeRandomMove.
+				if true then delete(randomAffinity(Dir2)) + insert(randomAffinity(Dir)) + helperMoveWithoutBlock.
+			}
 	
  	    % Movement around dispenser when without block
 	    if percept(step(SimStep)), 

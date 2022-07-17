@@ -23,6 +23,7 @@
 :- dynamic elapseStepTime/1. % timing step duration for agent
 :- dynamic agentAt/3. % Coordinates of agent XY
 :- dynamic randomAffinity/1. % nswe direction preferred for exploration
+:- dynamic exploreDirection/1. % nswe direction in witch should be explored
 :- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. % Variables for Manhatten Distance 
 :- dynamic targetDispenserAt/4. % (X,Y,BlockType,MD) of dispenser to search out for
 :- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)d
@@ -40,6 +41,10 @@
 :- dynamic cachedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
 :- dynamic cachedMyOffsetOfOtherAgent/5. % message cached for offset
 
+:- dynamic northExplored/0. % when a marked is north of agent. 
+:- dynamic southExplored/0. % when a marked is south of agent. 
+:- dynamic eastExplored/0. % when a marked is east of agent. 
+:- dynamic westExplored/0. % when a marked is west of agent. 
 
 :- dynamic confirmedOffsetOfAgent/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 %:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
@@ -52,7 +57,6 @@
 :- dynamic messagePersitanceAfterDelay/1. % how long does a distStepNamePosition message still lingers around after being processed
 :- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0. % Flags to steer world measurements.
 :- dynamic worldSizeX/1, worldSizeY/1. % store the size of the world on X and Y
-
 
 % messages can be commented out and still work; Variables related to goal zone and dispenser messaging
 :- dynamic cachedMsgGoalZoneData/3.

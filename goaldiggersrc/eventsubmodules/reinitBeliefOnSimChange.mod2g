@@ -26,6 +26,8 @@ module reinitBeliefOnSimChange {
 	if true then subscribe(channelDispenser).
 	if true then subscribe (channelNamesRelativeXY).
 	
+	if bel(exploreDirection(Dir)) then delete(exploreDirection(Dir)) + insert(exploreDirection(n)).
+	
 	%reset assign Role
 	if bel(positionInHirarchie(Position)) then delete(positionInHirarchie(Position)) + insert(positionInHirarchie(0)).
 	if bel(targetRole(Role)) then delete(targetRole(Role)) + insert (targetRole(worker)).

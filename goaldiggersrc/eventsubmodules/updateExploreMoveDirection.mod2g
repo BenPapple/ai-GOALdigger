@@ -1,0 +1,69 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../pathfinding/helperManhattanChoice" as module.
+use "../pathfinding/executeRandomMove" as module.
+use "../actionhandling/preActionCleanup" as module.
+use "../pathfinding/helperMoveWithoutBlock" as module.
+
+module updateExploreMoveDirection {
+
+	if true 
+		then delete(northExplored) +
+			 delete(southExplored) +
+			 delete(eastExplored) +
+			 delete(westExplored).
+
+	forall bel(exploredMark(ExploredX, ExploredY))
+		do {
+			% 
+			if bel(not(northExplored)) then {
+				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
+				   bel(DY =< 0, DY >= -2), bel(DX >= -2, DX =< 2) 
+				    then insert(northExplored). 	
+			}
+			
+			if bel(not(eastExplored)) then {
+				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
+				   bel(DX >= 0, DX =< 2), bel(DY >= -2, DY =< 2)
+				    then insert(eastExplored).
+			}
+			
+			if bel(not(southExplored)) then {
+				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
+				   bel(DY >= 0, DY =< 2), bel(DX >= -2, DX =< 2)
+				    then insert(southExplored).
+			}
+			
+			if bel(not(westExplored)) then {
+				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
+				   bel(DX =< 0, DX >= -2), bel(DY >= -2, DY =< 2)
+				    then insert(westExplored).
+			}
+		}
+		
+	if bel(not(northExplored), exploreDirection(Dir)) 
+		then delete(exploreDirection(Dir)) + 
+			 insert(exploreDirection(n)) +
+			 exit-module.
+	
+	if bel(not(eastExplored), exploreDirection(Dir)) 
+		then delete(exploreDirection(Dir)) + 
+		 	 insert(exploreDirection(e)) +
+		 	 exit-module.
+		 	 
+	if bel(not(southExplored), exploreDirection(Dir))
+		then delete(exploreDirection(Dir)) + 
+		 	 insert(exploreDirection(s)) +
+		 	 exit-module.
+		 	 
+	if bel(not(westExplored), exploreDirection(Dir))
+		then delete(exploreDirection(Dir)) + 
+		 	 insert(exploreDirection(w)) +
+		 	 exit-module.
+		 	 
+	if true, bel(exploreDirection(Dir)) 
+		then delete(exploreDirection(Dir)) +
+			 insert(exploreDirection(r)) +
+			 exit-module.
+	
+}
