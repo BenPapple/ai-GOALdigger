@@ -2,67 +2,122 @@
  * Prolog Knowledge Base of Agent
  *
  */
-
-:- dynamic lDebugOn/0. % true enables debug features logging, timing etc
-:- dynamic activateDoubleSpeed/0.  % switch to deactivate double speed for workers
-:- dynamic haveMove/0. % Switch that signals Main Module to get active
-:- dynamic expectDifferentSimulations/0. % switch to recognize simulations have different characteristics on sim change
-:- dynamic simCount/1. %Counter for sim in tournament mode
-:- dynamic count2Task/2. % submitterLeader counts his submitted 2tasks
-:- dynamic cachedCount2Task/1. % cached so it survives map change for score table
-:- dynamic activateTimer/0. % switch timing step calculation of agent
-:- dynamic thisIsTheFirstSim/0. % prevents reinit in first sim
-:- dynamic calculatedNewOffset/0. % switch to send calculated offsets to everyone
-:- dynamic calculateNewDispenserMD/0. % switch to recalculate dispenses distance
-:- dynamic calculateNewGoalzoneMD/0. % switch to recalculate goalzone distance
-
-:- dynamic haveBlockAttached/2. % (Bool, Dir)
-:- dynamic haveDispenserDelivery/2. % switch dispenser delivered block (Bool, Step)
-
-:- dynamic step/1. % step counter in belief of simulation
-:- dynamic elapseStepTime/1. % timing step duration for agent
-:- dynamic agentAt/3. % Coordinates of agent XY
-:- dynamic randomAffinity/1. % nswe direction preferred for exploration
-:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. % Variables for Manhatten Distance 
-:- dynamic targetDispenserAt/4. % (X,Y,BlockType,MD) of dispenser to search out for
-:- dynamic targetClosestOfAllDispensersAt/4. % closest of all known dispensers (X,Y,Blocktype, MD)d
-:- dynamic skipThisStep/1. % do skip/explore until this step
-:- dynamic changeAffinityAfterTheseSteps/1. % as told changes random affinity
-:- dynamic currentChosenTask/8. % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType, Client/Server, NameSubmitter)
-:- dynamic mapDispenser/6. % dispenser percept data plus MD (X,Y,Type,Details,MD)
-:- dynamic mapGoalZone/3. % goalzone percept data plus MD (X,Y,MD)
-:- dynamic mapRoleZone/3. % rolezone percept data plus MD (X,Y,MD)
-:- dynamic targetClosestGoalZone/3. % goalzone XY plus MD field (X,Y,MD)
-:- dynamic targetClosestRoleZone/3. % rolezone XY plus MD field (X,Y,MD)
-:- dynamic limitChangeStepMinMax/2. % lowest and highest limit after which agent changes explore direction
-:- dynamic targetNearestAgent/4. % nearest Agent (Name, X, Y, MD).
-:- dynamic targetNearestAgentWithNeededBlock/4. % nearest Agent (Name, X, Y, MD).
-:- dynamic cachedSeenOtherAgentAt/6. % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
-:- dynamic cachedMyOffsetOfOtherAgent/5. % message cached for offset
+ 
+% Bool Switches
+% true enables debug features logging, timing etc
+:- dynamic lDebugOn/0. 
+% switch to deactivate double speed for workers
+:- dynamic activateDoubleSpeed/0.  
+% Switch that signals Main Module to get active
+:- dynamic haveMove/0. 
+% switch to recognize simulations have different characteristics on sim change
+:- dynamic expectDifferentSimulations/0. 
+% switch timing step calculation of agent
+:- dynamic activateTimer/0. 
+% prevents reinit in first sim
+:- dynamic thisIsTheFirstSim/0. 
+% switch to send calculated offsets to everyone
+:- dynamic calculatedNewOffset/0. 
+% switch to recalculate dispenses distance
+:- dynamic calculateNewDispenserMD/0. 
+% switch to recalculate goalzone distance
+:- dynamic calculateNewGoalzoneMD/0. 
 
 
-:- dynamic confirmedOffsetOfAgent/3. % relative coordinates to other agents coordinate system (relX, relY, TheirName)
-%:- dynamic seenOtherAgentAt/6. % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
-%:- dynamic sawGoalzoneAt/3. % data for message (X,X, MyAgentName)
-%:- dynamic sawDispenserAt/4. % data for messages (X,Y, Type, MyAgentName)
+% Counter for sim in tournament mode
+:- dynamic simCount/1. 
+% submitterLeader counts his submitted 2tasks
+:- dynamic count2Task/2. 
+% cached so it survives map change for score table
+:- dynamic cachedCount2Task/1. 
+
+
+% (Bool, Dir)
+:- dynamic haveBlockAttached/2. 
+% switch dispenser delivered block (Bool, Step)
+:- dynamic haveDispenserDelivery/2. 
+
+
+% step counter in belief of simulation
+:- dynamic step/1. 
+% timing step duration for agent
+:- dynamic elapseStepTime/1. 
+% Coordinates of agent XY
+:- dynamic agentAt/3. 
+% nswe direction preferred for exploration
+:- dynamic randomAffinity/1. 
+% Variables for Manhatten Distance 
+:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. 
+% (X,Y,BlockType,MD) of dispenser to search out for
+:- dynamic targetDispenserAt/4. 
+% closest of all known dispensers (X,Y,Blocktype, MD)
+:- dynamic targetClosestOfAllDispensersAt/4. 
+% do skip/explore until this step
+:- dynamic skipThisStep/1. 
+% as told changes random affinity
+:- dynamic changeAffinityAfterTheseSteps/1. 
+% task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType, Client/Server, NameSubmitter)
+:- dynamic currentChosenTask/8. 
+% dispenser percept data plus MD (X,Y,Type,Details,MD)
+:- dynamic mapDispenser/6. 
+ % goalzone percept data plus MD (X,Y,MD)
+:- dynamic mapGoalZone/3.
+% rolezone percept data plus MD (X,Y,MD)
+:- dynamic mapRoleZone/3. 
+
+% goalzone XY plus MD field (X,Y,MD)
+:- dynamic targetClosestGoalZone/3.
+% rolezone XY plus MD field (X,Y,MD) 
+:- dynamic targetClosestRoleZone/3. 
+% lowest and highest limit after which agent changes explore direction
+:- dynamic limitChangeStepMinMax/2. 
+
+% nearest Agent (Name, X, Y, MD).
+:- dynamic targetNearestAgent/4. 
+% nearest Agent with needed block (Name, X, Y, MD).
+:- dynamic targetNearestAgentWithNeededBlock/4. 
+% Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
+:- dynamic cachedSeenOtherAgentAt/6. 
+% message cached for offset
+:- dynamic cachedMyOffsetOfOtherAgent/5. 
+
+% relative coordinates to other agents coordinate system (relX, relY, TheirName)
+:- dynamic confirmedOffsetOfAgent/3. 
+% message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
+%:- dynamic seenOtherAgentAt/6. 
+% data for message (X,X, MyAgentName)
+%:- dynamic sawGoalzoneAt/3.
+% data for messages (X,Y, Type, MyAgentName) 
+%:- dynamic sawDispenserAt/4. 
 
 % Variables related to world measurement
-:- dynamic worldListX/1, worldListY/1. % lists containing world X and Y sizes
-:- dynamic messageProcessingDelay/1. % how long does it take for a distStepNamePosition message to get processed (the greater the delay, the most sure we can be to have received all messages sent during a concrete step)
-:- dynamic messagePersitanceAfterDelay/1. % how long does a distStepNamePosition message still lingers around after being processed
-:- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0. % Flags to steer world measurements.
-:- dynamic worldSizeX/1, worldSizeY/1. % store the size of the world on X and Y
+% lists containing world X and Y sizes
+:- dynamic worldListX/1, worldListY/1. 
+% how long does it take for a distStepNamePosition message to get processed 
+%(the greater the delay, the most sure we can be to have received all messages sent during a concrete step)
+:- dynamic messageProcessingDelay/1. 
+% how long does a distStepNamePosition message still lingers around after being processed
+:- dynamic messagePersitanceAfterDelay/1. 
+% Flags to steer world measurements.
+:- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0. 
+% store the size of the world on X and Y
+:- dynamic worldSizeX/1, worldSizeY/1. 
 
 
 % messages can be commented out and still work; Variables related to goal zone and dispenser messaging
 :- dynamic cachedMsgGoalZoneData/3.
 :- dynamic cachedMsgRoleZoneData/3.
 :- dynamic cachedMsgDispenserData/6.
-%:- dynamic messageGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
-%:- dynamic messageDeletedGoalZone/3. % goalzone percept data plus sender name (X, Y, SenderName).
-%:- dynamic messageDispenser/6. % dispenser data plus sender name (X,Y,Type,Details,SenderName)
-%:- dynamic messageNeedGoalZone/1. % message containing just the sender name
-%:- dynamic messageNeedDispenser/2. % message containing the requested dispenser details (BlockType) and the sender name
+% goalzone percept data plus sender name (X, Y, SenderName).
+%:- dynamic messageGoalZone/3. 
+% goalzone percept data plus sender name (X, Y, SenderName).
+%:- dynamic messageDeletedGoalZone/3.
+% dispenser data plus sender name (X,Y,Type,Details,SenderName) 
+%:- dynamic messageDispenser/6. 
+% message containing just the sender name
+%:- dynamic messageNeedGoalZone/1. 
+% message containing the requested dispenser details (BlockType) and the sender name
+%:- dynamic messageNeedDispenser/2. 
 
 % Variables related to choosing or Determine Role
 :- dynamic targetRole/1.
@@ -71,11 +126,18 @@
 :- dynamic submitterLeader/0.
 
 % Variables related to locating other agents in the world
-:- dynamic otherAgentAt/4. % store / update other agents' positions
-:- dynamic storedOtherAgentStatus/8. % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)
-:- dynamic agentOffset/4. % field name x y CalcStep
-:- dynamic distStepNamePosition/6. % message passed to everyone else if other agents seen / saved (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
-:- dynamic myDistStepNamePosition/5. % belief stored if the agent has seen another agent in this step (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
+% store / update other agents' positions
+:- dynamic otherAgentAt/4. 
+% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)
+:- dynamic storedOtherAgentStatus/8. 
+% field name x y CalcStep
+:- dynamic agentOffset/4. 
+% message passed to everyone else if other agents seen / saved 
+% (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
+:- dynamic distStepNamePosition/6. 
+% belief stored if the agent has seen another agent in this step 
+% (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
+:- dynamic myDistStepNamePosition/5. 
 
 
 % Transform XY coordinates concerning direction D nswe
@@ -94,8 +156,9 @@ transformTwoTimesXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 2.
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
 
 % Offset calculator
-calculateAgentOffset(ReceiverBaseX, ReceiverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, OffsetX, OffsetY) :- OffsetX is ReceiverBaseX + PerceptOffsetX - SenderBaseX, 
-	OffsetY is ReceiverBaseY + PerceptOffsetY - SenderBaseY .
+calculateAgentOffset(ReceiverBaseX, ReceiverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, 
+		     OffsetX, OffsetY) :- OffsetX is ReceiverBaseX + PerceptOffsetX - SenderBaseX, 
+	             OffsetY is ReceiverBaseY + PerceptOffsetY - SenderBaseY .
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
@@ -130,7 +193,9 @@ calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
 % Calculate distance XY coordinates concerning target targetMd and taking into account the world size
 calculateXYMdWorldSize(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-  
 	(SizeX == 54321, SizeY == 54321, calculateXYMd(X1, Y1, X2, Y2, Md));
-	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), Md is DistanceX + DistanceY).
+	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), 
+	                                   absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), 
+	                                   Md is DistanceX + DistanceY).
 
 % Calculate absolute distance between two points taking into account the size of the world
 absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-
@@ -144,7 +209,8 @@ absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-
 calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
 calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
 
-% return coordinates in front of attached block concerning move direction (DirMoving, BlockAttach, FrontBlockX, FrontBlockY)
+% return coordinates in front of attached block concerning move direction 
+% (DirMoving, BlockAttach, FrontBlockX, FrontBlockY)
 clearAttachedDirection(n, w, -1, -1).
 clearAttachedDirection(n, e, 1, -1).
 clearAttachedDirection(n, n, 0, -2).

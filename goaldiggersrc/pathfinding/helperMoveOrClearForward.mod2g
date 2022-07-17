@@ -25,18 +25,25 @@ module helperMoveOrClearForward {
         then preActionCleanup + move(Dir).
     	
     % clear main affinity direction of obstacles and blocks
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, obstacle,_)) 
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
+       percept(thing(Xn, Yn, obstacle,_)) 
         then preActionCleanup + clear(Xn, Yn).
-    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), percept(thing(Xn, Yn, block,_)), 
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
+       percept(thing(Xn, Yn, block,_)), 
        not(percept(attached(Xn, Yn))) 
         then preActionCleanup + clear(Xn, Yn).
     
     % clear if altmove blocked
-    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
-    	if  bel( directionToCoordinate(AltMove, Xm, Ym)), percept(thing(Xm, Ym, Type,_), Type \== dispenser) then {
-    		if percept(thing(Xn, Yn, obstacle,_))   then preActionCleanup + clear(Xn, Yn).
-    		if percept(thing(Xn, Yn, block,_)), not(percept(attached(Xn, Yn)))   then preActionCleanup + clear(Xn, Yn).
+    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) 
+    	then {
+    		if bel( directionToCoordinate(AltMove, Xm, Ym)), 
+    		   percept(thing(Xm, Ym, Type,_), Type \== dispenser) 
+    		   	then {
+    		if percept(thing(Xn, Yn, obstacle,_))  
+				then preActionCleanup + clear(Xn, Yn).
+    		if percept(thing(Xn, Yn, block,_)), 
+    		   not(percept(attached(Xn, Yn)))   
+    		   	then preActionCleanup + clear(Xn, Yn).
 		}
     } % 
-	
 }

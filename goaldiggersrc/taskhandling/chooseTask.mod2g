@@ -12,7 +12,8 @@ use "../taskhandling/taskHandlingTwoBlock" as module.
 module chooseTask {
 
 	% chose 1s task if one is available and not believe submitterLeader
-	if percept(task(_ ,TaskStep, 10,[req(_,_,_)])), bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0),
+	if percept(task(_ ,TaskStep, 10,[req(_,_,_)])), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0),
 	   not(bel(submitterLeader))
 		then taskHandlingOneBlock.
 		 

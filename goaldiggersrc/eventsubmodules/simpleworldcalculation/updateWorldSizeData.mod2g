@@ -9,50 +9,64 @@ use "../../goaldiggerAction" as actionspec.
 module updateWorldSizeData {
 
 	% Fill a list with worldSizeX values
-	if not(bel(worldUpdatedX)) then {
-	
-		forall (_).sent(worldSizeX(SizeX))	do {
-		
-			if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), SizeX \= KnownSize, (Length < 10)) then 
-				delete(worldListX(WorldListX)) + insert(worldListX([SizeX | WorldListX])). 
-				
+	if not(bel(worldUpdatedX)) 
+		then {
+			forall (_).sent(worldSizeX(SizeX))	
+				do {
+					if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), 
+					       SizeX \= KnownSize, (Length < 10)) 
+						then delete(worldListX(WorldListX)) + 
+						     insert(worldListX([SizeX | WorldListX])). 
 		}
-			
 	}
 	
 	% Fill a list with worldSizeY values
-	if not(bel(worldUpdatedY)) then {
-	
-		forall (_).sent(worldSizeY(SizeY))	do {
-			
-			 if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), SizeY \= KnownSize, (Length < 10)) then 
-			 	delete(worldListY(WorldListY)) + insert(worldListY([SizeY | WorldListY])). 
-			 
+	if not(bel(worldUpdatedY)) 
+		then {
+			forall (_).sent(worldSizeY(SizeY))	
+				do {
+			 		if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), 
+			 		       SizeY \= KnownSize, (Length < 10)) 
+			 			then delete(worldListY(WorldListY)) + 
+			 			     insert(worldListY([SizeY | WorldListY])). 
 		}
-	 
 	}
 
-	% Update world sizes with the most common values in the X and Y mesasurement lists once both lists lenghts are equal or greater than 10
-	if bel(worldListX(WorldListX), length(WorldListX, LengthX), LengthX >= 10, worldListY(WorldListY), length(WorldListY, LengthY), LengthY >= 10,
-			worldSizeX(OldWorldSizeX), worldSizeX(OldWorldSizeY), 
-			msort(WorldListX, SListX), rle(SListX, RLEX), sort(RLEX, SRLEX),last(SRLEX, [FreqX, MostCommonX]), length(WorldListX, ListLenX), FreqX > ListLenX/2,
-			msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), length(WorldListY, ListLenY), FreqY > ListLenY/2)
-		then delete(worldSizeX(OldWorldSizeX)) + insert(worldSizeX(MostCommonX)) + insert (worldUpdateX) + insert(worldUpdatedX)
-			 + delete(worldSizeY(OldWorldSizeY)) + insert(worldSizeY(MostCommonY)) + insert (worldUpdateY) + insert(worldUpdatedY).
+	% Update world sizes with the most common values in the X and Y mesasurement lists 
+	% once both lists lenghts are equal or greater than 10
+	if bel(worldListX(WorldListX), length(WorldListX, LengthX), LengthX >= 10, worldListY(WorldListY), 
+	       length(WorldListY, LengthY), LengthY >= 10, worldSizeX(OldWorldSizeX), worldSizeX(OldWorldSizeY), 
+			msort(WorldListX, SListX), rle(SListX, RLEX), sort(RLEX, SRLEX),last(SRLEX, [FreqX, MostCommonX]), 
+		   length(WorldListX, ListLenX), FreqX > ListLenX/2,
+			msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), 
+		   length(WorldListY, ListLenY), FreqY > ListLenY/2)
+		then delete(worldSizeX(OldWorldSizeX)) + 
+		     insert(worldSizeX(MostCommonX)) + 
+		     insert (worldUpdateX) + 
+		     insert(worldUpdatedX) + 
+		     delete(worldSizeY(OldWorldSizeY)) + 
+		     insert(worldSizeY(MostCommonY)) + 
+		     insert (worldUpdateY) + 
+		     insert(worldUpdatedY).
 	
 	% ToDo agentAt change to agentAtComplexWorld
 	% After updating one agent's belief about world size, the agent updates its own position.
-%	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then 
+%	if bel((worldUpdateX; worldUpdateY), worldSizeX(SizeX), worldSizeY(SizeY), agentAt(X0,Y0), 
+% 			getModPos(X0, Y0, SizeX, SizeY, X1, Y1)) then 
 %		delete(agentAt(X0,Y0)) + insert(agentAt(X1,Y1)).
 %
-%	% After updating one agent's belief about world size, it updates the position of the things it has seen. The variable updateThing stores the values while deleting old values.
+%	% After updating one agent's belief about world size, it updates the position of the things it has seen. 
+%     The variable updateThing stores the values while deleting old values.
 %	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
 %		then { 
-%			forall bel(mapDispenser(X1, Y1, dispenser, Details, MDValue, Bool), getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do 
-%				delete(mapDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + insert(mapDispenser(X2, Y2, dispenser, Details, MDValue, Bool)).
+%			forall bel(mapDispenser(X1, Y1, dispenser, Details, MDValue, Bool), 
+% 			getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) do 
+%				delete(mapDispenser(X1, Y1, dispenser, Details, MDValue, Bool)) + 
+%			insert(mapDispenser(X2, Y2, dispenser, Details, MDValue, Bool)).
 %			}
 %	
-%	% After updating one agent's belief about world size, the agent updates other agents' positions. The variable updateOtherAgentAt stores the values while deletig old values.
+%	% After updating one agent's belief about world size, the agent updates other agents' positions. 
+%	The variable updateOtherAgentAt stores the values while deletig old values.
 %	if bel(worldUpdateX, worldUpdateY, worldSizeX(SizeX), worldSizeY(SizeY))
 %		then { 
 %			forall bel(otherAgentAt(AgentName, X0, Y0, Step), getModPos(X0, X0, SizeX, SizeY, X1, Y1)) do 
@@ -60,7 +74,9 @@ module updateWorldSizeData {
 %		} % end then		
 
 	% remove conditionals update belief coord
-	if bel(worldUpdateX) then delete(worldUpdateX).
-	if bel(worldUpdateY) then delete(worldUpdateY).	
+	if bel(worldUpdateX) 
+		then delete(worldUpdateX).
+	if bel(worldUpdateY) 
+		then delete(worldUpdateY).	
 
 }

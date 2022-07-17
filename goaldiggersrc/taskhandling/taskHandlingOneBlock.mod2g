@@ -10,35 +10,36 @@ use "../eventsubmodules/updateDispenserDistance" as module.
 module taskHandlingOneBlock {
 
     % SUBMODULE update dispenser map data as worker with no block and as worker with no active task
-	if not(bel(calculateNewDispenserMD)) then updateDispenserDistance.
+	if not(bel(calculateNewDispenserMD)) 	
+		then updateDispenserDistance.
 
 	% chose task if your attached block fits task	
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)), 
 	   percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockTypeAttached)])),
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 8) then {
-		
-		if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
-		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
-		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
-		    insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockTypeAttached, submittingAgentOneTask, 
-		           oneTaskSubmitter)) 
-		    + print("ModuleChoseTask 1task Block fits") +
-		    exit-module.
-		
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 8) 
+	   	then {
+			if not(bel(calculateNewGoalzoneMD)) 
+				then insert(calculateNewGoalzoneMD).
+			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
+				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
+		    		 insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockTypeAttached, submittingAgentOneTask, 
+		                    oneTaskSubmitter)) +
+		    		 print("ModuleChoseTask 1task Block fits") +
+		      		 exit-module.
 	} % if
 	
 	% choose/change 1-block tasks if closest dispenser has fitting block
 	if bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \== bx), 
 	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),  
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20) then {
-		
-	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
-	        delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
-	        insert(currentChosenTask(TaskName, TaskStep, 10, X, Y, BlockType, submittingAgentOneTask, oneTaskSubmitter)) 
-	        + print("ModuleChoseTask 1task closest Dispenser") +
-	        exit-module.
-		
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20) 
+	   	then {
+	    	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
+	    		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
+	        		 insert(currentChosenTask(TaskName, TaskStep, 10, X, Y, BlockType, submittingAgentOneTask, 
+	        		        oneTaskSubmitter)) + 
+	        		 print("ModuleChoseTask 1task closest Dispenser") +
+	        		 exit-module.
 	} % if
 	
 	% choose 1-block tasks of target Dispenser concerning currenttaskBlockType+targetDispenserAt calc in EventModule
@@ -46,40 +47,36 @@ module taskHandlingOneBlock {
 	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),  
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20)
 	    then {
-		
-		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
-		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
-		    insert(currentChosenTask(TaskName, TaskStep, 10, X, Y, BlockType, submittingAgentOneTask, oneTaskSubmitter)) 
-		    + print("ModuleChoseTask 1task fits last target dispenser") +
-		    exit-module.
-		
+			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
+				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
+		    		 insert(currentChosenTask(TaskName, TaskStep, 10, X, Y, BlockType, 
+		    		        submittingAgentOneTask, oneTaskSubmitter)) +
+		    		 print("ModuleChoseTask 1task fits last target dispenser") +
+		     		 exit-module.
 	} % if
 	
 	% choose 1-block tasks if random known dispenser has fitting block
 	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])),  
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 30) then {
-		
-	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
-	        delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
-	        insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, submittingAgentOneTask, 
-	               oneTaskSubmitter)) 
-	        + print("ModuleChoseTask 1task fits random known dispenser") +
-	        exit-module.
-		
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 30) 
+	   	then {
+		    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
+		    	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
+	                 insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, submittingAgentOneTask, 
+	                        oneTaskSubmitter)) +
+	        		 print("ModuleChoseTask 1task fits random known dispenser") +
+	         		 exit-module.
 	} % if
 
 	% choose 1-block tasks if it exists
 	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) then {
-		
-		if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) then 
-		    delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
-		    insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, submittingAgentOneTask, 
-		           oneTaskSubmitter)) 
-		    + print("ModuleChoseTask 1task Just Any Taks Fit") +
-		     exit-module.
-		
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 40) 
+	   	then {
+			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
+				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
+		    	 	 insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, submittingAgentOneTask, 
+		           		    oneTaskSubmitter)) +
+		    		 print("ModuleChoseTask 1task Just Any Taks Fit") +
+		     		 exit-module.
 	} % if	
-	
 } % end module
