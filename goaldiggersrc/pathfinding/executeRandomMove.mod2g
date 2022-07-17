@@ -15,10 +15,12 @@ exit = always.
 module executeRandomMove {
 
 	% move with block
-	if  bel(haveBlockAttached(true, _)) then helperMoveWithBlock.
+	if bel(haveBlockAttached(true, _)) 
+		then helperMoveWithBlock.
 	
 	% move without block
-	if  bel(haveBlockAttached(false, _)) then helperMoveWithoutBlock.
+	if bel(haveBlockAttached(false, _))
+		then helperMoveWithoutBlock.
 
 	% obligatory skip
 	if true then preActionCleanup + skip.   

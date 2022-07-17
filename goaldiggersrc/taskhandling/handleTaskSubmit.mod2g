@@ -19,15 +19,14 @@ module handleTaskSubmit {
 
 	% submit 2-task if block is south of agent
 	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, submittingAgentTwoTask, _)), 
-	   bel(step(SimStep), TaskStep >= SimStep), bel(haveBlockAttached(true, DirBlock), DirBlock == s) then {		
-			
+	   bel(step(SimStep), TaskStep >= SimStep), 
+	   bel(haveBlockAttached(true, DirBlock), DirBlock == s) 
+	   	then {		
 			% submit after succesful connect
 			if percept(lastActionResult(success), lastAction(connect)) 
 				then preActionCleanup + submit(TaskFit).
-			
 			% try to connect blocks
 			if true then connectBlocks.
-    	    	
     } 
 
 	% prefer rotate to south position and clear route to it if necessary
@@ -35,5 +34,4 @@ module handleTaskSubmit {
 	
 	% obligatory skip/executeRandomMove
 	if true then skip.  
-		
 } % module

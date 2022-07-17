@@ -19,9 +19,9 @@ module updateNearestAgentDistance {
 	
 	% Find lowest MD for known agents with offsets	     
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _)) do {
-		if  bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)), 
-		    bel(agentAt(OwnX, OwnY, _), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
-		    bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+		if bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)), 
+		   bel(agentAt(OwnX, OwnY, _), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
+		   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
 		       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
 		     then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
 		          insert(targetNearestAgent(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
@@ -40,28 +40,28 @@ module updateNearestAgentDistance {
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, BlockTypeAttached)),
 	       bel(currentChosenTask(TaskName, _, _, _, _, _, _, _)) 
 		do {
-		
 			if percept(task(TaskName,_, 40,[req(0,1,_),req(_,_,BlockTypeTask)]), BlockTypeTask == BlockTypeAttached),
-			    bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) then {
-	            if bel(agentAt(OwnX, OwnY, _), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
-				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
-				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
-				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
-				         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
+			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
+			    	then {
+			            if bel(agentAt(OwnX, OwnY, _), 
+			                   targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+						   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+						       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+						    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+						         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, 
+						                                                  LocalizedOtherY, NewMD)).
 		    }
 		    
 		    if percept(task(TaskName,_, 40,[req(_,_,BlockTypeTask),req(0,1,_)]), BlockTypeTask == BlockTypeAttached),
-		       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) then {
-	            if bel(agentAt(OwnX, OwnY, _), targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
-				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
-				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
-				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
-				         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
+		       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
+		       	then {
+		            if bel(agentAt(OwnX, OwnY, _), 
+		                   targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+					   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+					       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+					    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+					         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, 
+					         										  LocalizedOtherY, NewMD)).
 		    }
-			
-
-		
-			
 		} % do
-	
 } % end module
