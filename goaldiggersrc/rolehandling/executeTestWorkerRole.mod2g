@@ -28,8 +28,15 @@ module executeTestWorkerRole {
 	if bel(attachedBlokes(Count), Count < 2) then {
 
 		% attach bloke if next to it
-		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), not(percept(attached(X,Y))) 
-		then executeMoveAroundBloke.
+		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), not(percept(attached(X,Y))) then {
+		   % update empty time counter of all dispensers nearby
+		   forall percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
+		   bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3)) do {
+		      if bel(emptyDispenserCounter(X3, Y3, Count)) then delete(emptyDispenserCounter(X3, Y3, Count)).
+		   } % end empty time counter update
+		    
+		   if true then executeMoveAroundBloke. % attach the bloke
+		}
 		
 		% go to bloke if next to it
 		if percept(thing(X, Y, entity, _)), bel(abs(X) + abs(Y) >= 2) then {
@@ -43,10 +50,19 @@ module executeTestWorkerRole {
 			if bel(Y < 0), bel(X \= 0) then move(n).
 		}
 		
-		% Si no veo un agente cerca, me acerco a un dispenser
+		% if no agent around, go to a dispenser
 		if not(percept(thing(A, B, entity, _))), bel(A \= 0; B \=0), not(percept(thing(_,_,dispenser,_))), 
 		   bel(targetMd(_, _, dispenser), executeManhattan) then executeManhattanMove. 
 
+		% if at a dispenser and no agents around, count steps without seeing agents around
+		if percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
+		   bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3))
+		then {
+		   if bel(emptyDispenserCounter(X3, Y3, Count), NewCount is Count + 1)
+		   then delete(emptyDispenserCounter(X3, Y3, Count)) + insert(emptyDispenserCounter(X3, Y3, NewCount)).
+		   if not(bel(emptyDispenserCounter(X3, Y3, _))) then insert(emptyDispenserCounter(X3, Y3, 1)).
+		}
+			
 		if true then executeRandomMove.
 	
  	    % Attach other bloke

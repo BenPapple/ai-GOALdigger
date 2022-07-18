@@ -129,6 +129,7 @@
 % Variables related to testWorker role
 :- dynamic haveBlokeAttached/2. % Boolean and direction
 :- dynamic attachedBlokes/1. % Count of attached blokes
+:- dynamic emptyDispenserCounter/3. % Count of time no agents were seen around a specific dispenser.
 
 % Variables related to locating other agents in the world
 % store / update other agents' positions

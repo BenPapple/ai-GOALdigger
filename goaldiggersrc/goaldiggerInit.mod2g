@@ -31,7 +31,7 @@ module goaldiggerInit {
 	if true then insert (haveMove). % Semaphore of decision for step
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
-	if true then insert (getFree). % get free from attachments
+	%if true then insert (getFree). % get free from attachments
 	
 	% Assign Explorer and set worker as default role
 	if true then insert(randomSeed(0)).
