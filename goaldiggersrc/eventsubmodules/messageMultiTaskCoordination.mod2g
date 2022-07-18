@@ -90,7 +90,7 @@ module messageMultiTaskCoordination {
 		   insert(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSupporter)).
 		   
    	% RECEIVE as submitterLeader NoACK from supporter
-	forall (_).sent(msgNoACKtask(NameSupporter)), 
+	forall (_).sent(msgNoACKtask(_)), 
 	       bel(submitterLeader),
 	       bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterACKPending))	       
 	   	do delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterACKPending)) +
