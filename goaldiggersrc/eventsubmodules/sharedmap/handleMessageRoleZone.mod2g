@@ -8,17 +8,27 @@ use "../../goaldiggerAction" as actionspec.
 
 module handleMessageRoleZone {
 	
-	% Check received messageRolezone messages.
-	forall (_).sent(msgRoleZoneData(X,Y,SenderName)) do {
-			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
+	%ToDo: There doesn't seem to be a flag to recalc the distance to role zones, as for goal zones. Is it so by design?
+	
+	% Check cached msgRoleZoneData messages.
+	forall bel(cachedMsgRoleZoneData(X,Y,SenderName)) 
+		do {
+			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY) 
+				then {
+		    		if not(bel(mapRoleZone(X1,Y1,_))) 
+		    			then insert(mapRoleZone(X1,Y1, 9999)).
+		    		if bel(mapRoleZone(X1,Y1,_)) 
+		    			then delete(cachedMsgRoleZoneData(X,Y,SenderName)).
+		} % then
+	} %forall
+	
+	% Check received msgRoleZoneData messages.
+	forall (_).sent(msgRoleZoneData(X,Y,SenderName)) 
+		do {
+			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY),
 			   not(bel(mapRoleZone(X1,Y1,_))) 
-			    then insert(mapRoleZone(X1,Y1, rzStoredFromMessage)).
-		}
-	
-	% Ask for stored role zones if none are known
-	if percept(name(MyName), role(default)) then {
-		forall bel(confirmedOffsetOfAgent(_,_,SenderName), storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _))
-		do (SenderConnect).send(messageNeedRoleZone(MyName)).
+			    then insert(mapRoleZone(X1,Y1, 9999)).
+			if not(bel(confirmedOffsetOfAgent(_,_,SenderName), cachedMsgRoleZoneData(X,Y,SenderName))) 
+			    then insert(cachedMsgRoleZoneData(X,Y,SenderName)).
 	}
-	
 }

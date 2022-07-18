@@ -11,11 +11,12 @@ module handleMessageDeletedGoalZone {
 	% ToDo: When the world measurement is ready, adapt coordinates additionaly to world size
 	
 	% Check received messageDeletedGoalzone messages.
-	forall (_).sent(messageDeletedGoalZone(X,Y,SenderName)) do {
+	forall (_).sent(messageDeletedGoalZone(X,Y,SenderName)) 
+		do {
 			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
 			   mapGoalZone(X1,Y1,Md)) 
-			    then delete (mapGoalZone(X1,Y1,Md)) 
-			         + print("Deleted"+mapGoalZone(X1,Y1,12345)+" Offset "+
-			                 confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName)).
+			    then delete (mapGoalZone(X1,Y1,Md)) +
+			         print("Deleted"+mapGoalZone(X1,Y1,12345)+" Offset "+ 
+			               confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName)).
 		}
 }

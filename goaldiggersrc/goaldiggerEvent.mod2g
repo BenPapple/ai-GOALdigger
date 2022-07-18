@@ -33,13 +33,16 @@ module goaldiggerEvent {
 
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)),
-	   not(bel(thisIsTheFirstSim)) then reinitBeliefOnSimChange.
+	   not(bel(thisIsTheFirstSim)) 
+	   	then reinitBeliefOnSimChange.
 	   
 	% prevent first reinitBeliefOnSimChange activation
-	if bel(thisIsTheFirstSim) then delete(thisIsTheFirstSim).
+	if bel(thisIsTheFirstSim) 
+		then delete(thisIsTheFirstSim).
 	
 	% Logging made points by agents
-	if not(bel(lDebugOn)) then logScoringBoard.
+	if not(bel(lDebugOn)) 
+		then logScoringBoard.
 
 	% SUBMODULE managing success and partial_success percepts
 	if true then syncLastActionResultDataIntoBelief.
@@ -49,18 +52,22 @@ module goaldiggerEvent {
 	if true then syncMessageDataIntoBelief.
 	
 	% check attached block direction for block and if none found switch haveBlockAttached false
-    if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), not(percept(attached(X, Y))) 
-        then delete(haveBlockAttached(true, DirBlock)) + insert(haveBlockAttached(false, DirBlock)).
+    if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)), 
+       not(percept(attached(X, Y))) 
+        then delete(haveBlockAttached(true, DirBlock)) + 
+             insert(haveBlockAttached(false, DirBlock)).
 
 	% SUBMODULES Choose RandomAgent for Explorer
-	if percept(step(SimStep), SimStep >= 6) then updateSubmitterRanking.
+	if percept(step(SimStep), SimStep >= 6) 
+		then updateSubmitterRanking.
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULES to measure the world
-	if percept(step(SimStep), SimStep > 3) then {
-		% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-		if true then updateWorldSizeData.
-		if true then handleMessageDistStepNamePosition.
+	if percept(step(SimStep), SimStep > 3333) 
+		then {
+			% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
+			if true then updateWorldSizeData.
+			if true then handleMessageDistStepNamePosition.
 	}
 	
 	% SUBMODULE SimpleWorldcalculation
@@ -72,11 +79,13 @@ module goaldiggerEvent {
 %	% SUBMODULE update nearest Agent on map for submitterleader
 %	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) then updateNearestAgentData.
 
-	% SUBMODULE ask for a dispenser if none known
+	% SUBMODULE check messages about dispensers if none known
 	if true then handleMessageDispenser.	
 		
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
-	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)), percept(role(worker)) then updateDispenserDistance.
+	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)), 
+	   percept(role(worker)) 
+	   	then updateDispenserDistance.
     
     % SUBMODULE chose new task if necessary
     if true then changeTaskCheck.
@@ -84,23 +93,27 @@ module goaldiggerEvent {
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
 	
-	% SUBMODULE ask for a role zone if none known
-	if percept(role(default)) then handleMessageRoleZone.
+	% SUBMODULE check messages about role zones
+	%if percept(role(default)) then handleMessageRoleZone.
+	if true then handleMessageRoleZone.
 
     % SUBMODULE update rolezone map data
-    if percept(role(default)) then updateRolezoneDistance.
+    if percept(role(default)) 
+    	then updateRolezoneDistance.
 
-	% SUBMODULE ask for a goal zone if none known
+	% SUBMODULE check messages about goal zones
 	if true then handleMessageGoalZone.
 	    
 	% SUBMODULE delete goal zones if other agents have found that they don't exist anymore
 	if percept(step(SimStep), SimStep > 3333),
-	   (_).sent(messageDeletedGoalZone(_,_,_)) then handleMessageDeletedGoalZone.
+	   (_).sent(messageDeletedGoalZone(_,_,_)) 
+	   	then handleMessageDeletedGoalZone.
 	   
 	% SUBMODULE update goalzone map data
-	if percept(step(SimStep),role(worker)), bel(calculateNewGoalzoneMD, haveBlockAttached(true, _), 
-	           currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
-	           TaskStep >= SimStep) 
+	if percept(step(SimStep),role(worker)), 
+	   bel(calculateNewGoalzoneMD, haveBlockAttached(true, _), 
+	       currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent, 
+	       TaskStep >= SimStep) 
 	    then updateGoalzoneDistance.
 	    
 	% SUBMODULE manhattan switch manipulation
@@ -115,8 +128,10 @@ module goaldiggerEvent {
 	 */
 
 	% check old dispenser request and set switch to false
-	if percept(step(Step)), bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) 
-	    then delete(haveDispenserDelivery(true, OnStepX)) + insert(haveDispenserDelivery(false, Step)).
+	if percept(step(Step)), 
+	   bel(haveDispenserDelivery(true, OnStepX), OnStepX + 1 =< Step) 
+	    then delete(haveDispenserDelivery(true, OnStepX)) + 
+	         insert(haveDispenserDelivery(false, Step)).
 
 	/**
 	 * MISCELLANEOUS POST EVERYTHING
@@ -124,16 +139,21 @@ module goaldiggerEvent {
 	 */
 
 	% change affinity direction after X steps
-	if bel(changeAffinityAfterTheseSteps(ChangeStep)), percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), 
+	if bel(changeAffinityAfterTheseSteps(ChangeStep)), 
+	   percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)), 
 	   bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir)) 
-	    then delete (randomAffinity(DirOld)) + insert (randomAffinity(NewDir)).
+	    then delete (randomAffinity(DirOld)) + 
+	         insert (randomAffinity(NewDir)).
 	    
 	% remove switch
-	if bel(calculateNewDispenserMD) then delete(calculateNewDispenserMD).
-	if bel(calculateNewGoalzoneMD) then delete(calculateNewGoalzoneMD).	
+	if bel(calculateNewDispenserMD) 
+		then delete(calculateNewDispenserMD).
+	if bel(calculateNewGoalzoneMD) 
+		then delete(calculateNewGoalzoneMD).	
 
 	% SUBMODULE debug with our mini percept
-	if bel(lDebugOn) then logMiniPercept.
+	if bel(lDebugOn) 
+		then logMiniPercept.
 
 	/**
 	 * ACTIVATE MAIN LOOP
@@ -141,6 +161,7 @@ module goaldiggerEvent {
 	 */
 
 	% prepare action chosing in main module
-	if bel(haveMove), percept(step(SimStep), SimStep >= 0) then delete(haveMove).
-
+	if bel(haveMove), 
+	   percept(step(SimStep), SimStep >= 0) 
+	   	then delete(haveMove).
 } % module

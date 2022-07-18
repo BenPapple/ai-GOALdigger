@@ -39,35 +39,36 @@ module handleMessageDistStepNamePosition {
 						if bel(NewWorldY \== OldWorldY) then all.send(worldSizeY(NewWorldY)).
 					   
 				}
-				
 		} % end do
 	} % end if
 
     % DELETE all myDistStepNamePosition messages which are compatible with more than one distStepNamePosition messages.
-	forall bel(distStepNamePosition(DistX, DistY, Step, Agent1Name, _, _), distStepNamePosition(DistX, DistY, Step, Agent2Name, _, _),
-		Agent1Name \== Agent2Name, myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), MyDistX =:= -DistX, MyDistY =:= -DistY)
-			do {
-			    if bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)) then delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
+	forall bel(distStepNamePosition(DistX, DistY, Step, Agent1Name, _, _), 
+		 	   distStepNamePosition(DistX, DistY, Step, Agent2Name, _, _),
+		       Agent1Name \== Agent2Name, myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY), 
+		       MyDistX =:= -DistX, MyDistY =:= -DistY)
+		do {
+			if bel(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)) 
+				then delete(myDistStepNamePosition(MyDistX, MyDistY, Step, MyPosX, MyPosY)). 
 			}
 
 	% DELETE old distanceStepNamePosition messages
-	forall bel(distStepNamePosition(DistX, DistY, StepMsg, Name, PosX, PosY)) do { 
-	
-		if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), 
+	forall bel(distStepNamePosition(DistX, DistY, StepMsg, Name, PosX, PosY)) 
+		do { 
+			if percept(step(CurrentStep)), 
+			   bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), 
 		           StepLimit is CurrentStep - Delay - Persistance, StepMsg < StepLimit),
-		   bel(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY))
-		      then delete(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)).
-		 
+		       bel(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY))
+		      	then delete(distStepNamePosition(DistX, DistY, Step, Name, PosX, PosY)).
 	} % end if
 
     % DELETE old myDistanceStepNamePosition messages
-	forall bel(myDistStepNamePosition(DistX, DistY, StepMsg, PosX, PosY)) do { 
-	
-		if percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), 
+	forall bel(myDistStepNamePosition(DistX, DistY, StepMsg, PosX, PosY)) 
+		do { 
+			if percept(step(CurrentStep)), 
+			   bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), 
 		           StepLimit is CurrentStep - Delay - Persistance, StepMsg < StepLimit),
-		   bel(myDistStepNamePosition(DistX, DistY, Step, PosX, PosY))
-		      then delete(myDistStepNamePosition(DistX, DistY, Step, PosX, PosY)).
-		 
+		   	   bel(myDistStepNamePosition(DistX, DistY, Step, PosX, PosY))
+		      	then delete(myDistStepNamePosition(DistX, DistY, Step, PosX, PosY)).
 	} % end if	
-	
 }

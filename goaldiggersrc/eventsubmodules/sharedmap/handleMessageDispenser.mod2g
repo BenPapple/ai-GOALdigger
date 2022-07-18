@@ -8,25 +8,37 @@ use "../../pathfinding/executeRandomMove" as module.
  */
 
 module handleMessageDispenser {
-
 	% ToDo: When the world measurement is ready, adapt coordinates additionaly to world size
-	
-	% Check received messageDispenser messages.
-	forall (_).sent(msgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) do {
+		
+	% Check cached msgDispenserData messages.
+	forall bel(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) 
+		do {
+			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY) 
+				then {
+			    	if not(bel(mapDispenser(X1,Y1,_,_,_,_))) 
+			    		then {
+			    			if true then insert(mapDispenser(X1,Y1,dispenser,BlockType,12345,Bool)).
+			    			if bel(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) 
+			    				then delete(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)).
+			    			if not(bel(calculateNewDispenserMD)) 
+			    				then insert(calculateNewDispenserMD).			    	
+			    	} % then
+			if bel(mapDispenser(X1,Y1,dispenser,BlockType,_,_)) 
+				then delete(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)).
+			} % then
+	} %forall
+
+	forall (_).sent(msgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) 
+		do {
 			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
 			   not(bel(mapDispenser(X1,Y1,_,_,_,_))) 
-			    then {
-			    if true then insert(mapDispenser(X1,Y1,dispenser,BlockType,12345,Bool)).
-			    if not(bel(calculateNewDispenserMD)) then insert(calculateNewDispenserMD).
+			   	then {
+			       if true then insert(mapDispenser(X1,Y1,dispenser,BlockType,12345,Bool)).
+			       if not(bel(calculateNewDispenserMD)) 
+			       	then insert(calculateNewDispenserMD).
 			}
+			if not(bel(confirmedOffsetOfAgent(_,_,SenderName), 
+					   cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)))
+				then insert(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)).
 	}
-	
-	% Ask for stored dispensers of the needed type if none are known
-	if bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_)), 
-	   not(bel(mapDispenser(_,_,_,BlockType,_,_))),
-	   percept(name(MyName), role(worker), step(SimStep), TaskStep > SimStep) then {
-			forall bel(storedOtherAgentStatus(SenderName, _, _, _, SenderConnect, _, _, _), confirmedOffsetOfAgent(_,_,SenderName))
-				do (SenderConnect).send(messageNeedDispenser(BlockType, MyName)).
-	}
-	
 }

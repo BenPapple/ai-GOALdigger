@@ -16,8 +16,8 @@ module connectBlocks {
 		then preActionCleanup + connect(AgentName, 0, -1).
 	
 	% connect as submitting agent
-	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), percept(goalZone(0,0)),
-	       bel(currentChosenTask(_, _, _, _, _, _, _, AgentName)) 
+	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), 
+	   percept(goalZone(0,0)),
+	   bel(currentChosenTask(_, _, _, _, _, _, _, AgentName)) 
 		then preActionCleanup + connect(AgentName, 0, 1).
-	
 }
