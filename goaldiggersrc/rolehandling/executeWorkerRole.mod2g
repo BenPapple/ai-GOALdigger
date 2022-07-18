@@ -7,6 +7,7 @@ use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
 use "../pathfinding/executeMoveAroundSubmitter" as module.
 use "../taskhandling/changeTaskCheck" as module.
 use "../taskhandling/handleTaskSubmit" as module.
+use "../blockhandling/detachBloke" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
 use "../blockhandling/connectBlocks" as module.
@@ -17,6 +18,9 @@ use "../blockhandling/connectBlocks" as module.
  */
 
 module executeWorkerRole {
+
+	% if caught, get free
+	if bel(getFree) then detachBloke.
 
     /**
 	 * WITHOUT BLOCK	

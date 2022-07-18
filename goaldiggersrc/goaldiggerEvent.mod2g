@@ -33,7 +33,8 @@ module goaldiggerEvent {
 
 	% Get testWorker role
 	if percept(name(MyName), MyName == "agentA1", role(worker)), not(bel(role(testWorker))) then 
-	   insert(role(testWorker)) + insert(attachedBlokes(0)).
+	   insert(role(testWorker)) + insert(attachedBlokes(0)) + delete(getFree).
+	   
 	
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)),

@@ -27,20 +27,40 @@ module executeTestWorkerRole {
 		 
 	if bel(attachedBlokes(Count), Count < 2) then {
 
-		if true then executeMoveAroundBloke.
+		% attach bloke if next to it
+		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), not(percept(attached(X,Y))) 
+		then executeMoveAroundBloke.
+		
+		% go to bloke if next to it
+		if percept(thing(X, Y, entity, _)), bel(abs(X) + abs(Y) >= 2) then {
+			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
+			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
+			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
+			if bel(Y < 0), bel(X =:= 0), not(percept(attached(_,-1))) then move(n).
+			if bel(X > 0), bel(Y \= 0) then move(e).
+			if bel(X < 0), bel(Y \= 0) then move(w).
+			if bel(Y > 0), bel(X \= 0) then move(s).
+			if bel(Y < 0), bel(X \= 0) then move(n).
+		}
+		
+		% Si no veo un agente cerca, me acerco a un dispenser
+		if not(percept(thing(A, B, entity, _))), bel(A \= 0; B \=0), not(percept(thing(_,_,dispenser,_))), 
+		   bel(targetMd(_, _, dispenser), executeManhattan) then executeManhattanMove. 
+
+		if true then executeRandomMove.
 	
  	    % Attach other bloke
-	    if percept(thing(0,0,dispenser,_)) then executeMoveAroundBloke.
+	    %if percept(thing(0,0,dispenser,_)) then executeMoveAroundBloke.
 	
 	    % manhattan move to dispenser
-    	if not(percept(thing(0,0,dispenser,_))), bel(targetMd(_, _, dispenser), executeManhattan) 
-    	   then executeManhattanMove.		
+    	%if not(percept(thing(0,0,dispenser,_))), bel(targetMd(_, _, dispenser), executeManhattan) 
+    	%   then executeManhattanMove.		
 	
 		% Move to goal zone
 	    %if bel(executeManhattan, targetMd(_, _, goalzone)) then executeManhattanMove.
 	    	
 	    % execute random explorer move without attached blokes with affinity to one direction
-		if not(percept(thing(0,0,dispenser,_))) then executeRandomMove. 
+		%if not(percept(thing(0,0,dispenser,_))) then executeRandomMove. 
 	
 	} % end haveBlockAttached(false,_)
     
@@ -51,9 +71,9 @@ module executeTestWorkerRole {
 	 % ToDo: Get out of the way of other agents
 	 % ToDo: Get to a random place when more than one bloke attached
 	 		  
-	if bel(attachedBlokes(Count), Count == 2) then {
-		
-	}
+	if bel(attachedBlokes(Count), Count == 2) then executeRandomMove.
+	
+	if true then skip.
 
 	
 }

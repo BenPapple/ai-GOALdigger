@@ -1,0 +1,8 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+module detachBloke {
+	forall percept(attached(X,Y), (abs(X) =:= 0; abs(Y) =:= 0)) do {
+		if percept(thing(X, Y, entity, _)), bel(directionToCoordinate(Dir, X, Y)) then detach(Dir).
+	}
+}

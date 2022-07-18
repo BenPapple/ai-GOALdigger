@@ -90,8 +90,8 @@ module syncPerceptDataIntoBelief {
   	}
 	
 	% DELETE detached blokes
-	forall bel(haveBlokeAttached(true,Dir)) do {
-		if not(percept(attached(Dir))), bel(attachedBlokes(Count), NewCount is Count - 1) 
+	forall bel(haveBlokeAttached(true,Dir), directionToCoordinate(Dir, X, Y)) do {
+		if not(percept(attached(X, Y))), bel(attachedBlokes(Count), NewCount is Count - 1) 
 		then delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir))
 		     + delete(attachedBlokes(Count)) + insert(attachedBlokes(NewCount)). 
 	}
