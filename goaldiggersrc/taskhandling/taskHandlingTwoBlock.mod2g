@@ -21,7 +21,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockTypeAttached, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task own Block fits") + 
 				     exit-module.
 	}
@@ -38,7 +38,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockTypeAttached, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task own Block fits") + 
 				     exit-module.
 	}
@@ -58,7 +58,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task nearestDispenser") + 
 				     exit-module.
 	}
@@ -74,7 +74,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task nearestDispenser") + 
 				     exit-module.
 	}
@@ -90,7 +90,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				       supporterPending)) + 
+				       supporterREQPending)) + 
 				     print("ModuleChoseTask 2task OldTask nearestDispenser") + 
 					 exit-module.
 	}
@@ -106,7 +106,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task OldTask nearestDispenser") + 
 				     exit-module.
 	}
@@ -122,7 +122,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task basic disp known") + 
 				     exit-module.
 	} 	
@@ -138,7 +138,7 @@ module taskHandlingTwoBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 					 insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task basic disp known") + 
 				     exit-module.
 	} 

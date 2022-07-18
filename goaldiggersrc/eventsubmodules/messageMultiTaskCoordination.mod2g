@@ -10,12 +10,13 @@ use "../eventsubmodules/updateNearestAgentDistance" as module.
 module messageMultiTaskCoordination {
 
 	% SUBMODULE update nearest Agent on map for submitterleader when necessary
-	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterPending)),
+	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterREQPending)),
 	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
 	   	then updateNearestAgentDistance.
 
 	% set other agent with needed block as supporter and oneself as submitter
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)),
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
+	                                          supporterREQPending)),
 	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) 
@@ -25,9 +26,9 @@ module messageMultiTaskCoordination {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
-							                    supporterPending)) + 
+							                    supporterREQPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType1, 
-								                submittingAgentTwoTask, SupporterName)) +
+								                submittingAgentTwoTask, supporterACKPending)) +
 								         exit-module.
 						}
 			}
@@ -39,16 +40,17 @@ module messageMultiTaskCoordination {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 							                                      SupporterName, X2, Y2, TaskName)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
-							                    supporterPending)) + 
+							                    supporterREQPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
-								                submittingAgentTwoTask, SupporterName)) +
+								                submittingAgentTwoTask, supporterACKPending)) +
 								         exit-module.
 					}
 			}
 	} % other agent has block
 	
 	% set nearest agent without fitting block
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterPending)),
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
+	                                          supporterREQPending)),
 	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,_)]), name(SubmitterName)) 
@@ -58,9 +60,9 @@ module messageMultiTaskCoordination {
 							if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                          SupporterName, X2, Y2, TaskName)).
 						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
-						                    supporterPending)) + 
+						                    supporterREQPending)) + 
 							         insert(currentChosenTask(TaskName, V2, V3, V4, V5, BlockType1, 
-							                submittingAgentTwoTask, SupporterName)) +
+							                submittingAgentTwoTask, supporterACKPending)) +
 							         exit-module.
 					}
 		}
@@ -72,13 +74,27 @@ module messageMultiTaskCoordination {
 						if true then (channnelMultiTask).send(informSupportingAgent(SubmitterName, supportingAgent, 
 						                                      SupporterName, X2, Y2, TaskName)).
 						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
-						                    supporterPending)) + 
+						                    supporterREQPending)) + 
 							         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
-							                submittingAgentTwoTask, SupporterName)) +
+							                submittingAgentTwoTask, supporterACKPending)) +
 							         exit-module.
 				}
 		}
 	} % other agent has no block or no fitting block
+	
+	% RECEIVE as submitterLeader ACK from supporter
+	forall (_).sent(msgACKtask(NameSupporter)), 
+	       bel(submitterLeader),
+	       bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterACKPending))	       
+	   	do delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterACKPending)) +
+		   insert(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSupporter)).
+		   
+   	% RECEIVE as submitterLeader NoACK from supporter
+	forall (_).sent(msgNoACKtask(NameSupporter)), 
+	       bel(submitterLeader),
+	       bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterACKPending))	       
+	   	do delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterACKPending)) +
+		   insert(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterREQPending)).
 	
 	% RECEIVE submitterLeader order cease supporting
 	if (_).sent(informCeaseSupporting(NameSender)), 
@@ -89,16 +105,28 @@ module messageMultiTaskCoordination {
 	
 	
 	% RECEIVE become supportingAgent, check block for task and target		
-	if percept(name(NameOwn)), (_).sent(informSupportingAgent(NameSender, supportingAgent, NameOwn, _, _, TaskName)), 
-	   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)),
-	   percept(task(TaskName ,TaskStep, 40,[req(X3, Y3, BlockType1),req(X4, Y4, BlockType2)])),
-	   not(bel(submitterLeader)) 
-	   	then {
-			if bel(X3 == 0, Y3 == 1) 
-				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
-			         insert(currentChosenTask(TaskName, TaskStep, 40, X4, Y4, BlockType2, supportingAgent, NameSender)).	
-			if bel(X4 == 0, Y4 == 1) 
-				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
-			         insert(currentChosenTask(TaskName, TaskStep, 40, X3, Y3, BlockType1, supportingAgent, NameSender)).
-	}
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(NameSender, supportingAgent, NameOwn, _, _, TaskName)) 
+	    do{ 
+	    if bel(currentChosenTask(_, _, _, _, _, _, ClientServer, _), ClientServer == supportingAgent),
+	       not(bel(submitterLeader)) 
+	   	    then (ConnectSender).send(msgNoACKtask(NameOwn)).
+	   	    
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 40,[req(X3, Y3, BlockType1),req(X4, Y4, BlockType2)])),
+	       not(bel(submitterLeader)) 
+	   	    then {
+				if bel(X3 == 0, Y3 == 1) 
+					then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				         insert(currentChosenTask(TaskName, TaskStep, 40, X4, Y4, BlockType2, supportingAgent, 
+				                NameSender)) +
+				         (ConnectSender).send(msgACKtask(NameOwn)).	
+				if bel(X4 == 0, Y4 == 1) 
+					then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				         insert(currentChosenTask(TaskName, TaskStep, 40, X3, Y3, BlockType1, supportingAgent, 
+				                NameSender)) +
+				         (ConnectSender).send(msgACKtask(NameOwn)).
+        } % if 2
+	} % forall
+	
  } % end module
