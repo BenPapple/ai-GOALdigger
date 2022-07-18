@@ -16,11 +16,11 @@ module syncMessageDataIntoBelief {
 		
 	}
 	
-	% DELETE stored seenOtherAgent messages from belief when ~6 steps old
+	% DELETE stored seenOtherAgent messages from belief when ~5 steps old
 	forall bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), 
 	       percept(step(SimStep))
 		do {
-			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step =< SimStep - 7)
+			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step < SimStep - 5)
 				then delete(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
 	}
 	

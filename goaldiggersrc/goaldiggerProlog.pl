@@ -127,18 +127,9 @@
 
 % Variables related to locating other agents in the world
 % store / update other agents' positions
-:- dynamic otherAgentAt/4. 
+%:- dynamic otherAgentAt/4. 
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)
 :- dynamic storedOtherAgentStatus/8. 
-% field name x y CalcStep
-:- dynamic agentOffset/4. 
-% message passed to everyone else if other agents seen / saved 
-% (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderName, SenderPosx, SenderPosY)
-:- dynamic distStepNamePosition/6. 
-% belief stored if the agent has seen another agent in this step 
-% (DistTOOtherAgentX, DistToOtherAgentY, Step, SenderPosx, SenderPosY)
-:- dynamic myDistStepNamePosition/5. 
-
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -191,19 +182,19 @@ randomBetween(InLow, InHigh, RandOut) :- random_between(InLow, InHigh, RandOut).
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
 
 % Calculate distance XY coordinates concerning target targetMd and taking into account the world size
-calculateXYMdWorldSize(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-  
-	(SizeX == 54321, SizeY == 54321, calculateXYMd(X1, Y1, X2, Y2, Md));
-	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), 
-	                                   absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), 
-	                                   Md is DistanceX + DistanceY).
+%calculateXYMdWorldSize(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-  
+%	(SizeX == 54321, SizeY == 54321, calculateXYMd(X1, Y1, X2, Y2, Md));
+%	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), 
+%	                                   absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), 
+%	                                   Md is DistanceX + DistanceY).
 
 % Calculate absolute distance between two points taking into account the size of the world
-absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-
-    ( D1 is abs(ObjectPos - AgentPos), 
-      D2 is abs(ObjectPos + WorldSize - AgentPos), 
-      D3 is abs(AgentPos - ObjectPos), 
-      D4 is abs(AgentPos + WorldSize - ObjectPos), 
-      min_list([D1,D2,D3,D4], MinD), Distance is MinD ).
+%absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-
+%    ( D1 is abs(ObjectPos - AgentPos), 
+%      D2 is abs(ObjectPos + WorldSize - AgentPos), 
+%     D3 is abs(AgentPos - ObjectPos), 
+%     D4 is abs(AgentPos + WorldSize - ObjectPos), 
+%     min_list([D1,D2,D3,D4], MinD), Distance is MinD ).
 
 % calculate minus or plus 1
 calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
@@ -313,11 +304,12 @@ rotateToCoord(e, cw, 0, 1).
 rotateToCoord(e, ccw, 0, -1).
 
 % Gives the apparent displacement of the observed agent relative to the observing agent between t0 and t1. 
-distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
+%distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
 
 % modulo function for 2 values. It only returns positive values.
 getModPos(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, V is abs(Y+X), Z is V mod Y).
 
+%
 getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
     ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
     (getModPos(X1,SizeX,X2), getModPos(Y1,SizeY,Y2)).
@@ -339,11 +331,11 @@ getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
 %                       (   Delta < 0, abs(Delta) > PerceptDistance, getModPos(Delta, WorldSize, V), ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)))).
 
 % world size calculator
-getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :- 
-	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) > abs(PosDiff), NewWorldSize is abs(PosDiff));
-	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) < abs(PosDiff), NewWorldSize is OldWorldSize - abs(PosDiff));
-	(PosDiff = 0, NewWorldSize is OldWorldSize); 
-	(abs(PosDiff) >= OldWorldSize, NewWorldSize is OldWorldSize).
+%getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :- 
+%	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) > abs(PosDiff), NewWorldSize is abs(PosDiff));
+%	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) < abs(PosDiff), NewWorldSize is OldWorldSize - abs(PosDiff));
+%	(PosDiff = 0, NewWorldSize is OldWorldSize); 
+%	(abs(PosDiff) >= OldWorldSize, NewWorldSize is OldWorldSize).
 
 % Counting the quantity of repeated world measurement in the world measurement list.
 count_repeated([Elem|Xs], Elem, Count, Ys) :- count_repeated(Xs, Elem, Count1, Ys), Count is Count1+1.

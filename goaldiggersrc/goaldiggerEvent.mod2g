@@ -9,7 +9,7 @@ use "./eventsubmodules/syncLastActionResultDataIntoBelief" as module.
 use "./eventsubmodules/reinitBeliefOnSimChange" as module.
 use "./eventsubmodules/manageManhattanSwitchStatus" as module.
 use "./eventsubmodules/manageManhattanTarget" as module.
-use "./eventsubmodules/simpleworldcalculation/handleMessageDistStepNamePosition" as module.
+use "./eventsubmodules/simpleworldcalculation/calculateWorldSize" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/syncMessageDataIntoBelief" as module.
@@ -62,16 +62,11 @@ module goaldiggerEvent {
 		then updateSubmitterRanking.
 	if true then updateAssignExplorerRole.
 	
-	% SUBMODULES to measure the world
-	if percept(step(SimStep), SimStep > 3333) 
-		then {
-			% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-			if true then updateWorldSizeData.
-			if true then handleMessageDistStepNamePosition.
-	}
-	
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffset.
+	% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
+	if true then updateWorldSizeData.
+	if true then calculateWorldSize.
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	

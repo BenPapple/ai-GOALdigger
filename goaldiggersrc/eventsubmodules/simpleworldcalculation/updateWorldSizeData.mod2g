@@ -14,7 +14,7 @@ module updateWorldSizeData {
 			forall (_).sent(worldSizeX(SizeX))	
 				do {
 					if bel(worldListX(WorldListX), length(WorldListX, Length), worldSizeX(KnownSize), 
-					       SizeX \= KnownSize, (Length < 10)) 
+					       SizeX =< KnownSize, (Length < 10)) 
 						then delete(worldListX(WorldListX)) + 
 						     insert(worldListX([SizeX | WorldListX])). 
 		}
@@ -26,28 +26,35 @@ module updateWorldSizeData {
 			forall (_).sent(worldSizeY(SizeY))	
 				do {
 			 		if bel(worldListY(WorldListY), length(WorldListY, Length), worldSizeY(KnownSize), 
-			 		       SizeY \= KnownSize, (Length < 10)) 
+			 		       SizeY =< KnownSize, (Length < 10)) 
 			 			then delete(worldListY(WorldListY)) + 
 			 			     insert(worldListY([SizeY | WorldListY])). 
 		}
 	}
 
 	% Update world sizes with the most common values in the X and Y mesasurement lists 
-	% once both lists lenghts are equal or greater than 10
-	if bel(worldListX(WorldListX), length(WorldListX, LengthX), LengthX >= 10, worldListY(WorldListY), 
-	       length(WorldListY, LengthY), LengthY >= 10, worldSizeX(OldWorldSizeX), worldSizeX(OldWorldSizeY), 
-			msort(WorldListX, SListX), rle(SListX, RLEX), sort(RLEX, SRLEX),last(SRLEX, [FreqX, MostCommonX]), 
+	% once both lists lenghts are equal or greater than 4
+	if bel(worldListX(WorldListX), length(WorldListX, LengthX), LengthX >= 4, worldListY(WorldListY), 
+	       length(WorldListY, LengthY), LengthY >= 4, 
+		   msort(WorldListX, SListX), rle(SListX, RLEX), sort(RLEX, SRLEX),last(SRLEX, [FreqX, MostCommonX]), 
 		   length(WorldListX, ListLenX), FreqX > ListLenX/2,
-			msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), 
-		   length(WorldListY, ListLenY), FreqY > ListLenY/2)
-		then delete(worldSizeX(OldWorldSizeX)) + 
-		     insert(worldSizeX(MostCommonX)) + 
-		     insert (worldUpdateX) + 
-		     insert(worldUpdatedX) + 
-		     delete(worldSizeY(OldWorldSizeY)) + 
-		     insert(worldSizeY(MostCommonY)) + 
-		     insert (worldUpdateY) + 
-		     insert(worldUpdatedY).
+		   msort(WorldListY, SListY), rle(SListY, RLEY), sort(RLEY, SRLEY),last(SRLEY, [FreqY, MostCommonY]), 
+		   length(WorldListY, ListLenY), FreqY > ListLenY/2),
+	   bel(worldSizeX(OldWorldSizeX), worldSizeX(OldWorldSizeY))
+	   
+		then {
+		 if bel(MostCommonX =< OldWorldSizeX) 
+		     then delete(worldSizeX(OldWorldSizeX)) + 
+		          insert(worldSizeX(MostCommonX)) + 
+		          insert (worldUpdateX) + 
+		          insert(worldUpdatedX).
+		     
+		 if bel(MostCommonY =< OldWorldSizeY) 
+		     then delete(worldSizeY(OldWorldSizeY)) + 
+		          insert(worldSizeY(MostCommonY)) + 
+		          insert (worldUpdateY) + 
+		          insert(worldUpdatedY).
+    }
 	
 	% ToDo agentAt change to agentAtComplexWorld
 	% After updating one agent's belief about world size, the agent updates its own position.
