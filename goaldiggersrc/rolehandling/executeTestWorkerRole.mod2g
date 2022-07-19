@@ -21,6 +21,10 @@ module executeTestWorkerRole {
 
 	% preferred target switches
 	if not(bel(searchInGoalzone)) then insert(searchInGoalzone).
+	
+	% bloke quantity
+	if not(bel(targetBlokeCount(_))) then insert(targetBlokeCount(2)). 
+	
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
     /**
@@ -29,7 +33,7 @@ module executeTestWorkerRole {
 	 */	
 	
 		 
-	if bel(attachedBlokes(Count), Count < 2) then {
+	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {
 
 		% attach bloke if next to it
 		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), not(percept(attached(X,Y))) then {
@@ -55,13 +59,15 @@ module executeTestWorkerRole {
 		}
 
 
-		% if no agent around, go to a goal zone
-		if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(thing(_,_,goalZone,_))), 
-		   bel(targetMd(_, _, goalZone), executeManhattan) then executeManhattanMove.
+		% if no free agent around, go to a goal zone
+		if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(attached(X, Y))), 
+		   not(percept(goalZone(_,_))), bel(targetMd(_, _, goalzone), executeManhattan) 
+		then executeManhattanMove.
 		
 		% if no agent around, go to a dispenser
-		if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(thing(_,_,dispenser,_))), 
-		   bel(targetMd(_, _, dispenser), executeManhattan) then executeManhattanMove. 
+		if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(attached(X, Y))), 
+		   not(percept(thing(_,_,dispenser,_))), bel(targetMd(_, _, dispenser), executeManhattan) 
+		then executeManhattanMove. 
 
 
 		% if at a dispenser and no agents around, count steps without seeing agents around
@@ -85,9 +91,7 @@ module executeTestWorkerRole {
 	 % ToDo: Get out of the way of other agents
 	 % ToDo: Get to a random place when more than one bloke attached
 	 		  
-	if bel(attachedBlokes(Count), Count == 2) then executeRandomMove.
-	
-	if true then skip.
+	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count =:= Target) then skip.
 
 	
 }

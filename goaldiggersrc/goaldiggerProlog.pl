@@ -129,6 +129,7 @@
 % Variables related to testWorker role
 :- dynamic haveBlokeAttached/2. % Boolean and direction
 :- dynamic attachedBlokes/1. % Count of attached blokes
+:- dynamic targetBlokeCount/1. % Maximum number of attached blokes
 :- dynamic emptyDispenserCounter/3. % Count of time no agents were seen around a specific dispenser.
 :- dynamic searchInDispenser/0. % switch to search for blokes next to dispensers
 :- dynamic searchInGoalzone/0. % switch to search for blokes next to goalzones
