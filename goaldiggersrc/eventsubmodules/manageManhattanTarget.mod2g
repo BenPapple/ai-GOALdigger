@@ -1,6 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../pathfinding/helperManhattanCalc" as module.
+use "../eventsubmodules/updateGoalzoneDistance" as module.
 
 /**
  * Manages Manhattan targets
@@ -35,8 +36,18 @@ module manageManhattanTarget {
 					then insert(executeManhattan).
 	}
 
+	% when role test worker and without bloke set goalzone as target
+	if bel(role(testWorker), haveBlokeAttached(false,_)), not(bel(targetMd(_,_,goalZone))), bel(searchInGoalzone) then {
+		   		if true then updateGoalzoneDistance.
+		   		if bel(targetClosestGoalZone(X, Y, _)) then {
+					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+					if true then insert(targetMd(X, Y, goalZone)).	
+					if not(bel(executeManhattan)) then insert(executeManhattan).
+				}
+	}
+
 	% when role test worker and without bloke set dispenser as target
-	if bel(role(testWorker), haveBlockAttached(false,_),
+	if bel(role(testWorker), haveBlokeAttached(false,_), searchInDispenser,
 		   mapDispenser(X,Y,dispenser,BlockType,_,_)), percept(task(_, _, _,[req(_,_,BlockType)])), 
 		   not(bel(emptyDispenserCounter(X, Y, Count), Count > 20)) then {		
 				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 

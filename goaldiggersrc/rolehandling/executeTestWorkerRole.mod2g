@@ -19,6 +19,10 @@ use "../blockhandling/connectBlocks" as module.
 
 module executeTestWorkerRole {
 
+	% preferred target switches
+	if not(bel(searchInGoalzone)) then insert(searchInGoalzone).
+	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
+
     /**
 	 * WITHOUT BLOKE	
 	 *
@@ -49,10 +53,16 @@ module executeTestWorkerRole {
 			if bel(Y > 0), bel(X \= 0) then move(s).
 			if bel(Y < 0), bel(X \= 0) then move(n).
 		}
+
+
+		% if no agent around, go to a goal zone
+		if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(thing(_,_,goalZone,_))), 
+		   bel(targetMd(_, _, goalZone), executeManhattan) then executeManhattanMove.
 		
 		% if no agent around, go to a dispenser
-		if not(percept(thing(A, B, entity, _))), bel(A \= 0; B \=0), not(percept(thing(_,_,dispenser,_))), 
+		if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(thing(_,_,dispenser,_))), 
 		   bel(targetMd(_, _, dispenser), executeManhattan) then executeManhattanMove. 
+
 
 		% if at a dispenser and no agents around, count steps without seeing agents around
 		if percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
@@ -65,18 +75,6 @@ module executeTestWorkerRole {
 			
 		if true then executeRandomMove.
 	
- 	    % Attach other bloke
-	    %if percept(thing(0,0,dispenser,_)) then executeMoveAroundBloke.
-	
-	    % manhattan move to dispenser
-    	%if not(percept(thing(0,0,dispenser,_))), bel(targetMd(_, _, dispenser), executeManhattan) 
-    	%   then executeManhattanMove.		
-	
-		% Move to goal zone
-	    %if bel(executeManhattan, targetMd(_, _, goalzone)) then executeManhattanMove.
-	    	
-	    % execute random explorer move without attached blokes with affinity to one direction
-		%if not(percept(thing(0,0,dispenser,_))) then executeRandomMove. 
 	
 	} % end haveBlockAttached(false,_)
     
