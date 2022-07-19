@@ -45,7 +45,8 @@ module goaldiggerMain {
         then executeExplorerRole.
 
     } % if haveMove
-
+	
+	if bel(haveMove) then {
 		    % Handle WORKER role
 	    	if percept(role(worker))
 	    		then executeWorkerRole.

@@ -133,6 +133,7 @@
 :- dynamic emptyDispenserCounter/3. % Count of time no agents were seen around a specific dispenser.
 :- dynamic searchInDispenser/0. % switch to search for blokes next to dispensers
 :- dynamic searchInGoalzone/0. % switch to search for blokes next to goalzones
+:- dynamic getFree/0. % swicht to detach other bloke
 
 % Variables related to locating other agents in the world
 % store / update other agents' positions
