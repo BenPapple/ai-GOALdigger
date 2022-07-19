@@ -1,0 +1,53 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+/**
+ * calculate worldsize and send, delete message cache
+ *
+ */
+
+module calculateWorldSize {	
+
+	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders and cached messages older than 4 steps
+	forall percept(name(AgentReceiver)),
+	       bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) 
+		do {
+	    	if percept(step(SimStep), Step < SimStep -4), 
+               not(bel(cachedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
+	               AgentReceiver \== AgentNameSender2))
+		    	then {
+					% if only 1x inverse coordinates are found
+					if bel(cachedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+					   bel(confirmedOffsetOfAgent(ConfimedOffsetX, ConfimedOffsetY, AgentNameSender)),
+					   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
+					   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative) 
+					    then {
+							if not(bel(cachedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
+						                AgentNameSender \== AgentNameSender3)) 
+						    	then {
+									% calculate offset and worldsize
+									if true then {
+								 		if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, 
+								 		       OffsetX, OffsetY)),
+								 		   bel(ConfimedOffsetX \= OffsetX, ConfimedOffsetY \= OffsetY),
+								 		   bel(WorldSizeX is abs(ConfimedOffsetX - OffsetX), 
+								 		       WorldSizeY is abs(ConfimedOffsetY - OffsetY))
+									 		then {
+									 		if bel(worldSizeX(OldWorldX), WorldSizeX =< OldWorldX) 
+									 		    then delete(worldSizeX(OldWorldX)) + 
+									 		         insert(worldSizeX(WorldSizeX)) +
+									 		         all.send(worldSizeX(WorldSizeX)) + 
+									 		         print("WorldX="+WorldSizeX).
+						                    if bel(worldSizeY(OldWorldY), WorldSizeY =< OldWorldY) 
+						                        then delete(worldSizeY(OldWorldY)) + 
+									 		         insert(worldSizeY(WorldSizeY)) +
+									 		         all.send(worldSizeY(WorldSizeY)) + 
+									 		         print("WorldY="+WorldSizeY).
+									 	}						      
+							         }
+					}
+			}
+		}
+	} % do
+
+} % end module

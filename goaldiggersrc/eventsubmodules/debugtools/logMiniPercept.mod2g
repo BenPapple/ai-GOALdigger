@@ -112,9 +112,9 @@ module logMiniPercept {
 		if percept(thing(0, 0, dispenser, X)) 
 			then print("Agent is on Dispenser"+X).
 		if bel(worldSizeX(X), worldSizeY(Y)) 
-			then print("Agent knows this world size: "+X+", "+Y+"."). 
+			then print("Agent knows this world size: X"+X+", Y"+Y+"."). 
 		if bel(worldListX(ListX), worldListY(ListY)) 
-			then print("Agent knows this world size: "+ListX+", "+ListY+".").
+			then print("Agent knows this world size: XList"+ListX+", YList"+ListY+".").
 		if true then print("====== End Mini Percept =====").
 		if true then print("                ").
 	    if true then print("                ").

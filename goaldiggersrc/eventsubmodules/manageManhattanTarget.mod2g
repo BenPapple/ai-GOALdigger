@@ -64,9 +64,9 @@ module manageManhattanTarget {
 	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target), Target \== supportingPosition),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _)), 
-	   bel(localize(A, B, OffsetX, OffsetY, C, D) )
+	   bel(localize(A, B, OffsetX, OffsetY, C, D), D2 is D + 2 )
 		then delete(targetMd(X, Y, Target)) + 
-			 insert(targetMd(C, D, otherAgentAt)) + 
+			 insert(targetMd(C, D2, otherAgentAt)) + 
 			 insert(executeManhattan).
 	
 	% Moving around Submitting agent for docking sequence

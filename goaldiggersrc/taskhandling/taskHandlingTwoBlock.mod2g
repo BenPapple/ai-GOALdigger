@@ -12,15 +12,16 @@ module taskHandlingTwoBlock {
 	% choose 2-block tasks if own block fits left req fields
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
-	   percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockTypeAttached),req(_, _, _)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60) 
+	   percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockTypeAttached),req(_, _, BlockTypeOther)])), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)) 
 	    then {	
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).	
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockTypeAttached, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task own Block fits") + 
 				     exit-module.
 	}
@@ -28,15 +29,16 @@ module taskHandlingTwoBlock {
 	% choose 2-block tasks if own block fits right req fields
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
-	   percept(task(TaskName ,TaskStep, 40,[req(_, _, _),req(0, 1, BlockTypeAttached)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60) 
+	   percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockTypeAttached)])), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)) 
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockTypeAttached, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task own Block fits") + 
 				     exit-module.
 	}
@@ -46,91 +48,97 @@ module taskHandlingTwoBlock {
 		then updateDispenserDistance.
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block left req
-	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, _)])), 
+	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
-	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx)
+	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task nearestDispenser") + 
 				     exit-module.
 	}
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block right req
-	if percept(task(TaskName ,TaskStep, 40,[req(_, _, _),req(0, 1, BlockType)])), 
+	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
-	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx)
+	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task nearestDispenser") + 
 				     exit-module.
 	}
 
 	% choose 2-block tasks if it exists and currenttask dispenser left req
-	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, _)])), 
+	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
-	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx)
+	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				       supporterPending)) + 
+				       supporterREQPending)) + 
 				     print("ModuleChoseTask 2task OldTask nearestDispenser") + 
 					 exit-module.
 	}
 	
 	% choose 2-block tasks if it exists and currenttask dispenser right req
-	if percept(task(TaskName ,TaskStep, 40,[req(_, _, _),req(0, 1, BlockType)])), 
+	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
-	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx)
+	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task OldTask nearestDispenser") + 
 				     exit-module.
 	}
 
-	% choose 2-block tasks if it exists and dispenser known left req
-	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, _)])), 
+	% choose 2-block tasks if it exists and both dispensers known left req
+	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
-	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)) 
+	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task basic disp known") + 
 				     exit-module.
 	} 	
 
-	% choose 2-block tasks if it exists and dispenser known right req
-	if percept(task(TaskName ,TaskStep, 40,[req(_, _, _),req(0, 1, BlockType)])), 
+	% choose 2-block tasks if it exists and both dispensers known right req
+	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
-	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)) 
+	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 					 insert(currentChosenTask(TaskName, TaskStep, 40, 0, 1, BlockType, submittingAgentTwoTask, 
-				            supporterPending)) + 
+				            supporterREQPending)) + 
 				     print("ModuleChoseTask 2task basic disp known") + 
 				     exit-module.
 	} 
