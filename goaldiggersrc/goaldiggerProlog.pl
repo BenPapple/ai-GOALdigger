@@ -127,6 +127,7 @@
 :- dynamic submitterLeader/0.
 
 % Variables related to testWorker role
+:- dynamic testWorkerNamed/0. % Switch to prevent several test workers being named.
 :- dynamic haveBlokeAttached/2. % Boolean and direction
 :- dynamic attachedBlokes/1. % Count of attached blokes
 :- dynamic targetBlokeCount/1. % Maximum number of attached blokes

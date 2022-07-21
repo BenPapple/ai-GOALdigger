@@ -29,7 +29,7 @@ module goaldiggerMain {
         then executeRandomMove.
 
     	% Handle test worker role
-    	if bel(role(testWorker))
+    	if bel(role(testWorker)), percept(role(worker))
         then executeTestWorkerRole.
 
 	    % Handle DEFAULT role

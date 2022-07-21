@@ -25,6 +25,7 @@ module executeTestWorkerRole {
 	% bloke quantity
 	if not(bel(targetBlokeCount(_))) then insert(targetBlokeCount(2)). 
 	
+	
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
     /**
@@ -90,7 +91,8 @@ module executeTestWorkerRole {
 	 */
 	 % ToDo: Get out of the way of other agents
 	 % ToDo: Get to a random place when more than one bloke attached
-	 		  
+	
+	% ToDo: Clear action machen, wenn man fast ohne Energie ist!	 		  
 	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count =:= Target) then skip.
 
 	
