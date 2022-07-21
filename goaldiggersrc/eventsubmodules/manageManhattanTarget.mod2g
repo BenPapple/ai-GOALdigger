@@ -37,11 +37,11 @@ module manageManhattanTarget {
 	}
 
 	% when role test worker and without bloke set goalzone as target
-	if bel(role(testWorker), haveBlokeAttached(false,_)), not(bel(targetMd(_,_,goalzone))), bel(searchInGoalzone) then {
+	if bel(role(testWorker)), not(bel(targetMd(_,_,goalzone))), bel(searchInGoalzone) then {
 		   		if true then updateGoalzoneDistance.
 		   		if bel(targetClosestGoalZone(X, Y, _)) then {
 					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-					if true then insert(targetMd(X, Y, goalzone)).	
+					if true then insert(targetMd(X, Y, goalzone)) + allother.send(goToGoal("First step")).	
 					if not(bel(executeManhattan)) then insert(executeManhattan).
 				}
 	}
