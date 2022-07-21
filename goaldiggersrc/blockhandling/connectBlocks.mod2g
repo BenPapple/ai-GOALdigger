@@ -15,9 +15,10 @@ module connectBlocks {
 	       currentChosenTask(_, _, _, _, _, _, _, AgentName))
 		then preActionCleanup + connect(AgentName, 0, -1).
 	
-	% connect as submitting agent
+	% connect as submitting agent 2task
 	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), 
 	   percept(goalZone(0,0)),
-	   bel(currentChosenTask(_, _, _, _, _, _, _, AgentName)) 
+	   bel(currentChosenTask(_, _, 40, _, _, _, _, _)),
+	   bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, _, _, _, _, _, _, _, _, _, _, _))
 		then preActionCleanup + connect(AgentName, 0, 1).
 }
