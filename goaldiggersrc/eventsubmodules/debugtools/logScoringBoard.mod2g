@@ -25,6 +25,21 @@ module logScoringBoard {
 	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
 	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).
 	 }
+	 
+	% 3Task success logging
+	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
+	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+	   bel(currentChosenTask(TaskName, _, 90, _, _, _, _, _), count2Task(Num2Task, OldStep), 
+	       NewCount is Num2Task +1, CurrentStep > OldStep)
+	    then {
+	        if bel(count2Task(Num2Task, OldStep)) 
+	            then delete(count2Task(Num2Task, OldStep)) +
+	                 insert(count2Task(NewCount, CurrentStep)) +
+	                 print("Agent made 90 Points  On Step " + CurrentStep + " In Sim " + 
+	                         SimCount+"2TaskGoals: "+NewCount).
+	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
+	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).
+	 }
 
 	% score table sim end
     if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(0)),
