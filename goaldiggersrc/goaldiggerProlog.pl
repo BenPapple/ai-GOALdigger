@@ -132,6 +132,7 @@
 :- dynamic attachedBlokes/1. % Count of attached blokes
 :- dynamic targetBlokeCount/1. % Maximum number of attached blokes
 :- dynamic emptyDispenserCounter/3. % Count of time no agents were seen around a specific dispenser.
+:- dynamic emptyGoalZoneCounter/3. % Count of time no agents were seen around a specific goalZone.
 :- dynamic searchInDispenser/0. % switch to search for blokes next to dispensers
 :- dynamic searchInGoalzone/0. % switch to search for blokes next to goalzones
 :- dynamic getFree/0. % swicht to detach other bloke

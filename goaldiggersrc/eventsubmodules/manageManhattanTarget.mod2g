@@ -36,8 +36,10 @@ module manageManhattanTarget {
 					then insert(executeManhattan).
 	}
 
-	% when role test worker and without bloke set goalzone as target
-	if bel(role(testWorker)), not(bel(targetMd(_,_,goalzone))), bel(searchInGoalzone) then {
+
+	% when role test worker set goalzone as target
+	if bel(role(testWorker)), not(bel(targetMd(_,_,goalzone))), bel(searchInGoalzone), 
+	   not(bel(emptyGoalZoneCounter(_,_,Count), Count > 10)) then {
 		   		if true then updateGoalzoneDistance.
 		   		if bel(targetClosestGoalZone(X, Y, _)) then {
 					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
@@ -45,6 +47,21 @@ module manageManhattanTarget {
 					if not(bel(executeManhattan)) then insert(executeManhattan).
 				}
 	}
+
+	% when role test worker in empty goalZone set other goalzone as target
+	if bel(role(testWorker)), not(bel(targetMd(_,_,goalzone))), bel(searchInGoalzone), 
+	   bel(emptyGoalZoneCounter(X,Y,Count), Count > 10)
+	   then {
+		   		if true then updateGoalzoneDistance.
+		   		
+		   		if bel(mapGoalZone(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md), Md > 10) then {
+					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+					if true then insert(targetMd(X, Y, goalzone)) + allother.send(goToGoal("Distant goal zone")).	
+					if not(bel(executeManhattan)) then insert(executeManhattan).
+				}
+	}
+	
+	
 
 	% when role test worker and without bloke set dispenser as target
 	if bel(role(testWorker), haveBlokeAttached(false,_), searchInDispenser,
