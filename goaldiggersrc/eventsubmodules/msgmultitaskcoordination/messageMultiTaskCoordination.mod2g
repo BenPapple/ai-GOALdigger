@@ -22,7 +22,7 @@ module messageMultiTaskCoordination {
         then messageTwoTaskSupporter.
         
 	% find 3-task supporter
-	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterREQPending))
+	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentThreeTask, supporterREQPending))
         then messageThreeTaskSupporters.    
 	
 	% RECEIVE as submitterLeader ACK for second block from supporter
@@ -35,6 +35,19 @@ module messageMultiTaskCoordination {
 		     then delete(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, pending, Connected1, Name2, X2, Y2, Pending2, 
 		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) +
 		          insert(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, ack, Connected1, Name2, X2, Y2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)).
+    }
+    
+    % RECEIVE as submitterLeader ACK for third block from supporter
+	forall (_).sent(msgACKtask(thirdBlock, NameSupporter)), 
+	       bel(submitterLeader),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, NameSupporter, _, _, pending, _, _, _, _, _, _))      
+	   	do {
+		 if bel(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, pending, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
+		     then delete(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, pending, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) +
+		          insert(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, ack, 
 		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)).
     }
 		   
@@ -61,16 +74,51 @@ module messageMultiTaskCoordination {
 	    if bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, _)),
 	       not(bel(submitterLeader)) 
 	   	    then (ConnectSender).send(msgNoACKtask(secondBlock, NameOwn)). 	
-	   	       
+	   	 
+	   	% acknowledge 2-task second block     
         if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
-	       percept(task(TaskName ,TaskStep, Points,[req(_, _, _),req(_, _, _)])),
+	       percept(task(TaskName ,TaskStep, 40,[req(_, _, _),req(_, _, _)])),
 	       not(bel(submitterLeader)) 
 	   	    then {
 				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
-				             insert(currentChosenTask(TaskName, TaskStep, Points, SendX, SendY, SendBlock, 
+				             insert(currentChosenTask(TaskName, TaskStep, 40, SendX, SendY, SendBlock, 
 				                    supportingAgent, NameSender)) +
 				             (ConnectSender).send(msgACKtask(secondBlock, NameOwn)).					
         } % if 2
+        
+        % acknowledge 3-task second block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 90, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(secondBlock, NameOwn)).					
+        } % if 2
+        
+	} % forall
+	
+	% RECEIVE become thirdBlock supportingAgent, check block for task and target		
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(thirdBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
+	                                                  SendBlock, TaskName)) 
+	    do{ 
+	    if bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, _)),
+	       not(bel(submitterLeader)) 
+	   	    then (ConnectSender).send(msgNoACKtask(thirdBlock, NameOwn)). 	
+        
+        % acknowledge 3-task second block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 90, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(thirdBlock, NameOwn)).					
+        } % if 2
+        
 	} % forall
 	
  } % end module

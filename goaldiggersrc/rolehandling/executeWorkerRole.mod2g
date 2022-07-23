@@ -45,10 +45,6 @@ module executeWorkerRole {
 	 */		  
 	if bel(haveBlockAttached(true,DirBlock)) 
 		then {
-			% detach after connect success as supportingAgent
-			if percept(lastActionResult(success), lastAction(connect)),
-			   not(bel(submitterLeader))
-			    then preActionCleanup + detach(DirBlock).
 		
 	    	% detach block if task does not fit
 	    	if bel(directionToCoordinate(DirBlock, A, B)), 
@@ -56,6 +52,11 @@ module executeWorkerRole {
 	    	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
 	    	       BlockType \== BlockTypeAttached, TaskStep >= SimStep) 
 	    	    then preActionCleanup + detach(DirBlock).
+
+			% detach after connect success as supportingAgent
+			if percept(lastActionResult(success), lastAction(connect)),
+			   not(bel(submitterLeader))
+			    then preActionCleanup + detach(DirBlock).
 	
 			% Moving around Submitting agent in rain drop pattern 
 			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
@@ -93,9 +94,10 @@ module executeWorkerRole {
 	    	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) 
 	    	   	then handleTaskSubmit.
 	    	 
-	    	% as 1tasksubmitter with no active task explore  
-	    	if bel(currentChosenTask(TaskName, TaskStep, _, _, _, _,submittingAgentOneTask, _)),
-	    	   not(percept(task(TaskName ,TaskStep, 10,[req(_,_,_)]))) 
+	    	% as 1tasksubmitter/supportingAgent with no active task explore  
+	        if bel(currentChosenTask(_, TaskStep, _, _, _, _, PlanType, _)),
+	           bel(PlanType == supportingAgent; PlanType == submittingAgentOneTask),
+	    	   percept(step(SimStep), TaskStep < SimStep) 
 	    	   	then executeRandomMove.
 	    
 	    	% submit task if in goal zone with block and corresponding task available
@@ -105,9 +107,13 @@ module executeWorkerRole {
 	    	   	then handleTaskSubmit.
 	    	
 	    	% Prepare for connect by rotating block to north and if north connect
-	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition), DirBlock \= n)
+	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition), DirBlock \= n),
+	    	   bel(currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _)),
+	    	   percept(step(SimStep), TaskStep >= SimStep)
 	    	    then rotateBlockToNorth.
-	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition))
+	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition)),
+	    	   bel(currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _)),
+	    	   percept(step(SimStep), TaskStep >= SimStep)
 	    	    then preActionCleanup + connectBlocks.
 		 
 	    	% move to other agent to help in multitask 
