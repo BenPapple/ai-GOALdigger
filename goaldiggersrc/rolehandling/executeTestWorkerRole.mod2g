@@ -20,10 +20,26 @@ use "../blockhandling/connectBlocks" as module.
 module executeTestWorkerRole {
 
 	% preferred target switches
-	if not(bel(searchInGoalzone)) then insert(searchInGoalzone).
+	if not(bel(searchInGoalzone)) 
+	   then insert(searchInGoalzone).
 	
 	% bloke quantity
-	if not(bel(targetBlokeCount(_))) then insert(targetBlokeCount(4)). 
+	if not(bel(targetBlokeCount(_))) 
+	   then insert(targetBlokeCount(4)). 
+
+	% insert minimum distance for different goal zones
+	if not(bel(minimumDistanceEmptyGoalZone(_)))
+	   then insert(minimumDistanceEmptyGoalZone(15)).
+	
+	% insert waiting time in empty goal zone
+	if not(bel(waitingTimeEmptyGoalZone(_)))
+	   then insert(waitingTimeEmptyGoalZone(15)).	
+	
+	% detach blocks if they were attached by chance
+	if bel(haveBlockAttached(true, Dir)) 
+	   then detach(Dir).
+	
+
 	
 	
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
@@ -36,18 +52,19 @@ module executeTestWorkerRole {
 	
 	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {
 	
-		% remove flag if agent seen in goal zone
-		
-		if percept(thing(X, Y, entity, _), goalZone(X, Y)), 
-		   bel(emptyGoalZoneCounter(X1, Y1, Count)) % bel(emptyGoalZoneCounter(_,_,_))
-		then delete(emptyGoalZoneCounter(X1, Y1, Count)).
+		% remove empty goal zone flag if agent seen in goal zone
+		if percept(thing(X, Y, entity, _), goalZone(X, Y), X \= 0, Y \= 0) then {
+			forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
+		}
+				
 	
 		% attach bloke if next to it next to goal zone (without attached blokes)
-		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1, goalZone(_,_)), bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
+		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1, goalZone(_,_)), 
+		   bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
 		   % update empty time counter of all dispensers nearby
-		   if bel(searchInDispenser) then {
-		      forall percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
-		             bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3)) do {
+		      if bel(searchInDispenser) then {
+		         forall percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
+		                bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3)) do {
 		                if bel(emptyDispenserCounter(X3, Y3, Count)) then delete(emptyDispenserCounter(X3, Y3, Count)).
 		     } 
 		   }% end empty time counter update
@@ -86,27 +103,19 @@ module executeTestWorkerRole {
 		}
 
 
-		% set flag if in empty goal zone
-		
-		if percept(goalZone(0, 0)), not(percept(thing(X1, Y1, entity, _), goalZone(X1, Y1), X1 \= 0, Y1 \= 0)),
-		   bel(agentAt(X2, Y2, _))
-		then {
-		   if bel(emptyGoalZoneCounter(X2, Y2, Count), NewCount is Count + 1)
-		   then delete(emptyGoalZoneCounter(X2, Y2, Count)) + insert(emptyGoalZoneCounter(X2, Y2, NewCount)).
-		   if not(bel(emptyGoalZoneCounter(X2, Y2, _))) then insert(emptyGoalZoneCounter(X2, Y2, 1)).
-		}
-
 		% go to a goal zone if no bloke attached
 		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
 		then all.send(goToGoal("Go to goal zone")) + executeManhattanMove.
 		
 		% roam if no distant goal zone available
-		if bel(emptyGoalZoneCounter(_,_,Count), Count > 10, attachedBlokes(Count), Count == 0)
+		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), Count == 0)
 		   then executeRandomMove.
 
 		% clear blocks when next to goal zone
 		if percept(goalZone(_,_), thing(X, Y, block, _), abs(X) =< 1, abs(Y) =< 1) 
-		   then clear(X,Y).
+		   then clear(X,Y).				
+
+
 
         % go to a goal zone if next to it
 		%if not(percept(goalZone(0,0))), percept(goalZone(X, Y)) then {

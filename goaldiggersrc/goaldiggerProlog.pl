@@ -135,6 +135,9 @@
 :- dynamic emptyGoalZoneCounter/3. % Count of time no agents were seen around a specific goalZone.
 :- dynamic searchInDispenser/0. % switch to search for blokes next to dispensers
 :- dynamic searchInGoalzone/0. % switch to search for blokes next to goalzones
+:- dynamic minimumDistanceEmptyGoalZone/1. % Distance between next goal zone to be visited if current empty
+:- dynamic waitingTimeEmptyGoalZone/1. % Time to wait in an empty goal zone before moving to another one
+:- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
 :- dynamic getFree/0. % swicht to detach other bloke
 
 % Variables related to locating other agents in the world

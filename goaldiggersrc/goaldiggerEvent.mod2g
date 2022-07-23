@@ -84,6 +84,19 @@ module goaldiggerEvent {
 	   percept(role(worker)) 
 	   	then updateDispenserDistance.
     
+    %ToDo: Refactor this. WARNING: Changing A and B for some kind of X3, Y3 doesn't work. I don't know why.
+	% set flag if test worker in empty goal zone
+	if bel(role(testWorker)), percept(goalZone(0, 0)), not(percept(thing(X1, Y1, entity, _), goalZone(X1, Y1), X1 \= 0, Y1 \= 0)),
+	   bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
+	then {
+	   if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) then 
+	   delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)) + 
+	   allother.send(iBelieveGoalZoneCounter(A, B, NewCount, Md)).
+	   
+	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
+	   then insert(emptyGoalZoneCounter(X2, Y2, 1)) + allother.send(emptyGoalZoneCounter(X2, Y2, 1)).
+	}
+    
     % SUBMODULE chose new task if necessary
     if true then changeTaskCheck.
 
