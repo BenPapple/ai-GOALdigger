@@ -1,0 +1,19 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+module detachBloke {
+
+	% ToDo: Reset belief if attached for a long time (with counter).
+	
+	% detach a bloke if directly attached to yourself
+	if percept(attached(X,Y), (abs(X) =:= 0; abs(Y) =:= 0), thing(X, Y, entity, _)), 
+	   bel(directionToCoordinate(Dir, X, Y)) 
+	then detach(Dir).
+	
+	% detach a block if it has a test worker from other team attached to it
+	if percept(attached(X,Y), (abs(X) =:= 0; abs(Y) =:= 0), thing(X, Y, block, _), team(MyTeam),
+	   attached(X1,Y1), thing(X1, Y1, entity, OtherTeam), (X1 is X+1; X1 is X-1, Y1 is Y+1; Y1 is Y-1),
+	   OtherTeam \= MyTeam), 
+	   bel(directionToCoordinate(Dir, X, Y)) 
+	then detach(Dir).
+}

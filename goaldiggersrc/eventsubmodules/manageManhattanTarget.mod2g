@@ -1,6 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../pathfinding/helperManhattanCalc" as module.
+use "../eventsubmodules/updateGoalzoneDistance" as module.
 
 /**
  * Manages Manhattan targets
@@ -33,6 +34,50 @@ module manageManhattanTarget {
 				         insert(targetMd(AltX, AltY, dispenser)).	
 				if not(bel(executeManhattan)) 
 					then insert(executeManhattan).
+	}
+
+
+	% when role test worker set goalzone as target
+	if bel(role(testWorker)), bel(searchInGoalzone), 
+	   not(bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)) then {
+		   		if true then updateGoalzoneDistance.
+		   		if bel(targetClosestGoalZone(X, Y, _)) then {
+					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+					if true then insert(targetMd(X, Y, goalzone)).	
+					if not(bel(executeManhattan)) then insert(executeManhattan).
+				}
+	}
+
+	% when role test worker in empty goalZone set other goalzone as target
+	if bel(role(testWorker)), bel(searchInGoalzone), 
+	   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
+	   then {
+		   		if true then updateGoalzoneDistance.
+		   		
+		   		forall bel(mapGoalZone(A,B,C)) do insert(tempMapGoalZone(A,B,C)).
+		   		forall bel(tempMapGoalZone(X,Y,D)) do {
+		   		   if bel(emptyGoalZoneCounter(X1, Y1, Count1), calculateXYMd(X1,Y1,X,Y,Md), 
+		   		          minimumDistanceEmptyGoalZone(Dist), Md < Dist, Count1 > Time)
+		   		   then delete(tempMapGoalZone(X, Y, D)).
+		   		} % end deletion of tempMapGoalZone
+		   		
+		   		if bel(tempMapGoalZone(A, B, C)) then {
+		   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+					if true then insert(targetMd(A, B, goalzone)).	
+					if not(bel(executeManhattan)) then insert(executeManhattan).
+					forall bel(tempMapGoalZone(X, Y, D)) do delete(tempMapGoalZone(X, Y, D)).
+		   		}		   		
+	}
+	
+	
+
+	% when role test worker and without bloke set dispenser as target
+	if bel(role(testWorker), haveBlokeAttached(false,_), searchInDispenser,
+		   mapDispenser(X,Y,dispenser,BlockType,_,_)), percept(task(_, _, _,[req(_,_,BlockType)])), 
+		   not(bel(emptyDispenserCounter(X, Y, Count), Count > 20)) then {		
+				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+				if true then insert(targetMd(X, Y, dispenser)).	
+				if not(bel(executeManhattan)) then insert(executeManhattan).
 	}
 
 	% With block and as submittingAgent update goalzone target MD

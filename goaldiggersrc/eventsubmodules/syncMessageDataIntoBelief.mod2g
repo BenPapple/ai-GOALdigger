@@ -8,6 +8,15 @@ use "../goaldiggerAction" as actionspec.
 
 module syncMessageDataIntoBelief {
 	
+    % forall testWorker role
+	forall (_).sent(testWorkerName(TestWorkerName)) do {
+		if percept(name(MyName)), not(bel(MyName == TestWorkerName))
+		   then insert(testWorkerNamed).
+		   
+		if percept(name(MyName)), bel(MyName == TestWorkerName, not(testWorkerNamed))
+		   then insert(role(testWorker)) + insert(testWorkerNamed) + insert(attachedBlokes(0)) + delete(getFree).
+	}
+		
 	% STORE seenOtherAgent messages
 	forall (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)) 
 		do {
