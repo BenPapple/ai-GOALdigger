@@ -51,6 +51,7 @@ module syncMessageDataIntoBelief {
 	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
 	    if not(bel(storedOtherAgentStatus(SenderName, _, _, _, _, _, _, _))) then 
 	        insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
+	    % Set an mapExploredMark for other Agent
 	    if percept(step(Step)), bel(confirmedOffsetOfAgent(OffSetX, OffsetY, SenderName), 
 	               Remainder is Step mod 2, Remainder == 0, ExploredX is X + OffSetX, ExploredY is Y + OffsetY)
 	    	then insert(exploredMark(ExploredX, ExploredY)).

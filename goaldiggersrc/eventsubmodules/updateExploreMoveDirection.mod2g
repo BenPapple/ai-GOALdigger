@@ -16,25 +16,25 @@ module updateExploreMoveDirection {
 	forall bel(exploredMark(ExploredX, ExploredY))
 		do {
 			% 
-			if bel(not(northExplored)) then {
+			if not(bel(northExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
 				   bel(DY =< 0, DY >= -2), bel(DX >= -2, DX =< 2) 
 				    then insert(northExplored). 	
 			}
 			
-			if bel(not(eastExplored)) then {
+			if not(bel(eastExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
 				   bel(DX >= 0, DX =< 2), bel(DY >= -2, DY =< 2)
 				    then insert(eastExplored).
 			}
 			
-			if bel(not(southExplored)) then {
+			if not(bel(southExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
 				   bel(DY >= 0, DY =< 2), bel(DX >= -2, DX =< 2)
 				    then insert(southExplored).
 			}
 			
-			if bel(not(westExplored)) then {
+			if not(bel(westExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
 				   bel(DX =< 0, DX >= -2), bel(DY >= -2, DY =< 2)
 				    then insert(westExplored).
