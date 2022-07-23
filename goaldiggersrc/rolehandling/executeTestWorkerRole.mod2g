@@ -52,11 +52,6 @@ module executeTestWorkerRole {
 	
 	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {
 	
-		% remove empty goal zone flag if agent seen in goal zone
-		if percept(thing(X, Y, entity, _), goalZone(X, Y), X \= 0, Y \= 0) then {
-			forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
-		}
-				
 	
 		% attach bloke if next to it next to goal zone (without attached blokes)
 		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1, goalZone(_,_)), 
