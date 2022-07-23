@@ -13,7 +13,7 @@ use "./eventsubmodules/simpleworldcalculation/calculateWorldSize" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/syncMessageDataIntoBelief" as module.
-use "./eventsubmodules/messageMultiTaskCoordination" as module.
+use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
