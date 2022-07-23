@@ -17,8 +17,9 @@ module handleTaskSubmit {
        bel(currentChosenTask(TaskFit, _, _, _, _, _, submittingAgentOneTask, _)) 
         then preActionCleanup + submit(TaskFit).
 
-	% submit 2-task if block is south of agent
-	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, submittingAgentTwoTask, _)), 
+	% submit 2i-task if block is south of agent
+	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, SubmitType, _)),
+	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	   bel(step(SimStep), TaskStep >= SimStep), 
 	   bel(haveBlockAttached(true, DirBlock), DirBlock == s) 
 	   	then {		

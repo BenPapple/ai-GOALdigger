@@ -2,6 +2,7 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../taskhandling/taskHandlingOneBlock" as module.
 use "../taskhandling/taskHandlingTwoBlock" as module.
+use "../taskhandling/taskHandlingThreeBlock" as module.
 
 /**
  * Choose task from options when having corresponding role; waterfall chosing, advanced choices come first in file: 
@@ -15,24 +16,40 @@ module chooseTask {
 	if percept(task(_ ,TaskStep, 10,[req(_,_,_)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0),
 	   not(bel(submitterLeader))
-		then taskHandlingOneBlock.
+		then taskHandlingOneBlock + exit-module.
+
+	% chose 1-task as submitterLeader if no confirmedOffsetOfAgent known
+	if bel(submitterLeader, step(SimStep)),
+	   not(bel(confirmedOffsetOfAgent(_, _, _))),
+	   percept(task(_ ,TaskStep, 10,[req(_,_,_)]), TaskStep > SimStep)
+	   	then taskHandlingOneBlock + exit-module.
+
+	% chose 1-task as submitterLeader if 2task, 3task and 4task not available
+	if bel(submitterLeader, step(SimStep)), 
+	   not(percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)]), TaskStep >= SimStep)),
+	   not(percept(task(_ ,TaskStep2, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep2 >= SimStep)),
+	   not(percept(task(_ ,TaskStep3, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep3 >= SimStep)) 
+	    then taskHandlingOneBlock + exit-module.
+
+%	% chose 4-task as submitterLeader if available
+%	if bel(submitterLeader, step(SimStep)),
+%	   bel(confirmedOffsetOfAgent(_, _, _)),
+%	   percept(task(_ ,TaskStep, 1600,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])), 
+%	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 60)  
+%	    then taskHandlingTwoBlock + exit-module.
+
+	% chose 3-task as submitterLeader if available
+	if bel(submitterLeader, step(SimStep)),
+	   bel(confirmedOffsetOfAgent(_, _, _)),
+	   percept(task(_ ,TaskStep, 90,[req(_,_,_),req(_,_,_),req(_,_,_)])), 
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 60)  
+	    then taskHandlingThreeBlock + exit-module.
 		 
 	% chose 2-task as submitterLeader if available
 	if bel(submitterLeader, step(SimStep)),
 	   bel(confirmedOffsetOfAgent(_, _, _)),
 	   percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)])), 
-	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 70)  
-	    then taskHandlingTwoBlock.
-	    
-	% chose 1-task as submitterLeader if no confirmedOffsetOfAgent known
-	if bel(submitterLeader, step(SimStep)),
-	   not(bel(confirmedOffsetOfAgent(_, _, _))),
-	   percept(task(_ ,TaskStep, 10,[req(_,_,_)]), TaskStep > SimStep)
-	   	then taskHandlingOneBlock.
-	    
-	% chose 1-task as submitterLeader if 2task not available
-	if bel(submitterLeader, step(SimStep)), 
-	   not(percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)]), TaskStep >= SimStep)) 
-	    then taskHandlingOneBlock.
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 60)  
+	    then taskHandlingTwoBlock + exit-module.   
 		
 } % module

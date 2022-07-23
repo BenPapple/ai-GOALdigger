@@ -10,13 +10,14 @@ use "../eventsubmodules/updateNearestAgentDistance" as module.
 module messageMultiTaskCoordination {
 
 	% SUBMODULE update nearest Agent on map for submitterleader when necessary
-	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterREQPending)),
+	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, supporterREQPending)),
+	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
 	   	then updateNearestAgentDistance.
 
 	% set other agent with needed block as supporter and oneself as submitter
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
-	                                          supporterREQPending)),
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, supporterREQPending)),
+	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockSupporter)]), name(SubmitterName)) 
@@ -32,10 +33,10 @@ module messageMultiTaskCoordination {
 		                                                             W13, W14, W15, W16)) +
 		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
 		                                                             W10, W11, W12, W13, W14, W15, W16)).
-							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
+							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 							                    supporterREQPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType1, 
-								                submittingAgentTwoTask, supportersNotified)) +
+								                SubmitType, supportersNotified)) +
 								         exit-module.
 						}
 			}
@@ -53,18 +54,18 @@ module messageMultiTaskCoordination {
 		                                                             W13, W14, W15, W16)) +
 		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
 		                                                             W10, W11, W12, W13, W14, W15, W16)).						                                      
-							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
+							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 							                    supporterREQPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
-								                submittingAgentTwoTask, supportersNotified)) +
+								                SubmitType, supportersNotified)) +
 								         exit-module.
 					}
 			}
 	} % other agent has block
 	
 	% set nearest agent without fitting block
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
-	                                          supporterREQPending)),
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, supporterREQPending)),
+	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
 			if percept(task(TaskName,_, 40,[req(0,1,BlockType1),req(X2,Y2,BlockSupporter)]), name(SubmitterName)) 
@@ -80,10 +81,10 @@ module messageMultiTaskCoordination {
 		                                                             W13, W14, W15, W16)) +
 		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
 		                                                             W10, W11, W12, W13, W14, W15, W16)).							                                      
-						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
+						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 						                    supporterREQPending)) + 
 							         insert(currentChosenTask(TaskName, V2, V3, V4, V5, BlockType1, 
-							                submittingAgentTwoTask, supportersNotified)) +
+							                SubmitType, supportersNotified)) +
 							         exit-module.
 					}
 		}
@@ -101,10 +102,10 @@ module messageMultiTaskCoordination {
 		                                                             W13, W14, W15, W16)) +
 		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
 		                                                             W10, W11, W12, W13, W14, W15, W16)).						                                      
-						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentTwoTask, 
+						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 						                    supporterREQPending)) + 
 							         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
-							                submittingAgentTwoTask, supportersNotified)) +
+							                SubmitType, supportersNotified)) +
 							         exit-module.
 				}
 		}
