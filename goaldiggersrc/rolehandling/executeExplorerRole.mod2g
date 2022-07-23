@@ -13,11 +13,11 @@ use "../pathfinding/helperMoveWithoutBlock" as module.
 module executeExplorerRole {
 	    
 	    % explore
-	    % Explorer map
+    	% Explorer map until one Dispenser and one goalZone is known
 		if bel(exploreDirection(Dir), randomAffinity(Dir2)) 
-			then {
+			then { 
 				if bel(Dir == r) then executeRandomMove.
-				if true then delete(randomAffinity(Dir2)) + insert(randomAffinity(Dir)) + helperMoveWithoutBlock.
+				if true then delete(randomAffinity(Dir2)) + insert(randomAffinity(Dir)) + helperMoveWithoutBlock.	
 			}
 	
 }

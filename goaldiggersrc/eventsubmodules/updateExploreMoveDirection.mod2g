@@ -18,52 +18,52 @@ module updateExploreMoveDirection {
 			% 
 			if not(bel(northExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DY =< 0, DY >= -2), bel(DX >= -2, DX =< 2) 
+				   bel(DY =< 0, DY >= -4), bel(DX >= -4, DX =< 4) 
 				    then insert(northExplored). 	
 			}
 			
 			if not(bel(eastExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DX >= 0, DX =< 2), bel(DY >= -2, DY =< 2)
+				   bel(DX >= 0, DX =< 4), bel(DY >= -4, DY =< 4)
 				    then insert(eastExplored).
 			}
 			
 			if not(bel(southExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DY >= 0, DY =< 2), bel(DX >= -2, DX =< 2)
+				   bel(DY >= 0, DY =< 4), bel(DX >= -4, DX =< 4)
 				    then insert(southExplored).
 			}
 			
 			if not(bel(westExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DX =< 0, DX >= -2), bel(DY >= -2, DY =< 2)
+				   bel(DX =< 0, DX >= -4), bel(DY >= -4, DY =< 4)
 				    then insert(westExplored).
 			}
 		}
 		
-	if bel(not(northExplored), exploreDirection(Dir)) 
+	if not(bel(northExplored)), bel(exploreDirection(Dir))
 		then delete(exploreDirection(Dir)) + 
-			 insert(exploreDirection(n)) +
+			 insert(exploreDirection(n)) + print('North') +
 			 exit-module.
 	
-	if bel(not(eastExplored), exploreDirection(Dir)) 
-		then delete(exploreDirection(Dir)) + 
+	if not(bel(eastExplored)), bel(exploreDirection(Dir))
+		then delete(exploreDirection(Dir)) + print('East') +
 		 	 insert(exploreDirection(e)) +
 		 	 exit-module.
 		 	 
-	if bel(not(southExplored), exploreDirection(Dir))
+	if not(bel(southExplored)), bel(exploreDirection(Dir))
 		then delete(exploreDirection(Dir)) + 
-		 	 insert(exploreDirection(s)) +
+		 	 insert(exploreDirection(s)) + print('South') +
 		 	 exit-module.
 		 	 
-	if bel(not(westExplored), exploreDirection(Dir))
+	if not(bel(westExplored)), bel(exploreDirection(Dir))
 		then delete(exploreDirection(Dir)) + 
-		 	 insert(exploreDirection(w)) +
+		 	 insert(exploreDirection(w)) + print('West') +
 		 	 exit-module.
 		 	 
 	if true, bel(exploreDirection(Dir)) 
-		then delete(exploreDirection(Dir)) +
-			 insert(exploreDirection(r)) +
+		then delete(exploreDirection(Dir)) + 
+			 insert(exploreDirection(r)) + print('Random') +
 			 exit-module.
 	
 }

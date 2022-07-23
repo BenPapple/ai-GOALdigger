@@ -30,7 +30,7 @@ module executeWorkerRole {
 			then preActionCleanup + adapt(TargetRole).
 		
 		% Explorer map until one Dispenser and one goalZone is known
-		if bel(not(mapGoalZone(_, _, _)), not(mapDispenser(_, _, _, _, _, _))),
+		if not(bel(mapGoalZone(_, _, _))), not(bel(mapDispenser(_, _, _, _, _, _))),
 		   bel(exploreDirection(Dir), randomAffinity(Dir2)) 
 			then { 
 				if bel(Dir == r) then executeRandomMove.
