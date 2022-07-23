@@ -71,7 +71,7 @@ module manageManhattanTarget {
 			 insert(targetMd(C, D2, otherAgentAt)) + 
 			 insert(executeManhattan).
 	
-	% Moving around Submitting agent for docking sequence
+	% Moving around 2-task Submitting agent for docking sequence
 	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
 	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
 	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
@@ -82,6 +82,23 @@ module manageManhattanTarget {
 			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
 			       SubmitterBlockTypeAttached == SouthBlock), 
 			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
+			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
+			       targetMd(Xdel, Ydel, Zdel))
+			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
+			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)).
+	}
+	
+	% Moving around 3-task Submitting agent for docking sequence
+	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
+	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
+	   bel(haveBlockAttached(true, _)) 
+	   	then {
+			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
+			       SubmitterName)),
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
+			       SubmitterBlockTypeAttached == SouthBlock), 
+			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
 			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
 			       targetMd(Xdel, Ydel, Zdel))
 			    then delete(targetMd(Xdel, Ydel, Zdel)) + 

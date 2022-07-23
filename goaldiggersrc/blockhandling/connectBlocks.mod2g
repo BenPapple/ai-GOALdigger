@@ -21,4 +21,53 @@ module connectBlocks {
 	   bel(currentChosenTask(_, _, 40, _, _, _, _, _)),
 	   bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, _, _, _, _, _, _, _, _, _, _, _))
 		then preActionCleanup + connect(AgentName, 0, 1).
+		
+    % connect as submitting agent 3task
+	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), 
+	   percept(goalZone(0,0)),
+	   bel(currentChosenTask(_, _, 90, _, _, _, _, _)) 
+	    then {
+
+	    if percept(step(X), 0 =:= mod(X, 4)),
+	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+	           Connect1 \= connected)
+		    then preActionCleanup + connect(AgentName, 0, 2).
+
+	    if percept(step(X), 0 =:= mod(X, 3)),
+	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+	           Connect1 \= connected)
+		    then preActionCleanup + connect(AgentName, 1, 1).
+		    
+	    if percept(step(X), 0 =:= mod(X, 2)),
+	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+	           Connect1 \= connected)
+		    then preActionCleanup + connect(AgentName, -1, 1).
+		    
+	    if percept(step(X), 0 =:= mod(X, 1)),
+	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+	           Connect1 \= connected)
+		    then preActionCleanup + connect(AgentName, 0, 1).		    
+
+	    if percept(step(X), 0 =:= mod(X, 4)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, 0, 2).			    
+		    
+	    if percept(step(X), 0 =:= mod(X, 3)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, 1, 1).	
+		    
+	    if percept(step(X), 0 =:= mod(X, 2)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, -1, 1).			    
+		    
+	    if percept(step(X), 0 =:= mod(X, 1)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, 0, 1).			
+		    	
+	}
+		
 }

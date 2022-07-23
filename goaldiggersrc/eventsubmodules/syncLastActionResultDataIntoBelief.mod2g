@@ -84,6 +84,24 @@ module syncLastActionResultDataIntoBelief {
 		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) 
 		   	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) + 
 		         insert(currentChosenTask(task0, -1, 10 , 0, 1, b5, needNewTask, needNewTask)).
+
+		% successful connect supportingAgent set to find new task
+		if percept(lastAction(connect), lastActionParams([NameSupporter, _, _])), 
+		   bel(submitterLeader) 
+		    then {
+		   if bel(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, Connected1, Name2, X2, Y2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
+		   	then delete(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, Connected1, Name2, X2, Y2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) + 
+		         insert(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, connected, Name2, X2, Y2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)).
+		   if bel(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
+		   	then delete(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) + 
+		         insert(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, Pending2, 
+		                                 connected, Name3, X3, Y3, Pending3, Connected3)).
+		 }
 	
 		% successful submit 1task agent set to find new task
 		if percept(lastAction(submit)), 
