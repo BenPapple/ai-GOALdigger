@@ -66,6 +66,8 @@ module logMiniPercept {
 		           lastActionParams([Para, Param2, Param3]))
 			then print(Step|Role+"Agent: "+Result+LastAction| Para| Param2| Param3).
 
+		if bel(role(testWorker)) then print("This is a test worker").
+
 		% some extra extra custom percept logging because conditional can be false, others for formatting
 	    if bel(agentAt(X, Y, _), targetMd(A, B, Target))
 	    	then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).

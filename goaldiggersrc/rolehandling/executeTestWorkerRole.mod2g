@@ -50,8 +50,7 @@ module executeTestWorkerRole {
 	 */	
 	
 	
-	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {
-	
+	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {	
 	
 		% attach bloke if next to it next to goal zone (without attached blokes)
 		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1, goalZone(_,_)), 
@@ -68,13 +67,15 @@ module executeTestWorkerRole {
 		}
 		
 		% attach bloke anywhere if at least one bloke already attached
-		if percept(thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), bel(attachedBlokes(Count), Count > 0), not(percept(attached(X,Y))) then {
+		if percept(team(MyTeam), thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1), 
+		   bel(attachedBlokes(Count), Count > 0), not(percept(attached(X,Y))) then {
 		   % update empty time counter of all dispensers nearby
 		   if true then executeMoveAroundBloke. % attach the bloke
 		}
 		
 		% go to bloke if next to it in goalzone and have 0 or more than 1 blokes
-		if percept(goalZone(_,_)), bel(attachedBlokes(Count), Count \== 1), percept(thing(X, Y, entity, _)), bel(abs(X) + abs(Y) >= 2) then {
+		if percept(goalZone(_,_)), bel(attachedBlokes(Count), Count \== 1), percept(team(MyTeam), 
+		           thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), bel(abs(X) + abs(Y) >= 2) then {
 			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
 			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
 			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
@@ -86,7 +87,8 @@ module executeTestWorkerRole {
 		}
 		
 		% go to bloke anywhere if next to it with more than 2 blokes attached
-		if bel(attachedBlokes(Count), Count >= 2), percept(thing(X, Y, entity, _)), bel(abs(X) + abs(Y) >= 2) then {
+		if bel(attachedBlokes(Count), Count >= 2), percept(team(MyTeam), thing(X, Y, entity, OtherTeam), 
+		       MyTeam \= OtherTeam), bel(abs(X) + abs(Y) >= 2) then {
 			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
 			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
 			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
@@ -100,7 +102,7 @@ module executeTestWorkerRole {
 
 		% go to a goal zone if no bloke attached
 		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
-		then all.send(goToGoal("Go to goal zone")) + executeManhattanMove.
+		then executeManhattanMove.
 		
 		% roam if no distant goal zone available
 		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), Count == 0)
@@ -156,9 +158,6 @@ module executeTestWorkerRole {
 	 % ToDo: Get out of the way of other agents
 	
 	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count =:= Target) then {
-	
-		% ToDo: quick switch to default role for nefarious intentions
-		% if percept(roleZone(0,0)), bel(attachedBlokes(Count), Count =:= 1) then print("I become default") + adapt(default).
 		
 		if true then executeRandomMove. 
 	

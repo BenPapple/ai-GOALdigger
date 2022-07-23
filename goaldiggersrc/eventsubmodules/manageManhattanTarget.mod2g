@@ -43,7 +43,7 @@ module manageManhattanTarget {
 		   		if true then updateGoalzoneDistance.
 		   		if bel(targetClosestGoalZone(X, Y, _)) then {
 					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-					if true then insert(targetMd(X, Y, goalzone)) + allother.send(goToGoal("First step")).	
+					if true then insert(targetMd(X, Y, goalzone)).	
 					if not(bel(executeManhattan)) then insert(executeManhattan).
 				}
 	}
@@ -52,21 +52,18 @@ module manageManhattanTarget {
 	if bel(role(testWorker)), bel(searchInGoalzone), 
 	   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
 	   then {
-		   		if true then allother.send(markingPoint("Cero")).
 		   		if true then updateGoalzoneDistance.
 		   		
 		   		forall bel(mapGoalZone(A,B,C)) do insert(tempMapGoalZone(A,B,C)).
-		   		if true then allother.send(markingPoint("Uno")).
 		   		forall bel(tempMapGoalZone(X,Y,D)) do {
 		   		   if bel(emptyGoalZoneCounter(X1, Y1, Count1), calculateXYMd(X1,Y1,X,Y,Md), 
 		   		          minimumDistanceEmptyGoalZone(Dist), Md < Dist, Count1 > Time)
-		   		   then delete(tempMapGoalZone(X, Y, D)) + allother.send(markingPoint("Dos")).
+		   		   then delete(tempMapGoalZone(X, Y, D)).
 		   		} % end deletion of tempMapGoalZone
 		   		
 		   		if bel(tempMapGoalZone(A, B, C)) then {
-		   			if true then allother.send(markingPoint("Tres")).
 		   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-					if true then insert(targetMd(A, B, goalzone)) + allother.send(goToGoal("Distant goal zone"+A+B)).	
+					if true then insert(targetMd(A, B, goalzone)).	
 					if not(bel(executeManhattan)) then insert(executeManhattan).
 					forall bel(tempMapGoalZone(X, Y, D)) do delete(tempMapGoalZone(X, Y, D)).
 		   		}		   		

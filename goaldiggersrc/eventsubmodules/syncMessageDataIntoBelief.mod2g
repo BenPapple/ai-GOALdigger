@@ -14,8 +14,7 @@ module syncMessageDataIntoBelief {
 		   then insert(testWorkerNamed).
 		   
 		if percept(name(MyName)), bel(MyName == TestWorkerName, not(testWorkerNamed))
-		   then insert(role(testWorker)) + insert(testWorkerNamed) + insert(attachedBlokes(0)) + delete(getFree)
-		   + print("I am the test worker").
+		   then insert(role(testWorker)) + insert(testWorkerNamed) + insert(attachedBlokes(0)) + delete(getFree).
 	}
 		
 	% STORE seenOtherAgent messages
