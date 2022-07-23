@@ -1,0 +1,106 @@
+use "../../goaldiggerProlog" as knowledge.
+
+/**
+ * coordination messages to 3-task suppportingAgents)
+ *
+ */
+
+module messageThreeTaskSupporters {
+
+ % set other agent with needed block as supporter and oneself as submitter
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, supporterREQPending)),
+	   bel(SubmitType == submittingAgentThreeTask),
+	   bel(confirmedOffsetOfAgent(_, _, _)) 
+	    then {
+			if percept(task(TaskName,_, 90,[req(0,1,BlockType1),req(X2,Y2,BlockSupporter),req(0,1, BlockType3)]), name(SubmitterName)) 
+				then {
+					if bel(targetNearestAgentWithNeededBlock(SupporterName, _, _, _), SupporterName \= placeholder) 
+						then {
+							if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+							                                      supportingAgent, SupporterName, X2, Y2, 
+							                                      BlockSupporter, TaskName)).
+							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+							       W15, W16)) 
+		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+		                                                             W13, W14, W15, W16)) +
+		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
+		                                                             W10, W11, W12, W13, W14, W15, W16)).
+							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
+							                    supporterREQPending)) + 
+								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType1, 
+								                SubmitType, supportersNotified)) +
+								         exit-module.
+						}
+			}
+				
+			if percept(task(TaskName ,_, 90,[req(X2,Y2,BlockSupporter),req(0,1, BlockType2),req(0,1, BlockType3)]), name(SubmitterName)) 
+				then {
+					if bel(targetNearestAgentWithNeededBlock(SupporterName, _, _, _), SupporterName \= placeholder) 
+						then {
+							if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+							                                      supportingAgent, SupporterName, X2, Y2, 
+							                                      BlockSupporter, TaskName)).
+							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+							       W15, W16)) 
+		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+		                                                             W13, W14, W15, W16)) +
+		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
+		                                                             W10, W11, W12, W13, W14, W15, W16)).						                                      
+							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
+							                    supporterREQPending)) + 
+								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
+								                SubmitType, supportersNotified)) +
+								         exit-module.
+					}
+			}
+	} % other agent has block
+	
+	% set nearest agent without fitting block
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, supporterREQPending)),
+	   bel(SubmitType == submittingAgentThreeTask),
+	   bel(confirmedOffsetOfAgent(_, _, _)) 
+	    then {
+			if percept(task(TaskName,_, 90,[req(0,1,BlockType1),req(X2,Y2,BlockSupporter),req(0,1, BlockType3)]), name(SubmitterName)) 
+				then {
+					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder)
+						then {
+							if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+							                                      supportingAgent, SupporterName, X2, Y2, 
+							                                      BlockSupporter, TaskName)).
+							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+							       W15, W16)) 
+		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+		                                                             W13, W14, W15, W16)) +
+		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
+		                                                             W10, W11, W12, W13, W14, W15, W16)).							                                      
+						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
+						                    supporterREQPending)) + 
+							         insert(currentChosenTask(TaskName, V2, V3, V4, V5, BlockType1, 
+							                SubmitType, supportersNotified)) +
+							         exit-module.
+					}
+		}
+			
+		if percept(task(TaskName ,_, 90,[req(X2,Y2, BlockSupporter),req(0,1, BlockType2),req(0,1, BlockType3)]), name(SubmitterName)) 
+			then {
+				if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
+					then {
+						if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+						                                      supportingAgent, SupporterName, X2, Y2, BlockSupporter, 
+						                                      TaskName)).
+							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+							       W15, W16)) 
+		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+		                                                             W13, W14, W15, W16)) +
+		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, pending, W6, W7, W8, W9, 
+		                                                             W10, W11, W12, W13, W14, W15, W16)).						                                      
+						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
+						                    supporterREQPending)) + 
+							         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
+							                SubmitType, supportersNotified)) +
+							         exit-module.
+				}
+		}
+	} % other agent has no block or no fitting block
+	
+}
