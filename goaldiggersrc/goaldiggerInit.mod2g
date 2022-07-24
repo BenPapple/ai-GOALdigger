@@ -19,6 +19,10 @@ module goaldiggerInit {
 		then insert(count2Task(0, 0)). 
 	if not(bel(cachedCount2Task(_))) 
 		then insert(cachedCount2Task(0)). 
+	if not(bel(count3Task(_, _))) 
+		then insert(count3Task(0, 0)). 
+	if not(bel(cachedCount3Task(_))) 
+		then insert(cachedCount2Task(0)). 		
 	if true then insert(thisIsTheFirstSim).
 	
 	% global values
