@@ -64,7 +64,7 @@ module executeWorkerRole {
 			           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
 			   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
 			   bel(currentChosenTask(TaskName, TaskStep, _, _, _, _, supportingAgent, SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
 				   SubmitterBlockTypeAttached == SouthBlock),           
 			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
 				then executeMoveAroundSubmitter.

@@ -16,7 +16,7 @@ module executeMoveAroundSubmitter {
 	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
 	   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
 	   bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, SubmitterName)),
-	   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
+	   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
 		   SubmitterBlockTypeAttached == SouthBlock)
 	    then {
 		    % submitter below agent

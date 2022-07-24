@@ -9,7 +9,7 @@ use "../goaldiggerAction" as actionspec.
 module updateSubmitterRanking {
 	
 	% seed collision choose new seed
-	forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _)) 
+	forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _, _)) 
 		do {
 	    	if bel(randomSeed(MyRandomSeed), MyRandomSeed == OtherAgentSeed) 
 	    		then {
@@ -27,12 +27,12 @@ module updateSubmitterRanking {
 		         insert(positionInHirarchie(0)).	
 		
 		% position in hierarchy will increase for every lower other agent's randomSeed
-		forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _)) 
+		forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _, _)) 
 			do {
-			    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), MyRandomSeed > OtherAgentSeed, 
-				       NewPositionInHirarchie is PositionInHirarchie + 1) 
-				    then delete(positionInHirarchie(PositionInHirarchie)) + 
-				         insert (positionInHirarchie(NewPositionInHirarchie)).
+		    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), MyRandomSeed > OtherAgentSeed, 
+			       NewPositionInHirarchie is PositionInHirarchie + 1) 
+			    then delete(positionInHirarchie(PositionInHirarchie)) + 
+			         insert (positionInHirarchie(NewPositionInHirarchie)).
 		}
 		
 		% assign submitterLeader

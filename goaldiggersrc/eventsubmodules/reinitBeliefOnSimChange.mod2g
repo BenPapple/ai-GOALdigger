@@ -83,8 +83,8 @@ module reinitBeliefOnSimChange {
 			forall bel(mapRoleZone(V1, V2, V3)) 
 				do delete(mapRoleZone(V1, V2, V3)).
 			
-			forall bel(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)) 
-				do delete(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8)).
+			forall bel(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8, V9)) 
+				do delete(storedOtherAgentStatus(V1, V2, V3, V4, V5, V6, V7, V8, V9)).
 			forall bel(confirmedOffsetOfAgent(V1, V2, V3)) 
 				do delete(confirmedOffsetOfAgent(V1, V2, V3)).
 		    forall bel(cachedSeenOtherAgentAt(V1, V2, V3, V4, V5, V6)) 

@@ -26,13 +26,15 @@ module messagePermaSendStatusToOthers {
 	% send a status to all other agents while having block attached
 	if bel(randomSeed(Seed), agentAt(X, Y, _), haveBlockAttached(true, DirBlock), 
 	       directionToCoordinate(DirBlock, A, B)), 
-		percept(name(OwnName), step(Step),role(Role), thing(A, B, block, BlockTypeAttached)) 
-			then allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, BlockTypeAttached)).
+	   bel(currentChosenTask(_, _, _, _, _, _, TaskRole, _)),
+	   percept(name(OwnName), step(Step),role(Role), thing(A, B, block, BlockTypeAttached)) 
+	    then allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, BlockTypeAttached, TaskRole)).
 	
 	% send a status to all other agents without having block attached		
 	if bel(randomSeed(Seed), agentAt(X, Y, _), haveBlockAttached(false, _)), 
+	   bel(currentChosenTask(_, _, _, _, _, _, TaskRole, _)),
 	   percept(name(OwnName), role(Role), step(Step)) 
-	   	then allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, noBlock)).
+	   	then allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, noBlock, TaskRole)).
 	
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
 	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), 
