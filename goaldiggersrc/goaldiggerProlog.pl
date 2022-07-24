@@ -28,9 +28,11 @@
 :- dynamic simCount/1. 
 % submitterLeader counts his submitted 2tasks
 :- dynamic count2Task/2. 
+% submitterLeader counts his submitted 3tasks
+:- dynamic count3Task/2. 
 % cached so it survives map change for score table
 :- dynamic cachedCount2Task/1. 
-
+:- dynamic cachedCount3Task/1. 
 
 % (Bool, Dir)
 :- dynamic haveBlockAttached/2. 
