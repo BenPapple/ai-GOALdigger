@@ -45,6 +45,11 @@ module executeWorkerRole {
 	 */		  
 	if bel(haveBlockAttached(true,DirBlock)) 
 		then {
+
+			% detach after connect success as supportingAgent
+			if percept(lastActionResult(success), lastAction(connect)),
+			   not(bel(submitterLeader))
+			    then preActionCleanup + detach(DirBlock).
 		
 	    	% detach block if task does not fit
 	    	if bel(directionToCoordinate(DirBlock, A, B)), 
@@ -53,11 +58,6 @@ module executeWorkerRole {
 	    	       BlockType \== BlockTypeAttached, TaskStep >= SimStep) 
 	    	    then preActionCleanup + detach(DirBlock).
 
-			% detach after connect success as supportingAgent
-			if percept(lastActionResult(success), lastAction(connect)),
-			   not(bel(submitterLeader))
-			    then preActionCleanup + detach(DirBlock).
-	
 			% Moving around Submitting agent in rain drop pattern 
 			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
 			           YBlock is YSubmit + 1, thing(XBlock, YBlock, block, SouthBlock), 

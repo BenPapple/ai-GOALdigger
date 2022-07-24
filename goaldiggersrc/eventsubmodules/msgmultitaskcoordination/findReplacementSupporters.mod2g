@@ -1,4 +1,6 @@
 use "../../goaldiggerProlog" as knowledge.
+use "../../eventsubmodules/updateNearestAgentDistance" as module.
+use "./messageTwoTaskSupporter" as module.
 
 /**
  * message other agents to recruit supportingAgent after first request got denied
@@ -11,52 +13,53 @@ module findReplacementSupporters {
 	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
 	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
-	   	then updateNearestAgentDistance.
+	   	then updateNearestAgentDistance.  
         
     % inform other agent with needed second block as replacement supporter
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, _)),
+	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, SubmitType, _)),
 	   bel(SubmitType == submittingAgentThreeTask),
-	   bel(multiTaskSupporterStatus(_, needsupporter, X1, Y1, noack, _, _, _, _, _, _, _, _, _, _, _),
+	   bel(multiTaskSupporterStatus(_, needsupporter, X1, Y1, noack, _, _, _, _, _, _, _, _, _, _, _)),
 	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
-			if percept(task(TaskName,_, 90,[req(_,_,_),req(_,_,_),req(_,_, _)]), name(SubmitterName)) 
+			if percept(task(TaskName,_, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), name(SubmitterName)) 
 				then {
-					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
+					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder),
+					(_).sent(msgNoACKtask(secondBlock, SendBlock, _)) 
 						then {
-							if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
-							                                      supportingAgent, SupporterName, X1, Y1, 
-							                                      BlockSupporter, TaskName)).
-							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
-							       W15, W16)) 
-		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
-		                                                             W13, W14, W15, W16)) +
-		                             insert(multiTaskSupporterStatus(W1, SupporterName, X1, Y1, pending, W6, W7, W8, ), 
-		                                                             W10, W11, W12, W13, W14, W15, W16)).
+						if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+						                                      supportingAgent, SupporterName, X1, Y1, 
+						                                      SendBlock, TaskName)).
+						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+						       W15, W16)) 
+	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+	                                                             W13, W14, W15, W16)) +
+	                             insert(multiTaskSupporterStatus(W1, SupporterName, X1, Y1, pending, W6, W7, W8, W9, 
+	                                                             W10, W11, W12, W13, W14, W15, W16)).
 		             }
-			     }
+			 }
     } % end first block			
 	
-    % inform other agent with needed third block as replacement supporter
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, _)),
-	   bel(SubmitType == submittingAgentThreeTask),
-	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, needsupporter, _, _, pending, _, _, _, _, _, _),
-	   bel(confirmedOffsetOfAgent(_, _, _)) 
-	    then {
-			if percept(task(TaskName,_, 90,[req(_,_,_),req(_,_,_),req(_,_, _)]), name(SubmitterName)) 
-				then {
-					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
-						then {
-							if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
-							                                      supportingAgent, SupporterName, X1, Y1, 
-							                                      BlockSupporter, TaskName)).
-							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
-							       W15, W16)) 
-		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
-		                                                             W13, W14, W15, W16)) +
-		                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, SupporterName, X1, Y1, 
-		                                                             pending, W11, W12, W13, W14, W15, W16)).
-		             }
-			     }
-    } % end first block       
+%    % inform other agent with needed third block as replacement supporter
+%	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, _)),
+%	   bel(SubmitType == submittingAgentThreeTask),
+%	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, needsupporter, _, _, noack, _, _, _, _, _, _)),
+%	   bel(confirmedOffsetOfAgent(_, _, _)) 
+%	    then {
+%			if percept(task(TaskName,_, 90,[req(_,_,_),req(_,_,_),req(_,_, _)]), name(SubmitterName)) 
+%				then {
+%					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
+%						then {
+%							if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+%							                                      supportingAgent, SupporterName, X1, Y1, 
+%							                                      BlockSupporter, TaskName)).
+%							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+%							       W15, W16)) 
+%		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+%		                                                             W13, W14, W15, W16)) +
+%		                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, SupporterName, X1, Y1, 
+%		                                                             pending, W11, W12, W13, W14, W15, W16)).
+%		             }
+%			     }
+%    } % end first block       
 	
-}
+} % end module

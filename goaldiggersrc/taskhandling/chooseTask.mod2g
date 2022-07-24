@@ -53,7 +53,10 @@ module chooseTask {
 	if bel(submitterLeader, step(SimStep)),
 	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
 	   bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
-	   percept(task(_ ,TaskStep, 90,[req(_,_,_),req(_,_,_),req(_,_,_)])), 
+	   percept(task(_ ,TaskStep, 90,[req(X1,Y1,_),req(X2,Y2,_),req(X3,Y3,_)])), 
+	   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
+	   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2),
 	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 60)  
 	    then taskHandlingThreeBlock + exit-module.
 		 

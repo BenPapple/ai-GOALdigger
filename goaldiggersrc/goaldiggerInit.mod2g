@@ -9,7 +9,7 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	if true then insert (lDebugOn). 
+	%if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% To count sim changes
@@ -22,7 +22,7 @@ module goaldiggerInit {
 	if not(bel(count3Task(_, _))) 
 		then insert(count3Task(0, 0)). 
 	if not(bel(cachedCount3Task(_))) 
-		then insert(cachedCount2Task(0)). 		
+		then insert(cachedCount3Task(0)). 		
 	if true then insert(thisIsTheFirstSim).
 	
 	% global values

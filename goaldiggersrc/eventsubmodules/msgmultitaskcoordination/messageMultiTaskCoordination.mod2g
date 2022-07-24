@@ -3,6 +3,8 @@ use "../../goaldiggerAction" as actionspec.
 use "../../eventsubmodules/updateNearestAgentDistance" as module.
 use "./messageTwoTaskSupporter" as module.
 use "./messageThreeTaskSupporters" as module.
+use "./findReplacementSupporters" as module.
+
 
 /**
  * coordination for tasks greater than 1 (submittingAgent & supportingAgent)
@@ -16,7 +18,7 @@ module messageMultiTaskCoordination {
 	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
 	   	then updateNearestAgentDistance.
-
+	   	
 	% find 2-task supporter
 	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterREQPending))
         then messageTwoTaskSupporter.
@@ -50,16 +52,9 @@ module messageMultiTaskCoordination {
 		          insert(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, ack, 
 		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)).
     }
-		   
-%   	% RECEIVE as submitterLeader NoACK from supporter
-%	forall (_).sent(msgNoACKtask(_, _)), 
-%	       bel(submitterLeader),
-%	       bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supportersNotified))	       
-%	   	do delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supportersNotified)) +
-%		   insert(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, supporterREQPending)).
 
    	% RECEIVE as submitterLeader NoACK secondblock from supporter
-	forall (_).sent(msgNoACKtask(secondBlock, NameSupporter)), 
+	forall (_).sent(msgNoACKtask(secondBlock, _, NameSupporter)), 
 	       bel(submitterLeader)            
 	   	do {
 	   	if bel(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, pending, Connected1, Name2, X2, Y2, Pending2, 
@@ -71,7 +66,7 @@ module messageMultiTaskCoordination {
 	}
 
    	% RECEIVE as submitterLeader NoACK thirdblock from supporter
-	forall (_).sent(msgNoACKtask(thirdBlock, NameSupporter)), 
+	forall (_).sent(msgNoACKtask(thirdBlock, _, NameSupporter)), 
 	       bel(submitterLeader)            
 	   	do {
 	   	if bel(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, pending, 
@@ -81,6 +76,21 @@ module messageMultiTaskCoordination {
 		          insert(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, needsupporter, X2, Y2, 
 		                                          noack, Connected2, Name3, X3, Y3, Pending3, Connected3)).
 	}
+
+	% redo messageTwoTaskSupporter for 2task replacement
+	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, submittingAgentTwoTask, _)),
+	   bel(multiTaskSupporterStatus(_, needsupporter, _, _, noack, _, _, _, _, _, _, _, _, _, _, _)),
+	   percept(task(TaskName,_, 40,[req(_,_,_),req(_,_,_)]))	
+	    then {
+	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supportersNotified))
+	        then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supportersNotified)) + 
+	             insert(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterREQPending)).
+	    if true then messageTwoTaskSupporter.	    
+	}
+	
+	% find replacements 3task after noack message
+	if bel(submitterLeader, currentChosenTask(_, _, _, _, _, _, submittingAgentThreeTask, _))
+	    then findReplacementSupporters.
 	
 	% RECEIVE submitterLeader order cease supporting
 	if (_).sent(informCeaseSupporting(NameSender)), 
@@ -97,7 +107,7 @@ module messageMultiTaskCoordination {
 	    do{ 
 	    if bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, _)),
 	       not(bel(submitterLeader)) 
-	   	    then (ConnectSender).send(msgNoACKtask(secondBlock, NameOwn)). 	
+	   	    then (ConnectSender).send(msgNoACKtask(secondBlock, SendBlock, NameOwn)). 	
 	   	 
 	   	% acknowledge 2-task second block     
         if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
@@ -130,7 +140,7 @@ module messageMultiTaskCoordination {
 	    do{ 
 	    if bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, _)),
 	       not(bel(submitterLeader)) 
-	   	    then (ConnectSender).send(msgNoACKtask(thirdBlock, NameOwn)). 	
+	   	    then (ConnectSender).send(msgNoACKtask(thirdBlock, SendBlock, NameOwn)). 	
         
         % acknowledge 3-task second block  
         if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),

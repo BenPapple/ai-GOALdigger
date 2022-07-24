@@ -28,46 +28,86 @@ module connectBlocks {
 	   bel(currentChosenTask(_, _, 90, _, _, _, _, _)) 
 	    then {
 
-	    if percept(step(X), 0 =:= mod(X, 4)),
+	    if percept(step(X), 0 =:= mod(X, 8)),
+	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+	           Connect1 \= connected)
+		    then preActionCleanup + connect(AgentName, 0, 1).
+	    if percept(step(X), 1 =:= mod(X, 8)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, 0, 1).
+		    
+	    if percept(step(X), 2 =:= mod(X, 8)),
 	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
 	           Connect1 \= connected)
 		    then preActionCleanup + connect(AgentName, 0, 2).
+	    if percept(step(X), 3 =:= mod(X, 8)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, 0, 2).
 
-	    if percept(step(X), 0 =:= mod(X, 3)),
-	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
-	           Connect1 \= connected)
-		    then preActionCleanup + connect(AgentName, 1, 1).
-		    
-	    if percept(step(X), 0 =:= mod(X, 2)),
+	    if percept(step(X), 4 =:= mod(X, 8)),
 	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
 	           Connect1 \= connected)
 		    then preActionCleanup + connect(AgentName, -1, 1).
-		    
-	    if percept(step(X), 0 =:= mod(X, 1)),
+	    if percept(step(X), 5 =:= mod(X, 8)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, -1, 1).
+
+	    if percept(step(X), 6 =:= mod(X, 8)),
 	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
 	           Connect1 \= connected)
-		    then preActionCleanup + connect(AgentName, 0, 1).		    
+		    then preActionCleanup + connect(AgentName, 1, 1).
+	    if percept(step(X), 7 =:= mod(X, 8)),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+	           Connect2 \= connected)
+		    then preActionCleanup + connect(AgentName2, 1, 1).
+		    
 
-	    if percept(step(X), 0 =:= mod(X, 4)),
-	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
-	           Connect2 \= connected)
-		    then preActionCleanup + connect(AgentName2, 0, 2).			    
-		    
-	    if percept(step(X), 0 =:= mod(X, 3)),
-	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
-	           Connect2 \= connected)
-		    then preActionCleanup + connect(AgentName2, 1, 1).	
-		    
-	    if percept(step(X), 0 =:= mod(X, 2)),
-	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
-	           Connect2 \= connected)
-		    then preActionCleanup + connect(AgentName2, -1, 1).			    
-		    
-	    if percept(step(X), 0 =:= mod(X, 1)),
-	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
-	           Connect2 \= connected)
-		    then preActionCleanup + connect(AgentName2, 0, 1).			
+%	    if percept(step(X), 0 =:= mod(X, 4)),
+%	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+%	           Connect1 \= connected),
+%	       percept(thing(0, 1, block, _)), not(percept(attached(0,1)))
+%		    then preActionCleanup + connect(AgentName, 0, 2).
+%
+%	    if percept(step(X), 0 =:= mod(X, 3)),
+%	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+%	           Connect1 \= connected)
+%		    then preActionCleanup + connect(AgentName, 1, 1).
+%		    
+%	    if percept(step(X), 0 =:= mod(X, 2)),
+%	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+%	           Connect1 \= connected)
+%		    then preActionCleanup + connect(AgentName, -1, 1).
+%		    
+%	    if percept(step(X), 0 =:= mod(X, 1)),
+%	       bel(multiTaskSupporterStatus(_, AgentName, _, _, ack, Connect1, _, _, _, _, _, _, _, _, _, _), 
+%	           Connect1 \= connected)
+%		    then preActionCleanup + connect(AgentName, 0, 1).		    
+%
+%	    if percept(step(X), 0 =:= mod(X, 4)),
+%	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+%	           Connect2 \= connected)
+%		    then preActionCleanup + connect(AgentName2, 0, 2).			    
+%		    
+%	    if percept(step(X), 0 =:= mod(X, 3)),
+%	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+%	           Connect2 \= connected)
+%		    then preActionCleanup + connect(AgentName2, 1, 1).	
+%		    
+%	    if percept(step(X), 0 =:= mod(X, 2)),
+%	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+%	           Connect2 \= connected)
+%		    then preActionCleanup + connect(AgentName2, -1, 1).			    
+%		    
+%	    if percept(step(X), 0 =:= mod(X, 1)),
+%	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, AgentName2, _, _, ack, Connect2, _, _, _, _, _), 
+%	           Connect2 \= connected)
+%		    then preActionCleanup + connect(AgentName2, 0, 1).			
 		    	
 	}
+	
+	if true then preActionCleanup + skip.
 		
 }
