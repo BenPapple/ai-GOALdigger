@@ -65,7 +65,7 @@ module manageManhattanTarget {
 	       currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
 	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target), Target \== supportingPosition),
-	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _)), 
+	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
 	   bel(localize(A, B, OffsetX, OffsetY, C, D), D2 is D + 2 )
 		then delete(targetMd(X, Y, Target)) + 
 			 insert(targetMd(C, D2, otherAgentAt)) + 
@@ -79,7 +79,7 @@ module manageManhattanTarget {
 	   	then {
 			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
 			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
 			       SubmitterBlockTypeAttached == SouthBlock), 
 			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
 			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
@@ -96,7 +96,7 @@ module manageManhattanTarget {
 	   	then {
 			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
 			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
 			       SubmitterBlockTypeAttached == SouthBlock), 
 			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
 			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 

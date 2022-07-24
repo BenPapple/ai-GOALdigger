@@ -15,12 +15,13 @@ module syncPerceptDataIntoBelief {
 	
 	% DELETE out of step storedOtherAgentStatus
 	forall percept(step(SimStep)),
-	       bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached),
-	                                  MsgStep > SimStep) 
+	       bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, 
+	                                  TaskRole), MsgStep > SimStep) 
 	    do {
-	    	if bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached))
+	    	if bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, 
+	    	                              TaskRole))
 	        	then delete(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, 
-	        	                                   BlockTypeAttached)).
+	        	                                   BlockTypeAttached, TaskRole)).
 	}
 	
 	% STORE unknown dispensers from percept with MD field

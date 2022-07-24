@@ -132,8 +132,8 @@
 % Variables related to locating other agents in the world
 % store / update other agents' positions
 %:- dynamic otherAgentAt/4. 
-% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)
-:- dynamic storedOtherAgentStatus/8. 
+% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
+:- dynamic storedOtherAgentStatus/9. 
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
