@@ -19,10 +19,13 @@ module taskHandlingThreeBlock {
 	% choose 2-block tasks if own block fits LEFT req fields
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
-	   percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockTypeAttached),req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2)])), 
+	   percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockTypeAttached),req(X2, Y2, BlockTypeOther),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)) 
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y2 \= 3, Y3 \= 3),
+	   bel(Calc is 0 + 1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is 0 - 1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
 	    then {	
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).	
@@ -37,10 +40,13 @@ module taskHandlingThreeBlock {
 	% choose 2-block tasks if own block fits MIDDLE req fields
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
-	   percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockTypeAttached),req(_, _, BlockTypeOther2)])), 
+	   percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(0, 1, BlockTypeAttached),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)) 
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y3 \= 3),
+	   bel(Calc is X1 + Y1 + 0 + 1 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + 0 - 1 + X3 - Y3, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -55,10 +61,13 @@ module taskHandlingThreeBlock {
 	% choose 2-block tasks if own block fits RIGHT req fields
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
-	   percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),req(0, 1, BlockTypeAttached)])), 
+	   percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(X2, Y2, BlockTypeOther2),req(0, 1, BlockTypeAttached)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)) 
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y2 \= 3),
+	   bel(Calc is X1 + Y1 + X2 + Y2 + 0 + 1, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + X2 - Y2 + 0 - 1, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -75,11 +84,14 @@ module taskHandlingThreeBlock {
 		then updateDispenserDistance.
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block LEFT req
-	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(X2, Y2, BlockTypeOther),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y2 \= 3, Y3 \= 3),
+	   bel(Calc is 0 + 1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is 0 - 1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -92,11 +104,14 @@ module taskHandlingThreeBlock {
 	}
 
 	% choose 2-block tasks if it exists and nearestdispenser with right block MIDDLE req
-	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockType),req(_, _, BlockTypeOther2)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(0, 1, BlockType),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y3 \= 3),
+	   bel(Calc is X1 + Y1 + 0 + 1 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + 0 - 1 + X3 - Y3, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -109,11 +124,14 @@ module taskHandlingThreeBlock {
 	}
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block RIGHT req
-	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),req(0, 1, BlockType)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(X2, Y2, BlockTypeOther2),req(0, 1, BlockType)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y2 \= 3),
+	   bel(Calc is X1 + Y1 + X2 + Y2 + 0 + 1, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + X2 - Y2 + 0 - 1, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -126,11 +144,14 @@ module taskHandlingThreeBlock {
 	}
 
 	% choose 2-block tasks if it exists and currenttask dispenser LEFT req
-	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(X2, Y2, BlockTypeOther),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y2 \= 3, Y3 \= 3),
+	   bel(Calc is 0 + 1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is 0 - 1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -143,11 +164,14 @@ module taskHandlingThreeBlock {
 	}
 
 	% choose 2-block tasks if it exists and currenttask dispenser MIDDLE req
-	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockType),req(_, _, BlockTypeOther2)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(0, 1, BlockType),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y3 \= 3),
+	   bel(Calc is X1 + Y1 + 0 + 1 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + 0 - 1 + X3 - Y3, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -160,11 +184,14 @@ module taskHandlingThreeBlock {
 	}
 	
 	% choose 2-block tasks if it exists and currenttask dispenser RIGHT req
-	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),req(0, 1, BlockType)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(X2, Y2, BlockTypeOther2),req(0, 1, BlockType)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y2 \= 3),
+	   bel(Calc is X1 + Y1 + X2 + Y2 + 0 + 1, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + X2 - Y2 + 0 - 1, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -177,11 +204,14 @@ module taskHandlingThreeBlock {
 	}
 
 	% choose 2-block tasks if it exists and both dispensers known LEFT req
-	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(X2, Y2, BlockTypeOther),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y2 \= 3, Y3 \= 3),
+	   bel(Calc is 0 + 1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is 0 - 1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -194,11 +224,14 @@ module taskHandlingThreeBlock {
 	} 	
 
 	% choose 2-block tasks if it exists and both dispensers known MIDDLE req
-	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockType),req(_, _, BlockTypeOther2)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(0, 1, BlockType),req(X3, Y3, BlockTypeOther2)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y3 \= 3),
+	   bel(Calc is X1 + Y1 + 0 + 1 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + 0 - 1 + X3 - Y3, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		
@@ -211,11 +244,14 @@ module taskHandlingThreeBlock {
 	} 
 
 	% choose 2-block tasks if it exists and both dispensers known RIGHT req
-	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),req(0, 1, BlockType)])), 
+	if percept(task(TaskName ,TaskStep, 90,[req(X1, Y1, BlockTypeOther),req(X2, Y2, BlockTypeOther2),req(0, 1, BlockType)])), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	   bel(Y1 \= 3, Y2 \= 3),
+	   bel(Calc is X1 + Y1 + X2 + Y2 + 0 + 1, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + X2 - Y2 + 0 - 1, Calc2 \= -2)
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
 	        	then insert(calculateNewGoalzoneMD).		

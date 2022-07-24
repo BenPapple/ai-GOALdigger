@@ -13,7 +13,7 @@ module executeMoveAroundSubmitter {
     %
 	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
 	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
-	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
+	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
 	   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
 	   bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, SubmitterName)),
 	   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
