@@ -66,8 +66,8 @@ module messageMultiTaskCoordination {
 	   bel(multiTaskSupporterStatus(_, needsupporter, _, _, _, noack, _, _, _, _, _, _, _, _, _, _, _, _, _)),
 	   percept(task(TaskName,_, 40,[req(_,_,_),req(_,_,_)]))	
 	    then {
-	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supportersNotified))
-	        then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supportersNotified)) + 
+	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, blocksFoundAndInserted))
+	        then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, blocksFoundAndInserted)) + 
 	             insert(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supporterREQPending)).
 	    if true then messageTwoTaskSupporter.	    
 	}

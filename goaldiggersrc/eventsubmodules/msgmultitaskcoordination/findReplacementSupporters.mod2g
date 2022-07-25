@@ -51,12 +51,11 @@ module findReplacementSupporters {
 	    then {
 			if percept(task(TaskName,_, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), name(SubmitterName)) 
 				then {
-					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder),
-					(_).sent(msgNoACKtask(secondBlock, SendBlock, _)) 
+					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
 						then {
-						if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+						if true then (channnelMultiTask).send(informSupportingAgent(thirdBlock, SubmitterName, 
 						                                      supportingAgent, SupporterName, X1, Y1, 
-						                                      SendBlock, TaskName)).
+						                                      Block2, TaskName)).
 						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
 	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
 	                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, SupporterName, X1, Y1, Block2, pending, W13, W14, W15, W16, W17, W18, W19)).

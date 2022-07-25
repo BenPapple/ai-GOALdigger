@@ -108,7 +108,11 @@ module executeMoveAroundSubmitter {
 	    if bel(XSubmit == 1, YSubmit == 0), 
 	       bel(haveBlockAttached(true, BlockDir)) 
 	    	then {
-		    
+		    % move west when attached south
+		    if percept(thing(0, 1, block,_), BlockDir \= s), 
+		       percept(attached(0, 1)) 
+		        then preActionCleanup + move(w).	
+			        		    
 		    % clear south to move onto
 		    if percept(thing(0, 1, block,_)), 
 		       not(percept(attached(0, 1))) 
@@ -247,6 +251,11 @@ module executeMoveAroundSubmitter {
 	    if bel(XSubmit == -1, YSubmit == 0), 
 	       bel(haveBlockAttached(true, BlockDir)) 
 	    	then {
+			    % move east when attached south
+			    if percept(thing(0, 1, block,_), BlockDir \= s), 
+			       percept(attached(0, 1)) 
+			        then preActionCleanup + move(e).	    
+			    
 			    % clear south to move onto
 			    if percept(thing(0, 1, block,_)), 
 			       not(percept(attached(0, 1))) 

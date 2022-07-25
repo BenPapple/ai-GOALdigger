@@ -70,5 +70,9 @@ module logScoringBoard {
 			 insert(cachedCount2Task(0)) +
 			 delete(cachedCount3Task(Num3Task)) + 
 			 insert(cachedCount3Task(0)).
+	
+	% just print it to find submitterleader in logs	 
+    if (_).sent(msgSubmitterLeader(MyName)) then print(MyName+" is submitterLeader!").
+    
 		
 }
