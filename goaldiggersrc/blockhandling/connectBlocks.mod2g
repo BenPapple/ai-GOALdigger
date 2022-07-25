@@ -12,7 +12,7 @@ module connectBlocks {
 
 	% connect as supporting agent
 	if bel(targetMd(_, _, supportingPosition), haveBlockAttached(true,DirBlock), DirBlock == n,
-	       currentChosenTask(_, _, _, _, _, _, _, AgentName))
+	       currentChosenTask(_, _, _, _, _, _, supportingAgent, AgentName))
 		then preActionCleanup + connect(AgentName, 0, -1).
 
 %	% connect as submitting agent 2task
@@ -24,14 +24,14 @@ module connectBlocks {
 	% connect as submitting agent 2task
 	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), 
 	   percept(goalZone(0,0)),
-	   bel(currentChosenTask(_, _, 40, _, _, _, _, _)),
+	   bel(currentChosenTask(_, _, 40, _, _, _, submittingAgentTwoTask, _)),
 	   bel(multiTaskSupporterStatus(_, AgentName, _, _, _, ack, _, _, _, _, _, _, _, _, _, _, _, _, _))
 		then preActionCleanup + connect(AgentName, 0, 1).
 		
     % connect as submitting agent 3task
 	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), 
 	   percept(goalZone(0,0)),
-	   bel(currentChosenTask(_, _, 90, _, _, _, _, _)) 
+	   bel(currentChosenTask(_, _, 90, _, _, _, submittingAgentThreeTask, _)) 
 	    then {
 
         % connect if first agent already connected

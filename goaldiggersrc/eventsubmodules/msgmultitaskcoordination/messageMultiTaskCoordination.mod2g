@@ -82,8 +82,24 @@ module messageMultiTaskCoordination {
 	   not(bel(submitterLeader)) 
 	   	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) +
 			 insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).
-	
-	
+
+    % as submitterLeader decline all supporting requests secondBlock	
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(secondBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
+	                                                  SendBlock, TaskName)) 
+	    do{ 
+	    if bel(submitterLeader)
+	        then (ConnectSender).send(msgNoACKtask(secondBlock, SendBlock, NameOwn)). 	
+	}
+	% as submitterLeader decline all supporting requests thirdBlock
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(thirdBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
+	                                                  SendBlock, TaskName)) 
+	    do{ 
+	    if bel(submitterLeader)
+	        then (ConnectSender).send(msgNoACKtask(thirdBlock, SendBlock, NameOwn)).
+	}
+	        	
 	% RECEIVE become secondBlock supportingAgent, check block for task and target		
 	forall percept(name(NameOwn)), 
 	       (ConnectSender).sent(informSupportingAgent(secondBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
