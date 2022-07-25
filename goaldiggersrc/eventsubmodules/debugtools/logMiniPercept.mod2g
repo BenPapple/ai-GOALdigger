@@ -42,9 +42,6 @@ module logMiniPercept {
 	        then print("Agent hierarchy position:"| PositionInHirarchie| "submitterLeader").
 	    if not(bel(submitterLeader)) ,bel(positionInHirarchie(PositionInHirarchie)) 
 	        then print("Agent hierarchy position:"| PositionInHirarchie).
-	    
-	    % log score board
-        if true then logScoringBoard.
 		    
 		% Simulation counter
 		if bel(simCount(SimCount)) 

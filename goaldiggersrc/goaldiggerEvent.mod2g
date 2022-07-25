@@ -41,7 +41,7 @@ module goaldiggerEvent {
 		then delete(thisIsTheFirstSim).
 	
 	% Logging made points by agents
-	if not(bel(lDebugOn)) 
+	if true
 		then logScoringBoard.
 
 	% SUBMODULE managing success and partial_success percepts
