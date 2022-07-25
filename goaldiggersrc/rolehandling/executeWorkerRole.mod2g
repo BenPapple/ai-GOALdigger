@@ -58,15 +58,26 @@ module executeWorkerRole {
 	    	       BlockType \== BlockTypeAttached, TaskStep >= SimStep) 
 	    	    then preActionCleanup + detach(DirBlock).
 
-			% Moving around Submitting agent in rain drop pattern 
+			% Moving around 2task Submitting agent in rain drop pattern 
 			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
 			           YBlock is YSubmit + 1, thing(XBlock, YBlock, block, SouthBlock), 
-			           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
+			           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
 			   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
 			   bel(currentChosenTask(TaskName, TaskStep, _, _, _, _, supportingAgent, SubmitterName)),
 			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
 				   SubmitterBlockTypeAttached == SouthBlock),           
 			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
+				then executeMoveAroundSubmitter.
+
+			% Moving around 3task Submitting agent in rain drop pattern 
+			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+			           YBlock is YSubmit + 1, thing(XBlock, YBlock, block, SouthBlock), 
+			           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
+			   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
+			   bel(currentChosenTask(TaskName, TaskStep, _, _, _, _, supportingAgent, SubmitterName)),
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
+				   SubmitterBlockTypeAttached == SouthBlock),           
+			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
 				then executeMoveAroundSubmitter.
 			
 	    	% as submitterLeader don't wait on goalzone and on dispenser

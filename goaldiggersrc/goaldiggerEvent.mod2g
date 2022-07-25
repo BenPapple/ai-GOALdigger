@@ -65,8 +65,8 @@ module goaldiggerEvent {
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffset.
 	% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-	if true then updateWorldSizeData.
-	if true then calculateWorldSize.
+	%if true then updateWorldSizeData.
+	%if true then calculateWorldSize.
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	

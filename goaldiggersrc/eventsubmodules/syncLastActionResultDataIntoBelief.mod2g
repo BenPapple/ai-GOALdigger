@@ -89,18 +89,12 @@ module syncLastActionResultDataIntoBelief {
 		if percept(lastAction(connect), lastActionParams([NameSupporter, _, _])), 
 		   bel(submitterLeader) 
 		    then {
-		   if bel(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, Connected1, Name2, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
-		   	then delete(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, Connected1, Name2, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) + 
-		         insert(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, connected, Name2, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)).
-		   if bel(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
-		   	then delete(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) + 
-		         insert(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, Pending2, 
-		                                 connected, Name3, X3, Y3, Pending3, Connected3)).
+		   if bel(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, connected, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
+		   if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, connected, W14, W15, W16, W17, W18, W19)).
 		 }
 	
 		% successful submit 1task agent set to find new task

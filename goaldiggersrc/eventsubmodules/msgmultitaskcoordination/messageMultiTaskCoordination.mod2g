@@ -1,6 +1,5 @@
 use "../../goaldiggerProlog" as knowledge.
 use "../../goaldiggerAction" as actionspec.
-use "../../eventsubmodules/updateNearestAgentDistance" as module.
 use "./messageTwoTaskSupporter" as module.
 use "./messageThreeTaskSupporters" as module.
 use "./findReplacementSupporters" as module.
@@ -12,13 +11,7 @@ use "./findReplacementSupporters" as module.
  */
  
 module messageMultiTaskCoordination {
-
-	% SUBMODULE update nearest Agent on map for submitterleader when necessary
-	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, supporterREQPending)),
-	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
-	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
-	   	then updateNearestAgentDistance.
-	   	
+  	
 	% find 2-task supporter
 	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterREQPending))
         then messageTwoTaskSupporter.
@@ -30,56 +23,47 @@ module messageMultiTaskCoordination {
 	% RECEIVE as submitterLeader ACK for second block from supporter
 	forall (_).sent(msgACKtask(secondBlock, NameSupporter)), 
 	       bel(submitterLeader),
-	       bel(multiTaskSupporterStatus(_, NameSupporter, _, _, pending, _, _, _, _, _, _, _, _, _, _, _))      
+	       bel(multiTaskSupporterStatus(_, NameSupporter, _, _, _, pending, _, _, _, _, _, _, _, _, _, _, _, _, _))      
 	   	do {
-		 if bel(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, pending, Connected1, Name2, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
-		     then delete(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, pending, Connected1, Name2, X2, Y2, 
-		                                          Pending2, Connected2, Name3, X3, Y3, Pending3, Connected3)) +
-		          insert(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, ack, Connected1, Name2, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)).
+		 if bel(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Block1, pending, Connected1, Name2, X2, Y2, Block2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Block3, Pending3, Connected3)) 
+		     then delete(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Block1, pending, Connected1, Name2, X2, Y2, Block2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Block3, Pending3, Connected3)) +
+		          insert(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, Block1, ack, Connected1, Name2, X2, Y2, Block2, Pending2, 
+		                                 Connected2, Name3, X3, Y3, Block3, Pending3, Connected3)).
     }
     
     % RECEIVE as submitterLeader ACK for third block from supporter
 	forall (_).sent(msgACKtask(thirdBlock, NameSupporter)), 
 	       bel(submitterLeader),
-	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, NameSupporter, _, _, pending, _, _, _, _, _, _))      
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, NameSupporter, _, _, _, pending, _, _, _, _, _, _, _))      
 	   	do {
-		 if bel(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, pending, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
-		     then delete(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, 
-		                                          pending, Connected2, Name3, X3, Y3, Pending3, Connected3)) +
-		          insert(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, ack, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)).
+		 if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, pending, W13, W14, W15, W16, W17, W18, W19)) 
+		     then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, pending, W13, W14, W15, W16, W17, W18, W19)) +
+		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, ack, W13, W14, W15, W16, W17, W18, W19)).
     }
 
    	% RECEIVE as submitterLeader NoACK secondblock from supporter
 	forall (_).sent(msgNoACKtask(secondBlock, _, NameSupporter)), 
 	       bel(submitterLeader)            
 	   	do {
-	   	if bel(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, pending, Connected1, Name2, X2, Y2, Pending2, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
-		     then delete(multiTaskSupporterStatus(Task, NameSupporter, X1, Y1, pending, Connected1, Name2, X2, Y2, 
-		                                          Pending2, Connected2, Name3, X3, Y3, Pending3, Connected3)) +
-		          insert(multiTaskSupporterStatus(Task, needsupporter, X1, Y1, noack, Connected1, Name2, X2, Y2, 
-		                                          Pending2, Connected2, Name3, X3, Y3, Pending3, Connected3)).
+	   	if bel(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
+		     then delete(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
+		          insert(multiTaskSupporterStatus(W1, needsupporter, W3, W4, W5, noack, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
 	}
 
    	% RECEIVE as submitterLeader NoACK thirdblock from supporter
 	forall (_).sent(msgNoACKtask(thirdBlock, _, NameSupporter)), 
 	       bel(submitterLeader)            
 	   	do {
-	   	if bel(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, pending, 
-		                                 Connected2, Name3, X3, Y3, Pending3, Connected3)) 
-		     then delete(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, NameSupporter, X2, Y2, 
-		                                          pending, Connected2, Name3, X3, Y3, Pending3, Connected3)) +
-		          insert(multiTaskSupporterStatus(Task, Name1, X1, Y1, Pending1, Connected1, needsupporter, X2, Y2, 
-		                                          noack, Connected2, Name3, X3, Y3, Pending3, Connected3)).
+	   	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, pending, W13, W14, W15, W16, W17, W18, W19)) 
+		     then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, pending, W13, W14, W15, W16, W17, W18, W19)) +
+		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, needsupporter, W9, W10, W11, noack, W13, W14, W15, W16, W17, W18, W19)).
 	}
 
 	% redo messageTwoTaskSupporter for 2task replacement
 	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, submittingAgentTwoTask, _)),
-	   bel(multiTaskSupporterStatus(_, needsupporter, _, _, noack, _, _, _, _, _, _, _, _, _, _, _)),
+	   bel(multiTaskSupporterStatus(_, needsupporter, _, _, _, noack, _, _, _, _, _, _, _, _, _, _, _, _, _)),
 	   percept(task(TaskName,_, 40,[req(_,_,_),req(_,_,_)]))	
 	    then {
 	    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, supportersNotified))

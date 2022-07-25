@@ -10,11 +10,12 @@ use "../eventsubmodules/updateDispenserDistance" as module.
 module taskHandlingTwoBlock {
 
     % reset supporter status for multitask
-	if bel(multiTaskSupporterStatus(V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16)) 
-        then delete(multiTaskSupporterStatus(V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16)) +
+	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
+        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
              insert(multiTaskSupporterStatus(noTask, placeholder, placeholder, placeholder, placeholder, placeholder, 
                                              placeholder, placeholder, placeholder, placeholder, placeholder,
-                                             placeholder, placeholder, placeholder, placeholder, placeholder)).
+                                             placeholder, placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder, placeholder, placeholder)).
 
 	% choose 2-block tasks if own block fits left req fields
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
