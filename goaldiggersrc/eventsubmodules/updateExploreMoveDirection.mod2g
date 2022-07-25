@@ -7,63 +7,62 @@ use "../pathfinding/helperMoveWithoutBlock" as module.
 
 module updateExploreMoveDirection {
 
-	if true 
-		then delete(northExplored) +
-			 delete(southExplored) +
-			 delete(eastExplored) +
-			 delete(westExplored).
+	if bel(northExplored) then delete(northExplored).
+	if bel(southExplored) then delete(southExplored).
+	if bel(eastExplored) then delete(eastExplored).
+	if bel(westExplored) then delete(westExplored).
 
-	forall bel(exploredMark(ExploredX, ExploredY))
+	forall bel(mapMarkExplored(ExploredX, ExploredY))
 		do {
 			% 
 			if not(bel(northExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DY =< 0, DY >= -4), bel(DX >= -4, DX =< 4) 
+				   bel(DY =< -1, DY >= -3), bel(DX >= -3, DX =< 3) 
 				    then insert(northExplored). 	
 			}
 			
 			if not(bel(eastExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DX >= 0, DX =< 4), bel(DY >= -4, DY =< 4)
+				   bel(DX >= 1, DX =< 3), bel(DY >= -3, DY =< 3)
 				    then insert(eastExplored).
 			}
 			
 			if not(bel(southExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DY >= 0, DY =< 4), bel(DX >= -4, DX =< 4)
+				   bel(DY >= 1, DY =< 3), bel(DX >= -3, DX =< 3)
 				    then insert(southExplored).
 			}
 			
 			if not(bel(westExplored)) then {
 				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DX =< 0, DX >= -4), bel(DY >= -4, DY =< 4)
+				   bel(DX =< -1, DX >= -3), bel(DY >= -3, DY =< 3)
 				    then insert(westExplored).
 			}
-		}
+	}
 		
 	if not(bel(northExplored)), bel(exploreDirection(Dir))
 		then delete(exploreDirection(Dir)) + 
-			 insert(exploreDirection(n)) + print('North') +
+			 insert(exploreDirection(n)) +
 			 exit-module.
 	
 	if not(bel(eastExplored)), bel(exploreDirection(Dir))
-		then delete(exploreDirection(Dir)) + print('East') +
+		then delete(exploreDirection(Dir)) +
 		 	 insert(exploreDirection(e)) +
 		 	 exit-module.
 		 	 
 	if not(bel(southExplored)), bel(exploreDirection(Dir))
 		then delete(exploreDirection(Dir)) + 
-		 	 insert(exploreDirection(s)) + print('South') +
+		 	 insert(exploreDirection(s)) +
 		 	 exit-module.
 		 	 
 	if not(bel(westExplored)), bel(exploreDirection(Dir))
 		then delete(exploreDirection(Dir)) + 
-		 	 insert(exploreDirection(w)) + print('West') +
+		 	 insert(exploreDirection(w)) +
 		 	 exit-module.
 		 	 
-	if true, bel(exploreDirection(Dir)) 
+	if bel(exploreDirection(Dir)) 
 		then delete(exploreDirection(Dir)) + 
-			 insert(exploreDirection(r)) + print('Random') +
+			 insert(exploreDirection(r)) +
 			 exit-module.
 	
 }

@@ -9,33 +9,32 @@ use "../goaldiggerAction" as actionspec.
 module syncMessageDataIntoBelief {
 	
 	% STORE seenOtherAgent messages
-	forall (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)) do {
-	
-		if not(bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)))
-			then insert(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)). 
+	forall (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)) 
+		do {
+			if not(bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)))
+				then insert(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)). 
 		
 	}
 	
-	% DELETE stored seenOtherAgent messages from belief when ~6 steps old
-	forall bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), percept(step(SimStep))
+	% DELETE stored seenOtherAgent messages from belief when ~5 steps old
+	forall bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), 
+	       percept(step(SimStep))
 		do {
-			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step =< SimStep - 7)
-				       then delete(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
+			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step < SimStep - 5)
+				then delete(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
 	}
 	
 	% STORE myOffsetOfOtherAgent messages
 	forall percept(step(SimStep)),
 	       (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step)),
 	       bel(Step =< SimStep) 
-	       do {
-	
-		if  not(bel(confirmedOffsetOfAgent(_, _, KnownSenderName))),
-		    not(bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))),
-		    not(bel(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, 
-		                                       Step)))
-			 then insert(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, 
-			                                        Step)). 
-		
+		do {
+			if not(bel(confirmedOffsetOfAgent(_, _, KnownSenderName))),
+			   not(bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))),
+			   not(bel(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, 
+			                                       Step)))
+				then insert(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, 
+													   UnknownAgentName, Step)). 
 	}	
 	
 	% DELETE stored myOffsetOfOtherAgent messages from belief when offset known
@@ -43,25 +42,36 @@ module syncMessageDataIntoBelief {
 		do {
 			if percept(step(SimStep), Step =< SimStep),
 			   bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))
-				       then delete(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, 
+				then delete(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, 
 				                                              UnknownAgentName, Step)).
 	}	
 		
 	% CREATE belief about status messages
-	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
-	    if not(bel(storedOtherAgentStatus(SenderName, _, _, _, _, _, _, _))) then 
-	        insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
-	    % Set an mapExploredMark for other Agent
-	    if percept(step(Step)), bel(confirmedOffsetOfAgent(OffSetX, OffsetY, SenderName), 
-	               Remainder is Step mod 2, Remainder == 0, ExploredX is X + OffSetX, ExploredY is Y + OffsetY)
-	    	then insert(exploredMark(ExploredX, ExploredY)).
+	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) 
+		do {
+	    	if not(bel(storedOtherAgentStatus(SenderName, _, _, _, _, _, _, _))) 
+	    		then insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, 
+	    		                                   X, Y, BlockTypeAttached)).
 	}
+
 	    
 	% UPDATE belief about status messages
-	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) do {
-	    if bel(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8), MsgStep > OldMsgStep) then 
-	        delete(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8)) + 
-	        insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)).
+	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) 
+		do {
+	    	if bel(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8), MsgStep > OldMsgStep) 
+	    		then delete(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8)) + 
+	                 insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, 
+	                                               BlockTypeAttached)).
 	}
+	
+	% CREATE belief about explored Marks. Where other agents has explored
+%	forall bel(confirmedOffsetOfAgent(OffSetX, OffsetY, SenderName))
+%		do { 
+%		   if percept(step(Step)), 
+%		   	  bel(storedOtherAgentStatus(SenderName, X, Y, _, _, _, _, _)),
+%		   	  bel(0 =:= mod(Step, 2), ExploredX is X + OffSetX, ExploredY is Y + OffsetY),
+%	          not(bel(mapMarkExplored(ExploredX, ExploredY)))
+%	           then insert(mapMarkExplored(ExploredX, ExploredY)).
+%	}
 	
 } % end module

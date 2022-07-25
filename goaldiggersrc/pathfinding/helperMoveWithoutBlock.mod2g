@@ -3,7 +3,9 @@ use "../goaldiggerAction" as actionspec.
 use "../actionhandling/preActionCleanup" as module.
 use "./helperMoveOrClearForward" as module.
 
-order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
+% random choice between equal values requires random; 
+% linearrandom: first action choice linear, then inside curly brackets random action
+order = linearrandom. 
 
 /**
  * handle moving without block
@@ -13,16 +15,26 @@ order = linearrandom. % random choice between equal values requires random; line
 module helperMoveWithoutBlock {
 
     % random 90 degree move if blocked Obstacle main direction    
-    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) then {
-    	if  bel(directionToCoordinate(AltMove, Xm, Ym)), not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) then {
-    		if percept(thing(Xn, Yn, entity,_)) then preActionCleanup + move(AltMove).
-    		if percept(thing(Xn, Yn, block,_)), percept(attached(Xn, Yn)) then preActionCleanup + move(AltMove).
-        }
-        if  bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), 
-            not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) then {
-    	if percept(thing(Xn, Yn, entity,_)) then preActionCleanup + move(AltAltMove).
-    	if percept(thing(Xn, Yn, block,_)), percept(attached(Xn, Yn)) then preActionCleanup + move(AltAltMove).
-        }
+    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) 
+    	then {
+    		if bel( directionToCoordinate(AltMove, Xm, Ym)), 
+    		   not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) 
+    			then {
+    				if percept(thing(Xn, Yn, entity,_)) 
+    					then preActionCleanup + move(AltMove).
+    				if percept(thing(Xn, Yn, block,_)), 
+    				   percept(attached(Xn, Yn)) 
+    				   	then preActionCleanup + move(AltMove).
+        		}
+        if bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), 
+           not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)) 
+            then {
+    			if percept(thing(Xn, Yn, entity,_)) 
+    				then preActionCleanup + move(AltAltMove).
+    			if percept(thing(Xn, Yn, block,_)), 
+    			   percept(attached(Xn, Yn)) 
+    			   	then preActionCleanup + move(AltAltMove).
+        	}
     } % random 90 degree
 
 	% move into affinity direction

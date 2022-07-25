@@ -6,17 +6,20 @@ use "helperMoveManhattanWithoutBlock" as module.
 use "../actionhandling/preActionCleanup" as module.
 
 /**
- * Compares Manhattan Distance in stored fields nswe around agent and choses lowest value, if exist equal values random lowest chosen
+ * Compares Manhattan Distance in stored fields nswe around agent and choses lowest value, 
+ * if exist equal values random lowest chosen
  *
  */
 
 module helperManhattanChoice {
 
 	% manhattan movement with 1 or 2 blocks attached
-	if bel(haveBlockAttached(true, _)) then helperMoveManhattanWithBlock.
+	if bel(haveBlockAttached(true, _)) 
+		then helperMoveManhattanWithBlock.
 	
 	% manhattan movement with 1 or 2 blocks attached
-	if bel(haveBlockAttached(false, _)) then helperMoveManhattanWithoutBlock.
+	if bel(haveBlockAttached(false, _)) 
+		then helperMoveManhattanWithoutBlock.
 		
 	% obligatory skip continue action if above unsuccessful
 	if true then preActionCleanup + executeRandomMove.

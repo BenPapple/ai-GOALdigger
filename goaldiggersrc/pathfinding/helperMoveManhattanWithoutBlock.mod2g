@@ -2,33 +2,62 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../actionhandling/preActionCleanup" as module.
 
-order = linearrandom. % random choice between equal values requires random; linearrandom: first action choice linear, then inside curly brackets random action
+% random choice between equal values requires random; 
+% linearrandom: first action choice linear, then inside curly brackets random action
+order = linearrandom. 
 
 module helperMoveManhattanWithoutBlock {
 
 	% check if agent already at target
-	if bel(haveBlockAttached(false, _)), bel(nMd(N), sMd(S), eMd(E), wMd(W)) then {
-	
-		% Find field nswe with lowest value ManhattanDistance and chose randomly between equally valued and free target field
-		
-		% move onto free fields
-    	if bel(N =< S, N =< E, N =< W), not(percept(thing(0, -1, Type,_), Type \== dispenser)) then preActionCleanup + move(n).
-    	if bel(S =< N, S =< E, S =< W), not(percept(thing(0, 1, Type,_), Type \== dispenser)) then preActionCleanup + move(s).
-    	if bel(E =< S, E =< N, E =< W), not(percept(thing(1, 0, Type,_), Type \== dispenser)) then preActionCleanup + move(e).
-    	if bel(W =< S, W =< E, W =< N), not(percept(thing(-1, 0, Type,_), Type \== dispenser)) then preActionCleanup + move(w).
-		
-		% clear obstacles
-		if bel(N =< S, N =< E, N =< W), percept(thing(0, -1, obstacle,_)) then preActionCleanup + clear(0, -1).
-		if bel(S =< N, S =< E, S =< W), percept(thing(0, 1, obstacle,_)) then preActionCleanup + clear(0, 1).
-    	if bel(E =< S, E =< N, E =< W), percept(thing(1, 0, obstacle,_)) then preActionCleanup + clear(1, 0).
-    	if bel(W =< S, W =< E, W =< N), percept(thing(-1, 0, obstacle,_)) then preActionCleanup + clear(-1, 0).
-    	
-    	% clear blocks
-    	if bel(N =< S, N =< E, N =< W), percept(thing(0, -1, block,_)), not(percept(attached(0, -1))) then preActionCleanup + clear(0, -1).
-		if bel(S =< N, S =< E, S =< W), percept(thing(0, 1, block,_)), not(percept(attached(0, 1))) then preActionCleanup + clear(0, 1).
-    	if bel(E =< S, E =< N, E =< W), percept(thing(1, 0, block,_)), not(percept(attached(1, 0))) then preActionCleanup + clear(1, 0).
-    	if bel(W =< S, W =< E, W =< N), percept(thing(-1, 0, block,_)), not(percept(attached(-1, 0))) then preActionCleanup + clear(-1, 0).						    	
-
+	if bel(haveBlockAttached(false, _)), 
+	   bel(nMd(N), sMd(S), eMd(E), wMd(W)) 
+		then {
+			% Find field nswe with lowest value ManhattanDistance and 
+			% chose randomly between equally valued and free target field
+			% move onto free fields
+	    	if bel(N =< S, N =< E, N =< W), 
+	    	   not(percept(thing(0, -1, Type,_), Type \== dispenser)) 
+	    	   	then preActionCleanup + move(n).
+	    	if bel(S =< N, S =< E, S =< W), 
+	    	   not(percept(thing(0, 1, Type,_), Type \== dispenser)) 
+	    	   	then preActionCleanup + move(s).
+	    	if bel(E =< S, E =< N, E =< W), 
+	    	   not(percept(thing(1, 0, Type,_), Type \== dispenser)) 
+	    	   	then preActionCleanup + move(e).
+	    	if bel(W =< S, W =< E, W =< N), 
+	    	   not(percept(thing(-1, 0, Type,_), Type \== dispenser)) 
+	    	   	then preActionCleanup + move(w).
+			
+			% clear obstacles
+			if bel(N =< S, N =< E, N =< W), 
+			   percept(thing(0, -1, obstacle,_)) 
+				then preActionCleanup + clear(0, -1).
+			if bel(S =< N, S =< E, S =< W), 
+			   percept(thing(0, 1, obstacle,_)) 
+				then preActionCleanup + clear(0, 1).
+	    	if bel(E =< S, E =< N, E =< W), 
+	    	   percept(thing(1, 0, obstacle,_)) 
+	    		then preActionCleanup + clear(1, 0).
+	    	if bel(W =< S, W =< E, W =< N), 
+	    	   percept(thing(-1, 0, obstacle,_)) 
+	    		then preActionCleanup + clear(-1, 0).
+	    	
+	    	% clear blocks
+	    	if bel(N =< S, N =< E, N =< W), 
+	    	   percept(thing(0, -1, block,_)), 
+	    	   not(percept(attached(0, -1))) 
+	    		then preActionCleanup + clear(0, -1).
+			if bel(S =< N, S =< E, S =< W), 
+			   percept(thing(0, 1, block,_)), 
+			   not(percept(attached(0, 1))) 
+				then preActionCleanup + clear(0, 1).
+	    	if bel(E =< S, E =< N, E =< W), 
+	    	   percept(thing(1, 0, block,_)), 
+	    	   not(percept(attached(1, 0))) 
+	    		then preActionCleanup + clear(1, 0).
+	    	if bel(W =< S, W =< E, W =< N), 
+	    	   percept(thing(-1, 0, block,_)), 
+	    	   not(percept(attached(-1, 0))) 
+	    		then preActionCleanup + clear(-1, 0).						    	
 	} % if 
-	
 }

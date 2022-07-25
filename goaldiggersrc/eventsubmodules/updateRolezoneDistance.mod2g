@@ -9,22 +9,29 @@ use "../goaldiggerAction" as actionspec.
 module updateRolezoneDistance {
 	
 	% RESET old MD values in mapGoalZones to high number expected to not occur in simulation
-	forall bel(mapRoleZone(XAlt, YAlt, MdAlt)) do delete(mapRoleZone(XAlt, YAlt, MdAlt))
-		+ insert(mapRoleZone(XAlt, YAlt, 123456)).
+	forall bel(mapRoleZone(XAlt, YAlt, MdAlt)) 
+		do delete(mapRoleZone(XAlt, YAlt, MdAlt)) +
+		   insert(mapRoleZone(XAlt, YAlt, 123456)).
 
 	% RESET old MD values in targetgoalzones to high number expected to not occur in simulation
 	if bel(targetClosestRoleZone(XAlt, YAlt, MdAlt)) 
-	    then delete(targetClosestRoleZone(XAlt, YAlt, MdAlt)) + insert(targetClosestRoleZone(XAlt, YAlt, 1234567)).
+	    then delete(targetClosestRoleZone(XAlt, YAlt, MdAlt)) + 
+	         insert(targetClosestRoleZone(XAlt, YAlt, 1234567)).
 
 	% CALCULATE MD for all stored in bel goalzones
-	forall bel(mapRoleZone(X, Y, MdAlt)), bel(agentAt(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md)) do {
-		if bel(mapRoleZone(X, Y, MdAlt)) then delete(mapRoleZone(X, Y, MdAlt)) + insert(mapRoleZone(X, Y, Md)).
+	forall bel(mapRoleZone(X, Y, MdAlt)), 
+	       bel(agentAt(X2, Y2, _), calculateXYMd(X, Y, X2, Y2, Md)) 
+		do {
+			if bel(mapRoleZone(X, Y, MdAlt)) 
+				then delete(mapRoleZone(X, Y, MdAlt)) + 
+				     insert(mapRoleZone(X, Y, Md)).
 	}
 
 	% COMPARE lowest MD value for ALL stored goalzones
-	forall bel(mapRoleZone(X2, Y2, MDZone)) do {
+	forall bel(mapRoleZone(X2, Y2, MDZone)) 
+		do {
 			if bel(targetClosestRoleZone(X, Y, MDTarget), MDZone < MDTarget) 
-			    then delete(targetClosestRoleZone(X, Y, MDTarget)) + insert(targetClosestRoleZone(X2, Y2, MDZone)).
+			    then delete(targetClosestRoleZone(X, Y, MDTarget)) + 
+			         insert(targetClosestRoleZone(X2, Y2, MDZone)).
 	}
-
 } % module

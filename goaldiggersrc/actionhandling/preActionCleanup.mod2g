@@ -2,7 +2,8 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * Handles everything after an action has been chosen but before it is excuted because of timing(action stops thread) in any module
+ * Handles everything after an action has been chosen but before it is excuted 
+ * because of timing(action stops thread) in any module
  *
  */
 
@@ -13,5 +14,4 @@ module preActionCleanup {
 	
 	% stops debug timer
 	if bel(activateTimer) then canceltimer(calculationTimer).
-	
 } % end module

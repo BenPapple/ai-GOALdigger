@@ -10,73 +10,73 @@ module handleMessageAgentOffset {
     % delete last sim survived messages
     forall percept(step(SimStep)), bel(cachedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6), MsgStep > SimStep) 
         do {
-        if bel(cachedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6))
-            then delete(cachedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6)).
+        	if bel(cachedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6))
+            	then delete(cachedSeenOtherAgentAt(V1, V2, V3, V4, MsgStep, V6)).
     }
 
     % on switch send calculated offset to other agents
-    if bel(calculatedNewOffset) then {
-    forall bel(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)), percept(name(MyName), step(SimStep)) 
-        do allother.send(myOffsetOfOtherAgent(MyName, OffsetX, OffsetY, AgentNameSender, SimStep)).
+    if bel(calculatedNewOffset) 
+    	then {
+    		forall bel(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)), 
+    		       percept(name(MyName), step(SimStep)) 
+        		do allother.send(myOffsetOfOtherAgent(MyName, OffsetX, OffsetY, AgentNameSender, SimStep)).
     }
     
     % reset switch for offset send
-    if bel(calculatedNewOffset) then delete(calculatedNewOffset).
+    if bel(calculatedNewOffset) 
+    	then delete(calculatedNewOffset).
 
 	% evaluate seenOtherAgentAt messages for offset concerning duplicate senders and cached messages older than 4 steps
-	forall bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) do {
-	    if percept(name(AgentReceiver), step(SimStep), Step < SimStep -4), 
-           not(bel(cachedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
+	forall percept(name(AgentReceiver)), 
+	       bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) 
+		do {
+	    	if percept(step(SimStep), Step < SimStep -4), 
+               not(bel(cachedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
 	               AgentReceiver \== AgentNameSender2))
-		    then {
-
-			% if only 1x inverse coordinates are found
-			if bel(cachedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
-			   not(bel(confirmedOffsetOfAgent(_, _, AgentNameSender))),
-			   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
-			   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative) 
-			    then {
-					
-				if not(bel(cachedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
-				                AgentNameSender \== AgentNameSender3)) then {
-
-					% calculate offset
-					if true then {
-						 if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, OffsetX, OffsetY))
-							 then insert(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender))
-							      + insert(calculatedNewOffset).							      
-
+		    	then {
+					% if only 1x inverse coordinates are found
+					if bel(cachedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+					   not(bel(confirmedOffsetOfAgent(_, _, AgentNameSender))),
+					   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
+					   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative) 
+					    then {
+							if not(bel(cachedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
+						                AgentNameSender \== AgentNameSender3)) 
+						    	then {
+									% calculate offset
+									if true then {
+								 		if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, 
+								 		       OffsetX, OffsetY))
+									 		then insert(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)) +
+									      		 insert(calculatedNewOffset).							      
+							}
 					}
-				}
 			}
 		}
-
 	} % do
 
     % CALCULATE offset of 3rd agent from message from 2nd agent
-	forall (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step)) do {
-
+	forall (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step)) 
+		do {
 			if percept(name(MyName), step(SimStep), Step =< SimStep),
 			   bel(UnknownAgentName \= MyName),
 			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, KnownSenderName)), 
 			   not(bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))),
 			   bel(X1 is OffsetX + OffsetToSenderX, 
 			       Y1 is OffsetY + OffsetToSenderY)
-			       then insert(confirmedOffsetOfAgent(X1, Y1, UnknownAgentName)).				
+			   	then insert(confirmedOffsetOfAgent(X1, Y1, UnknownAgentName)).				
 	}
 	
 	% CALCULATE offset of 3rd agent from cached message from 2nd agent
 	forall percept(step(SimStep)),
 	       bel(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step),
-	           Step =< SimStep) do {
-
+	           Step =< SimStep) 
+		do {
 			if percept(name(MyName)),
 			   bel(UnknownAgentName \= MyName),
 			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, KnownSenderName)), 
 			   not(bel(confirmedOffsetOfAgent(_, _, UnknownAgentName))),
-			   bel(X1 is OffsetX + OffsetToSenderX, 
-			       Y1 is OffsetY + OffsetToSenderY)
+			   bel(X1 is OffsetX + OffsetToSenderX, Y1 is OffsetY + OffsetToSenderY)
 			       then insert(confirmedOffsetOfAgent(X1, Y1, UnknownAgentName)).				
 	}
-
 } % end module

@@ -16,23 +16,27 @@ exit=never.
 module goaldiggerMain {
 
 	% Server sends new percept and Event sets haveMove(false) and now agent action strategy can continue
-    if not(bel(haveMove)) then {
+    if not(bel(haveMove)) 
+    	then {
     
-    	% handle deactivated by skip
-    	if percept(deactivated(true)) then preActionCleanup + skip.
-    
-    	% agents want to be free randomExploreMove for turn number skipThisStep    	
-    	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep) then executeRandomMove.
-    	
-	    % Handle DEFAULT role
-    	if percept(role(default)) then executeDefaultRole.
-
-	    % Handle WORKER role
-    	if percept(role(worker)) then executeWorkerRole.
-    	
-    	% Handle explorer role
-    	if percept(role(explorer)) then executeExplorerRole.   
-    
-    } % if haveMove
+	    	% handle deactivated by skip
+	    	if percept(deactivated(true)) 
+	    		then preActionCleanup + skip.
+	    
+	    	% agents want to be free randomExploreMove for turn number skipThisStep    	
+	    	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep) 
+	    		then executeRandomMove.
+	    	
+		    % Handle DEFAULT role
+	    	if percept(role(default)) 
+	    		then executeDefaultRole.
 	
+		    % Handle WORKER role
+	    	if percept(role(worker)) 
+	    		then executeWorkerRole.
+	    	
+	    	% Handle explorer role
+	    	if percept(role(explorer)) 
+	    		then executeExplorerRole.   
+    } % if haveMove
 } % module
