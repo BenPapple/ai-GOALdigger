@@ -32,6 +32,14 @@ module reinitBeliefOnSimChange {
 		then delete(executeManhattan).
 	if not(bel(haveMove)) 
 		then insert(haveMove).
+		
+   	% multitask coordinator for submitterLeader, necessary for other agents for hooks in program logic
+	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19))
+     then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) + 
+          insert(multiTaskSupporterStatus(noTask, placeholder, placeholder, placeholder, placeholder, 
+                                          placeholder,placeholder, placeholder, placeholder, placeholder, 
+                                          placeholder,placeholder, placeholder, placeholder, placeholder, 
+                                          placeholder, placeholder,  placeholder, placeholder)). 
 	
 	if bel(haveBlockAttached(X, Y)) 
 		then delete(haveBlockAttached(X, Y)) + 

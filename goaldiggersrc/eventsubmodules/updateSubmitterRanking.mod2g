@@ -39,11 +39,6 @@ module updateSubmitterRanking {
 		if percept(teamSize(SizeTeam), name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1)
 			then {
-			 if not(bel((multiTaskSupporterStatus(_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _))))
-			     then insert(multiTaskSupporterStatus(noTask, placeholder, placeholder, placeholder, placeholder, 
-			                                          placeholder,placeholder, placeholder, placeholder, placeholder, 
-			                                          placeholder,placeholder, placeholder, placeholder, placeholder, 
-			                                          placeholder)).
 			 if true then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 
 		}

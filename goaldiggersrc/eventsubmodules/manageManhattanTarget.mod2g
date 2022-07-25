@@ -62,19 +62,19 @@ module manageManhattanTarget {
 	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or 
 	% goalzone), coordinates converted from A,B to C,D
 	if bel(haveBlockAttached(true, _), step(SimStep), 
-	       currentChosenTask(_, TaskStep, _, _, _, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
+	       currentChosenTask(_, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
 	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target), Target \== supportingPosition),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
-	   bel(localize(A, B, OffsetX, OffsetY, C, D), D2 is D + 2 )
+	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 2 )
 		then delete(targetMd(X, Y, Target)) + 
-			 insert(targetMd(C, D2, otherAgentAt)) + 
+			 insert(targetMd(C2, D2, otherAgentAt)) + 
 			 insert(executeManhattan).
 	
 	% Moving around 2-task Submitting agent for docking sequence
 	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
 	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
-	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
+	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
 	   bel(haveBlockAttached(true, _)) 
 	   	then {
 			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
@@ -85,13 +85,14 @@ module manageManhattanTarget {
 			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
 			       targetMd(Xdel, Ydel, Zdel))
 			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
-			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)).
+			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
+			         insert(executeManhattan).
 	}
 	
 	% Moving around 3-task Submitting agent for docking sequence
 	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
 	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
-	           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock)),
+	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
 	   bel(haveBlockAttached(true, _)) 
 	   	then {
 			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
@@ -102,7 +103,8 @@ module manageManhattanTarget {
 			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
 			       targetMd(Xdel, Ydel, Zdel))
 			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
-			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)).
+			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
+			         insert(executeManhattan).
 	}
 	
 	% Manhattan Magic calculate nswe

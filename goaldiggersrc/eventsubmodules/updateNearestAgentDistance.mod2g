@@ -20,6 +20,9 @@ module updateNearestAgentDistance {
 	% Find lowest MD for known agents with offsets	     
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _, TaskRole)) do {
 		if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask),
+		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
+		                                W15, W16, W17, W18, W19), 
+		                                NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
 		   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)), 
 		   bel(agentAt(OwnX, OwnY, _), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
 		   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
@@ -42,6 +45,8 @@ module updateNearestAgentDistance {
 	       bel(currentChosenTask(TaskName, _, _, _, _, _, _, _)) 
 		do {
 		if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask),
+		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
+		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
 		   percept(task(TaskName,_, 40,[req(0,1,_),req(_,_,BlockTypeTask)]), BlockTypeTask == BlockTypeAttached),
 		   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
 		    	then {
@@ -55,6 +60,8 @@ module updateNearestAgentDistance {
 	    }
 	    
 	    if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask),
+		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
+		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
 	       percept(task(TaskName,_, 40,[req(_,_,BlockTypeTask),req(0,1,_)]), BlockTypeTask == BlockTypeAttached),
 	       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
 	       	then {
@@ -69,6 +76,8 @@ module updateNearestAgentDistance {
 	    
 	    % 3task left block applies
 		if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask),
+		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
+		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
 		   percept(task(TaskName,_, 90,[req(0,1,_),req(_,_,BlockTypeTask),req(_,_,_)]), BlockTypeTask == BlockTypeAttached),
 		   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
 		    	then {
@@ -82,6 +91,8 @@ module updateNearestAgentDistance {
 	    }
 	    %3task middle block applies
 	    if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask),
+		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
+		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
 	       percept(task(TaskName,_, 90,[req(_,_,BlockTypeTask),req(0,1,_),req(_,_,_)]), BlockTypeTask == BlockTypeAttached),
 	       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
 	       	then {
@@ -95,6 +106,8 @@ module updateNearestAgentDistance {
 	    }	    
 	    %3task right block applies
 	    if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask),
+		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
+		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
 	       percept(task(TaskName,_, 90,[req(_,_,BlockTypeTask),req(_,_,_),req(_,0,1)]), BlockTypeTask == BlockTypeAttached),
 	       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
 	       	then {

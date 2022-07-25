@@ -20,7 +20,7 @@ module syncMessageDataIntoBelief {
 	forall bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), 
 	       percept(step(SimStep))
 		do {
-			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step < SimStep - 5)
+			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step < SimStep - 4)
 				then delete(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
 	}
 	

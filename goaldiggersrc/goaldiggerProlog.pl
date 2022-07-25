@@ -128,8 +128,9 @@
 :- dynamic submitterLeader/0.
 
 % coordinate supprting agents of submitterleaders
-%(TaskType,Name1, X1, Y1, Pending1, Connected1,Name2, X2, Y2, Pending2, Connected2,Name3, X3, Y3, Pending3, Connected3)
-:- dynamic multiTaskSupporterStatus/16.
+%(TaskType,Name1,X1,Y1,Block1,Pending1,Connected1,Name2,X2,Y2,Block2,Pending2,Connected2,Name3,X3,Y3,Block3,Pending3,
+% Connected3)
+:- dynamic multiTaskSupporterStatus/19.
 
 % Variables related to locating other agents in the world
 % store / update other agents' positions

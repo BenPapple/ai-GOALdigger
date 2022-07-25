@@ -30,7 +30,7 @@ module handleMessageAgentOffset {
 	forall percept(name(AgentReceiver)), 
 	       bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) 
 		do {
-	    	if percept(step(SimStep), Step < SimStep -4), 
+	    	if percept(step(SimStep), Step =< SimStep -4), 
                not(bel(cachedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
 	               AgentReceiver \== AgentNameSender2))
 		    	then {

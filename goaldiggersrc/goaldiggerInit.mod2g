@@ -9,7 +9,7 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	%if true then insert (lDebugOn). 
+	if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% To count sim changes
@@ -59,7 +59,14 @@ module goaldiggerInit {
 	
 	% tasks
 	% filler task -11001001 so it gets replaced when real task available
-	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)). 
+	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)).
+	
+	% multitask coordinator for submitterLeader, necessary for other agents for hooks in program logic
+	if true
+        then insert(multiTaskSupporterStatus(noTask, placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder,placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder,placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder, placeholder, placeholder, placeholder)). 
 		
 	% manhattan distance
 	if true then insert (targetMd(-999, -999, placeholdertarget)). % init Manhatten Distance 

@@ -38,7 +38,7 @@ module messagePermaSendStatusToOthers {
 	
 	% Sending other agents its position, name, step and position of perceived next agent if agent is being seen
 	forall percept(team(TeamName), thing(OtherX, OtherY, entity, TeamName), 
-	 			   OtherCalc is OtherX + OtherY, OtherCalc \= 0, name(OwnName)), 
+	 			   OtherCalc is abs(OtherX) + abs(OtherY), OtherCalc \= 0, name(OwnName)), 
 	       bel(agentAt(OwnX,OwnY, _), step(Step))
 		do (channelNamesRelativeXY).send(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, OwnName)).
 	

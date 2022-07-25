@@ -37,8 +37,8 @@ module handleTaskSubmit {
 	   bel(haveBlockAttached(true, DirBlock), DirBlock == s) 
 	   	then {		
 			% submit after succesful connect
-			if bel(multiTaskSupporterStatus(_, _, _, _, _, connected, _, _, _, 
-			       _, connected, _, _, _, _, _))
+			if bel(multiTaskSupporterStatus(_, _, _, _, _, _, connected, _, _, _, _, 
+			       _, connected, _, _, _, _, _, _))
 				then preActionCleanup + submit(TaskFit).
 			% try to connect blocks
 			if true then connectBlocks.
