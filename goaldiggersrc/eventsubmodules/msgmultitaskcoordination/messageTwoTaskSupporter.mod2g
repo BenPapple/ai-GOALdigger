@@ -28,11 +28,11 @@ module messageTwoTaskSupporter {
 							                                      BlockSupporter, TaskName)).
 							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
 		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
-		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, W5, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
+		                             insert(multiTaskSupporterStatus(twoTask, SupporterName, X2, Y2, BlockSupporter, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 							                    supporterREQPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType1, 
-								                SubmitType, supportersNotified)) +
+								                SubmitType, blocksFoundAndInserted)) +
 								         exit-module.
 						}
 			}
@@ -46,11 +46,11 @@ module messageTwoTaskSupporter {
 							                                      BlockSupporter, TaskName)).
 							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
 		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
-		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, W5, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).						                                      
+		                             insert(multiTaskSupporterStatus(twoTask, SupporterName, X2, Y2, BlockSupporter, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).						                                      
 							if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 							                    supporterREQPending)) + 
 								         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
-								                SubmitType, supportersNotified)) +
+								                SubmitType, blocksFoundAndInserted)) +
 								         exit-module.
 					}
 			}
@@ -70,11 +70,11 @@ module messageTwoTaskSupporter {
 							                                      BlockSupporter, TaskName)).
 							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
 		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
-		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, W5, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).							                                      
+		                             insert(multiTaskSupporterStatus(twoTask, SupporterName, X2, Y2, BlockSupporter, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).							                                      
 						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 						                    supporterREQPending)) + 
 							         insert(currentChosenTask(TaskName, V2, V3, V4, V5, BlockType1, 
-							                SubmitType, supportersNotified)) +
+							                SubmitType, blocksFoundAndInserted)) +
 							         exit-module.
 					}
 		}
@@ -88,11 +88,11 @@ module messageTwoTaskSupporter {
 						                                      TaskName)).
 							if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
 		                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
-		                             insert(multiTaskSupporterStatus(W1, SupporterName, X2, Y2, W5, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).						                                      
+		                             insert(multiTaskSupporterStatus(twoTask, SupporterName, X2, Y2, BlockSupporter, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).						                                      
 						if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, 
 						                    supporterREQPending)) + 
 							         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockType2, 
-							                SubmitType, supportersNotified)) +
+							                SubmitType, blocksFoundAndInserted)) +
 							         exit-module.
 				}
 		}

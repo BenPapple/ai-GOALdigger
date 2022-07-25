@@ -12,10 +12,18 @@ use "../taskhandling/taskHandlingThreeBlock" as module.
 
 module chooseTask {
 
+    % reset supporter status for multitask
+	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
+        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
+             insert(multiTaskSupporterStatus(noTask, placeholder, placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder, placeholder, placeholder, placeholder, placeholder,
+                                             placeholder, placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder, placeholder, placeholder)).
+
 	% as supportingAgent remove supporter task 
-	if not(percept(task(_ ,_, 10,[req(_,_,_)]))), 
-	   not(bel(submitterLeader)),
-	   percept(step(SimStep))
+	if percept(step(SimStep)),
+	   not(percept(task(_ ,TaskStep, 10,[req(_,_,_)]), TaskStep >= SimStep)), 
+	   not(bel(submitterLeader))	   
 		then { 
 		if bel(currentChosenTask(V1, TaskStep, V3, V4, V5, V6, V7, V8), TaskStep < SimStep) 
 				then delete(currentChosenTask(V1, TaskStep, V3, V4, V5, V6, V7, V8)) +
@@ -25,7 +33,7 @@ module chooseTask {
 
 	% choose 1s task if one is available and not believe submitterLeader
 	if percept(task(_ ,TaskStep, 10,[req(_,_,_)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 0),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20),
 	   not(bel(submitterLeader))
 		then taskHandlingOneBlock + exit-module.
 
@@ -60,7 +68,7 @@ module chooseTask {
 	   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
 	   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
 	   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2),
-	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 60)  
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 120)  
 	    then taskHandlingThreeBlock + exit-module.
 		 
 	% choose 2-task as submitterLeader if available
@@ -69,7 +77,7 @@ module chooseTask {
 	   percept(task(_ ,TaskStep, 40,[req(_,_,Block1),req(_,_,Block2)])),
 	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
-	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 60)  
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 100)  
 	    then taskHandlingTwoBlock + exit-module.   
 		
 } % module

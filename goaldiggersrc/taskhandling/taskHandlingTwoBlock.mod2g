@@ -21,7 +21,7 @@ module taskHandlingTwoBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
 	   percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockTypeAttached),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)) 
 	    then {	
 	        if not(bel(calculateNewGoalzoneMD)) 
@@ -38,7 +38,7 @@ module taskHandlingTwoBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
 	   percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockTypeAttached)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)) 
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
@@ -57,7 +57,7 @@ module taskHandlingTwoBlock {
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block left req
 	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -73,7 +73,7 @@ module taskHandlingTwoBlock {
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block right req
 	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -89,7 +89,7 @@ module taskHandlingTwoBlock {
 
 	% choose 2-block tasks if it exists and currenttask dispenser left req
 	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -105,7 +105,7 @@ module taskHandlingTwoBlock {
 	
 	% choose 2-block tasks if it exists and currenttask dispenser right req
 	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -121,7 +121,7 @@ module taskHandlingTwoBlock {
 
 	% choose 2-block tasks if it exists and both dispensers known left req
 	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -137,7 +137,7 @@ module taskHandlingTwoBlock {
 
 	% choose 2-block tasks if it exists and both dispensers known right req
 	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
