@@ -108,7 +108,7 @@ module syncLastActionResultDataIntoBelief {
 		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)), 
 		   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask)
 		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)) + 
-		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).
+		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submitterLeaderNeedsNewTask, needNewTask)).
 	}% lastaction success
 	
 }

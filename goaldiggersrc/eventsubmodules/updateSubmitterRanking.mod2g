@@ -43,13 +43,21 @@ module updateSubmitterRanking {
 			 allother.send(msgSubmitterLeader(MyName)).			 
 		}
 		
-				% assign submitterLeader
+		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 2)
 			then {
 			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 
 		}
+
+%		% assign submitterLeader
+%		if percept(teamSize(SizeTeam), name(MyName)), 
+%		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 3)
+%			then {
+%			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
+%			 allother.send(msgSubmitterLeader(MyName)).			 
+%		}
 			
 	    % remove submitterLeader
 		if percept(teamSize(SizeTeam)), 

@@ -72,7 +72,7 @@ module logScoringBoard {
 			 insert(cachedCount3Task(0)).
 	
 	% just print it to find submitterleader in logs	 
-    if (_).sent(msgSubmitterLeader(MyName)) then print(MyName+" is submitterLeader!").
+    forall (_).sent(msgSubmitterLeader(MyName)) do print(MyName+" is submitterLeader!").
     
 		
 }
