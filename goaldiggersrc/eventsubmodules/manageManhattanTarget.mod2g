@@ -66,55 +66,55 @@ module manageManhattanTarget {
 	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target)),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
-	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 2 )
+	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 1 )
 		then delete(targetMd(X, Y, Target)) + 
-			 insert(targetMd(C2, D2, otherAgentAt)) + 
+			 insert(targetMd(C2, D2, supportingPosition)) + 
 			 insert(executeManhattan).
 	
-	% Moving around 2-task Submitting agent for docking sequence
-	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
-	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
-	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
-	   bel(haveBlockAttached(true, _)) 
-	   	then {
-			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
-			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
-			       SubmitterBlockTypeAttached == SouthBlock),
-			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
-			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
-			   bel(agentAt(MyX, MyY, _)),
-			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6), 
-			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
-			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
-			       targetMd(Xdel, Ydel, Zdel))
-			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
-			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
-			         insert(executeManhattan).
-	}
-	
-	% Moving around 3-task Submitting agent for docking sequence
-	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
-	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
-	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
-	   bel(haveBlockAttached(true, _)) 
-	   	then {
-			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
-			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
-			       SubmitterBlockTypeAttached == SouthBlock),
-			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
-			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
-			   bel(agentAt(MyX, MyY, _)),
-			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
-			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
-			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
-			       targetMd(Xdel, Ydel, Zdel))
-			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
-			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
-			         insert(executeManhattan).
-	}
-	
+%	% Moving around 2-task Submitting agent for docking sequence
+%	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+%	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
+%	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
+%	   bel(haveBlockAttached(true, _)) 
+%	   	then {
+%			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
+%			       SubmitterName)),
+%			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
+%			       SubmitterBlockTypeAttached == SouthBlock),
+%			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
+%			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
+%			   bel(agentAt(MyX, MyY, _)),
+%			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6), 
+%			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
+%			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
+%			       targetMd(Xdel, Ydel, Zdel))
+%			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
+%			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
+%			         insert(executeManhattan).
+%	}
+%	
+%	% Moving around 3-task Submitting agent for docking sequence
+%	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+%	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
+%	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
+%	   bel(haveBlockAttached(true, _)) 
+%	   	then {
+%			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
+%			       SubmitterName)),
+%			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
+%			       SubmitterBlockTypeAttached == SouthBlock),
+%			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
+%			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
+%			   bel(agentAt(MyX, MyY, _)),
+%			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
+%			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
+%			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
+%			       targetMd(Xdel, Ydel, Zdel))
+%			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
+%			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
+%			         insert(executeManhattan).
+%	}
+%	
 	% Manhattan Magic calculate nswe
 	if bel(executeManhattan) 
 		then helperManhattanCalc.	

@@ -22,6 +22,8 @@
 :- dynamic calculateNewDispenserMD/0. 
 % switch to recalculate goalzone distance
 :- dynamic calculateNewGoalzoneMD/0. 
+% switch to stop logging score after x sims
+:- dynamic stopScoreLogging/0. 
 
 
 % Counter for sim in tournament mode
