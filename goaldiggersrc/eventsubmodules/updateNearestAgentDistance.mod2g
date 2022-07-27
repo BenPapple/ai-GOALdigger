@@ -20,7 +20,7 @@ module updateNearestAgentDistance {
 	% Find lowest MD for known agents with offsets	     
 	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _, TaskRole)) do {
 		if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask,
-		       TaskRole \= submitterLeaderNeedsNewTask),
+		       TaskRole \= submitterLeaderNeedsNewTask, TaskRole \= submittingAgentFourTask, TaskRole \= sabotaging),
 		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
 		                                W15, W16, W17, W18, W19), 
 		                                NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
@@ -48,7 +48,7 @@ module updateNearestAgentDistance {
 		
 		% 2task right block applies
 		if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask,
-		       TaskRole \= submitterLeaderNeedsNewTask),
+		       TaskRole \= submitterLeaderNeedsNewTask, TaskRole \= submittingAgentFourTask, TaskRole \= sabotaging),
 		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
 		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, 
 		                                NameSuppo2 \= OtherAgentName),
@@ -66,7 +66,7 @@ module updateNearestAgentDistance {
 	    
 	    % 2task left block applies
 	    if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask,
-		       TaskRole \= submitterLeaderNeedsNewTask),
+		       TaskRole \= submitterLeaderNeedsNewTask, TaskRole \= submittingAgentFourTask, TaskRole \= sabotaging),
 		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
 		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, 
 		                                NameSuppo2 \= OtherAgentName),
@@ -84,7 +84,7 @@ module updateNearestAgentDistance {
 	    
 	    % 3task left block applies
 		if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask,
-		       TaskRole \= submitterLeaderNeedsNewTask),
+		       TaskRole \= submitterLeaderNeedsNewTask, TaskRole \= submittingAgentFourTask, TaskRole \= sabotaging),
 		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
 		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, 
 		                                NameSuppo2 \= OtherAgentName),
@@ -103,7 +103,7 @@ module updateNearestAgentDistance {
 	    
 	    %3task middle block applies
 	    if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask,
-		       TaskRole \= submitterLeaderNeedsNewTask),
+		       TaskRole \= submitterLeaderNeedsNewTask, TaskRole \= submittingAgentFourTask, TaskRole \= sabotaging),
 		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
 		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, 
 		                                NameSuppo2 \= OtherAgentName),
@@ -122,7 +122,7 @@ module updateNearestAgentDistance {
 	        
 	    %3task right block applies
 	    if bel(TaskRole \= supportingAgent, TaskRole \= submittingAgentTwoTask, TaskRole \= submittingAgentThreeTask,
-		       TaskRole \= submitterLeaderNeedsNewTask),
+		       TaskRole \= submitterLeaderNeedsNewTask, TaskRole \= submittingAgentFourTask, TaskRole \= sabotaging),
 		   bel(multiTaskSupporterStatus(W1, NameSuppo1, W3, W4, W5, W6, W7, NameSuppo2, W9, W10, W11, W12, W13, W14, 
 		                                W15, W16, W17, W18, W19), NameSuppo1 \= OtherAgentName, 
 		                                NameSuppo2 \= OtherAgentName),
