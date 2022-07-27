@@ -5,7 +5,7 @@ use "../../goaldiggerProlog" as knowledge.
  *
  */
 
-module messageThreeTaskSupporters {
+module prepareThreeTaskData {
 
     % store XY and blocktype for supporters
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentThreeTask, 

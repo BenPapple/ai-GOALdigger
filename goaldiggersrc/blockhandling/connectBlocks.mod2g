@@ -63,17 +63,19 @@ module connectBlocks {
 		    if bel(1 =:= mod(X, 6))
 			    then preActionCleanup + connect(AgentName2, 0, 1).
 		    if bel(2 =:= mod(X, 6))
-			    then preActionCleanup + connect(AgentName1, X1, Y1). 
+			    then preActionCleanup + connect(AgentName1, X2, Y2). 
 		    if bel(3 =:= mod(X, 6))
 			    then preActionCleanup + connect(AgentName1, 0, 1).
 		    if bel(4 =:= mod(X, 6))
 			    then preActionCleanup + connect(AgentName2, 0, 1). 			    
 		    if bel(5 =:= mod(X, 6))
-			    then preActionCleanup + connect(AgentName2, X2, Y2).			    
+			    then preActionCleanup + connect(AgentName2, X1, Y1).			    
 			            
         }
 		    	
 	}
+	
+	% ToDo add 4task connect
 	
 	if true then preActionCleanup + skip.
 		

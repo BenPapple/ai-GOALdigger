@@ -43,6 +43,20 @@ module handleTaskSubmit {
 			% try to connect blocks
 			if true then connectBlocks.
     }
+    
+    % submit 4-task if block is south of agent
+	if bel(currentChosenTask(TaskFit, TaskStep, _, _, _, _, SubmitType, _)),
+	   bel(SubmitType == submittingAgentFourTask),
+	   bel(step(SimStep), TaskStep >= SimStep), 
+	   bel(haveBlockAttached(true, DirBlock), DirBlock == s) 
+	   	then {		
+			% submit after succesful connect
+			if bel(multiTaskSupporterStatus(_, _, _, _, _, _, connected, _, _, _, _, 
+			       _, connected, _, _, _, _, _, connected))
+				then preActionCleanup + submit(TaskFit).
+			% try to connect blocks
+			if true then connectBlocks.
+    }
 
 	% prefer rotate to south position and clear route to it if necessary
     if true then rotateBlockToSouth.

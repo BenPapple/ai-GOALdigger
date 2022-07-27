@@ -84,7 +84,7 @@ module manageManhattanTarget {
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
 	       TaskStep >= SimStep, targetMd(X, Y, Target), targetClosestGoalZone(A, B, MdAlt), MdAlt < 1234567),
 	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
-	       OneOrTwoTask == submittingAgentThreeTask)
+	       OneOrTwoTask == submittingAgentThreeTask; OneOrTwoTask == submittingAgentFourTask)
 		then delete(targetMd(X, Y, Target)) + 
 			 insert(targetMd(A, B, goalzone)) + 
 			 insert(executeManhattan).
@@ -95,7 +95,7 @@ module manageManhattanTarget {
 	   percept(step(SimStep), role(worker), goalZone(GoalX, GoalY)),
 	   bel(TaskStep >= SimStep, AltX is GoalX + AgentX, AltY is GoalY + AgentY),
 	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
-	       OneOrTwoTask == submittingAgentThreeTask)
+	       OneOrTwoTask == submittingAgentThreeTask; OneOrTwoTask == submittingAgentFourTask)
 	    then {		
 			if bel(targetMd(X4, Y4, Target)) 
 				then delete(targetMd(X4, Y4, Target)) + 
