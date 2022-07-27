@@ -57,7 +57,11 @@ module reinitBeliefOnSimChange {
 	%reset assign Role
 	if bel(positionInHirarchie(Position)) 
 		then delete(positionInHirarchie(Position)) + 
-		     insert(positionInHirarchie(0)).
+		     insert(positionInHirarchie(0)).     
+	
+	if bel(customRole(customRoleSaboteur))
+	    then delete(customRole(customRoleSaboteur)).
+	
 	if bel(targetRole(Role)) 
 		then delete(targetRole(Role)) + 
 		     insert (targetRole(worker)).
@@ -68,6 +72,7 @@ module reinitBeliefOnSimChange {
 	if bel(targetClosestOfAllDispensersAt(X, Y, Z, A)) 
 		then delete(targetClosestOfAllDispensersAt(X, Y, Z, A)) + 
 		     insert (targetClosestOfAllDispensersAt(70, 70, bx, 700)). % init with dummy values 
+	
 	
 	% goalzone targets
 	if bel(targetClosestGoalZone(X, Y, Z)) 

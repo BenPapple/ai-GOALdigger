@@ -38,7 +38,7 @@ module updateSubmitterRanking {
 		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1)
-			then {
+			  then {
 			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 
 		}
@@ -50,8 +50,20 @@ module updateSubmitterRanking {
 			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 
 		}
+
+		% assign customRoleSaboteur
+		if percept(teamSize(SizeTeam), name(MyName)), 
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 3),
+		   not(bel(submitterLeader)) 
+			then {
 			
-	    % remove submitterLeader
+			if true then insert(attachedBlokes(0)).
+			if bel(getFree) then delete(getFree).
+			if not(bel(customRole(_))) then insert(customRole(customRoleSaboteur)) +
+			                                allother.send(msgCustomRole(MyName)).			 
+		}
+		
+	  % remove submitterLeader
 		if percept(teamSize(SizeTeam)), 
 		   bel(submitterLeader, positionInHirarchie(PositionInHirarchie), 
 		       PosCheck is SizeTeam - PositionInHirarchie, PosCheck > 2)

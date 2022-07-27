@@ -31,6 +31,8 @@ use "./taskhandling/changeTaskCheck" as module.
 
 module goaldiggerEvent {
 
+	   
+	
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)),
 	   not(bel(thisIsTheFirstSim)) 
@@ -78,6 +80,26 @@ module goaldiggerEvent {
 	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)), 
 	   percept(role(worker)) 
 	   	then updateDispenserDistance.
+
+	% SUBMODULE help test worker tour around the goal zones
+	      
+    % remove empty goal zone flag if agent seen in goal zone
+	if bel(customRole(customRoleSaboteur)), percept(team(MyTeam), thing(X, Y, entity, OtherTeam), OtherTeam \= MyTeam, goalZone(X, Y)) then {
+		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
+	}
+    
+    %ToDo: Refactor this. WARNING: Changing A and B for some kind of X3, Y3 doesn't work. I don't know why.
+	% set flag if test worker in empty goal zone
+	if bel(customRole(customRoleSaboteur)), percept(goalZone(0, 0)), not(percept(team(MyTeam), thing(X1, Y1, entity, OtherTeam), 
+	       OtherTeam \= MyTeam, goalZone(X1, Y1))), bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
+	then {
+	   if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) then 
+	   delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)) + 
+	   allother.send(iBelieveGoalZoneCounter(A, B, NewCount, Md)).
+	   
+	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
+	   then insert(emptyGoalZoneCounter(X2, Y2, 1)) + allother.send(emptyGoalZoneCounter(X2, Y2, 1)).
+	}
     
     % SUBMODULE chose new task if necessary
     if true then changeTaskCheck.

@@ -6,8 +6,8 @@ use "../goaldiggerAction" as actionspec.
  *
  */
 
-module syncMessageDataIntoBelief {
-	
+module syncMessageDataIntoBelief {	
+
 	% STORE seenOtherAgent messages
 	forall (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)) 
 		do {

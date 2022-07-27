@@ -2,32 +2,31 @@
  * Prolog Knowledge Base of Agent
  *
  */
- 
+
 % Bool Switches
 % true enables debug features logging, timing etc
-:- dynamic lDebugOn/0. 
+:- dynamic lDebugOn/0.
 % switch to deactivate double speed for workers
-:- dynamic activateDoubleSpeed/0.  
+:- dynamic activateDoubleSpeed/0.
 % Switch that signals Main Module to get active
-:- dynamic haveMove/0. 
+:- dynamic haveMove/0.
 % switch to recognize simulations have different characteristics on sim change
-:- dynamic expectDifferentSimulations/0. 
+:- dynamic expectDifferentSimulations/0.
 % switch timing step calculation of agent
-:- dynamic activateTimer/0. 
+:- dynamic activateTimer/0.
 % prevents reinit in first sim
-:- dynamic thisIsTheFirstSim/0. 
+:- dynamic thisIsTheFirstSim/0.
 % switch to send calculated offsets to everyone
-:- dynamic calculatedNewOffset/0. 
+:- dynamic calculatedNewOffset/0.
 % switch to recalculate dispenses distance
-:- dynamic calculateNewDispenserMD/0. 
+:- dynamic calculateNewDispenserMD/0.
 % switch to recalculate goalzone distance
 :- dynamic calculateNewGoalzoneMD/0. 
 % switch to stop logging score after x sims
 :- dynamic stopScoreLogging/0. 
 
-
 % Counter for sim in tournament mode
-:- dynamic simCount/1. 
+:- dynamic simCount/1.
 % submitterLeader counts his submitted 2tasks
 :- dynamic count2Task/2. 
 % submitterLeader counts his submitted 3tasks
@@ -37,75 +36,75 @@
 :- dynamic cachedCount3Task/1. 
 
 % (Bool, Dir)
-:- dynamic haveBlockAttached/2. 
+:- dynamic haveBlockAttached/2.
 % switch dispenser delivered block (Bool, Step)
-:- dynamic haveDispenserDelivery/2. 
+:- dynamic haveDispenserDelivery/2.
 
 
 % step counter in belief of simulation
-:- dynamic step/1. 
+:- dynamic step/1.
 % timing step duration for agent
-:- dynamic elapseStepTime/1. 
+:- dynamic elapseStepTime/1.
 % Coordinates of agent XY
-:- dynamic agentAt/3. 
+:- dynamic agentAt/3.
 % nswe direction preferred for exploration
-:- dynamic randomAffinity/1. 
-% Variables for Manhatten Distance 
-:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. 
+:- dynamic randomAffinity/1.
+% Variables for Manhatten Distance
+:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0.
 % (X,Y,BlockType,MD) of dispenser to search out for
-:- dynamic targetDispenserAt/4. 
+:- dynamic targetDispenserAt/4.
 % closest of all known dispensers (X,Y,Blocktype, MD)
-:- dynamic targetClosestOfAllDispensersAt/4. 
+:- dynamic targetClosestOfAllDispensersAt/4.
 % do skip/explore until this step
-:- dynamic skipThisStep/1. 
+:- dynamic skipThisStep/1.
 % as told changes random affinity
-:- dynamic changeAffinityAfterTheseSteps/1. 
+:- dynamic changeAffinityAfterTheseSteps/1.
 % task the agent has chosen and works on (TaskName, TaskStep, Reward, X, Y, BlockType, Client/Server, NameSubmitter)
-:- dynamic currentChosenTask/8. 
+:- dynamic currentChosenTask/8.
 % dispenser percept data plus MD (X,Y,Type,Details,MD)
-:- dynamic mapDispenser/6. 
+:- dynamic mapDispenser/6.
  % goalzone percept data plus MD (X,Y,MD)
 :- dynamic mapGoalZone/3.
 % rolezone percept data plus MD (X,Y,MD)
-:- dynamic mapRoleZone/3. 
+:- dynamic mapRoleZone/3.
 
 % goalzone XY plus MD field (X,Y,MD)
 :- dynamic targetClosestGoalZone/3.
-% rolezone XY plus MD field (X,Y,MD) 
-:- dynamic targetClosestRoleZone/3. 
+% rolezone XY plus MD field (X,Y,MD)
+:- dynamic targetClosestRoleZone/3.
 % lowest and highest limit after which agent changes explore direction
-:- dynamic limitChangeStepMinMax/2. 
+:- dynamic limitChangeStepMinMax/2.
 
 % nearest Agent (Name, X, Y, MD).
-:- dynamic targetNearestAgent/4. 
+:- dynamic targetNearestAgent/4.
 % nearest Agent with needed block (Name, X, Y, MD).
-:- dynamic targetNearestAgentWithNeededBlock/4. 
+:- dynamic targetNearestAgentWithNeededBlock/4.
 % Message for offset calc (OwnX, OwnY, OtherX, OtherY, Step, AgentSender)
-:- dynamic cachedSeenOtherAgentAt/6. 
+:- dynamic cachedSeenOtherAgentAt/6.
 % message cached for offset
-:- dynamic cachedMyOffsetOfOtherAgent/5. 
+:- dynamic cachedMyOffsetOfOtherAgent/5.
 
 % relative coordinates to other agents coordinate system (relX, relY, TheirName)
-:- dynamic confirmedOffsetOfAgent/3. 
+:- dynamic confirmedOffsetOfAgent/3.
 % message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
-%:- dynamic seenOtherAgentAt/6. 
+%:- dynamic seenOtherAgentAt/6.
 % data for message (X,X, MyAgentName)
 %:- dynamic sawGoalzoneAt/3.
-% data for messages (X,Y, Type, MyAgentName) 
-%:- dynamic sawDispenserAt/4. 
+% data for messages (X,Y, Type, MyAgentName)
+%:- dynamic sawDispenserAt/4.
 
 % Variables related to world measurement
 % lists containing world X and Y sizes
-:- dynamic worldListX/1, worldListY/1. 
-% how long does it take for a distStepNamePosition message to get processed 
+:- dynamic worldListX/1, worldListY/1.
+% how long does it take for a distStepNamePosition message to get processed
 %(the greater the delay, the most sure we can be to have received all messages sent during a concrete step)
-:- dynamic messageProcessingDelay/1. 
+:- dynamic messageProcessingDelay/1.
 % how long does a distStepNamePosition message still lingers around after being processed
-:- dynamic messagePersitanceAfterDelay/1. 
+:- dynamic messagePersitanceAfterDelay/1.
 % Flags to steer world measurements.
-:- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0. 
+:- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0.
 % store the size of the world on X and Y
-:- dynamic worldSizeX/1, worldSizeY/1. 
+:- dynamic worldSizeX/1, worldSizeY/1.
 
 
 % messages can be commented out and still work; Variables related to goal zone and dispenser messaging
@@ -113,32 +112,42 @@
 :- dynamic cachedMsgRoleZoneData/3.
 :- dynamic cachedMsgDispenserData/6.
 % goalzone percept data plus sender name (X, Y, SenderName).
-%:- dynamic messageGoalZone/3. 
+%:- dynamic messageGoalZone/3.
 % goalzone percept data plus sender name (X, Y, SenderName).
 %:- dynamic messageDeletedGoalZone/3.
-% dispenser data plus sender name (X,Y,Type,Details,SenderName) 
-%:- dynamic messageDispenser/6. 
+% dispenser data plus sender name (X,Y,Type,Details,SenderName)
+%:- dynamic messageDispenser/6.
 % message containing just the sender name
-%:- dynamic messageNeedGoalZone/1. 
+%:- dynamic messageNeedGoalZone/1.
 % message containing the requested dispenser details (BlockType) and the sender name
-%:- dynamic messageNeedDispenser/2. 
+%:- dynamic messageNeedDispenser/2.
 
 % Variables related to choosing or Determine Role
+:- dynamic customRole/1. % role belief for non standard roles
 :- dynamic targetRole/1.
 :- dynamic randomSeed/1.
 :- dynamic positionInHirarchie/1.
 :- dynamic submitterLeader/0.
 
-% coordinate supprting agents of submitterleaders
+% coordinate supporting agents of submitterleaders
 %(TaskType,Name1,X1,Y1,Block1,Pending1,Connected1,Name2,X2,Y2,Block2,Pending2,Connected2,Name3,X3,Y3,Block3,Pending3,
 % Connected3)
 :- dynamic multiTaskSupporterStatus/19.
-
-% Variables related to locating other agents in the world
-% store / update other agents' positions
-%:- dynamic otherAgentAt/4. 
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
 :- dynamic storedOtherAgentStatus/9. 
+
+% Variables related to customRoleSaboteur role
+:- dynamic haveBlokeAttached/2. % Boolean and direction
+:- dynamic attachedBlokes/1. % Count of attached blokes
+:- dynamic targetBlokeCount/1. % Maximum number of attached blokes
+:- dynamic emptyDispenserCounter/3. % Count of time no agents were seen around a specific dispenser.
+:- dynamic emptyGoalZoneCounter/3. % Count of time no agents were seen around a specific goalZone.
+:- dynamic searchInDispenser/0. % switch to search for blokes next to dispensers
+:- dynamic searchInGoalzone/0. % switch to search for blokes next to goalzones
+:- dynamic minimumDistanceEmptyGoalZone/1. % Distance between next goal zone to be visited if current empty
+:- dynamic waitingTimeEmptyGoalZone/1. % Time to wait in an empty goal zone before moving to another one
+:- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
+:- dynamic getFree/0. % swicht to detach other bloke
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -156,27 +165,27 @@ transformTwoTimesXYD(w, X1, Y1, X2, Y2) :- Y2 = Y1, X2 is X1 - 2.
 localize(X1, Y1, X2, Y2, X3, Y3) :- X3 is X1 + X2, Y3 is Y1 + Y2.
 
 % Offset calculator
-calculateAgentOffset(ReceiverBaseX, ReceiverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY, 
-		     OffsetX, OffsetY) :- OffsetX is ReceiverBaseX + PerceptOffsetX - SenderBaseX, 
+calculateAgentOffset(ReceiverBaseX, ReceiverBaseY, SenderBaseX, SenderBaseY, PerceptOffsetX, PerceptOffsetY,
+		     OffsetX, OffsetY) :- OffsetX is ReceiverBaseX + PerceptOffsetX - SenderBaseX,
 	             OffsetY is ReceiverBaseY + PerceptOffsetY - SenderBaseY .
 
 % get random nswe direction
 randomDirection(Dir) :- random_between(0, 3, D),
 			integerToDirection(D, Dir).
-	
-% never go back with new random		
+
+% never go back with new random
 randomGoForwardDirection(AltDir, NewDir) :- random_between(0, 3, D),
 			integerToDirection(D, NewDir),
 			oppositeDirection(AltDir, OppositAltDir),
 			NewDir \= OppositAltDir.
-			
+
 % get a random number between 0 - 100
 getRandomNumberSeed(RandomSeed) :- random_between (0, 10000, RandomSeed).
-						
+
 % skip random steps
 skipRandomSteps(SkipSteps) :- random_between(0, 8, SkipSteps).
-			
-% get random 90 degree direction to initial affinity direction		
+
+% get random 90 degree direction to initial affinity direction
 random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 			flankingDirection(RandD, Affini, AltDir).
 
@@ -184,32 +193,32 @@ random90Direction(Affini, AltDir) :- random_between(0, 1, RandD),
 randomRotate(Dir) :- random_between(0, 1, R),
 			integerToRotate(R, Dir).
 
-% Give random number between lower and higher bound			
+% Give random number between lower and higher bound
 randomBetween(InLow, InHigh, RandOut) :- random_between(InLow, InHigh, RandOut).
 
 % Calculate distance XY coordinates concerning target targetMd
 calculateXYMd(X1, Y1, X2, Y2, Md) :- Md is abs(X1 - X2) + abs(Y1 - Y2).
 
 % Calculate distance XY coordinates concerning target targetMd and taking into account the world size
-%calculateXYMdWorldSize(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-  
+%calculateXYMdWorldSize(X1, Y1, X2, Y2, SizeX, SizeY, Md) :-
 %	(SizeX == 54321, SizeY == 54321, calculateXYMd(X1, Y1, X2, Y2, Md));
-%	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX), 
-%	                                   absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY), 
+%	(SizeX \== 54321, SizeY \== 54321, absDistInMeasuredWorld(X1, X2, SizeX, DistanceX),
+%	                                   absDistInMeasuredWorld(Y1, Y2, SizeY, DistanceY),
 %	                                   Md is DistanceX + DistanceY).
 
 % Calculate absolute distance between two points taking into account the size of the world
 %absDistInMeasuredWorld(ObjectPos, AgentPos, WorldSize, Distance) :-
-%    ( D1 is abs(ObjectPos - AgentPos), 
-%      D2 is abs(ObjectPos + WorldSize - AgentPos), 
-%     D3 is abs(AgentPos - ObjectPos), 
-%     D4 is abs(AgentPos + WorldSize - ObjectPos), 
+%    ( D1 is abs(ObjectPos - AgentPos),
+%      D2 is abs(ObjectPos + WorldSize - AgentPos),
+%     D3 is abs(AgentPos - ObjectPos),
+%     D4 is abs(AgentPos + WorldSize - ObjectPos),
 %     min_list([D1,D2,D3,D4], MinD), Distance is MinD ).
 
 % calculate minus or plus 1
 calculateMinusOne(A1, A2) :- A2 is (A1 - 1).
 calculatePlusOne(B1, B2) :- B2 is (B1 + 1).
 
-% return coordinates in front of attached block concerning move direction 
+% return coordinates in front of attached block concerning move direction
 % (DirMoving, BlockAttach, FrontBlockX, FrontBlockY)
 clearAttachedDirection(n, w, -1, -1).
 clearAttachedDirection(n, e, 1, -1).
@@ -286,7 +295,7 @@ rotateAgainstAffinity(w, n, cw).
 rotateAgainstAffinity(w, s, ccw).
 rotateAgainstAffinity(w, w, ccw).
 rotateAgainstAffinity(s, s, cw).
-rotateAgainstAffinity(s, w, cw). 
+rotateAgainstAffinity(s, w, cw).
 rotateAgainstAffinity(s, e, ccw).
 rotateAgainstAffinity(e, e, cw).
 rotateAgainstAffinity(e, n, ccw).
@@ -312,7 +321,7 @@ rotateToCoord(w, ccw, 0, 1).
 rotateToCoord(e, cw, 0, 1).
 rotateToCoord(e, ccw, 0, -1).
 
-% Gives the apparent displacement of the observed agent relative to the observing agent between t0 and t1. 
+% Gives the apparent displacement of the observed agent relative to the observing agent between t0 and t1.
 %distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
 
 % modulo function for 2 values. It only returns positive values.
@@ -330,7 +339,7 @@ getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
 % conditional modulo function: it only triggers if the world size is no longer 1000, it returns pos values
 %getModInt(X1,Y1,SizeX,SizeY,X2,Y2) :-
 %    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
-%    (getModInt(X1,SizeX,X2), getModInt(Y1,SizeY,Y2)). 
+%    (getModInt(X1,SizeX,X2), getModInt(Y1,SizeY,Y2)).
 
 % calculates the distance between an object and an agent according to the agent perception limits and the size of the world
 %getPerceivedDistance(ObjectAt, AgentAt, WorldSize, PerceptDistance, Z) :-
@@ -340,10 +349,10 @@ getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
 %                       (   Delta < 0, abs(Delta) > PerceptDistance, getModPos(Delta, WorldSize, V), ((abs(V) < abs(Delta), Z is V); (abs(V) >= abs(Delta), Z is Delta)))).
 
 % world size calculator
-%getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :- 
+%getWorldSize(PosDiff, OldWorldSize, NewWorldSize) :-
 %	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) > abs(PosDiff), NewWorldSize is abs(PosDiff));
 %	(abs(PosDiff) > 0, abs(PosDiff) < OldWorldSize, OldWorldSize - abs(PosDiff) < abs(PosDiff), NewWorldSize is OldWorldSize - abs(PosDiff));
-%	(PosDiff = 0, NewWorldSize is OldWorldSize); 
+%	(PosDiff = 0, NewWorldSize is OldWorldSize);
 %	(abs(PosDiff) >= OldWorldSize, NewWorldSize is OldWorldSize).
 
 % Counting the quantity of repeated world measurement in the world measurement list.
@@ -353,4 +362,3 @@ count_repeated([], _, 0, []).
 
 rle([X|Xs], [[C,X]|Ys]) :- count_repeated([X|Xs], X, C, Zs), rle(Zs, Ys).
 rle([], []).
-
