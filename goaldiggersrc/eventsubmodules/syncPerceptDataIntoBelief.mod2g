@@ -90,4 +90,11 @@ module syncPerceptDataIntoBelief {
 	           	then delete(mapRoleZone(X, Y, Md)).
   	}
 	
+	% DELETE detached blokes
+	forall bel(haveBlokeAttached(true,Dir), directionToCoordinate(Dir, X, Y)) do {
+		if not(percept(attached(X, Y))), bel(attachedBlokes(Count), NewCount is Count - 1) 
+		then delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir))
+		     + delete(attachedBlokes(Count)) + insert(attachedBlokes(NewCount)). 
+	}
+	
 } % end module
