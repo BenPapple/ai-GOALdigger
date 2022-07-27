@@ -17,7 +17,7 @@ use "../blockhandling/connectBlocks" as module.
  *
  */
 
-module executeTestWorkerRole {
+module executeSaboteurRole {
 
 	% preferred target switches
 	if not(bel(searchInGoalzone)) 

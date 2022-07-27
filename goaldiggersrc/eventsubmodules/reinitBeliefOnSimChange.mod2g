@@ -57,14 +57,10 @@ module reinitBeliefOnSimChange {
 	%reset assign Role
 	if bel(positionInHirarchie(Position)) 
 		then delete(positionInHirarchie(Position)) + 
-		     insert(positionInHirarchie(0)).
-
-	% reset test worker role
-	if bel(testWorkerNamed)
-	    then delete(testWorkerNamed).		     
+		     insert(positionInHirarchie(0)).     
 	
-	if bel(role(testWorker))
-	    then delete(role(testWorker)).
+	if bel(customRole(customRoleSaboteur))
+	    then delete(customRole(customRoleSaboteur)).
 	
 	if bel(targetRole(Role)) 
 		then delete(targetRole(Role)) + 

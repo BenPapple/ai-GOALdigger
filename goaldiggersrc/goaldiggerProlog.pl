@@ -123,7 +123,7 @@
 %:- dynamic messageNeedDispenser/2.
 
 % Variables related to choosing or Determine Role
-:- dynamic role/1. % role belief for non standard roles
+:- dynamic customRole/1. % role belief for non standard roles
 :- dynamic targetRole/1.
 :- dynamic randomSeed/1.
 :- dynamic positionInHirarchie/1.
@@ -136,8 +136,7 @@
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
 :- dynamic storedOtherAgentStatus/9. 
 
-% Variables related to testWorker role
-:- dynamic testWorkerNamed/0. % Switch to prevent several test workers being named.
+% Variables related to customRoleSaboteur role
 :- dynamic haveBlokeAttached/2. % Boolean and direction
 :- dynamic attachedBlokes/1. % Count of attached blokes
 :- dynamic targetBlokeCount/1. % Maximum number of attached blokes

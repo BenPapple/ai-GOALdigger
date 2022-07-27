@@ -84,13 +84,13 @@ module goaldiggerEvent {
 	% SUBMODULE help test worker tour around the goal zones
 	      
     % remove empty goal zone flag if agent seen in goal zone
-	if bel(role(testWorker)), percept(team(MyTeam), thing(X, Y, entity, OtherTeam), OtherTeam \= MyTeam, goalZone(X, Y)) then {
+	if bel(customRole(customRoleSaboteur)), percept(team(MyTeam), thing(X, Y, entity, OtherTeam), OtherTeam \= MyTeam, goalZone(X, Y)) then {
 		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
 	}
     
     %ToDo: Refactor this. WARNING: Changing A and B for some kind of X3, Y3 doesn't work. I don't know why.
 	% set flag if test worker in empty goal zone
-	if bel(role(testWorker)), percept(goalZone(0, 0)), not(percept(team(MyTeam), thing(X1, Y1, entity, OtherTeam), 
+	if bel(customRole(customRoleSaboteur)), percept(goalZone(0, 0)), not(percept(team(MyTeam), thing(X1, Y1, entity, OtherTeam), 
 	       OtherTeam \= MyTeam, goalZone(X1, Y1))), bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
 	then {
 	   if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) then 

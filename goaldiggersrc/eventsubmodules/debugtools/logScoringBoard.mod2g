@@ -10,6 +10,10 @@ module logScoringBoard {
     % submitterLeader
     if percept(step(SimStep), SimStep == 25), bel(submitterLeader) 
     	then print("I am your SubmitterLeader!").
+    	
+    % saboteur
+    if percept(step(SimStep), SimStep == 25), bel(customRole(customRoleSaboteur)) 
+    	then print("I am the sneaky saboteur!").
 
     % 2Task success logging
 	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
@@ -88,6 +92,9 @@ module logScoringBoard {
 	
 	% just print it to find submitterleader in logs	 
     forall (_).sent(msgSubmitterLeader(MyName)) do print(MyName+" is submitterLeader!").
+    
+    % just print it to find saboteur in logs	 
+    forall (_).sent(msgCustomRole(MyName)) do print(MyName+" is the saboteur!").
     
 		
 }

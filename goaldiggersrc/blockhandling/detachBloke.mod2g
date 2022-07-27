@@ -16,4 +16,5 @@ module detachBloke {
 	   OtherTeam \= MyTeam), 
 	   bel(directionToCoordinate(Dir, X, Y)) 
 	then detach(Dir).
+	
 }

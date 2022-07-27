@@ -4,7 +4,7 @@ use "pathfinding/executeRandomMove" as module.
 use "./actionhandling/preActionCleanup" as module.
 use "./rolehandling/executeDefaultRole" as module.
 use "./rolehandling/executeWorkerRole" as module.
-use "./rolehandling/executeTestWorkerRole" as module.
+use "./rolehandling/executeSaboteurRole" as module.
 use "./rolehandling/executeExplorerRole" as module.
 
 exit=never.
@@ -29,8 +29,8 @@ module goaldiggerMain {
         then executeRandomMove.
 
     	% Handle test worker role
-    	if bel(role(testWorker)), percept(role(worker))
-        then executeTestWorkerRole.
+    	if bel(customRole(customRoleSaboteur)), percept(role(worker))
+        then executeSaboteurRole.
 
 	    % Handle DEFAULT role
     	if percept(role(default))

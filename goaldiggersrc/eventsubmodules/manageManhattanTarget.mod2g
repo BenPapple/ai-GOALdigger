@@ -38,7 +38,7 @@ module manageManhattanTarget {
 
 
 	% when role test worker set goalzone as target
-	if bel(role(testWorker)), bel(searchInGoalzone), 
+	if bel(customRole(customRoleSaboteur)), bel(searchInGoalzone), 
 	   not(bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)) then {
 		   		if true then updateGoalzoneDistance.
 		   		if bel(targetClosestGoalZone(X, Y, _)) then {
@@ -48,8 +48,8 @@ module manageManhattanTarget {
 				}
 	}
 
-	% when role test worker in empty goalZone set other goalzone as target
-	if bel(role(testWorker)), bel(searchInGoalzone), 
+	% when role saboteur worker in empty goalZone set other goalzone as target
+	if bel(customRole(customRoleSaboteur)), bel(searchInGoalzone), 
 	   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
 	   then {
 		   		if true then updateGoalzoneDistance.
@@ -72,7 +72,7 @@ module manageManhattanTarget {
 	
 
 	% when role test worker and without bloke set dispenser as target
-	if bel(role(testWorker), haveBlokeAttached(false,_), searchInDispenser,
+	if bel(customRole(customRoleSaboteur), haveBlokeAttached(false,_), searchInDispenser,
 		   mapDispenser(X,Y,dispenser,BlockType,_,_)), percept(task(_, _, _,[req(_,_,BlockType)])), 
 		   not(bel(emptyDispenserCounter(X, Y, Count), Count > 20)) then {		
 				if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
