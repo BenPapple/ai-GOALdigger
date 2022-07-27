@@ -9,7 +9,7 @@ use "../goaldiggerAction" as actionspec.
 module updateSubmitterRanking {
 	
 	% seed collision choose new seed
-	forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _)) 
+	forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _, _)) 
 		do {
 	    	if bel(randomSeed(MyRandomSeed), MyRandomSeed == OtherAgentSeed) 
 	    		then {
@@ -27,29 +27,39 @@ module updateSubmitterRanking {
 		         insert(positionInHirarchie(0)).	
 		
 		% position in hierarchy will increase for every lower other agent's randomSeed
-		forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _)) 
+		forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _, _)) 
 			do {
-			    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), MyRandomSeed > OtherAgentSeed, 
-				       NewPositionInHirarchie is PositionInHirarchie + 1) 
-				    then delete(positionInHirarchie(PositionInHirarchie)) + 
-				         insert (positionInHirarchie(NewPositionInHirarchie)).
+		    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), MyRandomSeed > OtherAgentSeed, 
+			       NewPositionInHirarchie is PositionInHirarchie + 1) 
+			    then delete(positionInHirarchie(PositionInHirarchie)) + 
+			         insert (positionInHirarchie(NewPositionInHirarchie)).
 		}
 		
 		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1)
-			then insert(submitterLeader) +
-			     allother.send(msgSubmitterLeader(MyName)).
+			  then {
+			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
+			 allother.send(msgSubmitterLeader(MyName)).			 
+		}
+		
+		% assign submitterLeader
+		if percept(teamSize(SizeTeam), name(MyName)), 
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 2)
+			then {
+			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
+			 allother.send(msgSubmitterLeader(MyName)).			 
+		}
 			     
 		% name test worker
 		if not(bel(testWorkerNamed)), bel(submitterLeader, storedOtherAgentStatus(TestWorkerName,_,_,_,_,_,_,_))
-		   then insert(testWorkerNamed) + allother.send(testWorkerName(TestWorkerName)). 
-			
-			
-	    % remove submitterLeader
+		   then insert(testWorkerNamed) + allother.send(testWorkerName(TestWorkerName)). 		
+		
+	  % remove submitterLeader
 		if percept(teamSize(SizeTeam)), 
 		   bel(submitterLeader, positionInHirarchie(PositionInHirarchie), 
-		       PosCheck is SizeTeam - PositionInHirarchie, PosCheck \= 1)
+		       PosCheck is SizeTeam - PositionInHirarchie, PosCheck > 2)
 			then delete(submitterLeader).
 	}
+	
 } % end module

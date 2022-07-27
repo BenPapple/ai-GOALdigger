@@ -29,7 +29,7 @@ module syncMessageDataIntoBelief {
 	forall bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)), 
 	       percept(step(SimStep))
 		do {
-			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step < SimStep - 5)
+			if bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender), Step < SimStep - 4)
 				then delete(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)).
 	}
 	
@@ -56,19 +56,20 @@ module syncMessageDataIntoBelief {
 	}	
 		
 	% CREATE belief about status messages
-	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) 
+	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached, TaskRole)) 
 		do {
-	    	if not(bel(storedOtherAgentStatus(SenderName, _, _, _, _, _, _, _))) 
+	    	if not(bel(storedOtherAgentStatus(SenderName, _, _, _, _, _, _, _, _))) 
 	    		then insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, 
-	    		                                   X, Y, BlockTypeAttached)).
+	    		                                   X, Y, BlockTypeAttached, TaskRole)).
 	}
 	    
 	% UPDATE belief about status messages
-	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached)) 
+	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached, TaskRole)) 
 		do {
-	    	if bel(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8), MsgStep > OldMsgStep) 
-	    		then delete(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8)) + 
+	    	if bel(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8, V9), MsgStep > OldMsgStep) 
+	    		then delete(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8, V9)) + 
 	                 insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, 
-	                                               BlockTypeAttached)).
+	                                               BlockTypeAttached, TaskRole)).
 	}
+	
 } % end module

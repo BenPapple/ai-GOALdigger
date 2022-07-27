@@ -21,16 +21,19 @@
 % switch to recalculate dispenses distance
 :- dynamic calculateNewDispenserMD/0.
 % switch to recalculate goalzone distance
-:- dynamic calculateNewGoalzoneMD/0.
-
+:- dynamic calculateNewGoalzoneMD/0. 
+% switch to stop logging score after x sims
+:- dynamic stopScoreLogging/0. 
 
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
 % submitterLeader counts his submitted 2tasks
-:- dynamic count2Task/2.
+:- dynamic count2Task/2. 
+% submitterLeader counts his submitted 3tasks
+:- dynamic count3Task/2. 
 % cached so it survives map change for score table
-:- dynamic cachedCount2Task/1.
-
+:- dynamic cachedCount2Task/1. 
+:- dynamic cachedCount3Task/1. 
 
 % (Bool, Dir)
 :- dynamic haveBlockAttached/2.
@@ -126,6 +129,13 @@
 :- dynamic positionInHirarchie/1.
 :- dynamic submitterLeader/0.
 
+% coordinate supporting agents of submitterleaders
+%(TaskType,Name1,X1,Y1,Block1,Pending1,Connected1,Name2,X2,Y2,Block2,Pending2,Connected2,Name3,X3,Y3,Block3,Pending3,
+% Connected3)
+:- dynamic multiTaskSupporterStatus/19.
+% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
+:- dynamic storedOtherAgentStatus/9. 
+
 % Variables related to testWorker role
 :- dynamic testWorkerNamed/0. % Switch to prevent several test workers being named.
 :- dynamic haveBlokeAttached/2. % Boolean and direction
@@ -139,12 +149,6 @@
 :- dynamic waitingTimeEmptyGoalZone/1. % Time to wait in an empty goal zone before moving to another one
 :- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
 :- dynamic getFree/0. % swicht to detach other bloke
-
-% Variables related to locating other agents in the world
-% store / update other agents' positions
-%:- dynamic otherAgentAt/4.
-% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached)
-:- dynamic storedOtherAgentStatus/8.
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.

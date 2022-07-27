@@ -49,6 +49,7 @@ module executeWorkerRole {
 	 */		  
 	if bel(haveBlockAttached(true,DirBlock)) 
 		then {
+
 			% detach after connect success as supportingAgent
 			if percept(lastActionResult(success), lastAction(connect)),
 			   not(bel(submitterLeader))
@@ -60,61 +61,75 @@ module executeWorkerRole {
 	    	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
 	    	       BlockType \== BlockTypeAttached, TaskStep >= SimStep) 
 	    	    then preActionCleanup + detach(DirBlock).
-	
-			% Moving around Submitting agent in rain drop pattern 
+
+			% Moving around 2task Submitting agent in rain drop pattern 
 			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
 			           YBlock is YSubmit + 1, thing(XBlock, YBlock, block, SouthBlock), 
-			           XPlusY is XSubmit + YSubmit, XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
+			           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
 			   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
 			   bel(currentChosenTask(TaskName, TaskStep, _, _, _, _, supportingAgent, SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached), 
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
 				   SubmitterBlockTypeAttached == SouthBlock),           
 			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
 				then executeMoveAroundSubmitter.
+
+			% Moving around 3task Submitting agent in rain drop pattern 
+			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+			           YBlock is YSubmit + 1, thing(XBlock, YBlock, block, SouthBlock), 
+			           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
+			   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
+			   bel(currentChosenTask(TaskName, TaskStep, _, _, _, _, supportingAgent, SubmitterName)),
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
+				   SubmitterBlockTypeAttached == SouthBlock),           
+			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
+				then executeMoveAroundSubmitter.
 			
 	    	% as submitterLeader don't wait on goalzone and on dispenser
-	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgentTwoTask, _)),
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,SubmitType, _)),
+	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	    	   percept(goalZone(0,0), thing(0, 0, dispenser, _), step(SimStep), TaskStep >= SimStep) 
 	    	    then executeRandomMove.
 	    	    
 	    	% as submitterLeader don't have block on dispenser
-	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgentTwoTask, _)),
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,SubmitType, _)),
+	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	    	   percept(goalZone(0,0), thing(0, 1, dispenser, _), step(SimStep), TaskStep >= SimStep) 
 	    	    then executeRandomMove.
 	    	    
 	        % as submitter move on occupied south position
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _)),
 	    	   percept(goalZone(0,0), thing(0, 1, entity, _), step(SimStep), TaskStep >= SimStep),
-	    	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask) 
+	    	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
+	    	       OneOrTwoTask == submittingAgentThreeTask) 
 	    	    then executeRandomMove.
 	
-	    	% submit task if in goal zone with block and corresponding task available
+	    	% submit 1-task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(TaskName, TaskStep, _, _, _, _,submittingAgentOneTask, _)),
 	    	   percept(task(TaskName ,TaskStep, 10,[req(_,_,_)])),
 	    	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) 
 	    	   	then handleTaskSubmit.
 	    	 
-	    	% as 1tasksubmitter with no active task explore  
-	    	if bel(currentChosenTask(TaskName, TaskStep, _, _, _, _,submittingAgentOneTask, _)),
-	    	   not(percept(task(TaskName ,TaskStep, 10,[req(_,_,_)]))) 
+	    	% as 1tasksubmitter/supportingAgent with no active task explore  
+	        if bel(currentChosenTask(_, TaskStep, _, _, _, _, PlanType, _)),
+	           bel(PlanType == supportingAgent; PlanType == submittingAgentOneTask),
+	    	   percept(step(SimStep), TaskStep < SimStep) 
 	    	   	then executeRandomMove.
 	    
 	    	% submit task if in goal zone with block and corresponding task available
-	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,submittingAgentTwoTask, _)),
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,SubmitType, _)),
+	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
 	    	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) 
 	    	   	then handleTaskSubmit.
 	    	
 	    	% Prepare for connect by rotating block to north and if north connect
-	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition), DirBlock \= n)
+	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition), DirBlock \= n),
+	    	   bel(currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _)),
+	    	   percept(step(SimStep), TaskStep >= SimStep)
 	    	    then rotateBlockToNorth.
-	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition))
+	    	if bel(agentAt(X, Y, _), targetMd(X, Y, supportingPosition)),
+	    	   bel(currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _)),
+	    	   percept(step(SimStep), TaskStep >= SimStep)
 	    	    then preActionCleanup + connectBlocks.
-		 
-	    	% move to other agent to help in multitask 
-	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
-	    	       targetMd(_, _, otherAgentAt)), 
-	    	   bel(step(SimStep), TaskStep >= SimStep) 
-	    	   	then executeManhattanMove.
 	    	 
 	    	% Move to supporting position for multi task
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
@@ -126,7 +141,8 @@ module executeWorkerRole {
 		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
 		           targetMd(_, _, goalzone)), 
 		       bel(step(SimStep), TaskStep >= SimStep),
-		       bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask) 
+		       bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
+		           OneOrTwoTask == submittingAgentThreeTask) 
 		        then executeManhattanMove.
 	        	
 	    	% random movemement actions while having block attached

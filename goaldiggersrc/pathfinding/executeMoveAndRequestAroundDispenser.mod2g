@@ -46,16 +46,24 @@ module executeMoveAndRequestAroundDispenser {
 	   	then {
 			% request block when nswe of dispenser
 			if percept(thing(1, 0, dispenser, BlockType)), 
-			   not(percept(thing(1, 0, block,_))) 
+			   not(percept(thing(1, 0, block,_))),
+			   not(percept(thing(1, 0, entity,_))),
+			   not(percept(thing(1, 0, obstacle,_))) 
 				then preActionCleanup + request(e).
 			if percept(thing(-1, 0, dispenser, BlockType)), 
-			   not(percept(thing(-1, 0, block,_))) 
+			   not(percept(thing(-1, 0, block,_))),
+			   not(percept(thing(-1, 0, entity,_))),
+			   not(percept(thing(-1, 0, obstacle,_)))  
 				then preActionCleanup + request(w).
 			if percept(thing(0, 1, dispenser, BlockType)), 
-			   not(percept(thing(0, 1, block,_))) 
+			   not(percept(thing(0, 1, block,_))),
+			   not(percept(thing(0, 1, entity,_))),
+			   not(percept(thing(0, 1, obstacle,_)))  
 				then preActionCleanup + request(s).
 			if percept(thing(0, -1, dispenser, BlockType)), 
-			   not(percept(thing(0, -1, block,_))) 
+			   not(percept(thing(0, -1, block,_))),
+			   not(percept(thing(0, -1, entity,_))),
+			   not(percept(thing(0, -1, obstacle,_)))  
 				then preActionCleanup + request(n).
 			
 			% clear block when nswe of dispenser
@@ -75,6 +83,24 @@ module executeMoveAndRequestAroundDispenser {
 			   percept(thing(0, -1, block,_)), 
 			   not(percept(attached(0, -1))) 
 				then preActionCleanup + clear(0, -1).
+
+			% clear obstacle when nswe of dispenser	
+			if percept(thing(1, 0, dispenser,_)), 
+			   percept(thing(1, 0, obstacle,_)), 
+			   not(percept(attached(1, 0))) 
+				then preActionCleanup + clear(1, 0).
+			if percept(thing(-1, 0, dispenser,_)), 
+			   percept(thing(-1, 0, obstacle,_)), 
+			   not(percept(attached(-1, 0))) 
+				then preActionCleanup + clear(-1, 0).
+			if percept(thing(0, 1, dispenser,_)), 
+			   percept(thing(0, 1, obstacle,_)), 
+			   not(percept(attached(0, 1))) 
+				then preActionCleanup + clear(0, 1).
+			if percept(thing(0, -1, dispenser,_)), 
+			   percept(thing(0, -1, obstacle,_)), 
+			   not(percept(attached(0, -1))) 
+				then preActionCleanup + clear(0, -1).	
 	}
 
 	% if entity around and block on near dispenser move out and skip X turns
@@ -177,4 +203,5 @@ module executeMoveAndRequestAroundDispenser {
 	
 	% obligatory random/skip.
 	if true then preActionCleanup + executeRandomMove.
+	
 } % module

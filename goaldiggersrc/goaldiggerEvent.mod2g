@@ -13,7 +13,7 @@ use "./eventsubmodules/simpleworldcalculation/calculateWorldSize" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/syncMessageDataIntoBelief" as module.
-use "./eventsubmodules/messageMultiTaskCoordination" as module.
+use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateSubmitterRanking" as module.
@@ -43,7 +43,7 @@ module goaldiggerEvent {
 		then delete(thisIsTheFirstSim).
 	
 	% Logging made points by agents
-	if not(bel(lDebugOn)) 
+	if true
 		then logScoringBoard.
 
 	% SUBMODULE managing success and partial_success percepts
@@ -67,14 +67,11 @@ module goaldiggerEvent {
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffset.
 	% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-	if true then updateWorldSizeData.
-	if true then calculateWorldSize.
+	%if true then updateWorldSizeData.
+	%if true then calculateWorldSize.
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
-
-%	% SUBMODULE update nearest Agent on map for submitterleader
-%	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) then updateNearestAgentData.
 
 	% SUBMODULE check messages about dispensers if none known
 	if true then handleMessageDispenser.	

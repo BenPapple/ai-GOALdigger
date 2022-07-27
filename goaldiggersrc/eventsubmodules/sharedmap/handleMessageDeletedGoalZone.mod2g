@@ -19,4 +19,5 @@ module handleMessageDeletedGoalZone {
 			         print("Deleted"+mapGoalZone(X1,Y1,12345)+" Offset "+ 
 			               confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName)).
 		}
+		
 }

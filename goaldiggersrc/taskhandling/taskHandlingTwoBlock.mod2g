@@ -9,11 +9,21 @@ use "../eventsubmodules/updateDispenserDistance" as module.
 
 module taskHandlingTwoBlock {
 
+    % reset supporter status for multitask
+	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, 
+	                                W19)) 
+        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17,
+                                             W18, W19)) +
+             insert(multiTaskSupporterStatus(noTask, placeholder, placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder, placeholder, placeholder, placeholder, placeholder,
+                                             placeholder, placeholder, placeholder, placeholder, placeholder, 
+                                             placeholder, placeholder, placeholder)).
+
 	% choose 2-block tasks if own block fits left req fields
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
 	   percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockTypeAttached),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)) 
 	    then {	
 	        if not(bel(calculateNewGoalzoneMD)) 
@@ -30,7 +40,7 @@ module taskHandlingTwoBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
 	   percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockTypeAttached)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 60),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)) 
 	    then {
 	        if not(bel(calculateNewGoalzoneMD)) 
@@ -49,7 +59,7 @@ module taskHandlingTwoBlock {
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block left req
 	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -65,7 +75,7 @@ module taskHandlingTwoBlock {
 	
 	% choose 2-block tasks if it exists and nearestdispenser with right block right req
 	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -81,7 +91,7 @@ module taskHandlingTwoBlock {
 
 	% choose 2-block tasks if it exists and currenttask dispenser left req
 	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -97,7 +107,7 @@ module taskHandlingTwoBlock {
 	
 	% choose 2-block tasks if it exists and currenttask dispenser right req
 	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 90),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -113,7 +123,7 @@ module taskHandlingTwoBlock {
 
 	% choose 2-block tasks if it exists and both dispensers known left req
 	if percept(task(TaskName ,TaskStep, 40,[req(0, 1, BlockType),req(_, _, BlockTypeOther)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -129,7 +139,7 @@ module taskHandlingTwoBlock {
 
 	% choose 2-block tasks if it exists and both dispensers known right req
 	if percept(task(TaskName ,TaskStep, 40,[req(_, _, BlockTypeOther),req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 110),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 100),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _))
 	    then {
@@ -142,4 +152,5 @@ module taskHandlingTwoBlock {
 				     print("ModuleChoseTask 2task basic disp known") + 
 				     exit-module.
 	} 
+	
 } % end module

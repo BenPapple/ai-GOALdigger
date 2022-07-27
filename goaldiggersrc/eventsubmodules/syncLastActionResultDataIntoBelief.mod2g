@@ -104,16 +104,37 @@ module syncLastActionResultDataIntoBelief {
 		   	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) +
 		         insert(currentChosenTask(task0, -1, 10 , 0, 1, b5, needNewTask, needNewTask)).
 
+		% successful connect submitter update connected
+		if percept(lastAction(connect), lastActionParams([NameSupporter, _, _])), 
+		   bel(submitterLeader) 
+		    then {
+		   if bel(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, 
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, connected, W8, W9, W10, W11, W12, 
+		                                         W13, W14, W15, W16, W17, W18, W19)).
+		   if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14, W15,
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, 
+		                                         connected, W14, W15, W16, W17, W18, W19)).
+		 }
+	
 		% successful submit 1task agent set to find new task
 		if percept(lastAction(submit)),
 		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentOneTask, V8))
 		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentOneTask, V8)) +
 		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).
 
-		% successful submit suubmittingAgent set to find new partner
-		if percept(lastAction(submit)),
-		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, NameOldSupporter))
-		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, NameOldSupporter)) +
-		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).
+		% successful submit submittingAgent set to find new partner
+		if percept(lastAction(submit)), 
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)), 
+		   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask)
+		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)) + 
+		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submitterLeaderNeedsNewTask, needNewTask)).
 	}% lastaction success
+	
 }
+

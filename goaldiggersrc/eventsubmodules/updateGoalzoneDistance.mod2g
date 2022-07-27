@@ -33,4 +33,5 @@ module updateGoalzoneDistance {
 			    then delete(targetClosestGoalZone(X, Y, MDTarget)) + 
 			         insert(targetClosestGoalZone(X2, Y2, MDZone)).
 	}
+	
 } % module

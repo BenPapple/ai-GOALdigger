@@ -25,27 +25,69 @@ module logScoringBoard {
 	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
 	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).
 	 }
+	 
+	% 3Task success logging
+	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
+	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+	   bel(currentChosenTask(TaskName, _, 90, _, _, _, _, _), count3Task(Num3Task, OldStep), 
+	       NewCount is Num3Task +1, CurrentStep > OldStep)
+	    then {
+	        if bel(count3Task(Num3Task, OldStep)) 
+	            then delete(count3Task(Num3Task, OldStep)) +
+	                 insert(count3Task(NewCount, CurrentStep)) +
+	                 print("Agent made 90 Points  On Step " + CurrentStep + " In Sim " + 
+	                         SimCount+"3TaskGoals: "+NewCount).
+	        if bel(count3Task(NumUpd, _), cachedCount3Task(V1)) 
+	            then delete(cachedCount3Task(V1)) + insert(cachedCount3Task(NumUpd)).
+	 }
+
+	% score table sim end
+    if not(percept(score(Score1), score(Score2), Score1 \= Score2)),
+       percept(score(Score1), ranking(Ranked), simEnd, step(0)),
+       bel(cachedCount2Task(Num2Task),cachedCount3Task(Num3Task),simCount(SimCountOld), SimCount is SimCountOld -1) 
+       	then print("Simulation"+SimCount+"ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+
+       			   " 2Task: "+Num2Task+" 3Task: "+Num3Task) +
+		     delete(cachedCount2Task(Num2Task)) + 
+		     insert(cachedCount2Task(0)) +
+		     delete(cachedCount3Task(Num3Task)) + 
+		     insert(cachedCount3Task(0)).
 
 	% score table sim end
     if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(0)),
-       bel(cachedCount2Task(Num2Task),simCount(SimCountOld), SimCount is SimCountOld -1) 
+       bel(cachedCount2Task(Num2Task),cachedCount3Task(Num3Task),simCount(SimCountOld), SimCount is SimCountOld -1) 
        	then print("Simulation"+SimCount+"ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+
-       			   " 2Task: "+Num2Task) +
+       			   " 2Task: "+Num2Task+" 3Task: "+Num3Task) +
 		     delete(cachedCount2Task(Num2Task)) + 
-		     insert(cachedCount2Task(0)).
+		     insert(cachedCount2Task(0)) +
+		     delete(cachedCount3Task(Num3Task)) + 
+		     insert(cachedCount3Task(0)).
 		     
 	% score last sim
-	if percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(749)),
-	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task)) 
-	   	then print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task) +
+	if not(bel(stopScoreLogging)),
+	   percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(749)),
+	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task),cachedCount3Task(Num3Task)) 
+	   	then print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task
+	   	           +" 3Task: "+Num3Task) +
 		     delete(cachedCount2Task(Num2Task)) + 
-		     insert(cachedCount2Task(0)).
+		     insert(cachedCount2Task(0)) +
+		     delete(cachedCount3Task(Num3Task)) + 
+		     insert(cachedCount3Task(0)) +
+		     insert(stopScoreLogging).
 		     
 	% score last sim alt
-	if percept(score(Score1), ranking(Ranked), simEnd, step(749)),
-	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task)) 
-	   	then print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+" 2Task: "+Num2Task) +
+	if not(bel(stopScoreLogging)),
+	   percept(score(Score1), ranking(Ranked), simEnd, step(749)),
+	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task), cachedCount3Task(Num3Task)) 
+	   	then print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+" 2Task: "+Num2Task
+	   	           +" 3Task: "+Num3Task) +
 			 delete(cachedCount2Task(Num2Task)) + 
-			 insert(cachedCount2Task(0)).
+			 insert(cachedCount2Task(0)) +
+			 delete(cachedCount3Task(Num3Task)) + 
+			 insert(cachedCount3Task(0)) +
+		     insert(stopScoreLogging).
+	
+	% just print it to find submitterleader in logs	 
+    forall (_).sent(msgSubmitterLeader(MyName)) do print(MyName+" is submitterLeader!").
+    
 		
 }

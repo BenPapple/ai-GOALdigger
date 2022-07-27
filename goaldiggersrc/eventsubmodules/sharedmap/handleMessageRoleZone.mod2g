@@ -31,4 +31,5 @@ module handleMessageRoleZone {
 			if not(bel(confirmedOffsetOfAgent(_,_,SenderName), cachedMsgRoleZoneData(X,Y,SenderName))) 
 			    then insert(cachedMsgRoleZoneData(X,Y,SenderName)).
 	}
+	
 }

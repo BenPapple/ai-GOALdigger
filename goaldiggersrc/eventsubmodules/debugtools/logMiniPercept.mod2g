@@ -43,9 +43,6 @@ module logMiniPercept {
 	    if not(bel(submitterLeader)) ,bel(positionInHirarchie(PositionInHirarchie))
 	        then print("Agent hierarchy position:"| PositionInHirarchie).
 
-	    % log score board
-        if true then logScoringBoard.
-
 		% Simulation counter
 		if bel(simCount(SimCount))
 			then print("This is simulation: " + SimCount).
@@ -73,7 +70,7 @@ module logMiniPercept {
 	    	then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).
 
 	    if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, NameSupporter)),
-	       bel(storedOtherAgentStatus(NameSupporter, _, _, _, _, X, Y, Block)),
+	       bel(storedOtherAgentStatus(NameSupporter, _, _, _, _, X, Y, Block, _)),
 	       bel(confirmedOffsetOfAgent(OffsetX,OffsetY,NameSupporter)),
 	       bel(XNew is X + OffsetX, YNew is Y + OffsetY)
 	     	then print("Supporter AgentAt: "| XNew| YNew+"Block: "| Block).
