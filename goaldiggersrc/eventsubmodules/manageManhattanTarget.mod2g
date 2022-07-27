@@ -64,11 +64,11 @@ module manageManhattanTarget {
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(_, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
 	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
-		   targetMd(X, Y, Target), Target \== supportingPosition),
+		   targetMd(X, Y, Target)),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
-	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 2 )
+	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 1 )
 		then delete(targetMd(X, Y, Target)) + 
-			 insert(targetMd(C2, D2, otherAgentAt)) + 
+			 insert(targetMd(C2, D2, supportingPosition)) + 
 			 insert(executeManhattan).
 	
 	% Moving around 2-task Submitting agent for docking sequence
@@ -79,8 +79,14 @@ module manageManhattanTarget {
 	   	then {
 			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
 			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
-			       SubmitterBlockTypeAttached == SouthBlock), 
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
+			       SubmitterBlockTypeAttached == SouthBlock),
+			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
+			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
+			   bel(agentAt(MyX, MyY, _)),
+			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
+			   bel(DiffX is SubMdX - MyX + XSubmit, DiffY is SubMdY - MyY + YSubmit),
+			   bel(DiffX =< 1, DiffY =< 1),
 			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
 			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
 			       targetMd(Xdel, Ydel, Zdel))
@@ -97,8 +103,14 @@ module manageManhattanTarget {
 	   	then {
 			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
 			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
-			       SubmitterBlockTypeAttached == SouthBlock), 
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
+			       SubmitterBlockTypeAttached == SouthBlock),
+			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
+			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
+			   bel(agentAt(MyX, MyY, _)),
+			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
+			   bel(DiffX is SubMdX - MyX + XSubmit, DiffY is SubMdY - MyY + YSubmit),
+			   bel(DiffX =< 1, DiffY =< 1),
 			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
 			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
 			       targetMd(Xdel, Ydel, Zdel))
@@ -106,7 +118,7 @@ module manageManhattanTarget {
 			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
 			         insert(executeManhattan).
 	}
-	
+%	
 	% Manhattan Magic calculate nswe
 	if bel(executeManhattan) 
 		then helperManhattanCalc.	

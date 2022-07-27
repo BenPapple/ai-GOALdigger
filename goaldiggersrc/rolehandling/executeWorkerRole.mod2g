@@ -128,6 +128,7 @@ module executeWorkerRole {
 	    	    then preActionCleanup + connectBlocks.
 		 
 	    	% move to other agent to help in multitask 
+	    	% ToDo otherAgentAt removed from code
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
 	    	       targetMd(_, _, otherAgentAt)), 
 	    	   bel(step(SimStep), TaskStep >= SimStep) 

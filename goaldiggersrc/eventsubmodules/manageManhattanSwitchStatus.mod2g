@@ -24,6 +24,10 @@ module manageManhattanSwitchStatus {
 	if bel(executeManhattan, targetMd(_, _, rolezone)), 
 	   percept(role(worker)) 
 		then delete(executeManhattan).
+	
+	% deactivate to reset pos from percept to prevent recognizing wrong submitterLeader
+	if bel(executeManhattan, targetMd(_, _, supportingPosition)) 
+	    then delete(executeManhattan). 
 
 	% 
 %	if bel(agentAt(X, Y), executeManhattan, targetMd(X, Y, supportingPosition), haveBlockAttached(true, _)), 
