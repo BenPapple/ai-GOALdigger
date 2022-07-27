@@ -273,4 +273,5 @@ module helperMoveManhattanWithBlock {
 		    then delete(skipThisStep(SkipStep)) + 
 		         insert(skipThisStep(SimStep + RandSteps)) + preActionCleanup + skip.
 	}
+	
 } % module

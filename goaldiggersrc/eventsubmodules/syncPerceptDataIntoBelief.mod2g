@@ -90,19 +90,4 @@ module syncPerceptDataIntoBelief {
 	           	then delete(mapRoleZone(X, Y, Md)).
   	}
 	
-	% ToDo too complex agent only needs to store it once not delayed or cached, just overwrite old value with new
-    % ToDo sent(otherAgentAt replaced with storedOtherAgentStatus... in belief
-	% The agent processes received messages about other agents' positions if it already knows it offsets to those agents
-%	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), 
-%	       bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, 
-%	           Y1 is Y0 + OffsetToEntityY, worldSizeX(SizeX), worldSizeY(SizeY), 
-%	           getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) 
-%		do insert(otherAgentAt(Name, X2, Y2, Step)).
-%
-%	% Remove old otherAgentAt variables:
-%	forall percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), 
-%	                                       StepLimit is CurrentStep - Delay - Persistance, 
-%		                                   otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
-%		do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 
-	
 } % end module

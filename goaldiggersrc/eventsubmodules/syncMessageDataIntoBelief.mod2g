@@ -62,4 +62,5 @@ module syncMessageDataIntoBelief {
 	                 insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, 
 	                                               BlockTypeAttached, TaskRole)).
 	}
+	
 } % end module

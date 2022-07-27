@@ -89,12 +89,18 @@ module syncLastActionResultDataIntoBelief {
 		if percept(lastAction(connect), lastActionParams([NameSupporter, _, _])), 
 		   bel(submitterLeader) 
 		    then {
-		   if bel(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
-		   	then delete(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) + 
-		         insert(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, connected, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
-		   if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
-		   	then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) + 
-		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, connected, W14, W15, W16, W17, W18, W19)).
+		   if bel(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, 
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, connected, W8, W9, W10, W11, W12, 
+		                                         W13, W14, W15, W16, W17, W18, W19)).
+		   if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14, W15,
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, 
+		                                         connected, W14, W15, W16, W17, W18, W19)).
 		 }
 	
 		% successful submit 1task agent set to find new task

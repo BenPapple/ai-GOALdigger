@@ -60,4 +60,5 @@ module helperMoveManhattanWithoutBlock {
 	    	   not(percept(attached(-1, 0))) 
 	    		then preActionCleanup + clear(-1, 0).						    	
 	} % if 
+	
 }
