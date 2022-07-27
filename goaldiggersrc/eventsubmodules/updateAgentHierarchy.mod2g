@@ -2,11 +2,11 @@ use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
 /**
- * Handle ranking of agents and assign submitterLeader to one agent
+ * Handle ranking of agents and assign submitterLeader/warrior/explorer to one agent
  *
  */
 
-module updateSubmitterRanking {
+module updateAgentHierarchy {
 	
 	% seed collision choose new seed
 	forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _, _)) 
@@ -34,27 +34,20 @@ module updateSubmitterRanking {
 			    then delete(positionInHirarchie(PositionInHirarchie)) + 
 			         insert (positionInHirarchie(NewPositionInHirarchie)).
 		}
-		
+
 		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
-		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1)
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie),
+		   bel(0 =:= mod(PosCheck, 5))
 			  then {
-			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
-			 allother.send(msgSubmitterLeader(MyName)).			 
-		}
-		
-		% assign submitterLeader
-		if percept(teamSize(SizeTeam), name(MyName)), 
-		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 2)
-			then {
 			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 
 		}
 
 		% assign customRoleSaboteur
 		if bel(activateSaboteurFeature),
-		   percept(teamSize(SizeTeam), name(MyName)), 
-		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 3),
+		   percept(teamSize(SizeTeam), SizeTeam > 6, name(MyName)), 
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1),
 		   not(bel(submitterLeader)) 
 			then {
 			
@@ -64,11 +57,11 @@ module updateSubmitterRanking {
 			                                allother.send(msgCustomRole(MyName)).			 
 		}
 		
-	  % remove submitterLeader
-		if percept(teamSize(SizeTeam)), 
-		   bel(submitterLeader, positionInHirarchie(PositionInHirarchie), 
-		       PosCheck is SizeTeam - PositionInHirarchie, PosCheck > 2)
-			then delete(submitterLeader).
+%	  % remove submitterLeader
+%		if percept(teamSize(SizeTeam)), 
+%		   bel(submitterLeader, positionInHirarchie(PositionInHirarchie), 
+%		       PosCheck is SizeTeam - PositionInHirarchie, PosCheck > 2)
+%			then delete(submitterLeader).
 	}
 	
 } % end module

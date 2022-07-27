@@ -16,7 +16,7 @@ use "./eventsubmodules/syncMessageDataIntoBelief" as module.
 use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
-use "./eventsubmodules/updateSubmitterRanking" as module.
+use "./eventsubmodules/updateAgentHierarchy" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -59,7 +59,7 @@ module goaldiggerEvent {
 
 	% SUBMODULES Choose RandomAgent for Explorer
 	if percept(step(SimStep), SimStep >= 6) 
-		then updateSubmitterRanking.
+		then updateAgentHierarchy.
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULE SimpleWorldcalculation
