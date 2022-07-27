@@ -22,37 +22,29 @@ module goaldiggerMain {
 
     	% handle deactivated by skip
     	if percept(deactivated(true))
-        then preActionCleanup + skip.
+            then preActionCleanup + skip.
 
     	% agents want to be free randomExploreMove for turn number skipThisStep
     	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep)
-        then executeRandomMove.
+            then executeRandomMove.
 
     	% Handle test worker role
-    	if bel(customRole(customRoleSaboteur)), percept(role(worker))
-        then executeSaboteurRole.
+    	if bel(activateSaboteurFeature, customRole(customRoleSaboteur)), 
+    	   percept(role(worker))
+            then executeSaboteurRole.
 
 	    % Handle DEFAULT role
     	if percept(role(default))
-        then executeDefaultRole.
+            then executeDefaultRole.
 
 	    % Handle WORKER role
     	if percept(role(worker))
-        then executeWorkerRole.
+            then executeWorkerRole.
 
     	% Handle explorer role
     	if percept(role(explorer))
-        then executeExplorerRole.
+            then executeExplorerRole.
 
     } % if haveMove
-	
-	if bel(haveMove) then {
-		    % Handle WORKER role
-	    	if percept(role(worker))
-	    		then executeWorkerRole.
-
-	    	% Handle explorer role
-	    	if percept(role(explorer)) 
-	    		then executeExplorerRole.
-    } % if haveMove
+    
 } % module
