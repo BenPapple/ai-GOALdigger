@@ -96,5 +96,9 @@ module logScoringBoard {
     % just print it to find saboteur in logs	 
     forall (_).sent(msgCustomRole(MyName)) do print(MyName+" is the saboteur!").
     
+    % success saboteur attach
+    if bel(customRole(customRoleSaboteur)),
+       percept(lastActionResult(success), lastAction(attach))
+        then print("Saboteur tackled enemy!").    
 		
 }

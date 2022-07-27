@@ -11,21 +11,26 @@ use "../actionhandling/preActionCleanup" as module.
 module executeMoveAroundBloke {	
 
 	% go random explore when current task expired
-	%if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false, _), currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) then executeRandomMove.
+	%if percept(step(SimStep), role(worker)), bel(haveBlockAttached(false, _), 
+	% currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) then executeRandomMove.
 
 
 	% Bloke attaching if in position
 	if  bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target),
-	 percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1), not(percept(attached(A,B))) then {
+	    percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1),
+	    bel(XPlusY is abs(A) + abs(B), XPlusY \= 0), 
+	    not(percept(attached(A,B))) then {
 	
-		if percept(thing(1, 0, entity,_)), not(percept(attached(1, 0))) then preActionCleanup + attach(e).
-		if percept(thing(-1, 0, entity,_)), not(percept(attached(-1, 0))) then preActionCleanup + attach(w).
-		if percept(thing(0, -1, entity,_)), not(percept(attached(0, -1))) then preActionCleanup + attach(n).
-		if percept(thing(0, 1, entity,_)), not(percept(attached(0, 1))) then preActionCleanup + attach(s).
+		if percept(thing(1, 0, entity,_)), not(percept(attached(1, 0))) 
+		    then preActionCleanup + attach(e).
+		if percept(thing(-1, 0, entity,_)), not(percept(attached(-1, 0))) 
+		    then preActionCleanup + attach(w).
+		if percept(thing(0, -1, entity,_)), not(percept(attached(0, -1))) 
+		    then preActionCleanup + attach(n).
+		if percept(thing(0, 1, entity,_)), not(percept(attached(0, 1))) 
+		    then preActionCleanup + attach(s).
 	
 	}
-
-	
 	% obligatory random/skip.
 	%if true then preActionCleanup + executeRandomMove.
 	

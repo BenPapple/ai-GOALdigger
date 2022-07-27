@@ -38,10 +38,7 @@ module executeSaboteurRole {
 	% detach blocks if they were attached by chance
 	if bel(haveBlockAttached(true, Dir)) 
 	   then detach(Dir).
-	
-
-	
-	
+		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
     /**
@@ -105,7 +102,8 @@ module executeSaboteurRole {
 		then executeManhattanMove.
 		
 		% roam if no distant goal zone available
-		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), Count == 0)
+		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
+		       Count == 0)
 		   then executeRandomMove.
 
 		% clear blocks when next to goal zone
