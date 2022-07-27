@@ -54,6 +54,36 @@ module handleMessageAgentOffset {
 			}
 		}
 	} % do
+	
+	% update offset when already known, hack when worldsize not known for shorter routing
+	forall percept(name(AgentReceiver)), 
+	       bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentReceiver)) 
+		do {
+	    	if percept(step(SimStep), Step =< SimStep -4), 
+               not(bel(cachedSeenOtherAgentAt(_, _, OtherX, OtherY, Step, AgentNameSender2), 
+	               AgentReceiver \== AgentNameSender2))
+		    	then {
+					% if only 1x inverse coordinates are found
+					if bel(cachedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
+					   bel(confirmedOffsetOfAgent(_, _, AgentNameSender)),
+					   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
+					   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative) 
+					    then {
+							if not(bel(cachedSeenOtherAgentAt( _, _, OtherX1, OtherY1, Step, AgentNameSender3), 
+						                AgentNameSender \== AgentNameSender3)) 
+						    	then {
+									% calculate offset
+									if true then {
+								 		if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, 
+								 		       OffsetX, OffsetY)),
+								 		   bel(confirmedOffsetOfAgent(DelX, DelY, AgentNameSender))
+									 		then delete(confirmedOffsetOfAgent(DelX, DelY, AgentNameSender)) +
+									 		     insert(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)).
+			                }
+					}
+			}
+		}
+	} % do
 
     % CALCULATE offset of 3rd agent from message from 2nd agent
 	forall (_).sent(myOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, UnknownAgentName, Step)) 
