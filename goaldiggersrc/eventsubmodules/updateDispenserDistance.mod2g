@@ -45,4 +45,5 @@ module updateDispenserDistance {
 				then delete(targetClosestOfAllDispensersAt(AltX, AltY, AltBlockType, MDAlt)) +
 			         insert(targetClosestOfAllDispensersAt(X, Y, BlockType, MDValue)).
 	}
+	
 } % module

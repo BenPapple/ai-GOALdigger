@@ -36,4 +36,5 @@ module helperManhattanCalc {
 				then delete(eMd(Dis)) + 
 				     insert(eMd(Md)) .	
 	}
+	
 } % module

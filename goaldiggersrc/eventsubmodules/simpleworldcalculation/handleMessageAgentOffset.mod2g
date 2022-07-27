@@ -109,4 +109,5 @@ module handleMessageAgentOffset {
 			   bel(X1 is OffsetX + OffsetToSenderX, Y1 is OffsetY + OffsetToSenderY)
 			       then insert(confirmedOffsetOfAgent(X1, Y1, UnknownAgentName)).				
 	}
+	
 } % end module

@@ -126,13 +126,6 @@ module executeWorkerRole {
 	    	   bel(currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _)),
 	    	   percept(step(SimStep), TaskStep >= SimStep)
 	    	    then preActionCleanup + connectBlocks.
-		 
-	    	% move to other agent to help in multitask 
-	    	% ToDo otherAgentAt removed from code
-	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
-	    	       targetMd(_, _, otherAgentAt)), 
-	    	   bel(step(SimStep), TaskStep >= SimStep) 
-	    	   	then executeManhattanMove.
 	    	 
 	    	% Move to supporting position for multi task
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 

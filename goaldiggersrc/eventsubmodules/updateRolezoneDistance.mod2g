@@ -34,4 +34,5 @@ module updateRolezoneDistance {
 			    then delete(targetClosestRoleZone(X, Y, MDTarget)) + 
 			         insert(targetClosestRoleZone(X2, Y2, MDZone)).
 	}
+	
 } % module

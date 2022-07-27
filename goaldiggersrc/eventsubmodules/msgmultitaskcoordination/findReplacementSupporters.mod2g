@@ -29,9 +29,12 @@ module findReplacementSupporters {
 						if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
 						                                      supportingAgent, SupporterName, X1, Y1, 
 						                                      Block1, TaskName)).
-						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
-	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
-	                             insert(multiTaskSupporterStatus(W1, SupporterName, X1, Y1, W5, pending, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
+						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+						                                W15, W16, W17, W18, W19)) 
+	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+	                                                             W14, W15, W16, W17, W18, W19)) +
+	                             insert(multiTaskSupporterStatus(W1, SupporterName, X1, Y1, W5, pending, W7, W8, W9,
+	                                                             W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
 		             }
 			 }
     } % end first block			
@@ -56,9 +59,12 @@ module findReplacementSupporters {
 						if true then (channnelMultiTask).send(informSupportingAgent(thirdBlock, SubmitterName, 
 						                                      supportingAgent, SupporterName, X1, Y1, 
 						                                      Block2, TaskName)).
-						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) 
-	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)) +
-	                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, SupporterName, X1, Y1, Block2, pending, W13, W14, W15, W16, W17, W18, W19)).
+						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+						                                W15, W16, W17, W18, W19)) 
+	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+	                                                             W14, W15, W16, W17, W18, W19)) +
+	                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, SupporterName, X1, Y1,
+	                                                             Block2, pending, W13, W14, W15, W16, W17, W18, W19)).
 		             }
 			 }
     } % end first block  
