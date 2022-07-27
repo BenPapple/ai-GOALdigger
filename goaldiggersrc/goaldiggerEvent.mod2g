@@ -29,9 +29,7 @@ use "./taskhandling/changeTaskCheck" as module.
  *
  */
 
-module goaldiggerEvent {
-
-	   
+module goaldiggerEvent {  
 	
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)),

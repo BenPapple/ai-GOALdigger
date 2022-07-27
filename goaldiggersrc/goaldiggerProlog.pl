@@ -24,6 +24,8 @@
 :- dynamic calculateNewGoalzoneMD/0. 
 % switch to stop logging score after x sims
 :- dynamic stopScoreLogging/0. 
+% switch for saboteur
+:- dynamic activateSaboteurFeature/0.
 
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
