@@ -11,14 +11,14 @@ module findReplacementSupporters {
 
 	% SUBMODULE update nearest Agent on map for submitterleader for second block
 	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
-	   bel(SubmitType == submittingAgentThreeTask),
+	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
 	   bel(multiTaskSupporterStatus(_, needsupporter, _, _, _, noack, _, _, _, _, _, _, _, _, _, _, _, _, _)),
 	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
 	   	then updateNearestAgentDistance.  
         
     % inform other agent with needed second block as replacement supporter
 	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, SubmitType, _)),
-	   bel(SubmitType == submittingAgentThreeTask),
+	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
 	   bel(multiTaskSupporterStatus(_, needsupporter, X1, Y1, Block1, noack, _, _, _, _, _, _, _, _, _, _, _, _, _)),
 	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
@@ -41,14 +41,14 @@ module findReplacementSupporters {
 
 	% SUBMODULE update nearest Agent on map for submitterleader for third block
 	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
-	   bel(SubmitType == submittingAgentThreeTask),
+	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
 	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, needsupporter, _, _, _, noack, _, _, _, _, _, _, _)),
 	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
 	   	then updateNearestAgentDistance. 
 
     % inform other agent with needed third block as replacement supporter
 	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, SubmitType, _)),
-	   bel(SubmitType == submittingAgentThreeTask),
+	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
 	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, needsupporter, X1, Y1, Block2, noack, _, _, _, _, _, _, _)),
 	   bel(confirmedOffsetOfAgent(_, _, _)) 
 	    then {
@@ -68,5 +68,7 @@ module findReplacementSupporters {
 		             }
 			 }
     } % end first block  
+    
+    % ToDo add 4task fourth block
 	
 } % end module

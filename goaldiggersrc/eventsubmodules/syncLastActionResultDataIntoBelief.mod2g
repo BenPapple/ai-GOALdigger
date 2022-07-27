@@ -63,18 +63,6 @@ module syncLastActionResultDataIntoBelief {
 
 		}
 
-		/*
-		% succesfull attach action handling
-    if percept(lastAction(attach), lastActionParams([Dir])),
-		   bel(haveBlockAttached(BoolOld2, Dold))
-			then {
-		    	if true then delete(haveBlockAttached(BoolOld2, Dold)) +
-		    	             insert(haveBlockAttached(true, Dir)).
-		    	if not(bel(calculateNewGoalzoneMD))
-		    		then insert(calculateNewGoalzoneMD).
-		}
-		*/
-
 		% succesfull detach action handling
 		if percept(lastAction(detach)),
 		   bel(haveBlockAttached(BoolOld2, Dold))
@@ -120,6 +108,12 @@ module syncLastActionResultDataIntoBelief {
 		   	                                     W15, W16, W17, W18, W19)) + 
 		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, 
 		                                         connected, W14, W15, W16, W17, W18, W19)).
+		   if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter, W15,
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+		                                         W13, NameSupporter, W15, W16, W17, W18, connected)).
 		 }
 	
 		% successful submit 1task agent set to find new task
@@ -131,7 +125,8 @@ module syncLastActionResultDataIntoBelief {
 		% successful submit submittingAgent set to find new partner
 		if percept(lastAction(submit)), 
 		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)), 
-		   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask)
+		   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask; 
+		       SubmitType == submittingAgentFourTask)
 		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)) + 
 		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submitterLeaderNeedsNewTask, needNewTask)).
 	}% lastaction success

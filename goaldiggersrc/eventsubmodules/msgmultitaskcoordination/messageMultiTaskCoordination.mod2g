@@ -1,7 +1,8 @@
 use "../../goaldiggerProlog" as knowledge.
 use "../../goaldiggerAction" as actionspec.
 use "./messageTwoTaskSupporter" as module.
-use "./messageThreeTaskSupporters" as module.
+use "./prepareThreeTaskData" as module.
+use "./prepareFourTaskData" as module.
 use "./findReplacementSupporters" as module.
 
 
@@ -12,13 +13,17 @@ use "./findReplacementSupporters" as module.
  
 module messageMultiTaskCoordination {
   	
-	% find 2-task supporter
+	% find and message 2-task supporter
 	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentTwoTask, supporterREQPending))
         then messageTwoTaskSupporter.
         
-	% find 3-task supporter
+	% prepare to find 3-task supporter
 	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentThreeTask, supporterREQPending))
-        then messageThreeTaskSupporters.    
+        then prepareThreeTaskData.    
+        
+	% prepare to find 4-task supporter
+	if bel(currentChosenTask(_, _, _, _, _, _, submittingAgentFourTask, supporterREQPending))
+        then prepareFourTaskData. 
 	
 	% RECEIVE as submitterLeader ACK for second block from supporter
 	forall (_).sent(msgACKtask(secondBlock, NameSupporter)), 
@@ -85,7 +90,8 @@ module messageMultiTaskCoordination {
 	}
 	
 	% find replacements 3task after noack message
-	if bel(submitterLeader, currentChosenTask(_, _, _, _, _, _, submittingAgentThreeTask, _))
+	if bel(submitterLeader, currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
+	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask)
 	    then findReplacementSupporters.
 	
 	% RECEIVE submitterLeader order cease supporting

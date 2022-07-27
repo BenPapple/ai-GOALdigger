@@ -3,6 +3,7 @@ use "../goaldiggerAction" as actionspec.
 use "../taskhandling/taskHandlingOneBlock" as module.
 use "../taskhandling/taskHandlingTwoBlock" as module.
 use "../taskhandling/taskHandlingThreeBlock" as module.
+use "../taskhandling/taskHandlingFourBlock" as module.
 
 /**
  * Choose task from options when having corresponding role; waterfall chosing, advanced choices come first in file: 
@@ -52,6 +53,7 @@ module chooseTask {
 	   not(percept(task(_ ,TaskStep3, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep3 >= SimStep)) 
 	    then taskHandlingOneBlock + exit-module.
 
+	% ToDo add 4task choosing
 %	% choose 4-task as submitterLeader if available
 %	if bel(submitterLeader, step(SimStep)),
 %	   bel(confirmedOffsetOfAgent(_, _, _)),
@@ -72,7 +74,7 @@ module chooseTask {
 	   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2),
 	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 120)  
 	    then taskHandlingThreeBlock + exit-module.
-		 
+	    
 	% choose 2-task as submitterLeader if available
 	if bel(submitterLeader, step(SimStep)),
 	   bel(confirmedOffsetOfAgent(_, _, _)),

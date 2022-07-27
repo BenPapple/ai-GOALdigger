@@ -85,13 +85,15 @@ module executeWorkerRole {
 			
 	    	% as submitterLeader don't wait on goalzone and on dispenser
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,SubmitType, _)),
-	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
+	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask; 
+	               SubmitType == submittingAgentFourTask),
 	    	   percept(goalZone(0,0), thing(0, 0, dispenser, _), step(SimStep), TaskStep >= SimStep) 
 	    	    then executeRandomMove.
 	    	    
 	    	% as submitterLeader don't have block on dispenser
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,SubmitType, _)),
-	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
+	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask; 
+	               SubmitType == submittingAgentFourTask),
 	    	   percept(goalZone(0,0), thing(0, 1, dispenser, _), step(SimStep), TaskStep >= SimStep) 
 	    	    then executeRandomMove.
 	    	    
@@ -99,7 +101,7 @@ module executeWorkerRole {
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _)),
 	    	   percept(goalZone(0,0), thing(0, 1, entity, _), step(SimStep), TaskStep >= SimStep),
 	    	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
-	    	       OneOrTwoTask == submittingAgentThreeTask) 
+	    	       OneOrTwoTask == submittingAgentThreeTask; SubmitType == submittingAgentFourTask) 
 	    	    then executeRandomMove.
 	
 	    	% submit 1-task if in goal zone with block and corresponding task available
@@ -116,7 +118,8 @@ module executeWorkerRole {
 	    
 	    	% submit task if in goal zone with block and corresponding task available
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,SubmitType, _)),
-	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask),
+	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask; 
+	               SubmitType == submittingAgentFourTask),
 	    	   percept(goalZone(0,0), step(SimStep), TaskStep >= SimStep) 
 	    	   	then handleTaskSubmit.
 	    	
@@ -141,7 +144,7 @@ module executeWorkerRole {
 		           targetMd(_, _, goalzone)), 
 		       bel(step(SimStep), TaskStep >= SimStep),
 		       bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
-		           OneOrTwoTask == submittingAgentThreeTask) 
+		           OneOrTwoTask == submittingAgentThreeTask; SubmitType == submittingAgentFourTask) 
 		        then executeManhattanMove.
 	        	
 	    	% random movemement actions while having block attached
