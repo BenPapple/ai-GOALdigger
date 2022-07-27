@@ -69,6 +69,12 @@ module goaldiggerEvent {
 	% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
 	%if true then updateWorldSizeData.
 	%if true then calculateWorldSize.
+
+    % update current task for saboteur before messagePermaSendStatusToOthers
+    if bel(customRole(customRoleSaboteur)),
+       bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8))
+        then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
+             insert(currentChosenTask(taskSaboteur, -1, 100, 0, 0, bx, sabotaging, nameX)).
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
@@ -100,9 +106,9 @@ module goaldiggerEvent {
 	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
 	   then insert(emptyGoalZoneCounter(X2, Y2, 1)) + allother.send(emptyGoalZoneCounter(X2, Y2, 1)).
 	}
-    
+
     % SUBMODULE chose new task if necessary
-    if true then changeTaskCheck.
+    if not(bel(customRole(customRoleSaboteur))) then changeTaskCheck.
 
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
