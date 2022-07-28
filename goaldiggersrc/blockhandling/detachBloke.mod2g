@@ -6,7 +6,7 @@ module detachBloke {
 	% ToDo: Reset belief if attached for a long time (with counter).
 	
 	% detach a bloke if directly attached to yourself
-	if percept(attached(0,0), thing(X, Y, entity, _), X =< 1, Y =< 1), 
+	if percept(attached(0,0), thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), 
 	   bel(directionToCoordinate(Dir, X, Y)) 
 	    then detach(Dir).
 

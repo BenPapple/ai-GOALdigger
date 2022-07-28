@@ -1,0 +1,11 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * fulfil plan from analyzeNorms to prevent damage to agents
+ *
+ */
+
+module executeNormPrevention {
+	
+}

@@ -23,6 +23,7 @@ use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDispenser" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffset" as module.
 use "./taskhandling/changeTaskCheck" as module.
+use "./normhandling/analyzeNorms" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -139,6 +140,10 @@ module goaldiggerEvent {
 
 	% SUBMODULE manhattan target manipulation
 	if true then manageManhattanTarget.
+
+    % check norms for possible damage to agents
+    if true 
+        then analyzeNorms.
 
 	/**
 	 * MISC SWITCH MANIPULATION
