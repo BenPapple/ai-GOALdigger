@@ -1,0 +1,10 @@
+use "../goaldiggerProlog" as knowledge.
+
+/**
+ * analyze norms and make plans about actions to remedy them
+ *
+ */
+
+module analyzeNorms {
+	
+}
