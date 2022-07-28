@@ -1,0 +1,57 @@
+{
+    "NOsetup" : "conf/setup/test.txt",
+
+    "steps" : 750,
+    "randomSeed" : 113,
+    "randomFail" : 1,
+    "entities" : {"standard" : 5},
+    "clusterBounds" : [1,3],
+
+    "roles" : "$(roles/rolesTurnier3.json)",
+
+    "clearEnergyCost" : 2,
+    "deactivatedDuration" : 10,
+    "maxEnergy" : 100,
+    "refreshEnergy" : 50,
+    "stepRecharge" : 1,
+    "clearDamage" : [32, 16, 8, 4, 2, 1],
+
+    "attachLimit" : 10,
+
+    "grid" : {
+      "height" : 14,
+      "width" : 17,
+      "instructions": [
+        ["cave", 0.0, 2, 5, 4]
+      ],
+      "goals": {
+        "number" : 1,
+        "size" : [3,3],
+        "moveProbability": 0.0
+      },
+      "roleZones" : {
+        "number" : 1,
+        "size" : [3, 3]
+      }
+    },
+
+    "blockTypes" : [3, 3],
+    "dispensers" : [1, 1],
+
+    "tasks" : {
+      "size" : [2, 2],
+      "concurrent" : 2,
+      "iterations" : [5, 10],
+      "maxDuration" : [150, 150]
+    },
+
+    "events" : {
+      "chance" : 0,
+      "radius" : [3, 5],
+      "warning" : 5,
+      "create" : [-3, 1],
+      "perimeter" : 2
+    },
+
+    "regulation" : "$(norms/normsTurnier3.json)"
+}
