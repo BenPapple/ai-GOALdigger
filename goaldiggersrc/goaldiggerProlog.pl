@@ -163,6 +163,9 @@
 :- dynamic waitingTimeEmptyGoalZone/1. % Time to wait in an empty goal zone before moving to another one
 :- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
 :- dynamic getFree/0. % swicht to detach other bloke
+:- dynamic sabotageUs/0. % if set, the saboteur sabotages its own team members for testing goals
+:- dynamic sabotageThem/0. % if set, the saboteur sabotages the members of other teams
+:- dynamic whitelistedTeam/1. % holds the name of the team NOT to be sabotaged (us in competition against other teams).
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.

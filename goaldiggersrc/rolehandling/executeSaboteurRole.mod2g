@@ -12,7 +12,7 @@ use "../blockhandling/rotateBlockToNorth" as module.
 use "../blockhandling/connectBlocks" as module.
 
 /**
- * Main decision rules for role test worker
+ * Main decision rules for saboteur
  *
  */
 
@@ -37,6 +37,13 @@ module executeSaboteurRole {
 	% detach blocks if they were attached by chance
 	if bel(haveBlockAttached(true, Dir)) 
 	   then detach(Dir).
+	
+	% select sabotage goal
+	if not(bel(whitelistedTeam(_))), bel(sabotageThem), percept(team(MyTeam)) 
+	   then insert(whitelistedTeam(MyTeam)).
+	
+	if not(bel(whitelistedTeam(_))), bel(sabotageUs) 
+	   then insert(whitelistedTeam(fakeTeamName)).
 		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
@@ -49,7 +56,8 @@ module executeSaboteurRole {
 	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {	
 	
 		% attach bloke if next to it next to goal zone (without attached blokes)
-		if percept(team(MyTeam), thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1, goalZone(_,_)), 
+		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
+		       abs(Y) =< 1, goalZone(_,_)), 
 		   bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
 		   % update empty time counter of all dispensers nearby
 		      if bel(searchInDispenser) then {
@@ -63,15 +71,15 @@ module executeSaboteurRole {
 		}
 		
 		% attach bloke anywhere if at least one bloke already attached
-		if percept(team(MyTeam), thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1), 
+		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1), 
 		   bel(attachedBlokes(Count), Count > 0), not(percept(attached(X,Y))) then {
 		   % update empty time counter of all dispensers nearby
 		   if true then executeMoveAroundBloke. % attach the bloke
 		}
 		
 		% go to bloke if next to it in goalzone and have 0 or more than 1 blokes
-		if percept(goalZone(_,_)), bel(attachedBlokes(Count), Count \== 1), percept(team(MyTeam), 
-		           thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), bel(abs(X) + abs(Y) >= 2) then {
+		if percept(goalZone(_,_)), bel(attachedBlokes(Count), Count \== 1, whitelistedTeam(MyTeam)), 
+		           percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), bel(abs(X) + abs(Y) >= 2) then {
 			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
 			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
 			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
@@ -83,7 +91,7 @@ module executeSaboteurRole {
 		}
 		
 		% go to bloke anywhere if next to it with more than 2 blokes attached
-		if bel(attachedBlokes(Count), Count >= 2), percept(team(MyTeam), thing(X, Y, entity, OtherTeam), 
+		if bel(attachedBlokes(Count), Count >= 2), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), 
 		       MyTeam \= OtherTeam), bel(abs(X) + abs(Y) >= 2) then {
 			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
 			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
