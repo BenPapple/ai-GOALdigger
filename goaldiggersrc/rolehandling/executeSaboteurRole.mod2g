@@ -32,7 +32,7 @@ module executeSaboteurRole {
 	
 	% insert waiting time in empty goal zone
 	if not(bel(waitingTimeEmptyGoalZone(_)))
-	   then insert(waitingTimeEmptyGoalZone(15)).	
+	   then insert(waitingTimeEmptyGoalZone(10)).	
 	
 	% detach blocks if they were attached by chance
 	if bel(haveBlockAttached(true, Dir)) 
@@ -108,6 +108,15 @@ module executeSaboteurRole {
 		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
 		then executeManhattanMove.
 		
+		% roam goal zone
+		if percept(goalZone(0,0), goalZone(X1, Y1)), not(bel(X1 \= 0, Y1 \= 0)), bel(agentAt(X,Y,_)), 
+		   bel(emptyGoalZoneCounter(A, B, _),  minimumDistanceEmptyGoalZone(Distance), calculateXYMd(A, B, X, Y, Md), 
+		   Md < Distance) then {	   			
+			if bel(X1 > 0), bel(Y1 \= 0) then move(e).
+			if bel(X1 < 0), bel(Y1 \= 0) then move(w).
+			if bel(Y1 > 0), bel(X1 \= 0) then move(s).
+			if bel(Y1 < 0), bel(X1 \= 0) then move(n).
+		}
 		% roam if no distant goal zone available
 		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
 		       Count == 0)
