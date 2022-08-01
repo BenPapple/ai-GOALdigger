@@ -28,8 +28,8 @@ module goaldiggerInit {
 	if true then insert(thisIsTheFirstSim).
 	
 	% variables for saboteur behaviour (againt own team, against other team)
-	if true then insert(sabotageUs).
-	%if true then insert(sabotageThem).
+	%if true then insert(sabotageUs).
+	if true then insert(sabotageThem).
 	
 	% global values
 	% switch to recognize simulations have different characteristics on sim change

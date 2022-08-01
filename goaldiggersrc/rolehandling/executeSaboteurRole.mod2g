@@ -104,19 +104,24 @@ module executeSaboteurRole {
 		}
 
 
+
+		% roam goal zone if still not declared empty
+		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), not(percept(thing(X1,Y1,entity,OtherTeam), 
+		   goalZone(X1,Y1), OtherTeam \= MyTeam)), not(bel(X1 \= 0, Y1 \= 0)), bel(agentAt(X4, Y4, _)), 
+		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), emptyGoalZoneCounter(X5, Y5, C), 
+		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
+		     
+		     forall bel(randomDirection(Dir), directionToCoordinate(Dir, X2, Y2)), percept(goalZone(X2, Y2)) do {
+		     		if percept(thing(X2, Y2, block, _)) then clear(X2, Y2).
+		     		if not(percept(thing(X2, Y2, block, _))) then move(Dir).
+		     }		        
+		}
+		
+
 		% go to a goal zone if no bloke attached
 		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
 		then executeManhattanMove.
-		
-		% roam goal zone
-		if percept(goalZone(0,0), goalZone(X1, Y1)), not(bel(X1 \= 0, Y1 \= 0)), bel(agentAt(X,Y,_)), 
-		   bel(emptyGoalZoneCounter(A, B, _),  minimumDistanceEmptyGoalZone(Distance), calculateXYMd(A, B, X, Y, Md), 
-		   Md < Distance) then {	   			
-			if bel(X1 > 0), bel(Y1 \= 0) then move(e).
-			if bel(X1 < 0), bel(Y1 \= 0) then move(w).
-			if bel(Y1 > 0), bel(X1 \= 0) then move(s).
-			if bel(Y1 < 0), bel(X1 \= 0) then move(n).
-		}
+
 		% roam if no distant goal zone available
 		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
 		       Count == 0)
