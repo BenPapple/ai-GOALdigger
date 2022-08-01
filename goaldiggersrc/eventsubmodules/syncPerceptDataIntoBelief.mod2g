@@ -19,12 +19,13 @@ module syncPerceptDataIntoBelief {
 	
 	% DELETE out of step storedOtherAgentStatus
 	forall percept(step(SimStep)),
-	       bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached),
-	                                  MsgStep > SimStep) 
+	       bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, 
+	                                  TaskRole), MsgStep > SimStep) 
 	    do {
-	    	if bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached))
+	    	if bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, 
+	    	                              TaskRole))
 	        	then delete(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, 
-	        	                                   BlockTypeAttached)).
+	        	                                   BlockTypeAttached, TaskRole)).
 	}
 	
 	% STORE unknown dispensers from percept with MD field
@@ -93,19 +94,11 @@ module syncPerceptDataIntoBelief {
 	           	then delete(mapRoleZone(X, Y, Md)).
   	}
 	
-	% ToDo too complex agent only needs to store it once not delayed or cached, just overwrite old value with new
-    % ToDo sent(otherAgentAt replaced with storedOtherAgentStatus... in belief
-	% The agent processes received messages about other agents' positions if it already knows it offsets to those agents
-%	forall (_).sent(otherAgentAt(Name, X0, Y0, Step)), 
-%	       bel(agentOffset(Name, OffsetToEntityX, OffsetToEntityY, _), step(Step), X1 is X0 + OffsetToEntityX, 
-%	           Y1 is Y0 + OffsetToEntityY, worldSizeX(SizeX), worldSizeY(SizeY), 
-%	           getModPos(X1, Y1, SizeX, SizeY, X2, Y2)) 
-%		do insert(otherAgentAt(Name, X2, Y2, Step)).
-%
-%	% Remove old otherAgentAt variables:
-%	forall percept(step(CurrentStep)), bel(messageProcessingDelay(Delay), messagePersitanceAfterDelay(Persistance), 
-%	                                       StepLimit is CurrentStep - Delay - Persistance, 
-%		                                   otherAgentAt(AgentNameSender, X, Y, Step), Step < StepLimit) 
-%		do delete(otherAgentAt(AgentNameSender,X,Y,Step)). 
+	% DELETE detached blokes
+	forall bel(haveBlokeAttached(true,Dir), directionToCoordinate(Dir, X, Y)) do {
+		if not(percept(attached(X, Y))), bel(attachedBlokes(Count), NewCount is Count - 1) 
+		then delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir))
+		     + delete(attachedBlokes(Count)) + insert(attachedBlokes(NewCount)). 
+	}
 	
 } % end module

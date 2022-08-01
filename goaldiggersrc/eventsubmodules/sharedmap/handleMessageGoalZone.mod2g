@@ -41,4 +41,5 @@ module handleMessageGoalZone {
 			if not(bel(confirmedOffsetOfAgent(_,_,SenderName), cachedMsgGoalZoneData(X,Y,SenderName)))
 				then insert(cachedMsgGoalZoneData(X,Y,SenderName)).
 	}	
+	
 }

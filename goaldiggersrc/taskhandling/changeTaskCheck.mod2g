@@ -14,15 +14,42 @@ module changeTaskCheck {
     	   bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) 
     	    then chooseTask.
     	    
-    	% change task when task expired when chosen task not in percept anymore
+    	% change task when chosen task not in percept anymore
     	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), 
     	   not(percept(task(TaskName , _, _, _))) 
     	    then chooseTask.
-    	    
+
+    	% change from 1-task to 3-task as submitterLeader
+    	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)),
+    	   percept(step(SimStep)), 
+    	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
+    	   percept(task(_ ,TaskStep2, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep2 > SimStep)
+    	    then chooseTask.
+  	    
     	% change from 1-task to 2-task as submitterLeader
     	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)),
     	   percept(step(SimStep)), 
     	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
-    	   percept(task(_ ,TaskStep2, 40,[req(_,_,_),req(_,_,_)]), TaskStep2 > SimStep)
+    	   percept(task(_ ,TaskStep2, 40,[req(_,_,Block1),req(_,_,Block2)]), 
+    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 100),
+    	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+	       bel(mapDispenser(_, _, dispenser, Block2, _, _))
     	    then chooseTask.
+    	    
+    	% change from 1-task to -task as submitterLeader
+    	if bel(submitterLeader),
+    	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	       bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
+    	   percept(step(SimStep)), 
+    	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
+    	   percept(task(_ ,TaskStep2, 90,[req(X1,Y1,Block1),req(X2,Y2,Block2),req(X3,Y3,Block3)]), 
+    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 120),
+		   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+		   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
+		   bel(mapDispenser(_, _, dispenser, Block3, _, _)),
+		   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
+		   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+		   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
+    	    then chooseTask.    	    
+    	    
 }

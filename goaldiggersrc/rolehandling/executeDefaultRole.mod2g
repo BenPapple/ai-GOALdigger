@@ -1,6 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../actionhandling/preActionCleanup" as module.
+use "../blockhandling/detachBloke" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/helperMoveWithoutBlock" as module.
@@ -12,6 +13,9 @@ use "../pathfinding/helperMoveWithoutBlock" as module.
  */
 
 module executeDefaultRole {
+
+		% if caught, get free
+		if bel(getFree) then detachBloke.
 
     	% if oppurtunity arises adapt targetRole role until complex role module ready
     	if percept(roleZone(0, 0), step(Step), Step >= 0), 

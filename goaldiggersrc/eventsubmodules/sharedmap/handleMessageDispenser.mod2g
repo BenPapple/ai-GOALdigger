@@ -28,6 +28,7 @@ module handleMessageDispenser {
 			} % then
 	} %forall
 
+    % cach message
 	forall (_).sent(msgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) 
 		do {
 			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY), 
@@ -41,4 +42,5 @@ module handleMessageDispenser {
 					   cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)))
 				then insert(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)).
 	}
+	
 }

@@ -1,0 +1,164 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../actionhandling/preActionCleanup" as module.
+use "../pathfinding/executeManhattanMove" as module.
+use "../pathfinding/executeRandomMove" as module.
+use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
+use "../pathfinding/executeMoveAroundSubmitter" as module.
+use "../pathfinding/executeMoveAroundBloke" as module.
+use "../taskhandling/handleTaskSubmit" as module.
+use "../blockhandling/rotateBlockAgainstAffinity" as module.
+use "../blockhandling/rotateBlockToNorth" as module.
+use "../blockhandling/connectBlocks" as module.
+
+/**
+ * Main decision rules for role test worker
+ *
+ */
+
+module executeSaboteurRole {
+
+	% preferred target switches
+	if not(bel(searchInGoalzone)) 
+	   then insert(searchInGoalzone).
+	
+	% bloke quantity
+	if not(bel(targetBlokeCount(_))) 
+	   then insert(targetBlokeCount(4)). 
+
+	% insert minimum distance for different goal zones
+	if not(bel(minimumDistanceEmptyGoalZone(_)))
+	   then insert(minimumDistanceEmptyGoalZone(15)).
+	
+	% insert waiting time in empty goal zone
+	if not(bel(waitingTimeEmptyGoalZone(_)))
+	   then insert(waitingTimeEmptyGoalZone(15)).	
+	
+	% detach blocks if they were attached by chance
+	if bel(haveBlockAttached(true, Dir)) 
+	   then detach(Dir).
+		
+	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
+
+    /**
+	 * WITHOUT BLOKE	
+	 *
+	 */	
+	
+	
+	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {	
+	
+		% attach bloke if next to it next to goal zone (without attached blokes)
+		if percept(team(MyTeam), thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1, goalZone(_,_)), 
+		   bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
+		   % update empty time counter of all dispensers nearby
+		      if bel(searchInDispenser) then {
+		         forall percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
+		                bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3)) do {
+		                if bel(emptyDispenserCounter(X3, Y3, Count)) then delete(emptyDispenserCounter(X3, Y3, Count)).
+		     } 
+		   }% end empty time counter update
+		    
+		   if true then executeMoveAroundBloke. % attach the bloke
+		}
+		
+		% attach bloke anywhere if at least one bloke already attached
+		if percept(team(MyTeam), thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1), 
+		   bel(attachedBlokes(Count), Count > 0), not(percept(attached(X,Y))) then {
+		   % update empty time counter of all dispensers nearby
+		   if true then executeMoveAroundBloke. % attach the bloke
+		}
+		
+		% go to bloke if next to it in goalzone and have 0 or more than 1 blokes
+		if percept(goalZone(_,_)), bel(attachedBlokes(Count), Count \== 1), percept(team(MyTeam), 
+		           thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), bel(abs(X) + abs(Y) >= 2) then {
+			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
+			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
+			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
+			if bel(Y < 0), bel(X =:= 0), not(percept(attached(_,-1))) then move(n).
+			if bel(X > 0), bel(Y \= 0) then move(e).
+			if bel(X < 0), bel(Y \= 0) then move(w).
+			if bel(Y > 0), bel(X \= 0) then move(s).
+			if bel(Y < 0), bel(X \= 0) then move(n).
+		}
+		
+		% go to bloke anywhere if next to it with more than 2 blokes attached
+		if bel(attachedBlokes(Count), Count >= 2), percept(team(MyTeam), thing(X, Y, entity, OtherTeam), 
+		       MyTeam \= OtherTeam), bel(abs(X) + abs(Y) >= 2) then {
+			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
+			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
+			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
+			if bel(Y < 0), bel(X =:= 0), not(percept(attached(_,-1))) then move(n).
+			if bel(X > 0), bel(Y \= 0) then move(e).
+			if bel(X < 0), bel(Y \= 0) then move(w).
+			if bel(Y > 0), bel(X \= 0) then move(s).
+			if bel(Y < 0), bel(X \= 0) then move(n).
+		}
+
+
+		% go to a goal zone if no bloke attached
+		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
+		then executeManhattanMove.
+		
+		% roam if no distant goal zone available
+		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
+		       Count == 0)
+		   then executeRandomMove.
+
+		% clear blocks when next to goal zone
+		if percept(goalZone(_,_), thing(X, Y, block, _), abs(X) =< 1, abs(Y) =< 1) 
+		   then clear(X,Y).				
+
+
+
+        % go to a goal zone if next to it
+		%if not(percept(goalZone(0,0))), percept(goalZone(X, Y)) then {
+		%   	if bel(X > 0), bel(Y \= 0) then move(e).
+		%	if bel(X < 0), bel(Y \= 0) then move(w).
+		%	if bel(Y > 0), bel(X \= 0) then move(s).
+		%	if bel(Y < 0), bel(X \= 0) then move(n).
+		%}
+
+		% if no free agent around, go to a goal zone
+		% if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(attached(X, Y))), 
+		%   not(percept(goalZone(_,_))), bel(targetMd(_, _, goalzone), executeManhattan) 
+		%then all.send(goToGoal("Go to goal zone")) + executeManhattanMove.
+		
+		% if no agent around, go to a dispenser
+		%if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(attached(X, Y))), 
+		%   not(percept(thing(_,_,dispenser,_))), bel(targetMd(_, _, dispenser), executeManhattan) 
+		%then executeManhattanMove. 
+
+		% if at a dispenser and no agents around, count steps without seeing agents around
+		%if percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
+		%   bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3))
+		%then {
+		%   if bel(emptyDispenserCounter(X3, Y3, Count), NewCount is Count + 1)
+		%   then delete(emptyDispenserCounter(X3, Y3, Count)) + insert(emptyDispenserCounter(X3, Y3, NewCount)).
+		%   if not(bel(emptyDispenserCounter(X3, Y3, _))) then insert(emptyDispenserCounter(X3, Y3, 1)).
+		%}
+			
+		
+		if percept(goalZone(0,0), bel(attachedBlokes(Count), Count \== 1)) then executeRandomMove.
+		
+		if bel(attachedBlokes(Count), Count == 0) then executeRandomMove.
+		
+		if true then skip.
+	
+	
+	} % end haveBlockAttached(false,_)
+    
+    /**
+	 * WITH BLOKE
+	 *
+	 */
+	 % ToDo: Get out of the way of other agents
+	
+	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count =:= Target) then {
+		
+		if true then executeRandomMove. 
+	
+	}
+
+	
+}

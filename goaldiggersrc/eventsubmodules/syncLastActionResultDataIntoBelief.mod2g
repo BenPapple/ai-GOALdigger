@@ -9,92 +9,127 @@ use "../goaldiggerAction" as actionspec.
 module syncLastActionResultDataIntoBelief {
 
 	% Managing action partial_success action messages
-	forall percept(lastActionResult(partial_success)) 
-		do {	
+	forall percept(lastActionResult(partial_success))
+		do {
 		% single move instead of two
-			if percept(lastAction(move), lastActionParams([D, _])) 
+			if percept(lastAction(move), lastActionParams([D, _]))
 				then {
 					% update agent XY position with confirmed move nswe
 					if percept(step(NewStep)),
-					   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2)) 
-					    then delete(agentAt(X, Y, OldStep)) + 
+					   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2))
+					    then delete(agentAt(X, Y, OldStep)) +
 					         insert(agentAt(X2, Y2, NewStep)).
 			}
-	} % lastaction partial_success		
+	} % lastaction partial_success
 
 	% managing action success percepts
-	forall percept(lastActionResult(success)) 
+	forall percept(lastActionResult(success))
 		do {
 		% update XY position of agent
 		% single move
-		if percept(lastAction(move), lastActionParams([D])) 
+		if percept(lastAction(move), lastActionParams([D]))
 			then {
 			% update agent XY position with confirmed move nswe
 				if percept(step(NewStep)),
-				   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2)) 
-				    then delete(agentAt(X, Y, OldStep)) + 
-				         insert(agentAt(X2, Y2, NewStep)).	
-		} 
-		% double move	
-		if percept(lastAction(move), lastActionParams([D, _])), 
-		   bel(activateDoubleSpeed) 
+				   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2))
+				    then delete(agentAt(X, Y, OldStep)) +
+				         insert(agentAt(X2, Y2, NewStep)).
+		}
+		% double move
+		if percept(lastAction(move), lastActionParams([D, _])),
+		   bel(activateDoubleSpeed)
 			then {
 				% update agent XY position with confirmed move nswe
 				if percept(step(NewStep)),
-				   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformTwoTimesXYD(D, X, Y, X2, Y2)) 
-				   	then delete(agentAt(X, Y, OldStep)) + 
-				   	     insert(agentAt(X2, Y2, NewStep)).	
-		} % move	
-		
+				   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformTwoTimesXYD(D, X, Y, X2, Y2))
+				   	then delete(agentAt(X, Y, OldStep)) +
+				   	     insert(agentAt(X2, Y2, NewStep)).
+		} % move
+
 		% succesfull attach action handling
-		if percept(lastAction(attach), lastActionParams([Dir])), 
-		   bel(haveBlockAttached(BoolOld2, Dold)) 
-			then {
-		    	if true then delete(haveBlockAttached(BoolOld2, Dold)) + 
-		    	             insert(haveBlockAttached(true, Dir)).
-		    	if not(bel(calculateNewGoalzoneMD)) 
-		    		then insert(calculateNewGoalzoneMD).
-		}		
+		if percept(lastAction(attach), lastActionParams([Dir])) then {
+
+			if bel(directionToCoordinate(Dir, X, Y)), percept(thing(X, Y, block, _)) then {
+		       if bel(haveBlockAttached(BoolOld2, Dold)) then delete(haveBlockAttached(BoolOld2, Dold))
+		       + insert(haveBlockAttached(true, Dir)).
+		       if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
+		    } % end if for blocks
+
+			if bel(directionToCoordinate(Dir, X, Y)), percept(thing(X, Y, entity, _)), bel(attachedBlokes(Count),
+			   NewCount is Count + 1)
+			   then insert(haveBlokeAttached(true, Dir)) + delete(attachedBlokes(Count))
+			   + insert(attachedBlokes(NewCount)).
+		     % end if for blokes
+
+		}
 
 		% succesfull detach action handling
-		if percept(lastAction(detach)), 
-		   bel(haveBlockAttached(BoolOld2, Dold)) 
-			then { 
-		  	if true then delete(haveBlockAttached(BoolOld2, Dold)) + 
-		  	             insert(haveBlockAttached(false, Dold)).	
-		  	if not(bel(calculateNewDispenserMD)) 
+		if percept(lastAction(detach)),
+		   bel(haveBlockAttached(BoolOld2, Dold))
+			then {
+		  	if true then delete(haveBlockAttached(BoolOld2, Dold)) +
+		  	             insert(haveBlockAttached(false, Dold)).
+		  	if not(bel(calculateNewDispenserMD))
 		  		then insert(calculateNewDispenserMD).
 		  }
 
 		% rotate update attached coordinates
-		if percept(lastAction(rotate), lastActionParams([Dir])), 
-		   bel(haveBlockAttached(true, Dold), rotateToDirection(Dold, Dir, Dnew), directionToCoordinate(Dnew, A, B)), 
-		   percept(attached(A, B)) 
-		    then delete(haveBlockAttached(true, Dold)) + 
-		         insert(haveBlockAttached(true, Dnew)).		
-		
+		if percept(lastAction(rotate), lastActionParams([Dir])),
+		   bel(haveBlockAttached(true, Dold), rotateToDirection(Dold, Dir, Dnew), directionToCoordinate(Dnew, A, B)),
+		   percept(attached(A, B))
+		    then delete(haveBlockAttached(true, Dold)) +
+		         insert(haveBlockAttached(true, Dnew)).
+
 		% successful dispenser request
-		if percept(lastAction(request), step(Step)), 
-		   bel(haveDispenserDelivery(BoolOld, X)) 
-			then delete(haveDispenserDelivery(BoolOld, X)) + 
+		if percept(lastAction(request), step(Step)),
+		   bel(haveDispenserDelivery(BoolOld, X))
+			then delete(haveDispenserDelivery(BoolOld, X)) +
 			     insert(haveDispenserDelivery(true, Step)).
-		
+
 		% successful connect supportingAgent set to find new task
-		if percept(lastAction(connect)), 
-		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) 
-		   	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) + 
+		if percept(lastAction(connect)),
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8))
+		   	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, supportingAgent, V8)) +
 		         insert(currentChosenTask(task0, -1, 10 , 0, 1, b5, needNewTask, needNewTask)).
+
+		% successful connect submitter update connected
+		if percept(lastAction(connect), lastActionParams([NameSupporter, _, _])), 
+		   bel(submitterLeader) 
+		    then {
+		   if bel(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, 
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, NameSupporter, W3, W4, W5, W6, connected, W8, W9, W10, W11, W12, 
+		                                         W13, W14, W15, W16, W17, W18, W19)).
+		   if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14, W15,
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, W13, W14,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, NameSupporter, W9, W10, W11, W12, 
+		                                         connected, W14, W15, W16, W17, W18, W19)).
+		   if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter, W15,
+		                                   W16, W17, W18, W19)) 
+		   	then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter,
+		   	                                     W15, W16, W17, W18, W19)) + 
+		         insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, 
+		                                         W13, NameSupporter, W15, W16, W17, W18, connected)).
+		 }
 	
 		% successful submit 1task agent set to find new task
-		if percept(lastAction(submit)), 
+		if percept(lastAction(submit)),
 		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentOneTask, V8))
-		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentOneTask, V8)) + 
-		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).	
-		    
-		% successful submit suubmittingAgent set to find new partner
-		if percept(lastAction(submit)), 
-		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, NameOldSupporter))
-		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentTwoTask, NameOldSupporter)) + 
+		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, submittingAgentOneTask, V8)) +
 		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).
+
+		% successful submit submittingAgent set to find new partner
+		if percept(lastAction(submit)), 
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)), 
+		   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask; 
+		       SubmitType == submittingAgentFourTask)
+		    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, SubmitType, NameOldSupporter)) + 
+		         insert(currentChosenTask(V1, -1, V3, V4, V5, V6, submitterLeaderNeedsNewTask, needNewTask)).
 	}% lastaction success
+	
 }
+

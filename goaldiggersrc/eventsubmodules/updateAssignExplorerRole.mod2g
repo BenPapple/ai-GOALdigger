@@ -14,4 +14,5 @@ module updateAssignExplorerRole {
 	%bel(positionInHirarchie(PositionInHirarchie), targetRole(Role), CheckSum is TeamSize - PositionInHirarchie, 
 	%CheckSum =< 2) then
 	%	delete(targetRole(Role)) + insert (targetRole(explorer)).
+	
 }

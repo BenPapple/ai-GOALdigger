@@ -23,4 +23,5 @@ module helperManhattanChoice {
 		
 	% obligatory skip continue action if above unsuccessful
 	if true then preActionCleanup + executeRandomMove.
+	
 }

@@ -13,10 +13,10 @@ use "./eventsubmodules/simpleworldcalculation/calculateWorldSize" as module.
 use "./eventsubmodules/updateAssignExplorerRole" as module.
 use "./eventsubmodules/syncPerceptDataIntoBelief" as module.
 use "./eventsubmodules/syncMessageDataIntoBelief" as module.
-use "./eventsubmodules/messageMultiTaskCoordination" as module.
+use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as module.
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
-use "./eventsubmodules/updateSubmitterRanking" as module.
+use "./eventsubmodules/updateAgentHierarchy" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -25,14 +25,15 @@ use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffset" as modul
 use "./eventsubmodules/updateMapExploredMarks" as module.
 use "./eventsubmodules/updateExploreMoveDirection" as module.
 use "./taskhandling/changeTaskCheck" as module.
+use "./normhandling/analyzeNorms" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
  *
  */
 
-module goaldiggerEvent {
-
+module goaldiggerEvent {  
+	
 	% SUBMODULE reinitialize belief after simulation changes
 	if percept(step(0)),
 	   not(bel(thisIsTheFirstSim)) 
@@ -43,7 +44,7 @@ module goaldiggerEvent {
 		then delete(thisIsTheFirstSim).
 	
 	% Logging made points by agents
-	if not(bel(lDebugOn)) 
+	if true
 		then logScoringBoard.
 
 	% SUBMODULE managing success and partial_success percepts
@@ -61,20 +62,23 @@ module goaldiggerEvent {
 
 	% SUBMODULES Choose RandomAgent for Explorer
 	if percept(step(SimStep), SimStep >= 6) 
-		then updateSubmitterRanking.
+		then updateAgentHierarchy.
 	if true then updateAssignExplorerRole.
 	
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffset.
 	% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-	if true then updateWorldSizeData.
-	if true then calculateWorldSize.
+	%if true then updateWorldSizeData.
+	%if true then calculateWorldSize.
+
+    % update current task for saboteur before messagePermaSendStatusToOthers
+    if bel(customRole(customRoleSaboteur)),
+       bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8))
+        then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
+             insert(currentChosenTask(taskSaboteur, -1, 100, 0, 0, bx, sabotaging, nameX)).
 	
 	% SUBMODULE Permanently send message to other agents with own status and on conditional greetings
 	if true then messagePermaSendStatusToOthers.	
-
-%	% SUBMODULE update nearest Agent on map for submitterleader
-%	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) then updateNearestAgentData.
 
 	% SUBMODULE check messages about dispensers if none known
 	if true then handleMessageDispenser.	
@@ -83,9 +87,29 @@ module goaldiggerEvent {
 	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)), 
 	   percept(role(worker)) 
 	   	then updateDispenserDistance.
+
+	% SUBMODULE help test worker tour around the goal zones
+	      
+    % remove empty goal zone flag if agent seen in goal zone
+	if bel(customRole(customRoleSaboteur)), percept(team(MyTeam), thing(X, Y, entity, OtherTeam), OtherTeam \= MyTeam, goalZone(X, Y)) then {
+		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
+	}
     
+    %ToDo: Refactor this. WARNING: Changing A and B for some kind of X3, Y3 doesn't work. I don't know why.
+	% set flag if test worker in empty goal zone
+	if bel(customRole(customRoleSaboteur)), percept(goalZone(0, 0)), not(percept(team(MyTeam), thing(X1, Y1, entity, OtherTeam), 
+	       OtherTeam \= MyTeam, goalZone(X1, Y1))), bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
+	then {
+	   if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) then 
+	   delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)) + 
+	   allother.send(iBelieveGoalZoneCounter(A, B, NewCount, Md)).
+	   
+	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
+	   then insert(emptyGoalZoneCounter(X2, Y2, 1)) + allother.send(emptyGoalZoneCounter(X2, Y2, 1)).
+	}
+
     % SUBMODULE chose new task if necessary
-    if true then changeTaskCheck.
+    if not(bel(customRole(customRoleSaboteur))) then changeTaskCheck.
 
 	% SUBMODULE managing messages concerning task coordination
 	if true then messageMultiTaskCoordination.
@@ -118,6 +142,10 @@ module goaldiggerEvent {
 
 	% SUBMODULE manhattan target manipulation
 	if true then manageManhattanTarget.
+
+    % check norms for possible damage to agents
+    if true 
+        then analyzeNorms.
 
 	/**
 	 * MISC SWITCH MANIPULATION
