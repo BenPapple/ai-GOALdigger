@@ -64,14 +64,4 @@ module syncMessageDataIntoBelief {
 	                                               BlockTypeAttached)).
 	}
 	
-	% CREATE belief about explored Marks. Where other agents has explored
-%	forall bel(confirmedOffsetOfAgent(OffSetX, OffsetY, SenderName))
-%		do { 
-%		   if percept(step(Step)), 
-%		   	  bel(storedOtherAgentStatus(SenderName, X, Y, _, _, _, _, _)),
-%		   	  bel(0 =:= mod(Step, 2), ExploredX is X + OffSetX, ExploredY is Y + OffsetY),
-%	          not(bel(mapMarkExplored(ExploredX, ExploredY)))
-%	           then insert(mapMarkExplored(ExploredX, ExploredY)).
-%	}
-	
 } % end module

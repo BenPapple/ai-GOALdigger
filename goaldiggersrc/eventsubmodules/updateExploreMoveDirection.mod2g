@@ -15,28 +15,26 @@ module updateExploreMoveDirection {
 	forall bel(mapMarkExplored(ExploredX, ExploredY))
 		do {
 			% 
-			if not(bel(northExplored)) then {
-				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DY =< -1, DY >= -3), bel(DX >= -3, DX =< 3) 
-				    then insert(northExplored). 	
-			}
-			
-			if not(bel(eastExplored)) then {
-				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DX >= 1, DX =< 3), bel(DY >= -3, DY =< 3)
-				    then insert(eastExplored).
-			}
-			
-			if not(bel(southExplored)) then {
-				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DY >= 1, DY =< 3), bel(DX >= -3, DX =< 3)
-				    then insert(southExplored).
-			}
-			
-			if not(bel(westExplored)) then {
-				if bel(agentAt(X, Y, _), DX is X - ExploredX, DY is Y - ExploredY),
-				   bel(DX =< -1, DX >= -3), bel(DY >= -3, DY =< 3)
-				    then insert(westExplored).
+			if bel(agentAt(X, Y, _), DX is ExploredX - X, DY is ExploredY - Y) then {
+				if not(bel(northExplored)) then {
+					if bel(DY =< -1, DY >= -4), bel(DX >= -4, DX =< 4) 
+					    then insert(northExplored). 	
+				}
+				
+				if not(bel(eastExplored)) then {
+					if bel(DX >= 1, DX =< 3), bel(DY >= -4, DY =< 4)
+					    then insert(eastExplored).
+				}
+				
+				if not(bel(southExplored)) then {
+					if bel(DY >= 1, DY =< 3), bel(DX >= -4, DX =< 4)
+					    then insert(southExplored).
+				}
+				
+				if not(bel(westExplored)) then {
+					if bel(DX =< -1, DX >= -4), bel(DY >= -4, DY =< 4)
+					    then insert(westExplored).
+				}
 			}
 	}
 		

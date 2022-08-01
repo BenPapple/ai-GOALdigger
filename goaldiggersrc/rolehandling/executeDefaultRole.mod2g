@@ -23,7 +23,7 @@ module executeDefaultRole {
 	    	then executeManhattanMove.
     	
     	% Explorer map until one Dispenser and one goalZone is known
-		if not(bel(mapGoalZone(_, _, _))), not(bel(mapDispenser(_, _, _, _, _, _))),
+		if not(bel(mapGoalZone(_, _, _))), not(bel(executeManhattan)), not(bel(mapDispenser(_, _, _, _, _, _))),
 		   bel(exploreDirection(Dir), randomAffinity(Dir2)) 
 			then { 
 				if bel(Dir == r) then executeRandomMove.
