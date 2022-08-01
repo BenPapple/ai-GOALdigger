@@ -13,7 +13,7 @@ module syncPerceptDataIntoBelief {
 		then delete(step(Y)) + 
 		     insert(step(X)).
 	
-	% store explored Mark every two Rounds
+	% store explored Mark every Round
 	if bel(agentAt(X, Y, _))
 		then insert(mapMarkExplored(X, Y)).
 	

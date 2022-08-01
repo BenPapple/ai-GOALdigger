@@ -14,7 +14,7 @@ module updateExploreMoveDirection {
 
 	forall bel(mapMarkExplored(ExploredX, ExploredY))
 		do {
-			% 
+			% Checks all direction if a marks is in a perimeter of 4x4
 			if bel(agentAt(X, Y, _), DX is ExploredX - X, DY is ExploredY - Y) then {
 				if not(bel(northExplored)) then {
 					if bel(DY =< -1, DY >= -4), bel(DX >= -4, DX =< 4) 
@@ -37,7 +37,8 @@ module updateExploreMoveDirection {
 				}
 			}
 	}
-		
+	
+	%Works after guardian system, if a direction is "blocked" the guardian is set	
 	if not(bel(northExplored)), bel(exploreDirection(Dir))
 		then delete(exploreDirection(Dir)) + 
 			 insert(exploreDirection(n)) +
@@ -58,6 +59,7 @@ module updateExploreMoveDirection {
 		 	 insert(exploreDirection(w)) +
 		 	 exit-module.
 		 	 
+	%If all directions are "blocked" it choose a random direction 	 	 
 	if bel(exploreDirection(Dir)) 
 		then delete(exploreDirection(Dir)) + 
 			 insert(exploreDirection(r)) +

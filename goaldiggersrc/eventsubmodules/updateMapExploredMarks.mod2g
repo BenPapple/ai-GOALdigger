@@ -4,15 +4,6 @@ use "../goaldiggerAction" as actionspec.
 module updateMapExploredMarks {
 
 	% CREATE belief about explored Marks. Where other agents has explored
-%	forall bel(confirmedOffsetOfAgent(OffSetX, OffsetY, SenderName))
-%		do { 
-%		   if percept(step(Step)), 
-%		   	  bel(storedOtherAgentStatus(SenderName, X, Y, _, _, _, _, _)),
-%		   	  bel(0 =:= mod(Step, 2), ExploredX is X + OffSetX, ExploredY is Y + OffsetY),
-%	          not(bel(mapMarkExplored(ExploredX, ExploredY)))
-%	           then insert(mapMarkExplored(ExploredX, ExploredY)).
-%	}	
-
 	forall bel(storedOtherAgentStatus(SenderName, _, _, _, _, X, Y, _))
 		do {
 			if bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SenderName)), 

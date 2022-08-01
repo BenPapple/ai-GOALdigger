@@ -42,7 +42,7 @@ module executeWorkerRole {
 	    	   bel(targetMd(_, _, dispenser), executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _,_,_), 
 	    	       TaskStep >= SimStep) then executeManhattanMove.	
 	    	       
-	    	% Explorer map until one Dispenser and one goalZone is known
+	    	% Explorer map until execute Manhattan is set
 			if not(bel(executeManhattan)),
 			   bel(exploreDirection(Dir), randomAffinity(Dir2)) 
 				then { 
