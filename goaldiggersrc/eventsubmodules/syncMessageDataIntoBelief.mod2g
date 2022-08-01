@@ -53,6 +53,7 @@ module syncMessageDataIntoBelief {
 	    		then insert(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, 
 	    		                                   X, Y, BlockTypeAttached, TaskRole)).
 	}
+
 	    
 	% UPDATE belief about status messages
 	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached, TaskRole)) 

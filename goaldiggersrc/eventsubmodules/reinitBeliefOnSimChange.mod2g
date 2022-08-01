@@ -54,6 +54,8 @@ module reinitBeliefOnSimChange {
 	if true then subscribe(channelDispenser).
 	if true then subscribe (channelNamesRelativeXY).
 	
+	if bel(exploreDirection(Dir)) then delete(exploreDirection(Dir)) + insert(exploreDirection(n)).
+	
 	%reset assign Role
 	if bel(positionInHirarchie(Position)) 
 		then delete(positionInHirarchie(Position)) + 
@@ -112,6 +114,8 @@ module reinitBeliefOnSimChange {
 		               Step)) 
 		        do delete(cachedMyOffsetOfOtherAgent(KnownSenderName, OffsetToSenderX, OffsetToSenderY, 
 		        		  UnknownAgentName, Step)).
+		        		  
+		    forall bel(mapMarkExplored(X, Y)) do delete(mapMarkExplored(X, Y)).
 	}
 	
 } % end module

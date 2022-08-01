@@ -22,6 +22,8 @@ use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDispenser" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffset" as module.
+use "./eventsubmodules/updateMapExploredMarks" as module.
+use "./eventsubmodules/updateExploreMoveDirection" as module.
 use "./taskhandling/changeTaskCheck" as module.
 use "./normhandling/analyzeNorms" as module.
 
@@ -173,18 +175,25 @@ module goaldiggerEvent {
 		then delete(calculateNewDispenserMD).
 	if bel(calculateNewGoalzoneMD) 
 		then delete(calculateNewGoalzoneMD).	
+		
+	if true then updateMapExploredMarks.
 
+	%If not know goalzone or dispenser, exploreMap
+	if not(bel(executeManhattan)) then updateExploreMoveDirection.
+	
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn) 
 		then logMiniPercept.
-
+	
 	/**
 	 * ACTIVATE MAIN LOOP
 	 *
 	 */
 
+
 	% prepare action chosing in main module
 	if bel(haveMove), 
 	   percept(step(SimStep), SimStep >= 0) 
 	   	then delete(haveMove).
+
 } % module

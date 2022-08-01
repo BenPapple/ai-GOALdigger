@@ -13,6 +13,10 @@ module syncPerceptDataIntoBelief {
 		then delete(step(Y)) + 
 		     insert(step(X)).
 	
+	% store explored Mark every Round
+	if bel(agentAt(X, Y, _))
+		then insert(mapMarkExplored(X, Y)).
+	
 	% DELETE out of step storedOtherAgentStatus
 	forall percept(step(SimStep)),
 	       bel(storedOtherAgentStatus(SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, 

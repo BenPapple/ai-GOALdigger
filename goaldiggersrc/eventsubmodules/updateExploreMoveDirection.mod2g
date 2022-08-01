@@ -1,0 +1,68 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../pathfinding/helperManhattanChoice" as module.
+use "../pathfinding/executeRandomMove" as module.
+use "../actionhandling/preActionCleanup" as module.
+use "../pathfinding/helperMoveWithoutBlock" as module.
+
+module updateExploreMoveDirection {
+
+	if bel(northExplored) then delete(northExplored).
+	if bel(southExplored) then delete(southExplored).
+	if bel(eastExplored) then delete(eastExplored).
+	if bel(westExplored) then delete(westExplored).
+
+	forall bel(mapMarkExplored(ExploredX, ExploredY))
+		do {
+			% Checks all direction if a marks is in a perimeter of 4x4
+			if bel(agentAt(X, Y, _), DX is ExploredX - X, DY is ExploredY - Y) then {
+				if not(bel(northExplored)) then {
+					if bel(DY =< -1, DY >= -4), bel(DX >= -4, DX =< 4) 
+					    then insert(northExplored). 	
+				}
+				
+				if not(bel(eastExplored)) then {
+					if bel(DX >= 1, DX =< 3), bel(DY >= -4, DY =< 4)
+					    then insert(eastExplored).
+				}
+				
+				if not(bel(southExplored)) then {
+					if bel(DY >= 1, DY =< 3), bel(DX >= -4, DX =< 4)
+					    then insert(southExplored).
+				}
+				
+				if not(bel(westExplored)) then {
+					if bel(DX =< -1, DX >= -4), bel(DY >= -4, DY =< 4)
+					    then insert(westExplored).
+				}
+			}
+	}
+	
+	%Works after guardian system, if a direction is "blocked" the guardian is set	
+	if not(bel(northExplored)), bel(exploreDirection(Dir))
+		then delete(exploreDirection(Dir)) + 
+			 insert(exploreDirection(n)) +
+			 exit-module.
+	
+	if not(bel(eastExplored)), bel(exploreDirection(Dir))
+		then delete(exploreDirection(Dir)) +
+		 	 insert(exploreDirection(e)) +
+		 	 exit-module.
+		 	 
+	if not(bel(southExplored)), bel(exploreDirection(Dir))
+		then delete(exploreDirection(Dir)) + 
+		 	 insert(exploreDirection(s)) +
+		 	 exit-module.
+		 	 
+	if not(bel(westExplored)), bel(exploreDirection(Dir))
+		then delete(exploreDirection(Dir)) + 
+		 	 insert(exploreDirection(w)) +
+		 	 exit-module.
+		 	 
+	%If all directions are "blocked" it choose a random direction 	 	 
+	if bel(exploreDirection(Dir)) 
+		then delete(exploreDirection(Dir)) + 
+			 insert(exploreDirection(r)) +
+			 exit-module.
+	
+}

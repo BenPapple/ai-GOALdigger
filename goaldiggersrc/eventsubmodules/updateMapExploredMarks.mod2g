@@ -1,0 +1,13 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+module updateMapExploredMarks {
+
+	% CREATE belief about explored Marks. Where other agents has explored
+	forall bel(storedOtherAgentStatus(SenderName, _, _, _, _, X, Y, _, _))
+		do {
+			if bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SenderName)), 
+			   bel( ExploredX is X + OffsetX, ExploredY is Y + OffsetY)
+			    then insert(mapMarkExplored(ExploredX,ExploredY)).
+	}
+}

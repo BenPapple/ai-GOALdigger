@@ -9,7 +9,7 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	%if true then insert (lDebugOn). 
+	if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
@@ -81,10 +81,13 @@ module goaldiggerInit {
 	% misc
 	if true then insert ( step(-1)). % init server steps
 	if true then insert (agentAt(0, 0, 0)). % agent starting coordinate	
+
 	if bel(randomDirection(X)) 
 		then insert (randomAffinity(X)). % random general direction to explore for agent
 	if bel(limitChangeStepMinMax(X, Y), randomBetween(X, Y, Out)) 
 		then insert (changeAffinityAfterTheseSteps(Out)). 
+	if true then insert(exploreDirection(n)). % init Explore Direction default is north
+
 	if true then insert (elapseStepTime(0)). % Time measurement between step
 	if true then insert (skipThisStep(-2)). % turns to skip with random explore move
 	

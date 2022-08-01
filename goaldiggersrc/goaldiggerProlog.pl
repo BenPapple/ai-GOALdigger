@@ -22,10 +22,21 @@
 :- dynamic calculateNewDispenserMD/0.
 % switch to recalculate goalzone distance
 :- dynamic calculateNewGoalzoneMD/0. 
+
+% when a marked is north of agent. 
+:- dynamic northExplored/0. 
+% when a marked is south of agent. 
+:- dynamic southExplored/0.
+% when a marked is east of agent.  
+:- dynamic eastExplored/0. 
+% when a marked is west of agent. 
+:- dynamic westExplored/0. 
+
 % switch to stop logging score after x sims
 :- dynamic stopScoreLogging/0. 
 % switch for saboteur
 :- dynamic activateSaboteurFeature/0.
+
 
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
@@ -50,9 +61,11 @@
 % Coordinates of agent XY
 :- dynamic agentAt/3.
 % nswe direction preferred for exploration
-:- dynamic randomAffinity/1.
-% Variables for Manhatten Distance
-:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0.
+:- dynamic randomAffinity/1. 
+% nswe direction in witch should be explored
+:- dynamic exploreDirection/1. 
+% Variables for Manhatten Distance 
+:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. 
 % (X,Y,BlockType,MD) of dispenser to search out for
 :- dynamic targetDispenserAt/4.
 % closest of all known dispensers (X,Y,Blocktype, MD)
@@ -68,8 +81,9 @@
  % goalzone percept data plus MD (X,Y,MD)
 :- dynamic mapGoalZone/3.
 % rolezone percept data plus MD (X,Y,MD)
-:- dynamic mapRoleZone/3.
-
+:- dynamic mapRoleZone/3. 
+% mapMarkExplored stored position of agents where has explored
+:- dynamic mapMarkExplored/2.
 % goalzone XY plus MD field (X,Y,MD)
 :- dynamic targetClosestGoalZone/3.
 % rolezone XY plus MD field (X,Y,MD)
@@ -107,7 +121,6 @@
 :- dynamic worldUpdateX/0, worldUpdateY/0, worldUpdatedX/0, worldUpdatedY/0.
 % store the size of the world on X and Y
 :- dynamic worldSizeX/1, worldSizeY/1.
-
 
 % messages can be commented out and still work; Variables related to goal zone and dispenser messaging
 :- dynamic cachedMsgGoalZoneData/3.
