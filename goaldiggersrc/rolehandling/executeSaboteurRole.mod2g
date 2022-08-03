@@ -47,7 +47,7 @@ module executeSaboteurRole {
 	   then insert(whitelistedTeam(fakeTeamName)).
 
 	% drag single blokes
-	if not(bel(dragger)) then insert(dragger).
+	%if not(bel(dragger)) then insert(dragger).
 		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
@@ -72,7 +72,28 @@ module executeSaboteurRole {
 		     if not(bel(dragging)) then insert(dragging) + insert(dragCounter(0)).
 		     if true then executeRandomMove.
 		}
-		   
+
+		% go to bloke anywhere if dragger without blokes attached
+		if bel(dragger, attachedBlokes(Count), Count =:= 0), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), 
+		       MyTeam \= OtherTeam), not(percept(attached(X,Y))), bel(abs(X) + abs(Y) >= 2) then {
+			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
+			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
+			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
+			if bel(Y < 0), bel(X =:= 0), not(percept(attached(_,-1))) then move(n).
+			if bel(X > 0), bel(Y \= 0) then move(e).
+			if bel(X < 0), bel(Y \= 0) then move(w).
+			if bel(Y > 0), bel(X \= 0) then move(s).
+			if bel(Y < 0), bel(X \= 0) then move(n).
+		}
+		
+		% attach blokes anywhere if dragger 
+		if bel(dragger, attachedBlokes(Count), Count =:= 0, whitelistedTeam(MyTeam)), 
+		   percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1),
+		   not(bel(X =:= 0, Y =:= 0)), not(percept(attached(X,Y)))
+		    then executeMoveAroundBloke.
+	
+
+	
 	
 		% attach bloke if next to it next to goal zone (without attached blokes)
 		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
@@ -148,8 +169,8 @@ module executeSaboteurRole {
 		       Count == 0)
 		   then executeRandomMove.
 
-		% clear blocks when next to goal zone
-		if percept(goalZone(_,_), thing(X, Y, block, _), abs(X) =< 1, abs(Y) =< 1) 
+		% clear blocks when in goal zone
+		if percept(goalZone(0,0), thing(X, Y, block, _), abs(X) =< 1, abs(Y) =< 1) 
 		   then clear(X,Y).				
 
 
@@ -186,6 +207,7 @@ module executeSaboteurRole {
 		
 		if bel(attachedBlokes(Count), Count == 0) then executeRandomMove.
 		
+		if bel(dragger) then executeRandomMove.
 		if true then skip.
 	
 	

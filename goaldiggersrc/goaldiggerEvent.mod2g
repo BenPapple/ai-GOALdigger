@@ -100,7 +100,7 @@ module goaldiggerEvent {
 	% set flag if test worker in empty goal zone
 	if bel(customRole(customRoleSaboteur)), percept(goalZone(0, 0)), bel(whitelistedTeam(MyTeam)), 
 	       not(percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, goalZone(X1, Y1))), 
-	       bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
+	       not(bel(X1 =:= 0, Y1 =:= 0)), bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
 	then {
 	   if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) then 
 	   delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)) + 
