@@ -166,6 +166,9 @@
 :- dynamic sabotageUs/0. % if set, the saboteur sabotages its own team members for testing goals
 :- dynamic sabotageThem/0. % if set, the saboteur sabotages the members of other teams
 :- dynamic whitelistedTeam/1. % holds the name of the team NOT to be sabotaged (us in competition against other teams).
+:- dynamic dragger/0. % flag to drag blokes.
+:- dynamic dragging/0. % flag to signal that blokes are being dragged.
+:- dynamic dragCounter/1. % step counter for dragging actions.
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.

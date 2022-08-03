@@ -64,6 +64,8 @@ module logMiniPercept {
 			then print(Step|Role+"Agent: "+Result+LastAction| Para| Param2| Param3).
 
 		if bel(customRole(customRoleSaboteur)) then print("This is a saboteur.").
+		if bel(dragging) then print("The saboteur is dragging someone.").
+		if bel(dragCounter(X)) then print("The dragging counter is "+X).
 
 		% some extra extra custom percept logging because conditional can be false, others for formatting
 	    if bel(agentAt(X, Y, _), targetMd(A, B, Target))

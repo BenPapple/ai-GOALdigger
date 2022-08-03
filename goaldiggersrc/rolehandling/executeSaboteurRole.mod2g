@@ -10,6 +10,7 @@ use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
 use "../blockhandling/connectBlocks" as module.
+use "../blockhandling/detachBloke" as module.
 
 /**
  * Main decision rules for saboteur
@@ -44,8 +45,13 @@ module executeSaboteurRole {
 	
 	if not(bel(whitelistedTeam(_))), bel(sabotageUs) 
 	   then insert(whitelistedTeam(fakeTeamName)).
+
+	% drag single blokes
+	if not(bel(dragger)) then insert(dragger).
 		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
+
+
 
     /**
 	 * WITHOUT BLOKE	
@@ -54,10 +60,23 @@ module executeSaboteurRole {
 	
 	
 	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {	
+
+
+		% stop dragging single blokes
+		if bel(dragging, dragCounter(Count), Count >= 20), not(percept(goalZone(_,_)))
+		   then delete(dragging) + delete(dragCounter(Count)) + allother.send(mensaje("Detached bloke")) + detachBloke.
+
+		% drag single blokes	
+		if bel(dragger, attachedBlokes(Count), Count =:= 1)
+		   then {
+		     if not(bel(dragging)) then insert(dragging) + insert(dragCounter(0)).
+		     if true then executeRandomMove.
+		}
+		   
 	
-		% attach bloke if next to it on goal zone (without attached blokes)
+		% attach bloke if next to it next to goal zone (without attached blokes)
 		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
-		       abs(Y) =< 1, goalZone(X,Y)), 
+		       abs(Y) =< 1, goalZone(_,_)), 
 		   bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
 		   % update empty time counter of all dispensers nearby
 		      if bel(searchInDispenser) then {
