@@ -35,7 +35,8 @@ module syncLastActionResultDataIntoBelief {
 				    then delete(agentAt(X, Y, OldStep)) +
 				         insert(agentAt(X2, Y2, NewStep)).
 		    % update dragging counter if saboteur is dragging someone
-				if bel(dragging, dragCounter(Count), NewCount is Count + 1) 
+		    	if bel(dragCounter(Count)) then print("Drag Counter "+Count).
+				if bel(dragCounter(Count), NewCount is Count + 1)
 				   then delete(dragCounter(Count)) + insert(dragCounter(NewCount)) + print("Counter Updated").
 		}
 		% double move
@@ -75,6 +76,11 @@ module syncLastActionResultDataIntoBelief {
 		  	if not(bel(calculateNewDispenserMD))
 		  		then insert(calculateNewDispenserMD).
 		  }
+
+		% succesfull detach action handling for saboteurs
+		if percept(lastAction(detach)),
+		   bel(attachedBlokes(BlokeNumber), NewBlokeNumber is BlokeNumber - 1)
+		   then delete(attachedBlokes(BlokeNumber)) + insert(attachedBlokes(NewBlokeNumber)).
 
 		% rotate update attached coordinates
 		if percept(lastAction(rotate), lastActionParams([Dir])),

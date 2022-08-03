@@ -6,10 +6,12 @@ module detachBloke {
 	% ToDo: Reset belief if attached for a long time (with counter).
 	
 	% detach a bloke during dragger routine
+	
+	%if bel(customRole(customRoleSaboteur)) then allother.send(mensaje("Trying to detach")).
 	if bel(customRole(customRoleSaboteur), whitelistedTeam(OurTeam)), 
 	   percept(attached(X,Y), thing(X,Y, entity, OtherTeam), OurTeam \= OtherTeam), not(bel(X =:= 0, Y =:=0)),
 	   bel(directionToCoordinate(Dir, X, Y)) 
-	    then detach(Dir).	
+	    then detach(Dir).
 	
 	% detach a bloke if directly attached to yourself
 	if percept(attached(0,0), thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), 

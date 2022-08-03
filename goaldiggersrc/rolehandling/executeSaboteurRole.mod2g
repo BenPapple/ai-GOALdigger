@@ -63,8 +63,8 @@ module executeSaboteurRole {
 
 
 		% stop dragging single blokes
-		if bel(dragging, dragCounter(Count), Count >= 20), not(percept(goalZone(_,_)))
-		   then delete(dragging) + delete(dragCounter(Count)) + allother.send(mensaje("Detached bloke")) + detachBloke.
+		if bel(dragging, dragCounter(DragCount), DragCount > 5), not(percept(goalZone(_,_)))
+		   then delete(dragging) + delete(dragCounter(DragCount)) + detachBloke.
 
 		% drag single blokes	
 		if bel(dragger, attachedBlokes(Count), Count =:= 1)
