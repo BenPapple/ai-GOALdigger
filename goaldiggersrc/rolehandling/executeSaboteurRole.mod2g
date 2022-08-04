@@ -97,7 +97,7 @@ module executeSaboteurRole {
 	
 		% attach bloke if next to it next to goal zone (without attached blokes)
 		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
-		       abs(Y) =< 1, goalZone(_,_)), 
+		       abs(Y) =< 1, goalZone(_,_)), not(bel(X =:= 0, Y =:= 0)), 
 		   bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
 		   % update empty time counter of all dispensers nearby
 		      if bel(searchInDispenser) then {
