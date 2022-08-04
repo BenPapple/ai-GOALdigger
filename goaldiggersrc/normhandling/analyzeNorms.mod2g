@@ -6,5 +6,9 @@ use "../goaldiggerProlog" as knowledge.
  */
 
 module analyzeNorms {
+
+/*fertig analysierte Norm soll gespeichert werden*/
+if percept(
+avoidNorm(nameNorm,checkAvoid,stepFirst,stepLast,typeNorm,roleNorm,maxQuant,penaltyDmg,substituteOne,substituteTwo).
 	
 }

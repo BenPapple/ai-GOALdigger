@@ -151,6 +151,12 @@
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
 :- dynamic storedOtherAgentStatus/9. 
 
+
+% coordination to avoid a norm or accept punishment
+%(nameNorm,checkAvoid,stepFirst,stepLast,typeNorm,roleNorm,maxQuant,penaltyDmg,substituteOne,substituteTwo)
+:- dynamic avoidNorm/10.
+
+
 % Variables related to customRoleSaboteur role
 :- dynamic haveBlokeAttached/2. % Boolean and direction
 :- dynamic attachedBlokes/1. % Count of attached blokes

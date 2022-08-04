@@ -29,7 +29,8 @@ module updateSubmitterRanking {
 		% position in hierarchy will increase for every lower other agent's randomSeed
 		forall bel(storedOtherAgentStatus(_, _, _, OtherAgentSeed, _, _, _, _)) 
 			do {
-			    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), MyRandomSeed > OtherAgentSeed, 
+			    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), 
+			           MyRandomSeed > OtherAgentSeed, 
 				       NewPositionInHirarchie is PositionInHirarchie + 1) 
 				    then delete(positionInHirarchie(PositionInHirarchie)) + 
 				         insert (positionInHirarchie(NewPositionInHirarchie)).
