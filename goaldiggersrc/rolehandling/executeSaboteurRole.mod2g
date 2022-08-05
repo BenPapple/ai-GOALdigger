@@ -47,7 +47,7 @@ module executeSaboteurRole {
 	   then insert(whitelistedTeam(fakeTeamName)).
 
 	% drag single blokes
-	if not(bel(dragger)) then insert(dragger).
+	%if not(bel(dragger)) then insert(dragger).
 		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
@@ -118,8 +118,8 @@ module executeSaboteurRole {
 		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
 		     
 		     forall bel(randomDirection(Dir), directionToCoordinate(Dir, X2, Y2)), percept(goalZone(X2, Y2)) do {
-		     		if percept(thing(X2, Y2, block, _)) then clear(X2, Y2).
-		     		if not(percept(thing(X2, Y2, block, _))) then move(Dir).
+		     		if percept(thing(X2, Y2, obstacle, _)) then clear(X2, Y2).
+		     		if not(percept(thing(X2, Y2, obstacle, _))) then move(Dir).
 		     }		        
 		}
 
@@ -133,7 +133,7 @@ module executeSaboteurRole {
 		   then executeRandomMove.
 
 		% clear blocks when in goal zone
-		if percept(goalZone(0,0), thing(X, Y, block, _), abs(X) =< 1, abs(Y) =< 1) 
+		if percept(goalZone(0,0), thing(X, Y, obstacle, _), abs(X) + abs(Y) =:= 1) 
 		   then clear(X,Y).				
 
 
@@ -171,6 +171,7 @@ module executeSaboteurRole {
 		if bel(attachedBlokes(Count), Count == 0) then executeRandomMove.
 		
 		if bel(dragger) then executeRandomMove.
+		if percept(thing(X,Y,obstacle,_), abs(X) + abs(Y) =:= 1) then clear(X,Y).
 		if true then skip.
 	
 	
