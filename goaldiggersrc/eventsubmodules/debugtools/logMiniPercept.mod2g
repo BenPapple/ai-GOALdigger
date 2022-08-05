@@ -63,8 +63,15 @@ module logMiniPercept {
 		           lastActionParams([Para, Param2, Param3]))
 			then print(Step|Role+"Agent: "+Result+LastAction| Para| Param2| Param3).
 
-		if bel(customRole(customRoleSaboteur)) then print("This is a saboteur.").
-
+		if bel(customRole(customRoleSaboteur)) then {
+			if true then print("This is a saboteur.").
+			if bel(dragging) then print("The saboteur is dragging someone.").
+			if bel(dragCounter(X)) then print("The dragging counter is "+X).
+			if bel(emptyGoalZoneCounter(_,_,_)) then print("Empty goal zones:").
+			if not(bel(emptyGoalZoneCounter(_,_,_))) then print("No empty goal zones found.").
+			forall bel(emptyGoalZoneCounter(A,B,C)) do print(A+" "+B+" "+C).
+		}
+		
 		% some extra extra custom percept logging because conditional can be false, others for formatting
 	    if bel(agentAt(X, Y, _), targetMd(A, B, Target))
 	    	then print("This step AgentAt: "| X| Y+"TargetMD: "| A| B| Target).
