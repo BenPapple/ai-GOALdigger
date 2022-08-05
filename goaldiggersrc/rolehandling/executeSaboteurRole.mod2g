@@ -47,7 +47,7 @@ module executeSaboteurRole {
 	   then insert(whitelistedTeam(fakeTeamName)).
 
 	% drag single blokes
-	%if not(bel(dragger)) then insert(dragger).
+	if not(bel(dragger)) then insert(dragger).
 		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
@@ -74,17 +74,8 @@ module executeSaboteurRole {
 		}
 
 		% go to bloke anywhere if dragger without blokes attached
-		if bel(dragger, attachedBlokes(Count), Count =:= 0), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), 
-		       MyTeam \= OtherTeam), not(percept(attached(X,Y))), bel(abs(X) + abs(Y) >= 2) then {
-			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
-			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
-			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
-			if bel(Y < 0), bel(X =:= 0), not(percept(attached(_,-1))) then move(n).
-			if bel(X > 0), bel(Y \= 0) then move(e).
-			if bel(X < 0), bel(Y \= 0) then move(w).
-			if bel(Y > 0), bel(X \= 0) then move(s).
-			if bel(Y < 0), bel(X \= 0) then move(n).
-		}
+		if bel(dragger, attachedBlokes(Count), Count =:= 0, targetMd(_, _, agent), executeManhattan)
+		then executeManhattanMove.
 		
 		% attach blokes anywhere if dragger 
 		if bel(dragger, attachedBlokes(Count), Count =:= 0, whitelistedTeam(MyTeam)), 
@@ -116,35 +107,10 @@ module executeSaboteurRole {
 		   % update empty time counter of all dispensers nearby
 		   if true then executeMoveAroundBloke. % attach the bloke
 		}
-		
-		% go to bloke if next to it in goalzone and have 0 or more than 1 blokes
-		if percept(goalZone(_,_)), bel(attachedBlokes(Count), Count \== 1, whitelistedTeam(MyTeam)), 
-		           percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
-		           bel(abs(X) + abs(Y) >= 2) then {
-			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
-			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
-			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
-			if bel(Y < 0), bel(X =:= 0), not(percept(attached(_,-1))) then move(n).
-			if bel(X > 0), bel(Y \= 0) then move(e).
-			if bel(X < 0), bel(Y \= 0) then move(w).
-			if bel(Y > 0), bel(X \= 0) then move(s).
-			if bel(Y < 0), bel(X \= 0) then move(n).
-		}
-		
-		% go to bloke anywhere if next to it with more than 2 blokes attached
-		if bel(attachedBlokes(Count), Count >= 2), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), 
-		       MyTeam \= OtherTeam), not(percept(attached(X,Y))), bel(abs(X) + abs(Y) >= 2) then {
-			if bel(X > 0), bel(Y =:= 0), not(percept(attached(1,_))) then move(e).
-			if bel(X < 0), bel(Y =:= 0), not(percept(attached(-1,_))) then move(w).
-			if bel(Y > 0), bel(X =:= 0), not(percept(attached(_,1))) then move(s).
-			if bel(Y < 0), bel(X =:= 0), not(percept(attached(_,-1))) then move(n).
-			if bel(X > 0), bel(Y \= 0) then move(e).
-			if bel(X < 0), bel(Y \= 0) then move(w).
-			if bel(Y > 0), bel(X \= 0) then move(s).
-			if bel(Y < 0), bel(X \= 0) then move(n).
-		}
 
 
+		if bel(targetMd(_, _, agent), executeManhattan)
+		then executeManhattanMove.
 
 		% roam goal zone if still not declared empty
 		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), 
@@ -158,11 +124,10 @@ module executeSaboteurRole {
 		     		if not(percept(thing(X2, Y2, block, _))) then move(Dir).
 		     }		        
 		}
-		
 
-		% go to a goal zone if no bloke attached
 		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
 		then executeManhattanMove.
+				
 
 		% roam if no distant goal zone available
 		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 

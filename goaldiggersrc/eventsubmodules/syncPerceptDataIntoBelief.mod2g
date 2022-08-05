@@ -94,6 +94,11 @@ module syncPerceptDataIntoBelief {
 	           	then delete(mapRoleZone(X, Y, Md)).
   	}
 	
+	% DELETE targetted blokes as Manhattan targets if they have moved away
+	if bel(customRole(customRoleSaboteur), executeManhattan, targetMd(X1,Y1, agent), agentAt(X2,Y2,_)), 
+	   not(percept(thing(X3,Y3,entity,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
+       then  delete(targetMd(X1, Y1, agent)) + delete(executeManhattan). 
+	
 	% DELETE detached blokes
 	forall bel(haveBlokeAttached(true,Dir), directionToCoordinate(Dir, X, Y)) do {
 		if not(percept(attached(X, Y))), bel(attachedBlokes(Count), NewCount is Count - 1) 
