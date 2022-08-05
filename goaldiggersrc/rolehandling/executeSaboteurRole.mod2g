@@ -47,7 +47,7 @@ module executeSaboteurRole {
 	   then insert(whitelistedTeam(fakeTeamName)).
 
 	% drag single blokes
-	%if not(bel(dragger)) then insert(dragger).
+	if not(bel(dragger)) then insert(dragger).
 		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
@@ -112,16 +112,16 @@ module executeSaboteurRole {
 
 		% roam goal zone if still not declared empty
 		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), 
-		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam)), 
-		   not(bel(X1 \= 0, Y1 \= 0)), not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
+		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
+		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
 		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), emptyGoalZoneCounter(X5, Y5, C), 
-		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
+		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then executeManhattanMove. %{
 		     
-		     forall bel(randomDirection(Dir), directionToCoordinate(Dir, X2, Y2)), percept(goalZone(X2, Y2)) do {
-		     		if percept(thing(X2, Y2, obstacle, _)) then clear(X2, Y2).
-		     		if not(percept(thing(X2, Y2, obstacle, _))) then move(Dir).
-		     }		        
-		}
+		     %forall bel(randomDirection(Dir), directionToCoordinate(Dir, X2, Y2)), percept(goalZone(X2, Y2)) do {
+		     %		if percept(thing(X2, Y2, obstacle, _)) then clear(X2, Y2).
+		     % 		if not(percept(thing(X2, Y2, obstacle, _))) then move(Dir).
+		     %}		        
+		%}
 
 		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
 		then executeManhattanMove.
@@ -137,41 +137,13 @@ module executeSaboteurRole {
 		   then clear(X,Y).				
 
 
-
-        % go to a goal zone if next to it
-		%if not(percept(goalZone(0,0))), percept(goalZone(X, Y)) then {
-		%   	if bel(X > 0), bel(Y \= 0) then move(e).
-		%	if bel(X < 0), bel(Y \= 0) then move(w).
-		%	if bel(Y > 0), bel(X \= 0) then move(s).
-		%	if bel(Y < 0), bel(X \= 0) then move(n).
-		%}
-
-		% if no free agent around, go to a goal zone
-		% if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(attached(X, Y))), 
-		%   not(percept(goalZone(_,_))), bel(targetMd(_, _, goalzone), executeManhattan) 
-		%then all.send(goToGoal("Go to goal zone")) + executeManhattanMove.
-		
-		% if no agent around, go to a dispenser
-		%if not(percept(thing(X, Y, entity, _))), bel(X \= 0; Y \=0), not(percept(attached(X, Y))), 
-		%   not(percept(thing(_,_,dispenser,_))), bel(targetMd(_, _, dispenser), executeManhattan) 
-		%then executeManhattanMove. 
-
-		% if at a dispenser and no agents around, count steps without seeing agents around
-		%if percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
-		%   bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3))
-		%then {
-		%   if bel(emptyDispenserCounter(X3, Y3, Count), NewCount is Count + 1)
-		%   then delete(emptyDispenserCounter(X3, Y3, Count)) + insert(emptyDispenserCounter(X3, Y3, NewCount)).
-		%   if not(bel(emptyDispenserCounter(X3, Y3, _))) then insert(emptyDispenserCounter(X3, Y3, 1)).
-		%}
-			
-		
-		%if percept(goalZone(0,0), bel(attachedBlokes(Count), Count \== 1)) then executeRandomMove.
 		
 		if bel(attachedBlokes(Count), Count == 0) then executeRandomMove.
 		
 		if bel(dragger) then executeRandomMove.
+
 		if percept(thing(X,Y,obstacle,_), abs(X) + abs(Y) =:= 1) then clear(X,Y).
+
 		if true then skip.
 	
 	

@@ -71,6 +71,19 @@ module manageManhattanTarget {
 			   		}		   		
 		}
 				
+		% when role saboteur in still not declared empty goal zone, select distant point of that goal zone
+		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), 
+		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
+		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
+		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), emptyGoalZoneCounter(X5, Y5, C), 
+		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
+		     	     
+		     if percept(goalZone(X6, Y6)), bel(calculateXYMd(X6, Y6, 0, 0, 5), localize(X6, Y6, X4, Y4, X7, Y7)),
+		        bel(targetMd(X0, Y0, Target))
+		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X7, Y7, goalZone)).
+		     if not(bel(executeManhattan)) then insert(executeManhattan).	        
+		}
+
 	
 		% when role saboteur and without bloke set dispenser as target
 		if bel(customRole(customRoleSaboteur), haveBlokeAttached(false,_), searchInDispenser,
