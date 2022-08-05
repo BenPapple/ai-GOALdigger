@@ -83,9 +83,10 @@ module syncLastActionResultDataIntoBelief {
 		  }
 
 		% succesfull detach action handling for saboteurs
-		if percept(lastAction(detach)),
-		   bel(attachedBlokes(BlokeNumber), BlokeNumber > 0, NewBlokeNumber is BlokeNumber - 1)
-		   then delete(attachedBlokes(BlokeNumber)) + insert(attachedBlokes(NewBlokeNumber)).
+		if bel(customRole(customRoleSaboteur), dragger), percept(lastAction(detach), lastActionParams([Dir])),
+		   bel(attachedBlokes(BlokeNumber), BlokeNumber > 0, NewBlokeNumber is BlokeNumber - 1, haveBlokeAttached(true,Dir))
+		   then delete(attachedBlokes(BlokeNumber)) + insert(attachedBlokes(NewBlokeNumber))
+		        + delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir)).
 
 		% rotate update attached coordinates
 		if percept(lastAction(rotate), lastActionParams([Dir])),

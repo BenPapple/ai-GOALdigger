@@ -73,18 +73,16 @@ module executeSaboteurRole {
 		     if true then executeRandomMove.
 		}
 
-		% go to bloke anywhere if dragger without blokes attached
-		if bel(dragger, attachedBlokes(Count), Count =:= 0, targetMd(_, _, agent), executeManhattan)
-		then executeManhattanMove.
-		
 		% attach blokes anywhere if dragger 
 		if bel(dragger, attachedBlokes(Count), Count =:= 0, whitelistedTeam(MyTeam)), 
 		   percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1),
 		   not(bel(X =:= 0, Y =:= 0)), not(percept(attached(X,Y)))
 		    then executeMoveAroundBloke.
-	
 
-	
+		% go to bloke anywhere if dragger without blokes attached
+		if bel(dragger, attachedBlokes(Count), Count =:= 0, targetMd(_, _, agent), executeManhattan)
+		then allother.send(executingManhattan("Following someone!")) + executeManhattanMove.
+		
 	
 		% attach bloke if next to it next to goal zone (without attached blokes)
 		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
