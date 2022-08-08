@@ -21,14 +21,20 @@ module logScoringBoard {
 	   bel(currentChosenTask(TaskName, _, 40, _, _, _, _, _), count2Task(Num2Task, OldStep), 
 	       NewCount is Num2Task +1, CurrentStep > OldStep)
 	    then {
-	        if bel(count2Task(Num2Task, OldStep)) 
+	        if bel(count2Task(Num2Task, OldStep)),
+	           percept(name(MyName))
 	            then delete(count2Task(Num2Task, OldStep)) +
 	                 insert(count2Task(NewCount, CurrentStep)) +
 	                 print("Agent made 40 Points  On Step " + CurrentStep + " In Sim " + 
-	                         SimCount+"2TaskGoals: "+NewCount).
+	                         SimCount+"2TaskGoals: "+NewCount) +
+	                 allother.send(made40Points(MyName)).
 	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
 	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).
 	 }
+	 
+	% score messages
+	forall (_).sent(made40Points(Name))
+	    do print("40 Points by "+Name).
 	 
 	% 3Task success logging
 	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
