@@ -37,7 +37,7 @@ module manageManhattanTarget {
 					then insert(executeManhattan).
 	}
 
-
+    % ToDo Isaac comment
 	if bel(customRole(customRoleSaboteur)) then {		
 	
 		% when role saboteur set goalzone as target
@@ -211,4 +211,5 @@ module manageManhattanTarget {
 	% Manhattan Magic calculate nswe
 	if bel(executeManhattan) 
 		then helperManhattanCalc.	
+		
 } % end module

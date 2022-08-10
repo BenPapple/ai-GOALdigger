@@ -48,11 +48,13 @@ module executeWorkerRole {
 	    	       
 	    	% Explorer map until execute Manhattan is set
 			if not(bel(executeManhattan)),
+			   percept(step(SimStep), SimStep < 150),
 			   bel(exploreDirection(Dir), randomAffinity(Dir2)) 
 				then { 
 					if bel(Dir == r) then executeRandomMove.
 					if true then delete(randomAffinity(Dir2)) + 
 								 insert(randomAffinity(Dir)) + helperMoveWithoutBlock.
+				    if true then preActionCleanup + skip.
 			}		
 	
 		    % execute random explorer move without attached blocks with affinity to one direction
