@@ -10,6 +10,7 @@ order = linearrandom.
 /**
  * handle moving without block
  *
+ * @author Ben G.
  */
 
 module helperMoveWithoutBlock {

@@ -3,6 +3,7 @@ use "../../goaldiggerProlog" as knowledge.
 /**
  * Coordinate messages between agents about relative coordinates
  *
+ * @author Isaac S.
  */
 
 module handleMessageAgentOffset {

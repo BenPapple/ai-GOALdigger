@@ -4,6 +4,7 @@ use logScoringBoard as module.
 /**
  * Handles logging custom data in Our Mini Percept
  *
+ * @author Ben G.
  */
 
 module logMiniPercept {

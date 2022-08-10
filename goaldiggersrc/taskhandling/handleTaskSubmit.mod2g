@@ -8,6 +8,7 @@ use "../blockhandling/connectBlocks" as module.
 /**
  * Rotate logic clearing block/obstacles at rotate target and then rotates prefering south, if block south submit action
  *
+ * @author Ben G.
  */
 
 module handleTaskSubmit {

@@ -3,6 +3,7 @@ use goaldiggerProlog as knowledge.
 /**
  * Definitions of all the actions an agent can perform
  *
+ * @author Ben G.
  */
 
 % move agent in world, direction like compass nswe

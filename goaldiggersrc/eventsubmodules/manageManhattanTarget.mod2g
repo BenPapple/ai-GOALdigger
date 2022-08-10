@@ -6,6 +6,7 @@ use "../eventsubmodules/updateGoalzoneDistance" as module.
 /**
  * Manages Manhattan targets
  *
+ * @author Ben G.
  */
  
 module manageManhattanTarget {

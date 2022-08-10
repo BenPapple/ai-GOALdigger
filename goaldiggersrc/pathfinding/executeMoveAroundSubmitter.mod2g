@@ -6,6 +6,7 @@ use "../actionhandling/preActionCleanup" as module.
 /**
  * Handling movement around submitting agent with tear drop pattern
  *
+ * @author Ben G.
  */
 
 module executeMoveAroundSubmitter {

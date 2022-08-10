@@ -3,6 +3,7 @@ use "../goaldiggerProlog" as knowledge.
 /**
  * Remove and restore init values when entering a new simulation
  *
+ * @author Ben G.
  */
 
 module reinitBeliefOnSimChange {

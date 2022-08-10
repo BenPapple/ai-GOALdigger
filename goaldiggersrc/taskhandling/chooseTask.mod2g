@@ -9,6 +9,7 @@ use "../taskhandling/taskHandlingFourBlock" as module.
  * Choose task from options when having corresponding role; waterfall chosing, advanced choices come first in file: 
  * first true fit gets chosen and exits module
  *
+ * @author Ben G.
  */
 
 module chooseTask {

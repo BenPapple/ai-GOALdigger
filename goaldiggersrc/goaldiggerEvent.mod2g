@@ -30,6 +30,7 @@ use "./normhandling/analyzeNorms" as module.
 /**
  * Gets executed everytime a percept or message is received and handles them
  *
+ * @author Ben G.
  */
 
 module goaldiggerEvent {

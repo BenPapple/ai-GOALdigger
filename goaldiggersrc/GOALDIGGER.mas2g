@@ -3,6 +3,7 @@ use "../eismassim-4.5-jar-with-dependencies.jar" as environment.
 /**
  * Program start file defining primary modules files and launches agents for server
  *
+ * @author Ben G.
  */
 
 define goaldiggerAgent as agent {

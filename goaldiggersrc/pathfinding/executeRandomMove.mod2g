@@ -10,6 +10,7 @@ exit = always.
 /**
  * Random Move Controller organizing modules to execute move with random
  *
+ * @author Ben G.
  */
 
 module executeRandomMove {

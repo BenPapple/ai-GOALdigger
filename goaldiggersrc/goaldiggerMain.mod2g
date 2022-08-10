@@ -13,6 +13,7 @@ exit=never.
 /**
  * Main decision rules for every step server sends
  *
+ * @author Ben G.
  */
 
 module goaldiggerMain {

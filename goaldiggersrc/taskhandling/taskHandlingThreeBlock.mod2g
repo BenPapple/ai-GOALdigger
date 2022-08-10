@@ -5,6 +5,7 @@ use "../eventsubmodules/updateDispenserDistance" as module.
 /**
  * Use the 3-task as 3task submitterLeader
  *
+ * @author Ben G.
  */
 
 module taskHandlingThreeBlock {
