@@ -34,6 +34,10 @@
 
 % switch to stop logging score after x sims
 :- dynamic stopScoreLogging/1. 
+% switch to stop logging duration after x sims
+:- dynamic stopDurationLogging/1. 
+% to calculate duration for a sim with unix timestamp
+:- dynamic simDuration/1.
 % switch for saboteur
 :- dynamic activateSaboteurFeature/0.
 
