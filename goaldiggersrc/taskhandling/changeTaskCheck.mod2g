@@ -19,32 +19,25 @@ module changeTaskCheck {
     	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), 
     	   not(percept(task(TaskName , _, _, _))) 
     	    then chooseTask.
-
-    	% change from 1-task to 3-task as submitterLeader
-    	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)),
-    	   percept(step(SimStep)), 
-    	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
-    	   percept(task(_ ,TaskStep2, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep2 > SimStep)
-    	    then chooseTask.
-  	    
+	    
     	% change from 1-task to 2-task as submitterLeader
     	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)),
     	   percept(step(SimStep)), 
     	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
     	   percept(task(_ ,TaskStep2, 40,[req(_,_,Block1),req(_,_,Block2)]), 
-    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 50),
+    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 40),
     	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 	       bel(mapDispenser(_, _, dispenser, Block2, _, _))
     	    then chooseTask.
     	    
     	% change from 1-task to 3-task as submitterLeader
     	if bel(submitterLeader),
-    	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
-	       bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
     	   percept(step(SimStep)), 
     	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
+    	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	       bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),	           	   
     	   percept(task(_ ,TaskStep2, 90,[req(X1,Y1,Block1),req(X2,Y2,Block2),req(X3,Y3,Block3)]), 
-    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 50),
+    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 70),
 		   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 		   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
 		   bel(mapDispenser(_, _, dispenser, Block3, _, _)),

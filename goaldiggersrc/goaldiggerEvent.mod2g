@@ -92,13 +92,14 @@ module goaldiggerEvent {
 
 	% SUBMODULE help test worker tour around the goal zones
 
+    % ToDo Isaac (X \= 0; Y \=0 wont work look for XPlusY solution
     % remove empty goal zone flag if agent seen in goal zone
 	if bel(customRole(customRoleSaboteur)), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam),
 	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0)) then {
 		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
 	}
 
-%    %ToDo: Refactor this. WARNING: Changing A and B for some kind of X3, Y3 doesn't work. I don't know why.
+%   %ToDo: Refactor this. WARNING: Changing A and B for some kind of X3, Y3 doesn't work. I don't know why.
 %	% set flag if test worker in empty goal zone
 	if bel(customRole(customRoleSaboteur)), percept(goalZone(0, 0)), bel(whitelistedTeam(MyTeam)),
 	       not(percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, goalZone(X1, Y1), (X1 \= 0; Y1 \=0))),
@@ -136,9 +137,10 @@ module goaldiggerEvent {
 
 	% SUBMODULE update goalzone map data
 	if percept(step(SimStep),role(worker)),
-	   bel(calculateNewGoalzoneMD, haveBlockAttached(true, _),
-	       currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), ClientServer \= supportingAgent,
-	       TaskStep >= SimStep)
+	   bel(calculateNewGoalzoneMD, haveBlockAttached(true, _), 
+	       currentChosenTask(_, TaskStep, _, _, _, _,ClientServer,_), TaskStep >= SimStep),
+	   bel(ClientServer == submittingAgentOneTask; ClientServer == submittingAgentTwoTask; 
+	       ClientServer == submittingAgentThreeTask; ClientServer == submittingAgentFourTask)
 	    then updateGoalzoneDistance.
 
 	% SUBMODULE manhattan switch manipulation
@@ -180,10 +182,13 @@ module goaldiggerEvent {
 	if bel(calculateNewGoalzoneMD)
 		then delete(calculateNewGoalzoneMD).
 
-	if true then updateMapExploredMarks.
-
-	%If not know goalzone or dispenser, exploreMap
-	if not(bel(executeManhattan)) then updateExploreMoveDirection.
+    % ACO explore only until step 150
+    if percept(step(SimStep), SimStep < 150) then {
+		if true then updateMapExploredMarks.
+	
+		%If not know goalzone or dispenser, exploreMap
+		if not(bel(executeManhattan)) then updateExploreMoveDirection.
+	}
 
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn)

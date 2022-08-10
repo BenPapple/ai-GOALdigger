@@ -47,13 +47,6 @@ module chooseTask {
 	   percept(task(_ ,TaskStep, 10,[req(_,_,_)]), TaskStep > SimStep)
 	   	then taskHandlingOneBlock + exit-module.
 
-	% choose 1-task as submitterLeader if 2task, 3task and 4task not available
-	if bel(submitterLeader, step(SimStep)), 
-	   not(percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)]), TaskStep >= SimStep)),
-	   not(percept(task(_ ,TaskStep2, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep2 >= SimStep)),
-	   not(percept(task(_ ,TaskStep3, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep3 >= SimStep)) 
-	    then taskHandlingOneBlock + exit-module.
-
 	% ToDo add 4task choosing
 %	% choose 4-task as submitterLeader if available
 %	if bel(submitterLeader, step(SimStep)),
@@ -61,6 +54,15 @@ module chooseTask {
 %	   percept(task(_ ,TaskStep, 1600,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])), 
 %	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 60)  
 %	    then taskHandlingTwoBlock + exit-module.
+
+	% choose 2-task as submitterLeader if available
+	if bel(submitterLeader, step(SimStep)),
+	   bel(confirmedOffsetOfAgent(_, _, _)),
+	   percept(task(_ ,TaskStep, 40,[req(_,_,Block1),req(_,_,Block2)])),
+	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 40)  
+	    then taskHandlingTwoBlock + exit-module.   
 
 	% choose 3-task as submitterLeader if available
 	if bel(submitterLeader, step(SimStep)),
@@ -73,16 +75,14 @@ module chooseTask {
 	   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
 	   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
 	   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2),
-	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 50)  
-	    then taskHandlingThreeBlock + exit-module.
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 70)  
+	    then taskHandlingThreeBlock + exit-module. 
 	    
-	% choose 2-task as submitterLeader if available
-	if bel(submitterLeader, step(SimStep)),
-	   bel(confirmedOffsetOfAgent(_, _, _)),
-	   percept(task(_ ,TaskStep, 40,[req(_,_,Block1),req(_,_,Block2)])),
-	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
-	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
-	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 50)  
-	    then taskHandlingTwoBlock + exit-module.   
+	% choose 1-task as submitterLeader if 2task, 3task and 4task not available
+	if bel(submitterLeader, step(SimStep)), 
+	   not(percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)]), TaskStep >= SimStep)),
+	   not(percept(task(_ ,TaskStep2, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep2 >= SimStep)),
+	   not(percept(task(_ ,TaskStep3, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep3 >= SimStep)) 
+	    then taskHandlingOneBlock + exit-module.
 		
 } % module

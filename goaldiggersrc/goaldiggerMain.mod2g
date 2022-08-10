@@ -19,7 +19,8 @@ exit=never.
 module goaldiggerMain {
 
 	% Server sends new percept and Event sets haveMove(false) and now agent action strategy can continue
-    if not(bel(haveMove))
+    if not(bel(haveMove)),
+       percept(requestAction)
     	then {
 
     	% handle deactivated by skip

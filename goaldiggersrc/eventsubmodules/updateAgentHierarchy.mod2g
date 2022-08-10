@@ -20,8 +20,9 @@ module updateAgentHierarchy {
 			                 insert (randomSeed(NewSeed)).
 		}
     }
-	
-	if percept(step(SimStep), SimStep > 9) 
+
+    % reset hierarchy value
+	if percept(step(SimStep), SimStep > 9, SimStep < 14) 
 		then {
 		% RESET
 		if bel(positionInHirarchie(PositionInHirarchie)) 

@@ -34,8 +34,10 @@ module logScoringBoard {
 	 }
 	 
 	% score messages
-	forall (_).sent(made40Points(Name))
-	    do print("40 Points by "+Name).
+	forall (_).sent(made40Points(Name)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep))
+	    do print("40 Points by "+Name+" on step "+SimStep+" in Sim "+SimCount).
 	 
 	% 3Task success logging
 	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
@@ -75,8 +77,8 @@ module logScoringBoard {
 		     
 	% score last sim
 	if not(bel(stopScoreLogging)),
-	   percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(749)),
-	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task),cachedCount3Task(Num3Task)) 
+	   percept(score(Score1), score(Score2), Score1 \= Score2, ranking(Ranked), simEnd, step(399)),
+	   bel(simCount(SCount), SCount >= 3, cachedCount2Task(Num2Task),cachedCount3Task(Num3Task)) 
 	   	then print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+Score2+" 2Task: "+Num2Task
 	   	           +" 3Task: "+Num3Task) +
 		     delete(cachedCount2Task(Num2Task)) + 
@@ -87,8 +89,8 @@ module logScoringBoard {
 		     
 	% score last sim alt
 	if not(bel(stopScoreLogging)),
-	   percept(score(Score1), ranking(Ranked), simEnd, step(749)),
-	   bel(simCount(SCount), SCount >= 5, cachedCount2Task(Num2Task), cachedCount3Task(Num3Task)) 
+	   percept(score(Score1), ranking(Ranked), simEnd, step(399)),
+	   bel(simCount(SCount), SCount >= 3, cachedCount2Task(Num2Task), cachedCount3Task(Num3Task)) 
 	   	then print("Simulation 5 ended with agent ranked: "|Ranked+"Score: "+Score1+" : "+" 2Task: "+Num2Task
 	   	           +" 3Task: "+Num3Task) +
 			 delete(cachedCount2Task(Num2Task)) + 
