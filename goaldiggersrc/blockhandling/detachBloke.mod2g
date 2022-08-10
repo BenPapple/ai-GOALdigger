@@ -1,6 +1,12 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
+/**
+ * ToDo Isaac
+ *
+ * @author Isaac S.
+ */
+
 module detachBloke {
 
 	% ToDo: Reset belief if attached for a long time (with counter).

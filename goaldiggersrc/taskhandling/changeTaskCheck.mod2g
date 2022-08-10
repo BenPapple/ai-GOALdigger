@@ -5,6 +5,7 @@ use "../taskhandling/chooseTask" as module.
 /**
  * Check if task can be changed
  *
+ * @author Ben G.
  */
 
 module changeTaskCheck {

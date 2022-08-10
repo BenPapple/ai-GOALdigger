@@ -6,6 +6,7 @@ use "../actionhandling/preActionCleanup" as module.
 /**
  * Rotate logic clearing block/obstacles at rotate target and then rotates
  *
+ * @author Ben G.
  */
 
 module rotateBlockAgainstAffinity {

@@ -4,6 +4,7 @@ use "../../goaldiggerAction" as actionspec.
 /**
  * calculate worldsize and send, delete message cache
  *
+ * @author Isaac S.
  */
 
 module calculateWorldSize {	

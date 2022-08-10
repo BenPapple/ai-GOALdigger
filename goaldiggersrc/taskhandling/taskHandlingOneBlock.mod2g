@@ -5,6 +5,7 @@ use "../eventsubmodules/updateDispenserDistance" as module.
 /**
  * Use the 1s task
  *
+ * @author Ben G.
  */
 
 module taskHandlingOneBlock {

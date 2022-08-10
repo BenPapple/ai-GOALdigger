@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Store (or delete if messages get old) messages from percept into belief
  *
+ * @author Ben G.
  */
 
 module syncMessageDataIntoBelief {	

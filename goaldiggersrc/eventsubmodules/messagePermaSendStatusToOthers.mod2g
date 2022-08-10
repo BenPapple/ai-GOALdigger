@@ -3,6 +3,7 @@ use "../goaldiggerProlog" as knowledge.
 /**
  * Sending agents status and sync messages to all other agents
  *
+ * @author Ben G.
  */
  
 module messagePermaSendStatusToOthers {

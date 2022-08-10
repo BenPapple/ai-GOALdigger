@@ -7,6 +7,8 @@ exit = always.
 /**
  * Calculates Manhattan Distance for nswe directions of agent concerning targetMd
  *
+ * @author Julia H.
+ * @co-author Ben G.
  */
 
 module helperManhattanCalc {

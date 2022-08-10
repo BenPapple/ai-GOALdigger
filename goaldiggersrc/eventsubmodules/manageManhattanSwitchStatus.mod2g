@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Manages all cases to switch off Manhattan Switch targetMd(x,y,type) concerning type field
  *
+ * @author Ben G.
  */
 
 module manageManhattanSwitchStatus {

@@ -3,6 +3,7 @@ use "../../goaldiggerProlog" as knowledge.
 /**
  * Find XY and blocktype for supporters and store in multiTaskSupporterStatus
  *
+ * @author Ben G.
  */
 
 module prepareThreeTaskData {

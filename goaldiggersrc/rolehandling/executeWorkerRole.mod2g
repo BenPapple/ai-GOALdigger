@@ -15,6 +15,7 @@ use "../blockhandling/connectBlocks" as module.
 /**
  * Main decision rules for role worker
  *
+ * @author Ben G.
  */
 
 module executeWorkerRole {

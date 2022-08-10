@@ -4,6 +4,7 @@ use "../../eventsubmodules/updateNearestAgentDistance" as module.
 /**
  * coordination messages to 2-task suppportingAgent)
  *
+ * @author Ben G.
  */
 
 module messageTwoTaskSupporter {

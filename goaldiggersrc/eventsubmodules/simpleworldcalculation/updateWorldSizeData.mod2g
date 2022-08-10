@@ -4,6 +4,7 @@ use "../../goaldiggerAction" as actionspec.
 /**
  * Manage worldsizes of all agents and update believe when worldsize known with recalculated coordinates
  *
+ * @author Isaac S.
  */
 
 module updateWorldSizeData {

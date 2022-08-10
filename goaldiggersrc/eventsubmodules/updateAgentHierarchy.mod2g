@@ -4,6 +4,8 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Handle ranking of agents and assign submitterLeader/warrior/explorer to one agent
  *
+ * @author Marco G.
+ * @co-author Ben G.
  */
 
 module updateAgentHierarchy {

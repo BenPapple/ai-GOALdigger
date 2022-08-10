@@ -1,8 +1,9 @@
 use "../../goaldiggerProlog" as knowledge.
 
 /**
- * Log made points by agents
+ * Log made points by agents, logs always useful for benchmark when big log MiniPercept deactivated
  *
+ * @author Ben G.
  */
 
 module logScoringBoard {

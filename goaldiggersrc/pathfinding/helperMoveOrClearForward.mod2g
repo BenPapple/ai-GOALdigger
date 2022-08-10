@@ -9,6 +9,7 @@ order = linearrandom.
 /**
  * handle moving affinity forward and clear block if necessary
  *
+ * @author Ben G.
  */
 
 module helperMoveOrClearForward {

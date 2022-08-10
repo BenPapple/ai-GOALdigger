@@ -6,6 +6,7 @@ use "../actionhandling/preActionCleanup" as module.
 /**
  * Rotate block into north position
  *
+ * @author Ben G.
  */
 
 module rotateBlockToNorth {

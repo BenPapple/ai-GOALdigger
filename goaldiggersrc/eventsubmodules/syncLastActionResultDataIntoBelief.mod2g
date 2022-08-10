@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Handles field lastActionResult from percept and alters belief accordingly
  *
+ * @author Ben G.
  */
 
 module syncLastActionResultDataIntoBelief {

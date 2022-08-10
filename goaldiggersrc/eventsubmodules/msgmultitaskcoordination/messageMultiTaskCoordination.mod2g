@@ -9,6 +9,7 @@ use "./findReplacementSupporters" as module.
 /**
  * coordination for tasks greater than 1 (submittingAgent & supportingAgent)
  *
+ * @author Ben G.
  */
  
 module messageMultiTaskCoordination {

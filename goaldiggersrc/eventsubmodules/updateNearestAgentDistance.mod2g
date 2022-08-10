@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Calculate distance to nearest known agent.
  *
+ * @author Ben G.
  */
 
 module updateNearestAgentDistance {

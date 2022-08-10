@@ -13,6 +13,7 @@ order = linearrandom.
 /**
  * handle moving with block
  *
+ * @author Ben G.
  */
 
 module helperMoveWithBlock {

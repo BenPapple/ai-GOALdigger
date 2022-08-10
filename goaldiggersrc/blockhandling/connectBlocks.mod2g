@@ -6,6 +6,7 @@ use "../actionhandling/preActionCleanup" as module.
 /**
  * Connect blocks if at targetMd position with correct label
  *
+ * @author Ben G.
  */
 
 module connectBlocks {
