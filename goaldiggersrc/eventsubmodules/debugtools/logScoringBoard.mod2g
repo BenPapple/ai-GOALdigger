@@ -100,11 +100,13 @@ module logScoringBoard {
        bel(simCount(SimCount), SimCount > LastLog),
        percept(timestamp(TimeNew), steps(MaxStep), EndStep is MaxStep -1, step(EndStep)),
        bel(simDuration(TimeOld)),
-       bel(DurationSeconds is (TimeNew - TimeOld) * 0.001),
-       bel(DurationMinutes is DurationSeconds / 60)
+       bel(AllSeconds is integer((TimeNew - TimeOld) * 0.001)),
+       bel(DurationMinutes is  integer(AllSeconds / 60)),
+       bel(DurationSeconds is  mod(AllSeconds, 60))
         then delete(stopDurationLogging(LastLog)) + 
 		     insert(stopDurationLogging(SimCount)) + 
-		     print("Simulation"+SimCount+"ended in "+DurationSeconds+" seconds. Or "+DurationMinutes+" Minutes.").    
+		     print("Simulation"+SimCount+"ended in "+DurationMinutes+" Minutes and "+
+		           DurationSeconds+" seconds.").    
 	
 	% just print it to find submitterleader in logs	 
     forall (_).sent(msgSubmitterLeader(MyName)) do print(MyName+" is submitterLeader!").
