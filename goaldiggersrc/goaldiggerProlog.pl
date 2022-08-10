@@ -33,7 +33,7 @@
 :- dynamic westExplored/0. 
 
 % switch to stop logging score after x sims
-:- dynamic stopScoreLogging/0. 
+:- dynamic stopScoreLogging/1. 
 % switch for saboteur
 :- dynamic activateSaboteurFeature/0.
 
