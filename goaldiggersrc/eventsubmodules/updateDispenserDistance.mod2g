@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Handles calculating distance of dispensers to agent and manages inserting dispenser data from percept into belief
  *
+ * @author Ben G.
  */
 
 module updateDispenserDistance {

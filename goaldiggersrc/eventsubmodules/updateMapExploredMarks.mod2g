@@ -1,6 +1,8 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
+% ToDo Marco comments
+
 module updateMapExploredMarks {
 
 	% CREATE belief about explored Marks. Where other agents has explored

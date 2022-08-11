@@ -5,6 +5,7 @@ use "../eventsubmodules/updateDispenserDistance" as module.
 /**
  * Use the 4-task as 4task submitterLeader
  *
+ * @author Ben G.
  */
  
 % ToDo rewrite for 4task 

@@ -5,6 +5,7 @@ use "./messageTwoTaskSupporter" as module.
 /**
  * message other agents to recruit supportingAgent after first request got denied
  *
+ * @author Ben G.
  */
 
 module findReplacementSupporters {

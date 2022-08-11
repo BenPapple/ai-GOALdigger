@@ -7,6 +7,7 @@ use "../actionhandling/preActionCleanup" as module.
 /**
  * Manhattan Distance Controller organizing modules to execute move with Calculation and Actions
  *
+ * @author Ben G.
  */
 
 module executeManhattanMove {

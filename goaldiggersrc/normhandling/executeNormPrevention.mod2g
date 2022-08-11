@@ -1,9 +1,13 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
+use "../actionhandling/preActionCleanup" as module.
 
 /**
  * fulfil plan from analyzeNorms to prevent damage to agents
+ * (Exception submitter-leader, they should continue)
  *
+ * @author Julia H.
+ * @co-author Ben G.
  */
 
 module executeNormPrevention {
@@ -14,4 +18,38 @@ module executeNormPrevention {
 	%if Constructor, go worker 
 	%if Digger, go explorer or worker (if worldsize done)
 	%if default, go old role
-}
+	
+	% treat block-norm with null-condition if block is worn
+	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)),
+   	   bel(haveBlockAttached(true,DirBlock))
+		then preActionCleanup + detach(DirBlock).
+	
+	% skip further actions as long as the norm is active
+	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)), 
+	   percept(step(SimStep), SimStep < StepEnd)
+	   	then  preActionCleanup + skip.
+	
+	% when the norm ends, check if a block is carried and if for an active selected task, 
+	% a matching block is next to the agent and not carried by another agent
+	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)), 
+	   percept(step(SimStep), SimStep == StepEnd),
+	   bel(haveBlockAttached(false,DirBlock)),
+	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep)
+	   	then {
+	   	
+	   	% take the ownerless matching block
+   		if percept(thing(0, -1, block, BlockType)),
+   		   not(percept(attached(0,-1)))
+   			then preActionCleanup + attach(n).
+   		if percept(thing(0, 1, block, BlockType)),
+   		   not(percept(attached(0,1)))
+   			then preActionCleanup + attach(s).
+   		if percept(thing(1, 0, block, BlockType)),
+   		   not(percept(attached(1, 0)))
+   			then preActionCleanup + attach(e).
+   		if percept(thing(-1, 0, block, BlockType)),
+   		   not(percept(attached(-1, 0)))
+   			then preActionCleanup + attach(w).
+	   	}  
+	   	 
+} %end module executeNormPrevention

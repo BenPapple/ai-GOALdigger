@@ -4,6 +4,8 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Handle ranking of agents and assign submitterLeader/warrior/explorer to one agent
  *
+ * @author Marco G.
+ * @co-author Ben G.
  */
 
 module updateAgentHierarchy {
@@ -18,8 +20,9 @@ module updateAgentHierarchy {
 			                 insert (randomSeed(NewSeed)).
 		}
     }
-	
-	if percept(step(SimStep), SimStep > 9) 
+
+    % reset hierarchy value
+	if percept(step(SimStep), SimStep > 9, SimStep < 14) 
 		then {
 		% RESET
 		if bel(positionInHirarchie(PositionInHirarchie)) 
@@ -38,7 +41,7 @@ module updateAgentHierarchy {
 		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie),
-		   bel(0 =:= mod(PosCheck, 5))
+		   bel(0 =:= mod(PosCheck, 4))
 			  then {
 			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 

@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Store (or delete if not in percept anymore) objects from percept into belief with corrected coordinates
  *
+ * @author Ben G.
  */
 
 module syncPerceptDataIntoBelief {
@@ -14,7 +15,8 @@ module syncPerceptDataIntoBelief {
 		     insert(step(X)).
 	
 	% store explored Mark every Round
-	if bel(agentAt(X, Y, _))
+	if bel(agentAt(X, Y, _)),
+	   percept(step(SimStep), SimStep < 150)
 		then insert(mapMarkExplored(X, Y)).
 	
 	% DELETE out of step storedOtherAgentStatus
@@ -93,6 +95,11 @@ module syncPerceptDataIntoBelief {
 	           not(percept((roleZone(X3, Y3)))) 
 	           	then delete(mapRoleZone(X, Y, Md)).
   	}
+	
+	% DELETE targetted blokes as Manhattan targets if they have moved away
+	if bel(customRole(customRoleSaboteur), executeManhattan, targetMd(X1,Y1, agent), agentAt(X2,Y2,_)), 
+	   not(percept(thing(X3,Y3,entity,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
+       then  delete(targetMd(X1, Y1, agent)) + delete(executeManhattan). 
 	
 	% DELETE detached blokes
 	forall bel(haveBlokeAttached(true,Dir), directionToCoordinate(Dir, X, Y)) do {

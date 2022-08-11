@@ -9,6 +9,7 @@ use "../actionhandling/preActionCleanup" as module.
  * Compares Manhattan Distance in stored fields nswe around agent and choses lowest value, 
  * if exist equal values random lowest chosen
  *
+ * @author Ben G.
  */
 
 module helperManhattanChoice {

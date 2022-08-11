@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Handles calculating distance of goalzones to agent and manages inserting goalzone data from percept into belief
  *
+ * @author Ben G.
  */
 
 module updateGoalzoneDistance {

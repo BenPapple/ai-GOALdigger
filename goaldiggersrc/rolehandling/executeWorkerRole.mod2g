@@ -6,7 +6,6 @@ use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
 use "../pathfinding/executeMoveAroundSubmitter" as module.
 use "../pathfinding/helperMoveWithoutBlock" as module.
-use "../taskhandling/changeTaskCheck" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/detachBloke" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
@@ -16,6 +15,7 @@ use "../blockhandling/connectBlocks" as module.
 /**
  * Main decision rules for role worker
  *
+ * @author Ben G.
  */
 
 module executeWorkerRole {
@@ -48,15 +48,18 @@ module executeWorkerRole {
 	    	       
 	    	% Explorer map until execute Manhattan is set
 			if not(bel(executeManhattan)),
+			   percept(step(SimStep), SimStep < 150),
 			   bel(exploreDirection(Dir), randomAffinity(Dir2)) 
 				then { 
 					if bel(Dir == r) then executeRandomMove.
 					if true then delete(randomAffinity(Dir2)) + 
 								 insert(randomAffinity(Dir)) + helperMoveWithoutBlock.
+				    if true then preActionCleanup + skip.
 			}		
 	
 		    % execute random explorer move without attached blocks with affinity to one direction
 			if true then executeRandomMove. 
+			
 	} % end haveBlockAttached(false,_)
     
     /**

@@ -13,12 +13,14 @@ exit=never.
 /**
  * Main decision rules for every step server sends
  *
+ * @author Ben G.
  */
 
 module goaldiggerMain {
 
 	% Server sends new percept and Event sets haveMove(false) and now agent action strategy can continue
-    if not(bel(haveMove))
+    if not(bel(haveMove)),
+       percept(requestAction)
     	then {
 
     	% handle deactivated by skip

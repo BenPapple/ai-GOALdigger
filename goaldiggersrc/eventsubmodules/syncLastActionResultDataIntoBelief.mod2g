@@ -4,6 +4,7 @@ use "../goaldiggerAction" as actionspec.
 /**
  * Handles field lastActionResult from percept and alters belief accordingly
  *
+ * @author Ben G.
  */
 
 module syncLastActionResultDataIntoBelief {
@@ -19,6 +20,12 @@ module syncLastActionResultDataIntoBelief {
 					   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2))
 					    then delete(agentAt(X, Y, OldStep)) +
 					         insert(agentAt(X2, Y2, NewStep)).
+			
+			% update dragging counter if saboteur is dragging someone
+			if percept(lastAction(move)), bel(dragCounter(Count), NewCount is Count + 1)
+				   then delete(dragCounter(Count)) + insert(dragCounter(NewCount)).
+
+
 			}
 	} % lastaction partial_success
 
@@ -34,6 +41,9 @@ module syncLastActionResultDataIntoBelief {
 				   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2))
 				    then delete(agentAt(X, Y, OldStep)) +
 				         insert(agentAt(X2, Y2, NewStep)).
+		    % update dragging counter if saboteur is dragging someone
+				if bel(dragCounter(Count), NewCount is Count + 1)
+				   then delete(dragCounter(Count)) + insert(dragCounter(NewCount)).
 		}
 		% double move
 		if percept(lastAction(move), lastActionParams([D, _])),
@@ -72,6 +82,12 @@ module syncLastActionResultDataIntoBelief {
 		  	if not(bel(calculateNewDispenserMD))
 		  		then insert(calculateNewDispenserMD).
 		  }
+
+		% succesfull detach action handling for saboteurs
+		if bel(customRole(customRoleSaboteur), dragger), percept(lastAction(detach), lastActionParams([Dir])),
+		   bel(attachedBlokes(BlokeNumber), BlokeNumber > 0, NewBlokeNumber is BlokeNumber - 1, haveBlokeAttached(true,Dir))
+		   then delete(attachedBlokes(BlokeNumber)) + insert(attachedBlokes(NewBlokeNumber))
+		        + delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir)).
 
 		% rotate update attached coordinates
 		if percept(lastAction(rotate), lastActionParams([Dir])),

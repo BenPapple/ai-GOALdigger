@@ -6,6 +6,7 @@ use "../actionhandling/preActionCleanup" as module.
 /**
  * Handling movement, attaching and requesting when agent around dispenser
  *
+ * @author Isaac S.
  */
 
 module executeMoveAroundBloke {	
@@ -16,18 +17,18 @@ module executeMoveAroundBloke {
 
 
 	% Bloke attaching if in position
-	if  bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target),
-	    percept(thing(A, B, entity, _), abs(A) =< 1, abs(B) =< 1),
+	if  bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target, whitelistedTeam(MyTeam)),
+	    percept(thing(A, B, entity, OtherTeam), MyTeam \= OtherTeam, abs(A) =< 1, abs(B) =< 1),
 	    bel(XPlusY is abs(A) + abs(B), XPlusY \= 0), 
 	    not(percept(attached(A,B))) then {
 	
-		if percept(thing(1, 0, entity,_)), not(percept(attached(1, 0))) 
+		if bel(A =:= 1, B =:= 0), not(percept(attached(1, 0))) 
 		    then preActionCleanup + attach(e).
-		if percept(thing(-1, 0, entity,_)), not(percept(attached(-1, 0))) 
+		if bel(A =:= -1, B =:= 0), not(percept(attached(-1, 0))) 
 		    then preActionCleanup + attach(w).
-		if percept(thing(0, -1, entity,_)), not(percept(attached(0, -1))) 
+		if bel(A =:= 0, B =:= -1), not(percept(attached(0, -1))) 
 		    then preActionCleanup + attach(n).
-		if percept(thing(0, 1, entity,_)), not(percept(attached(0, 1))) 
+		if bel(A =:= 0, B =:= 1), not(percept(attached(0, 1))) 
 		    then preActionCleanup + attach(s).
 	
 	}

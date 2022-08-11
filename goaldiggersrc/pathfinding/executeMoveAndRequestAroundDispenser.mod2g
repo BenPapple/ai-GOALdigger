@@ -6,6 +6,7 @@ use "../actionhandling/preActionCleanup" as module.
 /**
  * Handling movement, attaching and requesting when agent around dispenser
  *
+ * @author Ben G.
  */
 
 module executeMoveAndRequestAroundDispenser {	
