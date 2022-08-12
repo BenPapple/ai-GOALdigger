@@ -23,9 +23,9 @@ module executeSaboteurRole {
 	if not(bel(searchInGoalzone)) 
 	   then insert(searchInGoalzone).
 	
-	% bloke quantity
-	if not(bel(targetBlokeCount(_))) 
-	   then insert(targetBlokeCount(4)). 
+%	% bloke quantity
+%	if not(bel(targetBlokeCount(_))) 
+%	   then insert(targetBlokeCount(4)). 
 
 	% insert minimum distance for different goal zones
 	if not(bel(minimumDistanceEmptyGoalZone(_)))
@@ -33,11 +33,11 @@ module executeSaboteurRole {
 	
 	% insert waiting time in empty goal zone
 	if not(bel(waitingTimeEmptyGoalZone(_)))
-	   then insert(waitingTimeEmptyGoalZone(10)).	
+	   then insert(waitingTimeEmptyGoalZone(15)).	
 	
-	% detach blocks if they were attached by chance
-	if bel(haveBlockAttached(true, Dir)) 
-	   then detach(Dir).
+%	% detach blocks if they were attached by chance
+%	if bel(haveBlockAttached(true, Dir)) 
+%	   then detach(Dir).
 	
 	% select sabotage goal
 	if not(bel(whitelistedTeam(_))), bel(sabotageThem), percept(team(MyTeam)) 
@@ -46,8 +46,8 @@ module executeSaboteurRole {
 	if not(bel(whitelistedTeam(_))), bel(sabotageUs) 
 	   then insert(whitelistedTeam(fakeTeamName)).
 
-	% drag single blokes
-	if not(bel(dragger)) then insert(dragger).
+%	% drag single blokes
+%	if not(bel(dragger)) then insert(dragger).
 		
 	%if not(bel(searchInDispenser)) then insert(searchInDispenser).
 
@@ -61,50 +61,56 @@ module executeSaboteurRole {
 	
 	if bel(attachedBlokes(Count), targetBlokeCount(Target), Count < Target) then {	
 
-
-		% stop dragging single blokes
-		if bel(dragging, dragCounter(DragCount), DragCount > 5), not(percept(goalZone(_,_)))
-		   then delete(dragging) + delete(dragCounter(DragCount)) + detachBloke.
-
-		% drag single blokes	
-		if bel(dragger, attachedBlokes(Count), Count =:= 1)
-		   then {
-		     if not(bel(dragging)) then insert(dragging) + insert(dragCounter(0)).
-		     if true then executeRandomMove.
-		}
-
-		% attach blokes anywhere if dragger 
-		if bel(dragger, attachedBlokes(Count), Count =:= 0, whitelistedTeam(MyTeam)), 
-		   percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1),
-		   not(bel(X =:= 0, Y =:= 0)), not(percept(attached(X,Y)))
-		    then executeMoveAroundBloke.
-
-		% go to bloke anywhere if dragger without blokes attached
-		if bel(dragger, attachedBlokes(Count), Count =:= 0, targetMd(_, _, agent), executeManhattan)
-		then allother.send(executingManhattan("Following someone!")) + executeManhattanMove.
-		
 	
-		% attach bloke if next to it next to goal zone (without attached blokes)
-		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
-		       abs(Y) =< 1, goalZone(_,_)), not(bel(X =:= 0, Y =:= 0)), 
-		   bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
-		   % update empty time counter of all dispensers nearby
-		      if bel(searchInDispenser) then {
-		         forall percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
-		                bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3)) do {
-		                if bel(emptyDispenserCounter(X3, Y3, Count)) then delete(emptyDispenserCounter(X3, Y3, Count)).
-		     } 
-		   }% end empty time counter update
-		    
-		   if true then executeMoveAroundBloke. % attach the bloke
-		}
+%		% DEPRECATED SABOTEUR FEATURES
+%		% stop dragging single blokes
+%		if bel(dragging, dragCounter(DragCount), DragCount > 5), not(percept(goalZone(_,_)))
+%		   then delete(dragging) + delete(dragCounter(DragCount)) + detachBloke.
+%
+%		% drag single blokes	
+%		if bel(dragger, attachedBlokes(Count), Count =:= 1)
+%		   then {
+%		     if not(bel(dragging)) then insert(dragging) + insert(dragCounter(0)).
+%		     if true then executeRandomMove.
+%		}
+
+%		% attach blokes anywhere if dragger 
+%		if bel(dragger, attachedBlokes(Count), Count =:= 0, whitelistedTeam(MyTeam)), 
+%		   percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1),
+%		   not(bel(X =:= 0, Y =:= 0)), not(percept(attached(X,Y)))
+%		    then executeMoveAroundBloke.
+
+%		% go to bloke anywhere if dragger without blokes attached
+%		if bel(dragger, attachedBlokes(Count), Count =:= 0, targetMd(_, _, agent), executeManhattan)
+%		then allother.send(executingManhattan("Following someone!")) + executeManhattanMove.
 		
-		% attach bloke anywhere if at least one bloke already attached
-		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1), 
-		   bel(attachedBlokes(Count), Count > 0), not(percept(attached(X,Y))) then {
-		   % update empty time counter of all dispensers nearby
-		   if true then executeMoveAroundBloke. % attach the bloke
-		}
+
+		% attack blocke if next to it
+		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, (X =:= 0; Y =:= 0),
+			   X =< 5, Y =< 5, directionToCoordinate(Dir, X, Y)), not(bel(X =:= 0, Y =:= 0)) 
+			   then clear(X,Y).
+			
+%		% attach bloke if next to it next to goal zone (without attached blokes)
+%		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
+%		       abs(Y) =< 1, goalZone(_,_)), not(bel(X =:= 0, Y =:= 0)), 
+%		   bel(attachedBlokes(Count), Count == 0), not(percept(attached(X,Y))) then {
+%		   % update empty time counter of all dispensers nearby
+%		      if bel(searchInDispenser) then {
+%		         forall percept(thing(X0, Y0, dispenser, _)), not(percept(thing(X1, Y1, entity, _), X1 \= 0, Y1 \= 0)),
+%		                bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3)) do {
+%		                if bel(emptyDispenserCounter(X3, Y3, Count)) then delete(emptyDispenserCounter(X3, Y3, Count)).
+%		     } 
+%		   }% end empty time counter update
+%		    
+%		   if true then executeMoveAroundBloke. % attach the bloke
+%		}
+		
+%		% attach bloke anywhere if at least one bloke already attached
+%		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, abs(Y) =< 1), 
+%		   bel(attachedBlokes(Count), Count > 0), not(percept(attached(X,Y))) then {
+%		   % update empty time counter of all dispensers nearby
+%		   if true then executeMoveAroundBloke. % attach the bloke
+%		}
 
 
 		if bel(targetMd(_, _, agent), executeManhattan)
@@ -135,7 +141,6 @@ module executeSaboteurRole {
 		% clear blocks when in goal zone
 		if percept(goalZone(0,0), thing(X, Y, obstacle, _), abs(X) + abs(Y) =:= 1) 
 		   then clear(X,Y).				
-
 
 		
 		if bel(attachedBlokes(Count), Count == 0) then executeRandomMove.

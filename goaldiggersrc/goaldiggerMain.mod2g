@@ -35,9 +35,14 @@ module goaldiggerMain {
     	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep)
             then executeRandomMove.
 
-    	% Handle test worker role
+%    	% Handle saboteur role
+%    	if bel(activateSaboteurFeature, customRole(customRoleSaboteur)), 
+%    	   percept(role(digger))
+%            then executeSaboteurRole.
+
+    	% Handle blaster role
     	if bel(activateSaboteurFeature, customRole(customRoleSaboteur)), 
-    	   percept(role(worker))
+    	   percept(role(digger))
             then executeSaboteurRole.
 
 	    % Handle DEFAULT role

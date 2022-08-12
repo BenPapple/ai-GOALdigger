@@ -297,6 +297,11 @@ directionToCoordinate(n, 0, -1).
 directionToCoordinate(s, 0, 1).
 directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
+directionToCoordinate(Dir, X, Y) :- (Dir =:= n, X =:= 0, Y < 0);
+                                    (Dir =:= s, X =:= 0, Y > 0);
+                                    (Dir =:= w, X < 0, Y =:= 0);
+                                    (Dir =:= e, X > 0, Y =:= 0).
+
 
 % helper function number to roles
 %numbertoRoles(0, worker).
