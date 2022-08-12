@@ -173,6 +173,14 @@
 :- dynamic dragger/0. % flag to drag blokes.
 :- dynamic dragging/0. % flag to signal that blokes are being dragged.
 :- dynamic dragCounter/1. % step counter for dragging actions.
+:- dynamic visionRange/1. % stores the vision range of the agent.
+:- dynamic agentSighting/6. % stores agent sightings, step information, direction and supposed energy.
+:- dynamic maxEnergy/1. % stores the maximum energy of an agent.
+recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
+	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 
+	(NewEnergy is 100).
+trackDirection(X0,Y0,X1,Y1,DirX,DirY) :- DirX is X1-X0, DirY is Y1-Y0.
+
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
@@ -297,11 +305,6 @@ directionToCoordinate(n, 0, -1).
 directionToCoordinate(s, 0, 1).
 directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
-directionToCoordinate(Dir, X, Y) :- (Dir =:= n, X =:= 0, Y < 0);
-                                    (Dir =:= s, X =:= 0, Y > 0);
-                                    (Dir =:= w, X < 0, Y =:= 0);
-                                    (Dir =:= e, X > 0, Y =:= 0).
-
 
 % helper function number to roles
 %numbertoRoles(0, worker).

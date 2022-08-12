@@ -20,6 +20,9 @@ use "../blockhandling/connectBlocks" as module.
 
 module executeWorkerRole {
 
+	if bel(targetRole(digger)), percept(roleZone(0,0))
+	   then preActionCleanup + adapt(digger).
+
 	% if caught, get free
 	if bel(getFree) then detachBloke.
 

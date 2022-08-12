@@ -24,8 +24,8 @@ module executeSaboteurRole {
 	   then insert(searchInGoalzone).
 	
 %	% bloke quantity
-%	if not(bel(targetBlokeCount(_))) 
-%	   then insert(targetBlokeCount(4)). 
+	if not(bel(targetBlokeCount(_))) 
+	   then insert(targetBlokeCount(4)). 
 
 	% insert minimum distance for different goal zones
 	if not(bel(minimumDistanceEmptyGoalZone(_)))
@@ -83,12 +83,28 @@ module executeSaboteurRole {
 %		% go to bloke anywhere if dragger without blokes attached
 %		if bel(dragger, attachedBlokes(Count), Count =:= 0, targetMd(_, _, agent), executeManhattan)
 %		then allother.send(executingManhattan("Following someone!")) + executeManhattanMove.
-		
 
-		% attack blocke if next to it
-		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, (X =:= 0; Y =:= 0),
-			   X =< 5, Y =< 5, directionToCoordinate(Dir, X, Y)), not(bel(X =:= 0, Y =:= 0)) 
+
+%		% attack blocke if next to it
+%		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, (X =:= 0; Y =:= 0),
+%			   X =< 5, Y =< 5), not(bel(X =:= 0, Y =:= 0)) 
+%			   then clear(X,Y).
+
+		% attack bloke if next to it
+		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) + abs(Y) =< 2),
+		   not(bel(X =:= 0, Y =:= 0)),
+		   percept(thing(X1, Y1, block, _), attached(X1, Y1), abs(X1-X) + abs(Y1-Y) =:= 1)
 			   then clear(X,Y).
+
+		% attack bloke if next to it
+		%if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) + abs(Y) =< 2),
+		%   not(bel(X =:= 0, Y =:= 0)) 
+		%	   then clear(X,Y).
+
+		% go to bloke anywhere
+		if bel(targetMd(_, _, agent), executeManhattan)
+		then allother.send(executingManhattan("Following someone!")) + executeManhattanMove.		
+
 			
 %		% attach bloke if next to it next to goal zone (without attached blokes)
 %		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) =< 1, 
