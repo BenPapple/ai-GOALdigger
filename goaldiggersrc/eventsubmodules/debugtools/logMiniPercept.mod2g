@@ -122,12 +122,31 @@ module logMiniPercept {
 			then print("Agent knows this world size: X"+X+", Y"+Y+".").
 		if bel(worldListX(ListX), worldListY(ListY))
 			then print("Agent knows this world size: XList"+ListX+", YList"+ListY+".").
-    forall percept(attached(X, Y), thing(X, Y, entity, _))
-        do print("Agent attached to bloke on "+X+" "+Y).
-      if bel(attachedBlokes(Count)) then print("Attached blokes " + Count).
+%    forall percept(attached(X, Y), thing(X, Y, entity, _))
+%        do print("Agent attached to bloke on "+X+" "+Y).
+%      if bel(attachedBlokes(Count)) then print("Attached blokes " + Count).
+		if bel(customRole(customRoleSaboteur)) then {
+			if true then print("This is a saboteur.").
+			if bel(dragging) then print("The saboteur is dragging someone.").
+			if bel(dragCounter(X)) then print("The dragging counter is "+X).
+			if bel(emptyGoalZoneCounter(_,_,_)) then print("Empty goal zones:").
+			if not(bel(emptyGoalZoneCounter(_,_,_))) then print("No empty goal zones found.").
+			forall bel(emptyGoalZoneCounter(A,B,C)) do print(A+" "+B+" "+C).
+			%forall percept(thing(X,Y,Type,_), attached(X,Y)) do print("Attached things: "+X+" "+Y+" "+Type).
+			%forall percept(thing(X,Y,entity,_), (X \= 0; Y \= 0)) do print("Just things: "+X+" "+Y+" "+entity).
+	       if bel(attachedBlokes(Count)) then print("Attached blokes " + Count).
+		   %forall bel(haveBlokeAttached(true, Dir, X, Y)) do print("Attached bloke: "+Dir+X+Y).
+	       if true then print("Targets of the saboteur:").
+	       forall bel(clearingTarget(A,B)) do print("Clearing target: "+A+" "+B).
+	       if true then print("Agend sighted by the saboteur:").
+	       forall bel(agentSighting(A,B,C,D,E,F)) do print("Agent sighted: "+A+" "+B+" "+C+" "+D+" "+E+" "+F).
+
+		}
+
 		if true then print("====== End Mini Percept =====").
 		if true then print("                ").
 	    if true then print("                ").
+
 
 		% logging percept base, message base, believe base
 		if true then log(pb) + log(mb) + log(bb) + log(gb).

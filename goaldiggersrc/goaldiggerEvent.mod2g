@@ -17,6 +17,8 @@ use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateAgentHierarchy" as module.
+use "./eventsubmodules/saboteurtools/selectClearingTarget" as module.
+use "./eventsubmodules/saboteurtools/trackSightedAgents" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -112,6 +114,12 @@ module goaldiggerEvent {
 	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
 	   then insert(emptyGoalZoneCounter(X2, Y2, 1)) + allother.send(emptyGoalZoneCounter(X2, Y2, 1)).
 	}
+
+	% SUBMODULE track entities in sight for saboteurs
+	if bel(customRole(customRoleSaboteur)) then trackSightedAgents.
+
+	% SUBMODULE select a target for saboteurs
+	%if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
 
     % SUBMODULE chose new task if necessary
     if not(bel(customRole(customRoleSaboteur))) then changeTaskCheck.

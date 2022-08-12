@@ -176,6 +176,8 @@
 :- dynamic visionRange/1. % stores the vision range of the agent.
 :- dynamic agentSighting/6. % stores agent sightings, step information, direction and supposed energy.
 :- dynamic maxEnergy/1. % stores the maximum energy of an agent.
+:- dynamic recoverEnergy/1. % stores the energy recovered in a turn.
+:- dynamic clearingTarget/2. % stores the target to clear next.
 recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
 	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 
 	(NewEnergy is 100).

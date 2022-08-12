@@ -91,10 +91,13 @@ module executeSaboteurRole {
 %			   then clear(X,Y).
 
 		% attack bloke if next to it
-		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) + abs(Y) =< 2),
-		   not(bel(X =:= 0, Y =:= 0)),
-		   percept(thing(X1, Y1, block, _), attached(X1, Y1), abs(X1-X) + abs(Y1-Y) =:= 1)
-			   then clear(X,Y).
+%		if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) + abs(Y) =< 2),
+%		   not(bel(X =:= 0, Y =:= 0)),
+%		   percept(thing(X1, Y1, block, _), attached(X1, Y1), abs(X1-X) + abs(Y1-Y) =:= 1)
+%			   then clear(X,Y).
+
+		% attack bloke if target available
+		if bel(clearingTarget(X,Y)) then clear(X,Y).
 
 		% attack bloke if next to it
 		%if bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, abs(X) + abs(Y) =< 2),
@@ -165,6 +168,7 @@ module executeSaboteurRole {
 
 		if percept(thing(X,Y,obstacle,_), abs(X) + abs(Y) =:= 1) then clear(X,Y).
 
+		if true then executeRandomMove.
 		if true then skip.
 	
 	

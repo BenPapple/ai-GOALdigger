@@ -1,0 +1,31 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+module selectClearingTarget {
+
+	if not(bel(visionRange(_)))
+	  then insert(visionRange(5)).
+
+	if not(bel(maxEnergy(_)))
+	  then insert(maxEnergy(100)).
+
+	if not(bel(recoverEnergy(_)))
+	  then insert(recoverEnergy(2)).
+
+	if bel(clearingTarget(X,Y)) then delete(clearingTarget(X,Y)).
+	 
+	forall bel(agentSighting(X,Y,DirX,DirY,_,_)) do {
+	
+		   if bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, localize(X1,Y1,X2,Y2,NextPosX,NextPosY),
+		          clearingTarget(OldX,OldY), OldDistance is abs(OldX)+abs(OldY), NewDistance is abs(X1)+abs(Y1),
+			      OldDistance > NewDistance) then {
+			      	if bel(clearingTarget(X,Y)) then delete(clearingTarget(X,Y)).
+			      	if true then insert(clearingTarget(X1,Y1)).
+			      }
+		  		  
+		  if not(bel(clearingTarget(_,_))),
+		    bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, localize(X1,Y1,X2,Y2,NextPosX,NextPosY))
+		    then insert(clearingTarget(X1,Y1)).
+	}
+
+}

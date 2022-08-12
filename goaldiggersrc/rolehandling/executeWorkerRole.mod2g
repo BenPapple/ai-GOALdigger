@@ -20,7 +20,7 @@ use "../blockhandling/connectBlocks" as module.
 
 module executeWorkerRole {
 
-	if bel(targetRole(digger)), percept(roleZone(0,0))
+	if bel(customRole(customRoleSaboteur)), percept(roleZone(0,0))
 	   then preActionCleanup + adapt(digger).
 
 	% if caught, get free
