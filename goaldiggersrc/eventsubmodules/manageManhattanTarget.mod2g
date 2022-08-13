@@ -58,6 +58,7 @@ module manageManhattanTarget {
 					}
 		}
 	
+	
 		% when role saboteur worker in empty goalZone set other goalzone as target
 		if bel(searchInGoalzone), 
 		   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
@@ -111,23 +112,33 @@ module manageManhattanTarget {
 			if not(bel(executeManhattan)) then insert(executeManhattan).
 	     }
 
-		% when role saboteur with someone attached set other agent as target anywhere
-		if bel(attachedBlokes(Count), Count > 0, whitelistedTeam(MyTeam)), 
-	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
+		% when role saboteur persecute some other bloke carrying one block
+		if bel(whitelistedTeam(MyTeam)), 
+	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam, thing(X1, Y1, block, _), attached(X1, Y1),
+	     	abs(X1-X) + abs(Y1-Y) =:= 1, not(X =:= 0, Y=:=0)),
 		 bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3), abs(X) + abs(Y) >= 2) then {
 	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
 			if true then insert(targetMd(X3, Y3, agent)).	
 			if not(bel(executeManhattan)) then insert(executeManhattan).
 	     }
-	
-		% when role saboteur with dragging routine set other agent as target anywhere
-		if bel(dragger, whitelistedTeam(MyTeam)), 
-	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
-		 bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3), abs(X) + abs(Y) >= 2) then {
-	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-			if true then insert(targetMd(X3, Y3, agent)).	
-			if not(bel(executeManhattan)) then insert(executeManhattan).
-	     }
+
+%		% when role saboteur with someone attached set other agent as target anywhere
+%		if bel(attachedBlokes(Count), Count > 0, whitelistedTeam(MyTeam)), 
+%	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
+%		 bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3), abs(X) + abs(Y) >= 2) then {
+%	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+%			if true then insert(targetMd(X3, Y3, agent)).	
+%			if not(bel(executeManhattan)) then insert(executeManhattan).
+%	     }
+%	
+%		% when role saboteur with dragging routine set other agent as target anywhere
+%		if bel(dragger, whitelistedTeam(MyTeam)), 
+%	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
+%		 bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3), abs(X) + abs(Y) >= 2) then {
+%	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+%			if true then insert(targetMd(X3, Y3, agent)).	
+%			if not(bel(executeManhattan)) then insert(executeManhattan).
+%	     }
 
 	}
 	

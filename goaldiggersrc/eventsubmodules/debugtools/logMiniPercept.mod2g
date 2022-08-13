@@ -140,7 +140,8 @@ module logMiniPercept {
 	       forall bel(clearingTarget(A,B)) do print("Clearing target: "+A+" "+B).
 	       if true then print("Agend sighted by the saboteur:").
 	       forall bel(agentSighting(A,B,C,D,E,F)) do print("Agent sighted: "+A+" "+B+" "+C+" "+D+" "+E+" "+F).
-
+		   if true then print("Inactive sightings").
+		   forall bel(inactiveSighting(A,B,C)) do print("Inactive sighting: "+A+" "+B+" "+C).
 		}
 
 		if true then print("====== End Mini Percept =====").

@@ -97,6 +97,10 @@ module executeSaboteurRole {
 %			   then clear(X,Y).
 
 		% attack bloke if target available
+		if percept(thing(X,Y,block,_), not(attached(X,Y)), abs(X)+abs(Y) =< 5, goalzone(_,_)) then clear(X,Y) + allother.send(msg("Block cleared")).
+
+
+		% attack bloke if target available
 		if bel(clearingTarget(X,Y)) then clear(X,Y).
 
 		% attack bloke if next to it

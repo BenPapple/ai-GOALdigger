@@ -67,23 +67,14 @@ module syncLastActionResultDataIntoBelief {
 				   
 				if bel(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy), X =:= X4 + DirX - X2, 
 					Y =:= Y4 + DirY - Y2, localize(X,Y,X2,Y2,X3,Y3), energyAfterDamage(Energy,X,Y,NewEnergy))
-				   then delete(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy)) + insert(agentSighting(X3,Y3,0,0,OldStep,NewEnergy))
-				   + print("Anadido uno "+NewEnergy).
+				   then { 
+				   		if true then delete(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy)) 
+				   		             + insert(agentSighting(X3,Y3,0,0,OldStep,NewEnergy)) + print("Energia restada").
+				   	    if bel(NewEnergy =:= 0) then insert(inactiveSighting(X3,Y3,10)) + print("Agente inactivo").
+				   
+					}
 			}
-		
-		if bel(customRole(customRoleSaboteur), whitelistedTeam(MyTeam)), percept(lastAction(clear), lastActionParams([X,Y])),
-		  percept(thing(X,Y,entity,OtherTeam), OtherTeam \= MyTeam), bel(agentAt(X2,Y2,_)), bel(agentSighting(X1,Y1,DirX,
-		  DirY,Step,Energy), localize(X,Y,X2,Y2,X3,Y3), X4 is X1 + DirX, Y4 is Y1 + DirY, X4 =:= X3, Y4 =:= Y3)
-		  then {
-
-				if true then print("Actualizada energia 0").
-				if bel(energyAfterDamage(Energy,X,Y,NewEnergy))
-				   then delete(agentSighting(X1,Y1,DirX,DirY,Step,Energy)) 
-		  		       + insert(agentSighting(X1,Y1,DirX,DirY,Step,NewEnergy)) + print("Actualizada energia 1").
-		  		
-		  		if bel(energyAfterDamage(Energy,X,Y,NewEnergy), NewEnergy =:= 0) 
-		  		   then insert(inactiveSighting(X1,Y1,10)).
-		  } 
+		 
 		  
 		% succesfull attach action handling
 		if percept(lastAction(attach), lastActionParams([Dir])) then {

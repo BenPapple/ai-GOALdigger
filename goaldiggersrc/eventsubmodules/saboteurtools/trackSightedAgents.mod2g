@@ -35,9 +35,10 @@ module trackSightedAgents {
 %				  then insert(agentSighting(X4,Y4,NewDirX,NewDirY,NewStep,Energy)) + print("Hasta aquí").
 			  } % end do
 			  
-			 forall percept(thing(X,Y,entity,OtherTeam), OtherTeam \= MyTeam), bel(localize(X, Y, X2, Y2, X5, Y5)) do {
+			 forall percept(thing(X,Y,entity,OtherTeam), OtherTeam \= MyTeam) do {
 			 	%if true then print("Also entered here").
-			 	if not(bel(agentSighting(X5,Y5,_,_,_,_))), bel(maxEnergy(MaxEnergy)) 
+			 	if bel(localize(X, Y, X2, Y2, X5, Y5)), not(bel(X =:=0, Y=:=0)), not(bel(agentSighting(X5,Y5,_,_,_,_))), 
+			 	not(bel(inactiveSighting(X5,Y5,_))), bel(maxEnergy(MaxEnergy)) 
 			 	   then insert(agentSighting(X5,Y5,0,0,NewStep, MaxEnergy)) + allother.send(seenAgent("Seen an agent")).
 			 } 
 		% if no agent nearby, don't add anything		 
