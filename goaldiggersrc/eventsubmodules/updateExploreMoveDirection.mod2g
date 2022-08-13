@@ -5,6 +5,13 @@ use "../pathfinding/executeRandomMove" as module.
 use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/helperMoveWithoutBlock" as module.
 
+
+/**
+ * update Explore direction
+ *
+ * @author Marco G.
+ */
+
 module updateExploreMoveDirection {
 
 	if bel(northExplored) then delete(northExplored).

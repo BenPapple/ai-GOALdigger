@@ -1,7 +1,11 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
-% ToDo Marco comments
+/**
+ * Update marks from other agents
+ *
+ * @author Marco G.
+ */
 
 module updateMapExploredMarks {
 
