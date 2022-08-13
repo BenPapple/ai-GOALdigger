@@ -95,9 +95,10 @@ module goaldiggerEvent {
 	% SUBMODULE help test worker tour around the goal zones
 
     % ToDo Isaac (X \= 0; Y \=0 wont work look for XPlusY solution
-    % remove empty goal zone flag if agent seen in goal zone
+    % remove empty goal zone flag if agent with block seen in goal zone
 	if bel(customRole(customRoleSaboteur)), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam),
-	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0)) then {
+	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0),
+	       thing(X1, Y1, block, _), attached(X1,Y1), abs(X1-X)+abs(Y1-Y) =:= 1) then {
 		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
 	}
 
