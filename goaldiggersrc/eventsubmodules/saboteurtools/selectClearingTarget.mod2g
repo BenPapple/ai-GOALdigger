@@ -16,16 +16,19 @@ module selectClearingTarget {
 	 
 	forall bel(agentSighting(X,Y,DirX,DirY,_,_)) do {
 	
-		   if bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, localize(X1,Y1,X2,Y2,NextPosX,NextPosY),
-		          clearingTarget(OldX,OldY), OldDistance is abs(OldX)+abs(OldY), NewDistance is abs(X1)+abs(Y1),
-			      OldDistance > NewDistance) then {
-			      	if bel(clearingTarget(X,Y)) then delete(clearingTarget(X,Y)).
-			      	if true then insert(clearingTarget(X1,Y1)).
-			      }
+%		   if true then print("Entered clearing section 1").
+%		   if true then print("Entered clearing section 2").
+%		   if bel(clearingTarget(OldX,OldY), OldDistance is abs(OldX) + abs(OldY), agentAt(X2,Y2,_)) then {
+%		   		if bel(NextPosX is X + DirX, NextPosY is Y + DirY, localize(X1,Y1,X2,Y2,NextPosX,NextPosY),
+%		   		       NewDistance is abs(X1) + abs(Y1), NewDistance < OldDistance)
+%		   		   then delete(clearingTarget(OldX,OldY)) + insert(clearingTarget(X1,Y1)).
+%		   }
 		  		  
 		  if not(bel(clearingTarget(_,_))),
-		    bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, localize(X1,Y1,X2,Y2,NextPosX,NextPosY))
-		    then insert(clearingTarget(X1,Y1)).
+		    bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, X1 is NextPosX - X2, Y1 is NextPosY - Y2), 
+		    not(bel(X1 =:= 0, Y1 =:= 0))
+		       
+		    then insert(clearingTarget(X1,Y1)) + print("Entered clearing section 3").
 	}
 
 }

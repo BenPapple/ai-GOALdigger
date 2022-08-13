@@ -119,7 +119,7 @@ module goaldiggerEvent {
 	if bel(customRole(customRoleSaboteur)) then trackSightedAgents.
 
 	% SUBMODULE select a target for saboteurs
-	%if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
+	if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
 
     % SUBMODULE chose new task if necessary
     if not(bel(customRole(customRoleSaboteur))) then changeTaskCheck.
