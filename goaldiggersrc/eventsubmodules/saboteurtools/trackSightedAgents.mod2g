@@ -15,19 +15,24 @@ module trackSightedAgents {
 	if bel(agentAt(X2,Y2,_), whitelistedTeam(MyTeam)), percept(step(NewStep))
 	  then {
 	  		forall bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy), OldStep < NewStep) do {
-
-				if true then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)).
 		
 				% if agent sighted at same location, change direction to "none".
-				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, not(X1 =:= 0, Y1 =:= 0), 
-				  localize(X1, Y1, X2, Y2, X, Y))
-				  then insert(agentSighting(X,Y,0,0,NewStep,Energy)).
+				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, localize(X1,Y1,X2,Y2,X,Y), not(X1 =:= 0, Y1 =:= 0))
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)) + insert(agentSighting(X,Y,0,0,NewStep,Energy)) + print("Relocalizado uno"). % ToDo: Recuperar energía
 		
-				%if agent nearby, update location and direction
-				if percept(thing(X3, Y3, entity, OtherTeam), OtherTeam \= MyTeam, not(X3 =:= 0, Y3 =:= 0), 
-				           localize(X1, Y1, X2, Y2, X, Y), abs(X3-X1) + abs(Y3-Y1) =< 3), bel(localize(X3,Y3,X2,Y2,X4,Y4), 
-				           trackDirection(X1,Y1,X3,Y3,NewDirX,NewDirY)), not(bel(agentSighting(X4,Y4,_,_,NewStep,_)))
-				  then insert(agentSighting(X4,Y4,NewDirX,NewDirY,NewStep,Energy)).
+				% if agent hit when not in movement, change direction to "none" and 
+				if bel(hitSighting(X,Y,NewStep))
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)) 
+				       + insert(agentSighting(X,Y,DirX,DirY,NewStep,Energy)).
+		
+		
+				if bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy))
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)).
+%				%if agent nearby, update location and direction
+%				if percept(thing(X3, Y3, entity, OtherTeam), OtherTeam \= MyTeam, not(X3 =:= 0, Y3 =:= 0), 
+%				           localize(X1, Y1, X2, Y2, X, Y), abs(X3-X1) + abs(Y3-Y1) =< 3), bel(localize(X3,Y3,X2,Y2,X4,Y4), 
+%				           trackDirection(X1,Y1,X3,Y3,NewDirX,NewDirY)), not(bel(agentSighting(X4,Y4,_,_,NewStep,_)))
+%				  then insert(agentSighting(X4,Y4,NewDirX,NewDirY,NewStep,Energy)) + print("Hasta aquí").
 			  } % end do
 			  
 			 forall percept(thing(X,Y,entity,OtherTeam), OtherTeam \= MyTeam), bel(localize(X, Y, X2, Y2, X5, Y5)) do {

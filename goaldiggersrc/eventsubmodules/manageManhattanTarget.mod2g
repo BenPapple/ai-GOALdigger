@@ -17,6 +17,13 @@ module manageManhattanTarget {
 		then delete(targetMd(X, Y, Target)) + 
 		     insert(targetMd(A, B, rolezone)) + 
 		     insert(executeManhattan).	
+
+	% update rolezone target MD
+	if bel(customRole(customRoleSaboteur)), not(percept(role(digger))), 
+	   bel(targetMd(X, Y, Target), targetClosestRoleZone(A, B, MdAlt), MdAlt < 1234567)
+		then delete(targetMd(X, Y, Target)) + 
+		     insert(targetMd(A, B, rolezone)) + 
+		     insert(executeManhattan).
 	
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), 

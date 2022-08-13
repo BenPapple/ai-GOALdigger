@@ -178,11 +178,19 @@
 :- dynamic maxEnergy/1. % stores the maximum energy of an agent.
 :- dynamic recoverEnergy/1. % stores the energy recovered in a turn.
 :- dynamic clearingTarget/2. % stores the target to clear next.
+:- dynamic inactiveSighting/3. % (X,Y,Timer) stores the coordinates of a bloke which is believed to be inactive and a timer.
+:- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
 recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
 	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 
 	(NewEnergy is 100).
 trackDirection(X0,Y0,X1,Y1,DirX,DirY) :- DirX is X1-X0, DirY is Y1-Y0.
-
+energyAfterDamage(Energy,X,Y,NewEnergy) :-
+	(abs(X) + abs(Y) =:= 1, NewEnergy is Energy - 32, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 2, NewEnergy is Energy - 16, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 3, NewEnergy is Energy - 8, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 4, NewEnergy is Energy - 4, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 5, NewEnergy is Energy - 2, NewEnergy >= 0);
+	(NewEnergy is 0).
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
