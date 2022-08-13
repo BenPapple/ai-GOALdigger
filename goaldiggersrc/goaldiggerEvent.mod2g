@@ -50,6 +50,32 @@ module goaldiggerEvent {
 	if true
 		then logScoringBoard.
 
+	% Initialize saboteur beliefs
+	
+	if bel(customRole(customRoleSaboteur)) then {
+	
+		% preferred target switches
+		if not(bel(searchInGoalzone)) 
+		   then insert(searchInGoalzone).
+		
+		% insert minimum distance for different goal zones
+		if not(bel(minimumDistanceEmptyGoalZone(_)))
+		   then insert(minimumDistanceEmptyGoalZone(15)).
+		
+		% insert waiting time in empty goal zone
+		if not(bel(waitingTimeEmptyGoalZone(_)))
+		   then insert(waitingTimeEmptyGoalZone(15)).	
+			
+		% select sabotage goal
+		if not(bel(whitelistedTeam(_))), bel(sabotageThem), percept(team(MyTeam)) 
+		   then insert(whitelistedTeam(MyTeam)).
+		
+		
+		if not(bel(whitelistedTeam(_))), bel(sabotageUs) 
+		   then insert(whitelistedTeam(fakeTeamName)).
+
+	}
+
 	% SUBMODULE managing success and partial_success percepts
 	if true then syncLastActionResultDataIntoBelief.
 

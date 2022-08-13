@@ -19,33 +19,16 @@ use "../blockhandling/detachBloke" as module.
 
 module executeSaboteurRole {
 
-	% preferred target switches
-	if not(bel(searchInGoalzone)) 
-	   then insert(searchInGoalzone).
-	
-	% insert minimum distance for different goal zones
-	if not(bel(minimumDistanceEmptyGoalZone(_)))
-	   then insert(minimumDistanceEmptyGoalZone(15)).
-	
-	% insert waiting time in empty goal zone
-	if not(bel(waitingTimeEmptyGoalZone(_)))
-	   then insert(waitingTimeEmptyGoalZone(15)).	
-		
-	% select sabotage goal
-	if not(bel(whitelistedTeam(_))), bel(sabotageThem), percept(team(MyTeam)) 
-	   then insert(whitelistedTeam(MyTeam)).
-	
-	if not(bel(whitelistedTeam(_))), bel(sabotageUs) 
-	   then insert(whitelistedTeam(fakeTeamName)).
-
 	if true then {	
 
+		
 		% clear block if target available
 		if percept(thing(X,Y,block,_), abs(X)+abs(Y) =:= 1, goalzone(_,_)), not(percept(attached(X,Y))) 
 		   then allother.send(msg("Block cleared")) + clear(X,Y).
 
 		% attack bloke if target available
 		if bel(clearingTarget(X,Y)) then clear(X,Y).
+
 
 		% persecute carried block if available
 		if bel(targetMd(_, _, blockCarrier), executeManhattan)
@@ -68,9 +51,9 @@ module executeSaboteurRole {
 %		     %}		        
 %		%}
 
-		if bel(attachedBlokes(Count), Count == 0), bel(targetMd(_, _, goalzone), executeManhattan)
+		if bel(targetMd(_, _, goalzone), executeManhattan)
 		then executeManhattanMove.
-				
+		
 
 		% roam if no distant goal zone available
 		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
