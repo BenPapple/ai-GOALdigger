@@ -177,11 +177,11 @@ recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :-
 	(NewEnergy is 100).
 trackDirection(X0,Y0,X1,Y1,DirX,DirY) :- DirX is X1-X0, DirY is Y1-Y0.
 energyAfterDamage(Energy,X,Y,NewEnergy) :-
-	(abs(X) + abs(Y) =:= 1, NewEnergy is Energy - 32, NewEnergy >= 0);
-	(abs(X) + abs(Y) =:= 2, NewEnergy is Energy - 16, NewEnergy >= 0);
-	(abs(X) + abs(Y) =:= 3, NewEnergy is Energy - 8, NewEnergy >= 0);
-	(abs(X) + abs(Y) =:= 4, NewEnergy is Energy - 4, NewEnergy >= 0);
-	(abs(X) + abs(Y) =:= 5, NewEnergy is Energy - 2, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 1, NewEnergy is Energy - 16, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 2, NewEnergy is Energy - 8, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 3, NewEnergy is Energy - 4, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 4, NewEnergy is Energy - 2, NewEnergy >= 0);
+	(abs(X) + abs(Y) =:= 5, NewEnergy is Energy - 1, NewEnergy >= 0);
 	(NewEnergy is 0).
 
 % Transform XY coordinates concerning direction D nswe

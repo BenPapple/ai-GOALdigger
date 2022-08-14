@@ -30,11 +30,13 @@ module selectClearingTarget {
 	} 
 	
 	
+	% ToDo: It should select a target based on the distance and energy expected to be left on the target after the attack
+	% now it merely selects a target next to the saboteur
 	forall bel(agentSighting(X,Y,DirX,DirY,_,_,_,_)) do {
 		  		  
 		  if not(bel(clearingTarget(_,_))), not(bel(inactiveSighting(X,Y,_))),
 		    bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, X1 is NextPosX - X2, Y1 is NextPosY - Y2), 
-		    not(bel(X1 =:= 0, Y1 =:= 0)), bel(abs(X1) + abs(Y1) =< 2)
+		    not(bel(X1 =:= 0, Y1 =:= 0)), bel(abs(X1) + abs(Y1) =:= 1)
 		       
 		    then insert(clearingTarget(X1,Y1)).
 	}

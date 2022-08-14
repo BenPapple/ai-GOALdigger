@@ -33,6 +33,7 @@ use "./normhandling/analyzeNorms" as module.
  * Gets executed everytime a percept or message is received and handles them
  *
  * @author Ben G.
+ * @co-author Isaac S.
  */
 
 module goaldiggerEvent {
@@ -64,7 +65,7 @@ module goaldiggerEvent {
 		
 		% insert waiting time in empty goal zone
 		if not(bel(waitingTimeEmptyGoalZone(_)))
-		   then insert(waitingTimeEmptyGoalZone(15)).	
+		   then insert(waitingTimeEmptyGoalZone(25)).	
 			
 		% select sabotage goal
 		if not(bel(whitelistedTeam(_))), bel(sabotageThem), percept(team(MyTeam)) 

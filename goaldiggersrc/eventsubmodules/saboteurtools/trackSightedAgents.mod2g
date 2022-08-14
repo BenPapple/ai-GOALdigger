@@ -26,6 +26,14 @@ module trackSightedAgents {
 	forall bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) do {
 		if bel(inactiveSighting(X,Y,_)) then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)).
 	}
+	
+	% update energy of all sightings according to the energy recovery rate and the max energy
+	forall bel(agentSighting(X,Y,DirX,DirY,OldStep,OldEnergy,BlockType,BlockDir)) do {
+		
+		if bel(recoverEnergy(RecoveredEnergy), recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy))
+		  then delete(agentSighting(X,Y,DirX,DirY,OldStep,OldEnergy,BlockType,BlockDir))
+		       + insert(agentSighting(X,Y,DirX,DirY,OldStep,NewEnergy,BlockType,BlockDir)).
+	}
 
 	if bel(agentAt(X2,Y2,_), whitelistedTeam(MyTeam)), percept(step(NewStep))
 	  then {
