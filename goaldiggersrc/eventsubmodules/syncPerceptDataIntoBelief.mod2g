@@ -100,6 +100,11 @@ module syncPerceptDataIntoBelief {
 	if bel(customRole(customRoleSaboteur), executeManhattan, targetMd(X1,Y1, agent), agentAt(X2,Y2,_)), 
 	   not(percept(thing(X3,Y3,entity,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
        then  delete(targetMd(X1, Y1, agent)) + delete(executeManhattan). 
+
+	% DELETE targetted blokes carrying blocks as Manhattan targets if they have moved away
+	if bel(customRole(customRoleSaboteur), executeManhattan, targetMd(X1,Y1, blockCarrier), agentAt(X2,Y2,_)), 
+	   not(percept(thing(X3,Y3,entity,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
+       then  delete(targetMd(X1, Y1, blockCarrier)) + delete(executeManhattan). 
 	
 	% DELETE detached blokes
 	forall bel(haveBlokeAttached(true,Dir), directionToCoordinate(Dir, X, Y)) do {

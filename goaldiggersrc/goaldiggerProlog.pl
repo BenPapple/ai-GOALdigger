@@ -174,7 +174,7 @@
 :- dynamic dragging/0. % flag to signal that blokes are being dragged.
 :- dynamic dragCounter/1. % step counter for dragging actions.
 :- dynamic visionRange/1. % stores the vision range of the agent.
-:- dynamic agentSighting/6. % stores agent sightings, step information, direction and supposed energy.
+:- dynamic agentSighting/8. % (X,Y,DirX,DirY,Step,Energy,BlockType,BlockDir) stores agent sightings, direction, step, supposed energy, carried block type, carried block direction.
 :- dynamic maxEnergy/1. % stores the maximum energy of an agent.
 :- dynamic recoverEnergy/1. % stores the energy recovered in a turn.
 :- dynamic clearingTarget/2. % stores the target to clear next.

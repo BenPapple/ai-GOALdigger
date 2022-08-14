@@ -94,7 +94,18 @@ module manageManhattanTarget {
 		}
 
 
-		% when role saboteur with someone attached set an agent carrying a block as target anywhere
+		% when role saboteur and not pursuing agent carrying a block, set agent without block as target anywhere
+		if bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrier))),
+	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam),
+		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 2),
+		 not(bel(inactiveSighting(X3,Y3,_)))
+		  then {
+	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+			if true then insert(targetMd(X3, Y3, agent)).	
+			if not(bel(executeManhattan)) then insert(executeManhattan).
+	     }
+
+		% when role saboteur set an agent carrying a block as target anywhere
 		if bel(whitelistedTeam(MyTeam)), 
 	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam, thing(X1, Y1, block, _),
 	     attached(X1,Y1), abs(X1-X0) + abs(Y1-Y0) =:= 1),

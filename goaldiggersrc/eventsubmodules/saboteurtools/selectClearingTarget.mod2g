@@ -20,7 +20,7 @@ module selectClearingTarget {
 		if bel(Timer =:= 0) then delete(inactiveSighting(X,Y,Timer)).
 	} 
 	 
-	forall bel(agentSighting(X,Y,DirX,DirY,_,_)) do {
+	forall bel(agentSighting(X,Y,DirX,DirY,_,_,_,_)) do {
 	
 %		   if true then print("Entered clearing section 1").
 %		   if true then print("Entered clearing section 2").

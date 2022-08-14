@@ -12,32 +12,37 @@ module trackSightedAgents {
 	if not(bel(recoverEnergy(_)))
 	  then insert(recoverEnergy(2)).
 
+	% Remove all agents supposed to be inactive
+	forall bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) do {
+		if bel(inactiveSighting(X,Y,_)) then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)).
+	}
+
 	if bel(agentAt(X2,Y2,_), whitelistedTeam(MyTeam)), percept(step(NewStep))
 	  then {
-	  		forall bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy), OldStep < NewStep) do {
+	  		forall bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir), OldStep < NewStep) do {
 		
 				% if agent sighted at same location, change direction to (0,0).
-				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X,Y)), not(bel(agentSighting(X,Y,_,_,NewStep,_)))
-				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)) + insert(agentSighting(X,Y,0,0,NewStep,Energy)) + print("Relocalizado uno"). % ToDo: Recuperar energía
+				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X,Y)), not(bel(agentSighting(X,Y,_,_,NewStep,_,_,_)))
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) + insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,BlockDir)) + print("Relocalizado uno"). % ToDo: Recuperar energía
 		
 				% if agent hit when not in movement, change direction to "none" and 
 				if bel(hitSighting(X,Y,NewStep))
-				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)) 
-				       + insert(agentSighting(X,Y,DirX,DirY,NewStep,Energy)).
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) 
+				       + insert(agentSighting(X,Y,DirX,DirY,NewStep,Energy,BlockType,BlockDir)).
 		
 				% if agent sighted at DirX, DirY distance from the original sighting, update location and direction
-				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X3,Y3), X3 =:= X + DirX, Y3 =:= Y + DirY), not(bel(agentSighting(X3,Y3,_,_,NewStep,_)))
-				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)) + insert(agentSighting(X3,Y3,DirX,DirY,NewStep,Energy)) + print("Relocalizado dos"). % ToDo: Recuperar energía
+				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X3,Y3), X3 =:= X + DirX, Y3 =:= Y + DirY), not(bel(agentSighting(X3,Y3,_,_,NewStep,_,_,_)))
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) + insert(agentSighting(X3,Y3,DirX,DirY,NewStep,Energy,BlockType,BlockDir)) + print("Relocalizado dos"). % ToDo: Recuperar energía
 		
 		
 				% if agent sighted at DirX, DirY distance from the original sighting, update location and direction
 				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X3,Y3)), bel(abs(X3-X) + abs(Y3-Y) =< 2,
-				  NewDirX is X3-X, NewDirY is Y3-Y), not(bel(agentSighting(X3,Y3,_,_,NewStep,_)))
-				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)) + insert(agentSighting(X3,Y3,NewDirX,NewDirY,NewStep,Energy)) + print("Relocalizado tres"). % ToDo: Recuperar energía
+				  NewDirX is X3-X, NewDirY is Y3-Y), not(bel(agentSighting(X3,Y3,_,_,NewStep,_,_,_)))
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) + insert(agentSighting(X3,Y3,NewDirX,NewDirY,NewStep,Energy,BlockType,BlockDir)) + print("Relocalizado tres"). % ToDo: Recuperar energía
 		
 		
-				if bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy))
-				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy)).
+				if bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir))
+				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)).
 %				%if agent nearby, update location and direction
 %				if percept(thing(X3, Y3, entity, OtherTeam), OtherTeam \= MyTeam, not(X3 =:= 0, Y3 =:= 0), 
 %				           localize(X1, Y1, X2, Y2, X, Y), abs(X3-X1) + abs(Y3-Y1) =< 3), bel(localize(X3,Y3,X2,Y2,X4,Y4), 
@@ -46,10 +51,12 @@ module trackSightedAgents {
 			  } % end do
 			  
 			 forall percept(thing(X,Y,entity,OtherTeam), OtherTeam \= MyTeam) do {
-			 	%if true then print("Also entered here").
-			 	if bel(localize(X, Y, X2, Y2, X5, Y5)), not(bel(X =:=0, Y=:=0)), not(bel(agentSighting(X5,Y5,_,_,_,_))), 
+			 	if percept(thing(X1, Y1, block, Type), attached(X1, Y1), abs(X1-X) + abs(Y1-Y) =:= 1), 
+			 	   bel(X0 is X1-X, Y0 is Y1-Y, directionToCoordinate(Dir,X0,Y0)),
+			 	   %not(percept(thing(X3,Y3,entity,_), (X3 \= X; Y3 \= Y), (X3 \= 0; Y3 \= 0), abs(X3-X1) + abs(Y3-Y1) =:= 1)), 
+			 	bel(localize(X, Y, X2, Y2, X5, Y5)), not(bel(X =:=0, Y=:=0)), not(bel(agentSighting(X5,Y5,_,_,_,_,_,_))), 
 			 	not(bel(inactiveSighting(X5,Y5,_))), bel(maxEnergy(MaxEnergy)) 
-			 	   then insert(agentSighting(X5,Y5,0,0,NewStep, MaxEnergy)) + allother.send(seenAgent("Seen an agent")).
+			 	   then insert(agentSighting(X5,Y5,0,0,NewStep, MaxEnergy, Type, Dir)) + allother.send(seenAgent("Seen an agent")).
 			 } 
 		% if no agent nearby, don't add anything		 
 	}

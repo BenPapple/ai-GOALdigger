@@ -65,11 +65,11 @@ module syncLastActionResultDataIntoBelief {
 				if bel(localize(X,Y,X2,Y2,X3,Y3)) 
 				   then insert(hitSighting(X3,Y3,NewStep)).
 				   
-				if bel(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy), X =:= X4 + DirX - X2, 
+				if bel(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy,BlockType,BlockDir), X =:= X4 + DirX - X2, 
 					Y =:= Y4 + DirY - Y2, localize(X,Y,X2,Y2,X3,Y3), energyAfterDamage(Energy,X,Y,NewEnergy))
 				   then { 
-				   		if true then delete(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy)) 
-				   		             + insert(agentSighting(X3,Y3,0,0,OldStep,NewEnergy)) + print("Energia restada").
+				   		if true then delete(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) 
+				   		             + insert(agentSighting(X3,Y3,0,0,OldStep,NewEnergy,BlockType,BlockDir)) + print("Energia restada").
 				   	    if bel(NewEnergy =:= 0) then insert(inactiveSighting(X3,Y3,10)) + print("Agente inactivo").
 				   
 					}
