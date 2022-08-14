@@ -1,19 +1,12 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/executeManhattanMove" as module.
 use "../pathfinding/executeRandomMove" as module.
-use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
-use "../pathfinding/executeMoveAroundSubmitter" as module.
-use "../pathfinding/executeMoveAroundBloke" as module.
-use "../taskhandling/handleTaskSubmit" as module.
-use "../blockhandling/rotateBlockAgainstAffinity" as module.
-use "../blockhandling/rotateBlockToNorth" as module.
-use "../blockhandling/connectBlocks" as module.
-use "../blockhandling/detachBloke" as module.
 
 /**
  * Main decision rules for saboteur
+ *
+ * @author Isaac S.
  *
  */
 
@@ -39,21 +32,14 @@ module executeSaboteurRole {
 %		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
 %		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
 %		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), emptyGoalZoneCounter(X5, Y5, C), 
-%		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then executeManhattanMove. %{
-%		     
-%		     %forall bel(randomDirection(Dir), directionToCoordinate(Dir, X2, Y2)), percept(goalZone(X2, Y2)) do {
-%		     %		if percept(thing(X2, Y2, obstacle, _)) then clear(X2, Y2).
-%		     % 		if not(percept(thing(X2, Y2, obstacle, _))) then move(Dir).
-%		     %}		        
-%		%}
+%		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then executeManhattanMove.
 
 	% go to goalzone if available
 	if bel(targetMd(A, B, goalzone), (A \= 111; B \= 111), executeManhattan)
 	then allother.send(msg("Last action performed: go to goalzone")) + executeManhattanMove.
 
 	% roam if no distant goal zone available
-	if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
-	       Count == 0)
+	if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
 	   then allother.send(msg("Last action performed: roam")) + executeRandomMove.
 
 	% clear blocks when in goal zone

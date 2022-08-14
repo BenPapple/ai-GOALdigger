@@ -54,8 +54,6 @@ module updateAgentHierarchy {
 		   not(bel(submitterLeader)) 
 			then {
 			
-			if true then insert(attachedBlokes(0)).
-			if bel(getFree) then delete(getFree).
 			if bel(targetRole(Role)) then delete(targetRole(Role)).
 			if not(bel(customRole(_))) then insert(customRole(customRoleSaboteur)) +
 			                                allother.send(msgCustomRole(MyName))
