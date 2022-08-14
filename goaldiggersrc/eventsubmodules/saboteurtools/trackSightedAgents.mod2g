@@ -21,9 +21,31 @@ module trackSightedAgents {
 	  then {
 	  		forall bel(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir), OldStep < NewStep) do {
 		
-				% if agent sighted at same location, change direction to (0,0).
-				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X,Y)), not(bel(agentSighting(X,Y,_,_,NewStep,_,_,_)))
-				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) + insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,BlockDir)) + print("Relocalizado uno"). % ToDo: Recuperar energía
+				% if agent sighted at same location, change direction to (0,0) and handle block rotations.
+				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X,Y)), 
+				   bel(directionToCoordinate(BlockDir,BlockX,BlockY)),
+				   not(bel(agentSighting(X,Y,_,_,NewStep,_,_,_)))
+				then {
+						
+						if true then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)).
+						
+						% if agent hasn't rotated its block, just update the direction to 0,0
+						if percept(thing(X01,Y01, block, BlockType), X01 =:= X1 + BlockX, Y01 =:= Y1 + BlockY)
+							then insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,BlockDir)) + print("Relocalizado uno sin giro").
+						
+						% if agent has rotated its block, update the direction to 0,0 and update block direction
+						if not(percept(thing(X01,Y01, block, BlockType), X01 =:= X1 + BlockX, Y01 =:= Y1 + BlockY)),
+							   percept(thing(X02,Y02, block, NewBlockType), attached(X02,Y02)), 
+							   bel(abs(X1-X02) + abs(Y1-Y02) =:= 1),
+							   bel(NewDirX is X02 - X1, NewDirY is Y02 - Y1, directionToCoordinate(NewBlockDir,NewDirX,NewDirY)) 
+							   then insert(agentSighting(X,Y,0,0,NewStep,Energy,NewBlockType,NewBlockDir)) + print("Relocalizado uno con giro").
+							   
+						% if the block of the agent is not to be seen because of agent on the fringe on the perception 
+						% field, just believe it still has a block and update the direction to 0,0
+						if not(percept(thing(X01,Y01, block, _), attached(X01,Y01), abs(X1-X01) + abs(Y1-Y01) =:= 1)),
+						   bel(visionRange(Range), abs(X1) + abs(Y1) =:= Range)	
+							   then insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,BlockDir)) + print("Relocalizado uno sin bloque visible").
+				}
 		
 				% if agent hit when not in movement, change direction to "none" and 
 				if bel(hitSighting(X,Y,NewStep))
@@ -36,7 +58,7 @@ module trackSightedAgents {
 		
 		
 				% if agent sighted at DirX, DirY distance from the original sighting, update location and direction
-				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X3,Y3)), bel(abs(X3-X) + abs(Y3-Y) =< 2,
+				if percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0)), bel(localize(X1,Y1,X2,Y2,X3,Y3)), bel(abs(X3-X) + abs(Y3-Y) =:= 1,
 				  NewDirX is X3-X, NewDirY is Y3-Y), not(bel(agentSighting(X3,Y3,_,_,NewStep,_,_,_)))
 				  then delete(agentSighting(X,Y,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) + insert(agentSighting(X3,Y3,NewDirX,NewDirY,NewStep,Energy,BlockType,BlockDir)) + print("Relocalizado tres"). % ToDo: Recuperar energía
 		

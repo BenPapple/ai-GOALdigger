@@ -17,26 +17,22 @@ use "../blockhandling/detachBloke" as module.
  *
  */
 
-module executeSaboteurRole {
-
-	if true then {	
-
+module executeSaboteurRole {	
 		
-		% clear block if target available
-		if percept(thing(X,Y,block,_), abs(X)+abs(Y) =:= 1, goalzone(_,_)), not(percept(attached(X,Y))) 
-		   then allother.send(msg("Block cleared")) + clear(X,Y).
+	% clear block if target available
+	if percept(thing(X,Y,block,_), abs(X)+abs(Y) =< 4, goalzone(_,_)), not(percept(attached(X,Y))) 
+	   then allother.send(msg("Last action performed: clearing block")) +  clear(X,Y).
 
-		% attack bloke if target available
-		if bel(clearingTarget(X,Y)) then clear(X,Y).
+	% attack agent if target available
+	if bel(clearingTarget(X,Y)) then allother.send(msg("Last action performed: attack agent")) +  clear(X,Y).
 
+	% persecute carried block if available
+	if bel(targetMd(_, _, blockCarrier), executeManhattan)
+	then allother.send(msg("Last action performed: persecute carrier")) + executeManhattanMove.
 
-		% persecute carried block if available
-		if bel(targetMd(_, _, blockCarrier), executeManhattan)
-		then executeManhattanMove.
-
-		% persecute agent block if available
-		if bel(targetMd(_, _, agent), executeManhattan)
-		then executeManhattanMove.
+	% persecute agent if available
+	if bel(targetMd(_, _, agent), executeManhattan)
+	then allother.send(msg("Last action performed: persecute agent")) + executeManhattanMove.
 
 %		% roam goal zone if still not declared empty
 %		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), 
@@ -51,27 +47,24 @@ module executeSaboteurRole {
 %		     %}		        
 %		%}
 
-		if bel(targetMd(_, _, goalzone), executeManhattan)
-		then executeManhattanMove.
-		
+	% go to goalzone if available
+	if bel(targetMd(A, B, goalzone), (A \= 111; B \= 111), executeManhattan)
+	then allother.send(msg("Last action performed: go to goalzone")) + executeManhattanMove.
 
-		% roam if no distant goal zone available
-		if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
-		       Count == 0)
-		   then executeRandomMove.
+	% roam if no distant goal zone available
+	if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time, attachedBlokes(Count), 
+	       Count == 0)
+	   then allother.send(msg("Last action performed: roam")) + executeRandomMove.
 
-		% clear blocks when in goal zone
-		if percept(goalZone(0,0), thing(X, Y, obstacle, _), abs(X) + abs(Y) =:= 1) 
-		   then clear(X,Y).				
+	% clear blocks when in goal zone
+	if percept(goalZone(0,0), thing(X, Y, obstacle, _), abs(X) + abs(Y) =:= 1) 
+	   then clear(X,Y).				
 
-		
-		if percept(thing(X,Y,obstacle,_), abs(X) + abs(Y) =:= 1) then clear(X,Y).
+	if true then allother.send(msg("Last action performed: randommove")) +executeRandomMove.
 
-		if true then executeRandomMove.
+	if true then allother.send(msg("Last action performed: skip")) + skip.
 	
 	
-	
-	} 
 
 	
 }

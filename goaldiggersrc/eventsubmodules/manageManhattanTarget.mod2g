@@ -95,7 +95,7 @@ module manageManhattanTarget {
 
 
 		% when role saboteur and not pursuing agent carrying a block, set agent without block as target anywhere
-		if bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrier))),
+		if bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrier))), not(bel(targetMd(_,_,goalzone))),
 	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam),
 		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 2),
 		 not(bel(inactiveSighting(X3,Y3,_)))
