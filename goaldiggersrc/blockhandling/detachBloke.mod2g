@@ -20,7 +20,7 @@ module detachBloke {
 	   bel(directionToCoordinate(Dir, X, Y)) 
 	    then preActionCleanup + detach(Dir).
 	
-	% detach a bloke if directly attached to yourself
+	%detach a bloke if directly attached to yourself
 	if percept(attached(0,0), thing(X, Y, entity, _), abs(X) =< 1, abs(Y) =< 1), 
 	   bel(directionToCoordinate(Dir, X, Y)) 
 	    then preActionCleanup + detach(Dir).
