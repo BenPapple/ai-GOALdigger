@@ -5,6 +5,7 @@ use "../goaldiggerAction" as actionspec.
  * Handles field lastActionResult from percept and alters belief accordingly
  *
  * @author Ben G.
+ * @co-author Isaac S.
  */
 
 module syncLastActionResultDataIntoBelief {
@@ -20,11 +21,6 @@ module syncLastActionResultDataIntoBelief {
 					   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2))
 					    then delete(agentAt(X, Y, OldStep)) +
 					         insert(agentAt(X2, Y2, NewStep)).
-			
-			% update dragging counter if saboteur is dragging someone
-			if percept(lastAction(move)), bel(dragCounter(Count), NewCount is Count + 1)
-				   then delete(dragCounter(Count)) + insert(dragCounter(NewCount)).
-
 
 			}
 	} % lastaction partial_success
@@ -41,9 +37,6 @@ module syncLastActionResultDataIntoBelief {
 				   bel(agentAt(X, Y, OldStep), OldStep < NewStep, transformXYD(D, X, Y, X2, Y2))
 				    then delete(agentAt(X, Y, OldStep)) +
 				         insert(agentAt(X2, Y2, NewStep)).
-		    % update dragging counter if saboteur is dragging someone
-				if bel(dragCounter(Count), NewCount is Count + 1)
-				   then delete(dragCounter(Count)) + insert(dragCounter(NewCount)).
 		}
 		% double move
 		if percept(lastAction(move), lastActionParams([D, _])),
@@ -56,6 +49,28 @@ module syncLastActionResultDataIntoBelief {
 				   	     insert(agentAt(X2, Y2, NewStep)).
 		} % move
 
+		% succesfull clearing action on an agent
+		if bel(customRole(customRoleSaboteur), agentAt(X2,Y2,_)), 
+		   percept(lastAction(clear), lastActionParams([X0,Y0]), step(NewStep)),
+		   bel(atom_number(X0,X), atom_number(Y0,Y))
+			then {
+		
+				if bel(localize(X,Y,X2,Y2,X3,Y3)) 
+				   then insert(hitSighting(X3,Y3,NewStep)).
+				   
+				if bel(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy,BlockType,BlockDir), X =:= X4 + DirX - X2, 
+					Y =:= Y4 + DirY - Y2, localize(X,Y,X2,Y2,X3,Y3), energyAfterDamage(Energy,X,Y,NewEnergy))
+				   then { 
+				   		if true then delete(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) 
+				   		             + insert(agentSighting(X3,Y3,DirX,DirY,OldStep,NewEnergy,BlockType,BlockDir)).
+				   		             %+ print("Energy taken").
+				   	    if bel(NewEnergy =:= 0) then insert(inactiveSighting(X3,Y3,10)).
+				   	    			 %+ print("Agent deactivated").
+				   
+					}
+			}
+		 
+		  
 		% succesfull attach action handling
 		if percept(lastAction(attach), lastActionParams([Dir])) then {
 
@@ -64,12 +79,6 @@ module syncLastActionResultDataIntoBelief {
 		       + insert(haveBlockAttached(true, Dir)).
 		       if not(bel(calculateNewGoalzoneMD)) then insert(calculateNewGoalzoneMD).
 		    } % end if for blocks
-
-			if bel(directionToCoordinate(Dir, X, Y)), percept(thing(X, Y, entity, _)), bel(attachedBlokes(Count),
-			   NewCount is Count + 1)
-			   then insert(haveBlokeAttached(true, Dir)) + delete(attachedBlokes(Count))
-			   + insert(attachedBlokes(NewCount)).
-		     % end if for blokes
 
 		}
 
@@ -82,12 +91,6 @@ module syncLastActionResultDataIntoBelief {
 		  	if not(bel(calculateNewDispenserMD))
 		  		then insert(calculateNewDispenserMD).
 		  }
-
-		% succesfull detach action handling for saboteurs
-		if bel(customRole(customRoleSaboteur), dragger), percept(lastAction(detach), lastActionParams([Dir])),
-		   bel(attachedBlokes(BlokeNumber), BlokeNumber > 0, NewBlokeNumber is BlokeNumber - 1, haveBlokeAttached(true,Dir))
-		   then delete(attachedBlokes(BlokeNumber)) + insert(attachedBlokes(NewBlokeNumber))
-		        + delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir)).
 
 		% rotate update attached coordinates
 		if percept(lastAction(rotate), lastActionParams([Dir])),

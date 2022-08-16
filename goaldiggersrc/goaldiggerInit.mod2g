@@ -13,7 +13,7 @@ module goaldiggerInit {
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
-	%if true then insert (activateSaboteurFeature).
+	if true then insert (activateSaboteurFeature).
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 
@@ -31,8 +31,8 @@ module goaldiggerInit {
 	if true then insert(simDuration(0)).
 	
 	% variables for saboteur behaviour (againt own team, against other team)
-	if true then insert(sabotageUs).
-	%if true then insert(sabotageThem).
+	%if true then insert(sabotageUs).
+	if true then insert(sabotageThem).
 	
 	% global values
 	% switch to recognize simulations have different characteristics on sim change
