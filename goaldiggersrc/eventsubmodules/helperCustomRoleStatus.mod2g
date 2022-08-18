@@ -1,0 +1,47 @@
+use "../goaldiggerProlog" as knowledge.
+
+/**
+ * Helper module to keep track of agents custom role to perma send to other agents in messagePermaSendStatusToOthers
+ *
+ * @author Ben G.
+ */
+
+module helperCustomRoleStatus {
+
+    % submitterLeader
+	if  bel(submitterLeader),
+	    bel(currentCustomRoleStatus(Delete), Delete \= submitterLeaderAgent) 
+	     then delete(currentCustomRoleStatus(Delete)) + 
+		      insert(currentCustomRoleStatus(submitterLeaderAgent)).
+	
+	% saboteur	      
+    if  bel(customRole(customRoleSaboteur)),
+        not(bel(submitterLeader)),
+	    bel(currentCustomRoleStatus(Delete), Delete \= saboteurAgent) 
+	     then delete(currentCustomRoleStatus(Delete)) + 
+		      insert(currentCustomRoleStatus(saboteurAgent)).		
+    % explorer      
+    if  percept(role(explorer)),
+        not(bel(submitterLeader)),
+	    bel(currentCustomRoleStatus(Delete), Delete \= explorerAgent) 
+	     then delete(currentCustomRoleStatus(Delete)) + 
+		      insert(currentCustomRoleStatus(explorerAgent)).	
+	
+	% basic worker agent	      
+    if  percept(role(worker)),
+        not(bel(submitterLeader)),
+        not(bel(customRole(customRoleSaboteur))),
+	    bel(currentCustomRoleStatus(Delete), Delete \= freeWorkerAgent) 
+	     then delete(currentCustomRoleStatus(Delete)) + 
+		      insert(currentCustomRoleStatus(freeWorkerAgent)).
+
+    % active supportingAgent		      
+    if  percept(role(worker), step(SimStep)),
+        not(bel(submitterLeader)),
+        not(bel(customRole(customRoleSaboteur))),
+        bel(currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), TaskStep >= SimStep),
+	    bel(currentCustomRoleStatus(Delete), Delete \= workerSupportingAgent) 
+	     then delete(currentCustomRoleStatus(Delete)) + 
+		      insert(currentCustomRoleStatus(workerSupportingAgent)).		      
+	
+}

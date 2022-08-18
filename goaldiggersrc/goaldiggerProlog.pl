@@ -41,6 +41,9 @@
 % switch for saboteur
 :- dynamic activateSaboteurFeature/0.
 
+% when a marked is north of agent. 
+:- dynamic currentCustomRoleStatus/1. 
+
 
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
