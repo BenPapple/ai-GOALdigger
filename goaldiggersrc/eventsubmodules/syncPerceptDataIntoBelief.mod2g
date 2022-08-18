@@ -16,7 +16,8 @@ module syncPerceptDataIntoBelief {
 		     insert(step(X)).
 	
 	% store explored Mark every Round
-	if bel(agentAt(X, Y, _))
+	if bel(agentAt(X, Y, _)),
+	   percept(step(SimStep), 0 =:= mod(SimStep, 2), SimStep < 200)
 		then insert(mapMarkExplored(X, Y)).
 	
 	% DELETE out of step storedOtherAgentStatus

@@ -219,7 +219,7 @@ module goaldiggerEvent {
 		then delete(calculateNewGoalzoneMD).
 
     % ACO explore 
-    if true then {
+    if percept(step(SimStep), SimStep < 200) then {
 		if true then updateMapExploredMarks.
 	
 		%If not know goalzone or dispenser, exploreMap
