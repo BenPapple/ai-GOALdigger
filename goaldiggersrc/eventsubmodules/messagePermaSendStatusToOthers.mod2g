@@ -1,4 +1,5 @@
 use "../goaldiggerProlog" as knowledge.
+use "./helperCustomRoleStatus" as module.
 
 /**
  * Sending agents status and sync messages to all other agents
@@ -24,16 +25,19 @@ module messagePermaSendStatusToOthers {
 				do allother.send(msgRoleZoneData(X,Y,MyName)).
 	}
 
+    % update custom roles designation
+    if true then helperCustomRoleStatus.
+
 	% send a status to all other agents while having block attached
 	if bel(randomSeed(Seed), agentAt(X, Y, _), haveBlockAttached(true, DirBlock), 
 	       directionToCoordinate(DirBlock, A, B)), 
-	   bel(currentChosenTask(_, _, _, _, _, _, TaskRole, _)),
+	   bel(currentCustomRoleStatus(TaskRole)),
 	   percept(name(OwnName), step(Step),role(Role), thing(A, B, block, BlockTypeAttached)) 
 	    then allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, BlockTypeAttached, TaskRole)).
 	
 	% send a status to all other agents without having block attached		
 	if bel(randomSeed(Seed), agentAt(X, Y, _), haveBlockAttached(false, _)), 
-	   bel(currentChosenTask(_, _, _, _, _, _, TaskRole, _)),
+	   bel(currentCustomRoleStatus(TaskRole)),
 	   percept(name(OwnName), role(Role), step(Step)) 
 	   	then allother.send(otherAgentStatus(OwnName, X, Y, Step, Seed, Role, noBlock, TaskRole)).
 	

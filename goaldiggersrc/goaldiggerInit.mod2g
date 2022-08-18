@@ -9,7 +9,7 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	%if true then insert (lDebugOn). 
+	if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
@@ -70,6 +70,9 @@ module goaldiggerInit {
 	% tasks
 	% filler task -11001001 so it gets replaced when real task available
 	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)).
+	
+	% track custom role of agent
+	if true then insert(currentCustomRoleStatus(basicAgent)).
 	
 	% multitask coordinator for submitterLeader, necessary for other agents for hooks in program logic
 	if true
