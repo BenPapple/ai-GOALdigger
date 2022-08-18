@@ -1,5 +1,5 @@
-use "../goaldiggerProlog" as knowledge.
-use "../goaldiggerAction" as actionspec.
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
 
 /**
  * Calculate distance to nearest known agent.

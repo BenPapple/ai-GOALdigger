@@ -1,6 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
-use "../eventsubmodules/updateDispenserDistance" as module.
+use "../eventsubmodules/distancecalc/updateDispenserDistance" as module.
 
 /**
  * Use the 2-task as 2task submitterLeader

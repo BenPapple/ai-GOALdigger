@@ -1,5 +1,5 @@
-use "../goaldiggerProlog" as knowledge.
-use "../goaldiggerAction" as actionspec.
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
 
 /**
  * Handles calculating distance of goalzones to agent and manages inserting goalzone data from percept into belief
