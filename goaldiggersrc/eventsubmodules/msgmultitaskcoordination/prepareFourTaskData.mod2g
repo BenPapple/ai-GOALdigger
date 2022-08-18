@@ -15,7 +15,7 @@ module prepareFourTaskData {
 	                                          supporterREQPending))
 	    then {
 		   if percept(task(TaskName,_, 90,[req(0,1,BlockTypeSubmitter),req(X2,Y2,BlockSupporter),
-		                                   req(X3,Y3, BlockType3)]), name(SubmitterName)) 
+		                                   req(X3,Y3, BlockType3)])) 
 		    then {
 			if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17,
 			                                W18, W19)) 
@@ -30,7 +30,7 @@ module prepareFourTaskData {
 						 exit-module.						
 		    } % end first block				
 			if percept(task(TaskName ,_, 90,[req(X1,Y1,BlockSupporter),req(0,1, BlockTypeSubmitter),
-			                                 req(X3,Y3, BlockType3)]), name(SubmitterName)) 
+			                                 req(X3,Y3, BlockType3)])) 
 				then {
 				if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16,
 				                                W17, W18, W19)) 
@@ -45,7 +45,7 @@ module prepareFourTaskData {
 					         exit-module.			
 			} % end second block		
 			if percept(task(TaskName ,_, 90,[req(X1,Y1,BlockSupporter),req(X2,Y2, BlockType2),
-			                                 req(0,1, BlockTypeSubmitter)]), name(SubmitterName)) 
+			                                 req(0,1, BlockTypeSubmitter)])) 
 				then {
 				if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16,
 				                                W17, W18, W19)) 

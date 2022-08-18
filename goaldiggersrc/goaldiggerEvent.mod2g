@@ -98,9 +98,9 @@ module goaldiggerEvent {
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffset.
 	% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-	%if true then updateWorldSizeData.
+	if percept(step(123456)) then updateWorldSizeData.
 	% ToDo Marco integrate with explorer to calculate worldsize
-	%if true then calculateWorldSize.
+	if percept(step(12345)) then calculateWorldSize.
 
     % update current task for saboteur before messagePermaSendStatusToOthers
     if bel(customRole(customRoleSaboteur)),
