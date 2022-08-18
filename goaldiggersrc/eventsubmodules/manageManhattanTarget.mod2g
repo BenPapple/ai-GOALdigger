@@ -1,7 +1,7 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../pathfinding/helperManhattanCalc" as module.
-use "../eventsubmodules/updateGoalzoneDistance" as module.
+use "../eventsubmodules/distancecalc/updateGoalzoneDistance" as module.
 
 /**
  * Manages Manhattan targets

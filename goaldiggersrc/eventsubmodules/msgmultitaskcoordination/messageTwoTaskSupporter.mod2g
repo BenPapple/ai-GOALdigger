@@ -1,5 +1,5 @@
 use "../../goaldiggerProlog" as knowledge.
-use "../../eventsubmodules/updateNearestAgentDistance" as module.
+use "../../eventsubmodules/distancecalc/updateNearestAgentDistance" as module.
 
 /**
  * coordination messages to 2-task suppportingAgent)
