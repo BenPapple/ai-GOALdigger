@@ -218,8 +218,8 @@ module goaldiggerEvent {
 	if bel(calculateNewGoalzoneMD)
 		then delete(calculateNewGoalzoneMD).
 
-    % ACO explore only until step 150
-    if percept(step(SimStep), SimStep < 150) then {
+    % ACO explore 
+    if true then {
 		if true then updateMapExploredMarks.
 	
 		%If not know goalzone or dispenser, exploreMap
