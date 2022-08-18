@@ -73,7 +73,7 @@ module manageManhattanTarget {
 			   		   then delete(tempMapGoalZone(X, Y, D)).
 			   		} % end deletion of tempMapGoalZone
 			   		
-			   		if bel(tempMapGoalZone(A, B, C)) then {
+			   		if bel(tempMapGoalZone(A, B, _)) then {
 			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
 						if true then insert(targetMd(A, B, goalzone)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).

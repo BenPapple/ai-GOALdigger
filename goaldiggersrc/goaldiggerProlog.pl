@@ -175,7 +175,7 @@
 recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
 	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 
 	(NewEnergy is 100).
-trackDirection(X0,Y0,X1,Y1,DirX,DirY) :- DirX is X1-X0, DirY is Y1-Y0.
+%trackDirection(X0,Y0,X1,Y1,DirX,DirY) :- DirX is X1-X0, DirY is Y1-Y0.
 energyAfterDamage(Energy,X,Y,NewEnergy) :-
 	(abs(X) + abs(Y) =:= 1, NewEnergy is Energy - 16, NewEnergy >= 0);
 	(abs(X) + abs(Y) =:= 2, NewEnergy is Energy - 8, NewEnergy >= 0);
@@ -360,12 +360,12 @@ rotateToCoord(e, ccw, 0, -1).
 %distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
 
 % modulo function for 2 values. It only returns positive values.
-getModPos(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, V is abs(Y+X), Z is V mod Y).
+%getModPos(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, V is abs(Y+X), Z is V mod Y).
 
 %
-getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
-    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
-    (getModPos(X1,SizeX,X2), getModPos(Y1,SizeY,Y2)).
+%getModPos(X1,Y1,SizeX,SizeY,X2,Y2) :-
+%    ((SizeX == 1000, SizeY == 1000), X2 is X1, Y2 is Y1);
+%    (getModPos(X1,SizeX,X2), getModPos(Y1,SizeY,Y2)).
 
 % modulo function for 2 values. It returns int values.
 %getModInt(X, Y, Z) :- (X >= 0, Z is X mod Y); (X < 0, Z is X mod -Y).
