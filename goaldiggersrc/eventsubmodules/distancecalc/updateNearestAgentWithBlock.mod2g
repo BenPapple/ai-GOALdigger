@@ -1,0 +1,138 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+/**
+ * Calculate distance to nearest known agent with block.
+ *
+ * @author Ben G.
+ */
+
+module updateNearestAgentWithBlock {
+    
+%    % Init not existent var reset for calc
+%	if not(bel(targetNearestAgent(_, _, _, _))) 
+%		then insert(targetNearestAgent(placeholder, 54321, 54321, 54321)).
+%
+%    % Update var for calc
+%	if bel(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) 
+%		then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
+%		     insert(targetNearestAgent(placeholder, 54321, 54321, 54321)).
+%	
+%	% Find lowest MD for known agents with offsets	     
+%	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _, TaskRole)) do {
+%		if bel(TaskRole == freeWorkerAgent),
+%		   bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, _, _, NameSuppo2, _, _, _, _, _, _, 
+%		                                _, _, _, _, _), 
+%		                                NameSuppo1 \= OtherAgentName, NameSuppo2 \= OtherAgentName),
+%		   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)), 
+%		   bel(agentAt(OwnX, OwnY, _), targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)),
+%		   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+%		       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+%		     then delete(targetNearestAgent(TargetNearestAgent, TargetX, TargetY, MD)) +
+%		          insert(targetNearestAgent(OtherAgentName, LocalizedOtherX, LocalizedOtherY, NewMD)).
+%		}
+		
+	% Init not existent var reset for calc
+	if not(bel(targetNearestAgentWithNeededBlock(_, _, _, _))) 
+		then insert(targetNearestAgentWithNeededBlock(placeholder, 54321, 54321, 54321)).
+
+    % Update var for calc
+	if bel(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) 
+		then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+		     insert(targetNearestAgentWithNeededBlock(placeholder, 54321, 54321, 54321)).
+	
+	% Find lowest MD for known agents with offsets	     
+	forall bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, BlockTypeAttached, TaskRole)),
+	       bel(currentChosenTask(TaskName, _, _, _, _, _, _, _)) 
+		do {
+		
+		% 2task right block applies
+		if bel(TaskRole == freeWorkerAgent),
+		   bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, _, _, NameSuppo2, _, _, _, _, _, _, 
+		                                _, _, _, _, _), NameSuppo1 \= OtherAgentName, 
+		                                NameSuppo2 \= OtherAgentName),
+		   percept(task(TaskName,_, 40,[req(0,1,_),req(_,_,BlockTypeTask)]), BlockTypeTask == BlockTypeAttached),
+		   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
+		    	then {
+		            if bel(agentAt(OwnX, OwnY, _), 
+		                   targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+					   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+					       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+					    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+					         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, 
+					                                                  LocalizedOtherY, NewMD)).
+	    }
+	    
+	    % 2task left block applies
+	    if bel(TaskRole == freeWorkerAgent),
+		   bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, _, _, NameSuppo2, _, _, _, _, _, _, 
+		                                _, _, _, _, _), NameSuppo1 \= OtherAgentName, 
+		                                NameSuppo2 \= OtherAgentName),
+	       percept(task(TaskName,_, 40,[req(_,_,BlockTypeTask),req(0,1,_)]), BlockTypeTask == BlockTypeAttached),
+	       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
+	       	then {
+	            if bel(agentAt(OwnX, OwnY, _), 
+	                   targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+				         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, 
+				         										  LocalizedOtherY, NewMD)).
+	    }
+	    
+%	    % 3task left block applies
+%		if bel(TaskRole == freeWorkerAgent),
+%		   bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, _, _, NameSuppo2, _, _, _, _, _, _, 
+%		                                _, _, _, _, _), NameSuppo1 \= OtherAgentName, 
+%		                                NameSuppo2 \= OtherAgentName),
+%		   percept(task(TaskName,_, 90,[req(0,1,_),req(_,_,BlockTypeTask),req(_,_,_)]), 
+%		           BlockTypeTask == BlockTypeAttached),
+%		   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
+%		    	then {
+%		            if bel(agentAt(OwnX, OwnY, _), 
+%		                   targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+%					   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+%					       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+%					    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+%					         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, 
+%					                                                  LocalizedOtherY, NewMD)).
+%	    }
+%	    
+%	    %3task middle block applies
+%	    if bel(TaskRole == freeWorkerAgent),
+%		   bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, _, _, NameSuppo2, _, _, _, _, _, _, 
+%		                                _, _, _, _, _), NameSuppo1 \= OtherAgentName, 
+%		                                NameSuppo2 \= OtherAgentName),
+%	       percept(task(TaskName,_, 90,[req(_,_,BlockTypeTask),req(0,1,_),req(_,_,_)]), 
+%	               BlockTypeTask == BlockTypeAttached),
+%	       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
+%	       	then {
+%	            if bel(agentAt(OwnX, OwnY, _), 
+%	                   targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+%				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+%				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+%				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+%				         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, 
+%				         										  LocalizedOtherY, NewMD)).
+%	    }	
+%	        
+%	    %3task right block applies
+%	    if bel(TaskRole == freeWorkerAgent),
+%		   bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, _, _, NameSuppo2, _, _, _, _, _, _, 
+%		                                _, _, _, _, _), NameSuppo1 \= OtherAgentName, 
+%		                                NameSuppo2 \= OtherAgentName),
+%	       percept(task(TaskName,_, 90,[req(_,_,BlockTypeTask),req(_,_,_),req(_,0,1)]), 
+%	               BlockTypeTask == BlockTypeAttached),
+%	       bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)) 
+%	       	then {
+%	            if bel(agentAt(OwnX, OwnY, _), 
+%	                   targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)),
+%				   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY, 
+%				       calculateXYMd(OwnX, OwnY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD =< MD)
+%				    then delete(targetNearestAgentWithNeededBlock(TargetNearestAgent, TargetX, TargetY, MD)) +
+%				         insert(targetNearestAgentWithNeededBlock(OtherAgentName, LocalizedOtherX, 
+%				         										  LocalizedOtherY, NewMD)).
+%	    }	    
+	} % do
+	
+} % end module

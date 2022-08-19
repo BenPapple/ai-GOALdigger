@@ -1,5 +1,6 @@
 use "../../goaldiggerProlog" as knowledge.
 use "../../eventsubmodules/distancecalc/updateNearestAgentDistance" as module.
+use "../../eventsubmodules/distancecalc/updateNearestAgentWithBlock" as module.
 
 /**
  * coordination messages to 2-task suppportingAgent)
@@ -13,7 +14,7 @@ module messageTwoTaskSupporter {
 	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
 	   bel(SubmitType == submittingAgentTwoTask),
 	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
-	   	then updateNearestAgentDistance.
+	   	then updateNearestAgentDistance + updateNearestAgentWithBlock.
 	
     % set other agent with needed block as supporter and oneself as submitter
 	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, SubmitType, supporterREQPending)),

@@ -78,6 +78,10 @@ module logMiniPercept {
 		if bel(currentChosenTask(TaskName, TaskStep, Reward, X, Y, BlockType, ClientServer, NameSubmitter))
 			then print("MyTask: "+TaskName+TaskStep+Reward| X| Y+BlockType| ClientServer| NameSubmitter).
 
+		if bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, Ack1, _, NameSuppo2, _, _, _, Ack2, _, NameSuppo3, 
+		                                _, _, _, Ack3, _))
+			then print("2-BLOCK: "| NameSuppo1 | Ack1+"3-BLOCK: "| NameSuppo2 | Ack2+"4-BLOCK: " |NameSuppo3 | Ack3).
+
 		if bel(targetDispenserAt(X2, Y2, BlockTypeNew, Md))
 			then print("TargetDispenser: "| X2| Y2+"Block+Distance: "| BlockTypeNew| Md).
 
@@ -133,7 +137,9 @@ module logMiniPercept {
 
 
 		% logging percept base, message base, believe base
-		if true then log(pb) + log(mb) + log(bb) + log(gb).
+		%if true then log(pb) + log(mb) + log(bb) + log(gb).
+		if true then log(pb) + log(mb) + log(bb).
+		
 		} % debug
 
 }

@@ -59,6 +59,8 @@ module chooseTask {
 	if bel(submitterLeader, step(SimStep)),
 	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
 	   bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
+	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
+	   bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)), 
 	   percept(task(_ ,TaskStep, 90,[req(X1,Y1,Block1),req(X2,Y2,Block2),req(X3,Y3,Block3)])),
 	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
@@ -71,7 +73,8 @@ module chooseTask {
 
 	% choose 2-task as submitterLeader if available
 	if bel(submitterLeader, step(SimStep)),
-	   bel(confirmedOffsetOfAgent(_, _, _)),
+	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
 	   percept(task(_ ,TaskStep, 40,[req(_,_,Block1),req(_,_,Block2)])),
 	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
