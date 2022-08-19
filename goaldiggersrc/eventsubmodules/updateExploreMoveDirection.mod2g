@@ -19,23 +19,34 @@ module updateExploreMoveDirection {
 	if bel(eastExplored) then delete(eastExplored).
 	if bel(westExplored) then delete(westExplored).
 	
-	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DX_min is X-4, DX_max is X+4, 
+	%Looking for exploremarks that is in 2 columns left or right from agent
+	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DX_min is X-2, DX_max is X+2, 
 	       MarkX >= DX_min, MarkX =< DX_max)
 		then {
-			if bel(DY_min is Y, DY_max is Y-4, MarkY < DY_min, MarkY > DY_max) 
+			%Looking if explore mark is in north from agent 	
+			if bel(DY_min is Y, DY_max is Y-5, MarkY < DY_min, MarkY > DY_max) 
 				then insert(northExplored).
-			if bel(DY_min is Y, DY_max is Y+4, MarkY > DY_min, MarkY < DY_max) 
+			%Looking if explore mark is in south from agent
+			if bel(DY_min is Y, DY_max is Y+5, MarkY > DY_min, MarkY < DY_max) 
 				then insert(southExplored).
 		}
-	
-	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DY_min is Y-4, DY_max is X+4, 
+	%Looking for exploremarks that is in 2 rows left or right from agent
+	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DY_min is Y-2, DY_max is Y+2, 
 	       MarkY >= DY_min, MarkY =< DY_max)
 		then {
-			if bel(DX_min is X, DX_max is X-4, MarkX < DX_min, MarkX > DX_max) 
+			if bel(DX_min is X, DX_max is X-5, MarkX < DX_min, MarkX > DX_max) 
 				then insert(eastExplored).
-			if bel(DX_min is X, DX_max is Y+4, MarkX > DX_min, MarkX < DX_max) 
+			if bel(DX_min is X, DX_max is X+5, MarkX > DX_min, MarkX < DX_max) 
 				then insert(westExplored).
 		}
+	
+	if percept(team(Team), thing(X, Y, entity, Team))
+	then {
+		if bel(Y > 0), not(bel(southExplored)) then insert(southExplored).
+		if bel(Y < 0), not(bel(northExplored)) then insert(northExplored).
+		if bel(X < 0), not(bel(eastExplored)) then insert(eastExplored).
+		if bel(X > 0), not(bel(westExplored)) then insert(westExplored).
+	}
 %	forall bel(mapMarkExplored(ExploredX, ExploredY))
 %		do {
 %			% Checks all direction if a marks is in a perimeter of 4x4
