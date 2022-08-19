@@ -73,4 +73,7 @@ module helperMoveOrClearForward {
 		}
     }
     
+    %If something applies where no rules are declared agent should skip his action, better than no_action
+    if true then preActionCleanup + skip.
+    
 } % end module
