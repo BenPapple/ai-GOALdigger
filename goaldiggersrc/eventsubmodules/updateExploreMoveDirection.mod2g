@@ -18,32 +18,49 @@ module updateExploreMoveDirection {
 	if bel(southExplored) then delete(southExplored).
 	if bel(eastExplored) then delete(eastExplored).
 	if bel(westExplored) then delete(westExplored).
-
-	forall bel(mapMarkExplored(ExploredX, ExploredY))
-		do {
-			% Checks all direction if a marks is in a perimeter of 4x4
-			if bel(agentAt(X, Y, _), DX is ExploredX - X, DY is ExploredY - Y) then {
-				if not(bel(northExplored)) then {
-					if bel(DY =< -1, DY >= -4), bel(DX >= -4, DX =< 4) 
-					    then insert(northExplored). 	
-				}
-				
-				if not(bel(eastExplored)) then {
-					if bel(DX >= 1, DX =< 3), bel(DY >= -4, DY =< 4)
-					    then insert(eastExplored).
-				}
-				
-				if not(bel(southExplored)) then {
-					if bel(DY >= 1, DY =< 3), bel(DX >= -4, DX =< 4)
-					    then insert(southExplored).
-				}
-				
-				if not(bel(westExplored)) then {
-					if bel(DX =< -1, DX >= -4), bel(DY >= -4, DY =< 4)
-					    then insert(westExplored).
-				}
-			}
-	}
+	
+	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DX_min is X-4, DX_max is X+4, 
+	       MarkX >= DX_min, MarkX =< DX_max)
+		then {
+			if bel(DY_min is Y, DY_max is Y-4, MarkY < DY_min, MarkY > DY_max) 
+				then insert(northExplored).
+			if bel(DY_min is Y, DY_max is Y+4, MarkY > DY_min, MarkY < DY_max) 
+				then insert(southExplored).
+		}
+	
+	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DY_min is Y-4, DY_max is X+4, 
+	       MarkY >= DY_min, MarkY =< DY_max)
+		then {
+			if bel(DX_min is X, DX_max is X-4, MarkX < DX_min, MarkX > DX_max) 
+				then insert(eastExplored).
+			if bel(DX_min is X, DX_max is Y+4, MarkX > DX_min, MarkX < DX_max) 
+				then insert(westExplored).
+		}
+%	forall bel(mapMarkExplored(ExploredX, ExploredY))
+%		do {
+%			% Checks all direction if a marks is in a perimeter of 4x4
+%			if bel(agentAt(X, Y, _), DX is ExploredX - X, DY is ExploredY - Y) then {
+%				if not(bel(northExplored)) then {
+%					if bel(DY =< -1, DY >= -4), bel(DX >= -4, DX =< 4) 
+%					    then insert(northExplored). 	
+%				}
+%				
+%				if not(bel(eastExplored)) then {
+%					if bel(DX >= 1, DX =< 3), bel(DY >= -4, DY =< 4)
+%					    then insert(eastExplored).
+%				}
+%				
+%				if not(bel(southExplored)) then {
+%					if bel(DY >= 1, DY =< 3), bel(DX >= -4, DX =< 4)
+%					    then insert(southExplored).
+%				}
+%				
+%				if not(bel(westExplored)) then {
+%					if bel(DX =< -1, DX >= -4), bel(DY >= -4, DY =< 4)
+%					    then insert(westExplored).
+%				}
+%			}
+%	}
 	
 	%Works after guardian system, if a direction is "blocked" the guardian is set	
 	if not(bel(northExplored)), bel(exploreDirection(Dir))
