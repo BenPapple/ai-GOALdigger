@@ -1,0 +1,44 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+/**
+ * Selects the agent to be attacked by an agent with the custom role saboteur
+ *
+ * @author Isaac S.
+ * 
+ */
+
+module selectClearingTarget {
+
+	if not(bel(visionRange(_)))
+	  then insert(visionRange(5)).
+
+	if not(bel(maxEnergy(_)))
+	  then insert(maxEnergy(100)).
+
+	if not(bel(recoverEnergy(_)))
+	  then insert(recoverEnergy(2)).
+
+	% delete previous clearing target in any case
+	if bel(clearingTarget(X,Y)) then delete(clearingTarget(X,Y)).
+	 
+	% deletes data about sightings of agents considered to be inactive (in order not to attack already inactive agents)
+	forall bel(inactiveSighting(X,Y,Timer)) do {
+		if bel(Timer > 0, NewTimer is Timer -1) 
+		  then delete(inactiveSighting(X,Y,Timer)) + insert(inactiveSighting(X,Y,NewTimer)).
+		if bel(Timer =:= 0) then delete(inactiveSighting(X,Y,Timer)).
+	} 
+	
+	
+	% ToDo: It should select a target based on the distance and energy expected to be left on the target after the attack
+	% now it merely selects a target next to the saboteur
+	forall bel(agentSighting(X,Y,DirX,DirY,_,_,_,_)) do {
+		  		  
+		  if not(bel(clearingTarget(_,_))), not(bel(inactiveSighting(X,Y,_))),
+		    bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, X1 is NextPosX - X2, Y1 is NextPosY - Y2), 
+		    not(bel(X1 =:= 0, Y1 =:= 0)), bel(abs(X1) + abs(Y1) =:= 1)
+		       
+		    then insert(clearingTarget(X1,Y1)).
+	}
+
+}

@@ -13,7 +13,7 @@ module goaldiggerInit {
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
-	%if true then insert (activateSaboteurFeature).
+	if true then insert (activateSaboteurFeature).
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 
@@ -31,8 +31,8 @@ module goaldiggerInit {
 	if true then insert(simDuration(0)).
 	
 	% variables for saboteur behaviour (againt own team, against other team)
-	if true then insert(sabotageUs).
-	%if true then insert(sabotageThem).
+	%if true then insert(sabotageUs).
+	if true then insert(sabotageThem).
 	
 	% global values
 	% switch to recognize simulations have different characteristics on sim change
@@ -44,7 +44,7 @@ module goaldiggerInit {
 	if true then insert (haveMove). % Semaphore of decision for step
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
 	if true then insert (haveDispenserDelivery(false, 0)). % switch for successful dispenser request
-	if true then insert (getFree). % get free from attachments
+	%if true then insert (getFree). % get free from attachments
 	
 	% Assign Explorer and set worker as default role
 	if true then insert(randomSeed(0)).
@@ -70,6 +70,9 @@ module goaldiggerInit {
 	% tasks
 	% filler task -11001001 so it gets replaced when real task available
 	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)).
+	
+	% track custom role of agent
+	if true then insert(currentCustomRoleStatus(basicAgent)).
 	
 	% multitask coordinator for submitterLeader, necessary for other agents for hooks in program logic
 	if true

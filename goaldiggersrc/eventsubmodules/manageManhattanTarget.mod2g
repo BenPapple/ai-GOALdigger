@@ -1,12 +1,13 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 use "../pathfinding/helperManhattanCalc" as module.
-use "../eventsubmodules/updateGoalzoneDistance" as module.
+use "../eventsubmodules/distancecalc/updateGoalzoneDistance" as module.
 
 /**
  * Manages Manhattan targets
  *
  * @author Ben G.
+ * @co-author Isaac S.
  */
  
 module manageManhattanTarget {
@@ -17,6 +18,13 @@ module manageManhattanTarget {
 		then delete(targetMd(X, Y, Target)) + 
 		     insert(targetMd(A, B, rolezone)) + 
 		     insert(executeManhattan).	
+
+	% update rolezone target MD
+	if bel(customRole(customRoleSaboteur)), not(percept(role(digger))), 
+	   bel(targetMd(X, Y, Target), targetClosestRoleZone(A, B, MdAlt), MdAlt < 1234567)
+		then delete(targetMd(X, Y, Target)) + 
+		     insert(targetMd(A, B, rolezone)) + 
+		     insert(executeManhattan).
 	
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), 
@@ -38,10 +46,11 @@ module manageManhattanTarget {
 	}
 
     % ToDo Isaac comment
+    % Manhattan targets for custom role saboteur
 	if bel(customRole(customRoleSaboteur)) then {		
 	
-		% when role saboteur set goalzone as target
-		if bel(searchInGoalzone), 
+		% set goalzone as target
+		if bel(searchInGoalzone), not(bel(targetMd(_,_,goalzone))), not(bel(targetMd(_,_,blockCarrier))), 
 		   not(bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)) then {
 			   		if true then updateGoalzoneDistance.
 			   		if bel(targetClosestGoalZone(X, Y, _)) then {
@@ -51,8 +60,8 @@ module manageManhattanTarget {
 					}
 		}
 	
-		% when role saboteur worker in empty goalZone set other goalzone as target
-		if bel(searchInGoalzone), 
+		% when in empty goal zone, set other goal zone as target
+		if bel(searchInGoalzone), not(bel(targetMd(_,_,blockCarrier))),
 		   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
 		   then {
 			   		if true then updateGoalzoneDistance.
@@ -64,7 +73,7 @@ module manageManhattanTarget {
 			   		   then delete(tempMapGoalZone(X, Y, D)).
 			   		} % end deletion of tempMapGoalZone
 			   		
-			   		if bel(tempMapGoalZone(A, B, C)) then {
+			   		if bel(tempMapGoalZone(A, B, _)) then {
 			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
 						if true then insert(targetMd(A, B, goalzone)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
@@ -72,57 +81,44 @@ module manageManhattanTarget {
 			   		}		   		
 		}
 				
-		% when role saboteur in still not declared empty goal zone, select distant point of that goal zone
-		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), 
+		% when in goal zone which has not still been declared empty, select distant point of that goal zone
+		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrier))),
 		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
 		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
-		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), emptyGoalZoneCounter(X5, Y5, C), 
-		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
+		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), 
+		   emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
 		     	     
 		     if percept(goalZone(X6, Y6)), bel(calculateXYMd(X6, Y6, 0, 0, 5), localize(X6, Y6, X4, Y4, X7, Y7)),
 		        bel(targetMd(X0, Y0, Target))
-		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X7, Y7, goalZone)).
+		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X7, Y7, goalzone)).
 		     if not(bel(executeManhattan)) then insert(executeManhattan).	        
 		}
 
-	
-		% when role saboteur and without bloke set dispenser as target
-		if bel(customRole(customRoleSaboteur), haveBlokeAttached(false,_), searchInDispenser,
-			   mapDispenser(X,Y,dispenser,BlockType,_,_)), percept(task(_, _, _,[req(_,_,BlockType)])), 
-			   not(bel(emptyDispenserCounter(X, Y, Count), Count > 20)) then {		
-					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-					if true then insert(targetMd(X, Y, dispenser)).	
-					if not(bel(executeManhattan)) then insert(executeManhattan).
-		}
 
-		% when role saboteur with no one attached set other agent as target next to a goal zone
-		if percept(goalZone(_,_)), bel(attachedBlokes(Count), Count == 0, whitelistedTeam(MyTeam)), 
-	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
-		 bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3), abs(X) + abs(Y) >= 2) then {
+		% when not pursuing any agent carrying a block, set other agent without block as target anywhere
+		if bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrier))), not(bel(targetMd(_,_,goalzone))),
+	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam),
+		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 2),
+		 not(bel(inactiveSighting(X3,Y3,_)))
+		  then {
 	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
 			if true then insert(targetMd(X3, Y3, agent)).	
 			if not(bel(executeManhattan)) then insert(executeManhattan).
 	     }
 
-		% when role saboteur with someone attached set other agent as target anywhere
-		if bel(attachedBlokes(Count), Count > 0, whitelistedTeam(MyTeam)), 
-	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
-		 bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3), abs(X) + abs(Y) >= 2) then {
+		% set an agent carrying a block as target anywhere
+		if bel(whitelistedTeam(MyTeam)), 
+	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam, thing(X1, Y1, block, _),
+	     attached(X1,Y1), abs(X1-X0) + abs(Y1-Y0) =:= 1),
+		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 2),
+		 not(bel(inactiveSighting(X3,Y3,_)))
+		  then {
 	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-			if true then insert(targetMd(X3, Y3, agent)).	
+			if true then insert(targetMd(X3, Y3, blockCarrier)).	
 			if not(bel(executeManhattan)) then insert(executeManhattan).
 	     }
-	
-		% when role saboteur with dragging routine set other agent as target anywhere
-		if bel(dragger, whitelistedTeam(MyTeam)), 
-	     percept(thing(X, Y, entity, OtherTeam), MyTeam \= OtherTeam), not(percept(attached(X,Y))),
-		 bel(agentAt(X2, Y2, _), localize(X, Y, X2, Y2, X3, Y3), abs(X) + abs(Y) >= 2) then {
-	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-			if true then insert(targetMd(X3, Y3, agent)).	
-			if not(bel(executeManhattan)) then insert(executeManhattan).
-	     }
-
 	}
+	         
 	
 	% With block and as submittingAgent update goalzone target MD
 	if bel(haveBlockAttached(true, _), step(SimStep), currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
@@ -160,53 +156,53 @@ module manageManhattanTarget {
 			 insert(targetMd(C2, D2, supportingPosition)) + 
 			 insert(executeManhattan).
 	
-	% Moving around 2-task Submitting agent for docking sequence
-	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
-	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
-	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
-	   bel(haveBlockAttached(true, _)) 
-	   	then {
-			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
-			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
-			       SubmitterBlockTypeAttached == SouthBlock),
-			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
-			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
-			   bel(agentAt(MyX, MyY, _)),
-			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
-			   bel(DiffX is SubMdX - MyX + XSubmit, DiffY is SubMdY - MyY + YSubmit),
-			   bel(DiffX =< 1, DiffY =< 1),
-			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
-			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
-			       targetMd(Xdel, Ydel, Zdel))
-			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
-			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
-			         insert(executeManhattan).
-	}
-	
-	% Moving around 3-task Submitting agent for docking sequence
-	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
-	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
-	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
-	   bel(haveBlockAttached(true, _)) 
-	   	then {
-			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
-			       SubmitterName)),
-			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
-			       SubmitterBlockTypeAttached == SouthBlock),
-			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
-			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
-			   bel(agentAt(MyX, MyY, _)),
-			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
-			   bel(DiffX is SubMdX - MyX + XSubmit, DiffY is SubMdY - MyY + YSubmit),
-			   bel(DiffX =< 1, DiffY =< 1),
-			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
-			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
-			       targetMd(Xdel, Ydel, Zdel))
-			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
-			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
-			         insert(executeManhattan).
-	}
+%	% Moving around 2-task Submitting agent for docking sequence
+%	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+%	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
+%	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
+%	   bel(haveBlockAttached(true, _)) 
+%	   	then {
+%			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
+%			       SubmitterName)),
+%			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
+%			       SubmitterBlockTypeAttached == SouthBlock),
+%			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
+%			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
+%			   bel(agentAt(MyX, MyY, _)),
+%			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
+%			   bel(DiffX is SubMdX - MyX + XSubmit, DiffY is SubMdY - MyY + YSubmit),
+%			   bel(DiffX =< 1, DiffY =< 1),
+%			   percept(task(TaskName, _, 40,[req(_, _, _),req(_, _, _)])),
+%			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
+%			       targetMd(Xdel, Ydel, Zdel))
+%			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
+%			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
+%			         insert(executeManhattan).
+%	}
+%	
+%	% Moving around 3-task Submitting agent for docking sequence
+%	if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+%	           YBlock is YSubmit+1, thing(XBlock, YBlock, block, SouthBlock), 
+%	           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock)),
+%	   bel(haveBlockAttached(true, _)) 
+%	   	then {
+%			if bel(agentAt(Xself, Yself, _), currentChosenTask(TaskName, _, _, XTask, YTask, _, supportingAgent, 
+%			       SubmitterName)),
+%			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, XSub, YSub, SubmitterBlockTypeAttached, _), 
+%			       SubmitterBlockTypeAttached == SouthBlock),
+%			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SubmitterName)),
+%			   bel(SubMdX is XSub + OffsetX, SubMdY is YSub + OffsetY),
+%			   bel(agentAt(MyX, MyY, _)),
+%			   bel(calculateXYMd(MyX, MyY, SubMdX, SubMdY, NewMD), NewMD < 6),
+%			   bel(DiffX is SubMdX - MyX + XSubmit, DiffY is SubMdY - MyY + YSubmit),
+%			   bel(DiffX =< 1, DiffY =< 1),
+%			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)])),
+%			   bel(Xtarget is Xself + XSubmit + XTask + 0, Ytarget is Yself + YSubmit + YTask + 1, 
+%			       targetMd(Xdel, Ydel, Zdel))
+%			    then delete(targetMd(Xdel, Ydel, Zdel)) + 
+%			    	 insert(targetMd(Xtarget, Ytarget, supportingPosition)) + 
+%			         insert(executeManhattan).
+%	}
 %	
 	% Manhattan Magic calculate nswe
 	if bel(executeManhattan) 

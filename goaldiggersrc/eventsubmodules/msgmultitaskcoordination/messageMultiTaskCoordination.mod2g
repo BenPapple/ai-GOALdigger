@@ -104,16 +104,16 @@ module messageMultiTaskCoordination {
 			 
     % as saboteur always noack req
 	forall percept(name(NameOwn)), 
-	       (ConnectSender).sent(informSupportingAgent(secondBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
-	                                                  SendBlock, TaskName)) 
+	       (ConnectSender).sent(informSupportingAgent(secondBlock, _, supportingAgent, NameOwn, _, _, 
+	                                                  SendBlock, _)) 
 	    do{ 
 	    if bel(customRole(customRoleSaboteur))
 	        then (ConnectSender).send(msgNoACKtask(secondBlock, SendBlock, NameOwn)). 	
 	}
 	% as saboteur decline all supporting requests thirdBlock
 	forall percept(name(NameOwn)), 
-	       (ConnectSender).sent(informSupportingAgent(thirdBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
-	                                                  SendBlock, TaskName)) 
+	       (ConnectSender).sent(informSupportingAgent(thirdBlock, _, supportingAgent, NameOwn, _, _, 
+	                                                  SendBlock, _)) 
 	    do{ 
 	    if bel(customRole(customRoleSaboteur))
 	        then (ConnectSender).send(msgNoACKtask(thirdBlock, SendBlock, NameOwn)).
@@ -121,16 +121,16 @@ module messageMultiTaskCoordination {
 
     % as submitterLeader decline all supporting requests secondBlock	
 	forall percept(name(NameOwn)), 
-	       (ConnectSender).sent(informSupportingAgent(secondBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
-	                                                  SendBlock, TaskName)) 
+	       (ConnectSender).sent(informSupportingAgent(secondBlock, _, supportingAgent, NameOwn, _, _, 
+	                                                  SendBlock, _)) 
 	    do{ 
 	    if bel(submitterLeader)
 	        then (ConnectSender).send(msgNoACKtask(secondBlock, SendBlock, NameOwn)). 	
 	}
 	% as submitterLeader decline all supporting requests thirdBlock
 	forall percept(name(NameOwn)), 
-	       (ConnectSender).sent(informSupportingAgent(thirdBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
-	                                                  SendBlock, TaskName)) 
+	       (ConnectSender).sent(informSupportingAgent(thirdBlock, _, supportingAgent, NameOwn, _, _, 
+	                                                  SendBlock, _)) 
 	    do{ 
 	    if bel(submitterLeader)
 	        then (ConnectSender).send(msgNoACKtask(thirdBlock, SendBlock, NameOwn)).

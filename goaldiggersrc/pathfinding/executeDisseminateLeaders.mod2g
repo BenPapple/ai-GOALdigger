@@ -1,0 +1,50 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "executeRandomMove" as module.
+use "../actionhandling/preActionCleanup" as module.
+
+% linearrandom: first action choice linear, then inside curly brackets random action
+order = linearrandom.
+
+/**
+ * Have some distance between submitterLeaders so supporters don't deadlock around them
+ *
+ * @author Ben G.
+ */
+
+module executeDisseminateLeaders {
+
+	% move away from other submitterLeaders in goalzone, stay in goalzone
+	if bel(storedOtherAgentStatus(OtherAgentName, _, worker, _, _, OtherX, OtherY, _, submitterLeaderAgent)),
+	   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, OtherAgentName)),
+	   bel(agentAt(MyX, MyY, _)),
+	   bel(LocalizedOtherX is OtherX + OffsetX, LocalizedOtherY is OtherY + OffsetY),
+	   bel(calculateXYMd(MyX, MyY, LocalizedOtherX, LocalizedOtherY, NewMD), NewMD < 5),
+	   bel(haveBlockAttached(true, s))
+	    then {
+	    
+	    if bel(MyX < LocalizedOtherX),
+	       percept(goalZone(-1,0)),
+	       not(percept(thing(-1, 0, Type,_), Type \== marker)),
+	       not(percept(thing(-1, 1, Type,_), Type \== marker))
+	        then preActionCleanup + move(w).
+	        
+	    if bel(MyX > LocalizedOtherX),
+	       percept(goalZone(1,0)),
+	       not(percept(thing(1, 0, Type,_), Type \== marker)),
+	       not(percept(thing(1, 1, Type,_), Type \== marker))
+	        then preActionCleanup + move(e).	        
+
+	    if bel(MyY < LocalizedOtherY),
+	       percept(goalZone(0,-1)),
+	       not(percept(thing(0, -1, Type,_), Type \== marker))
+	        then preActionCleanup + move(n).	       
+
+	    if bel(MyY > LocalizedOtherY),
+	       percept(goalZone(0, 1)),
+	       not(percept(thing(0, 2, Type,_), Type \== marker))
+	        then preActionCleanup + move(s).	       
+	    
+	    }
+	    	
+}

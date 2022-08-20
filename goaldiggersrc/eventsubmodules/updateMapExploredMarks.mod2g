@@ -1,7 +1,11 @@
 use "../goaldiggerProlog" as knowledge.
 use "../goaldiggerAction" as actionspec.
 
-% ToDo Marco comments
+/**
+ * Update marks from other agents
+ *
+ * @author Marco G.
+ */
 
 module updateMapExploredMarks {
 
@@ -9,7 +13,8 @@ module updateMapExploredMarks {
 	forall bel(storedOtherAgentStatus(SenderName, _, _, _, _, X, Y, _, _))
 		do {
 			if bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SenderName)), 
-			   bel( ExploredX is X + OffsetX, ExploredY is Y + OffsetY)
+			   bel( ExploredX is X + OffsetX, ExploredY is Y + OffsetY),
+	           percept(step(SimStep), 0 =:= mod(SimStep, 2), SimStep < 200)
 			    then insert(mapMarkExplored(ExploredX,ExploredY)).
 	}
 }

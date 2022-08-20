@@ -14,6 +14,7 @@ order = linearrandom.
  * handle moving with block
  *
  * @author Ben G.
+ * @co-author Marco G.
  */
 
 module helperMoveWithBlock {
@@ -36,20 +37,45 @@ module helperMoveWithBlock {
 	    			if percept(thing(Xn, Yn, block,_)), 
 	    			   percept(attached(Xn, Yn)) 
 	    				then preActionCleanup + move(AltMove).
-        			}
+        		}
+        	
+        	if bel( directionToCoordinate(AltMove, Xm, Ym), diagonalCoordForAffiAndOppoBlock(Diry,AltMove,A,B)), 
+    		   not(percept(thing(Xm, Ym, Type,_), Type \== marker)), 
+    		   not(percept(thing(A, B, Type,_), Type \== marker)) 
+    		   	then {
+	    			if percept(thing(Xn, Yn, entity,_)) 
+	    				then preActionCleanup + move(AltMove).
+	    			if percept(thing(Xn, Yn, block,_)), 
+	    			   percept(attached(Xn, Yn)) 
+	    				then preActionCleanup + move(AltMove).
+        		}
         			
-        if bel(oppositeDirection(AltMove, AltAltMove), 
-               directionToCoordinate(AltAltMove, Xm, Ym), 
-               diagonalCoordForAffiAndOppoBlock(Diry,AltAltMove,A,B)), 
-           not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)), 
-           not(percept(thing(A, B, Type,_), Type \== dispenser)) 
-        	then {
-	    		if percept(thing(Xn, Yn, entity,_)) 
-	    			then preActionCleanup + move(AltAltMove).
-	    		if percept(thing(Xn, Yn, block,_)), 
-	    		   percept(attached(Xn, Yn)) 
-	    			then preActionCleanup + move(AltAltMove).
-        }
+	        if bel(oppositeDirection(AltMove, AltAltMove), 
+	               directionToCoordinate(AltAltMove, Xm, Ym), 
+	               diagonalCoordForAffiAndOppoBlock(Diry,AltAltMove,A,B)), 
+	           not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)), 
+	           not(percept(thing(A, B, Type,_), Type \== dispenser)) 
+	        	then {
+		    		if percept(thing(Xn, Yn, entity,_)) 
+		    			then preActionCleanup + move(AltAltMove).
+		    		if percept(thing(Xn, Yn, block,_)), 
+		    		   percept(attached(Xn, Yn)) 
+		    			then preActionCleanup + move(AltAltMove).
+	        	}
+	        	
+	        if bel(oppositeDirection(AltMove, AltAltMove), 
+	               directionToCoordinate(AltAltMove, Xm, Ym), 
+	               diagonalCoordForAffiAndOppoBlock(Diry,AltAltMove,A,B)), 
+	           not(percept(thing(Xm, Ym, Type,_), Type \== marker)), 
+	           not(percept(thing(A, B, Type,_), Type \== marker)) 
+	        	then {
+		    		if percept(thing(Xn, Yn, entity,_)) 
+		    			then preActionCleanup + move(AltAltMove).
+		    		if percept(thing(Xn, Yn, block,_)), 
+		    		   percept(attached(Xn, Yn)) 
+		    			then preActionCleanup + move(AltAltMove).
+	        	}
+        	
     } % random 90 degree
 
 	%  move into affinity direction

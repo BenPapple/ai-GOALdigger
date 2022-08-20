@@ -5,38 +5,73 @@ use "../pathfinding/executeRandomMove" as module.
 use "../actionhandling/preActionCleanup" as module.
 use "../pathfinding/helperMoveWithoutBlock" as module.
 
+
+/**
+ * update Explore direction
+ *
+ * @author Marco G.
+ */
+
 module updateExploreMoveDirection {
 
 	if bel(northExplored) then delete(northExplored).
 	if bel(southExplored) then delete(southExplored).
 	if bel(eastExplored) then delete(eastExplored).
 	if bel(westExplored) then delete(westExplored).
-
-	forall bel(mapMarkExplored(ExploredX, ExploredY))
-		do {
-			% Checks all direction if a marks is in a perimeter of 4x4
-			if bel(agentAt(X, Y, _), DX is ExploredX - X, DY is ExploredY - Y) then {
-				if not(bel(northExplored)) then {
-					if bel(DY =< -1, DY >= -4), bel(DX >= -4, DX =< 4) 
-					    then insert(northExplored). 	
-				}
-				
-				if not(bel(eastExplored)) then {
-					if bel(DX >= 1, DX =< 3), bel(DY >= -4, DY =< 4)
-					    then insert(eastExplored).
-				}
-				
-				if not(bel(southExplored)) then {
-					if bel(DY >= 1, DY =< 3), bel(DX >= -4, DX =< 4)
-					    then insert(southExplored).
-				}
-				
-				if not(bel(westExplored)) then {
-					if bel(DX =< -1, DX >= -4), bel(DY >= -4, DY =< 4)
-					    then insert(westExplored).
-				}
-			}
+	
+	%Looking for exploremarks that is in 2 columns left or right from agent
+	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DX_min is X-2, DX_max is X+2, 
+	       MarkX >= DX_min, MarkX =< DX_max)
+		then {
+			%Looking if explore mark is in north from agent 	
+			if bel(DY_min is Y, DY_max is Y-5, MarkY < DY_min, MarkY > DY_max) 
+				then insert(northExplored).
+			%Looking if explore mark is in south from agent
+			if bel(DY_min is Y, DY_max is Y+5, MarkY > DY_min, MarkY < DY_max) 
+				then insert(southExplored).
+		}
+	%Looking for exploremarks that is in 2 rows left or right from agent
+	if bel(agentAt(X, Y, _), mapMarkExplored(MarkX, MarkY), DY_min is Y-2, DY_max is Y+2, 
+	       MarkY >= DY_min, MarkY =< DY_max)
+		then {
+			if bel(DX_min is X, DX_max is X-5, MarkX < DX_min, MarkX > DX_max) 
+				then insert(eastExplored).
+			if bel(DX_min is X, DX_max is X+5, MarkX > DX_min, MarkX < DX_max) 
+				then insert(westExplored).
+		}
+	
+	if percept(team(Team), thing(X, Y, entity, Team))
+	then {
+		if bel(Y > 0), not(bel(southExplored)) then insert(southExplored).
+		if bel(Y < 0), not(bel(northExplored)) then insert(northExplored).
+		if bel(X < 0), not(bel(eastExplored)) then insert(eastExplored).
+		if bel(X > 0), not(bel(westExplored)) then insert(westExplored).
 	}
+%	forall bel(mapMarkExplored(ExploredX, ExploredY))
+%		do {
+%			% Checks all direction if a marks is in a perimeter of 4x4
+%			if bel(agentAt(X, Y, _), DX is ExploredX - X, DY is ExploredY - Y) then {
+%				if not(bel(northExplored)) then {
+%					if bel(DY =< -1, DY >= -4), bel(DX >= -4, DX =< 4) 
+%					    then insert(northExplored). 	
+%				}
+%				
+%				if not(bel(eastExplored)) then {
+%					if bel(DX >= 1, DX =< 3), bel(DY >= -4, DY =< 4)
+%					    then insert(eastExplored).
+%				}
+%				
+%				if not(bel(southExplored)) then {
+%					if bel(DY >= 1, DY =< 3), bel(DX >= -4, DX =< 4)
+%					    then insert(southExplored).
+%				}
+%				
+%				if not(bel(westExplored)) then {
+%					if bel(DX =< -1, DX >= -4), bel(DY >= -4, DY =< 4)
+%					    then insert(westExplored).
+%				}
+%			}
+%	}
 	
 	%Works after guardian system, if a direction is "blocked" the guardian is set	
 	if not(bel(northExplored)), bel(exploreDirection(Dir))

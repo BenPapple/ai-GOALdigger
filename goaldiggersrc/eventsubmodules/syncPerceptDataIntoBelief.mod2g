@@ -5,6 +5,7 @@ use "../goaldiggerAction" as actionspec.
  * Store (or delete if not in percept anymore) objects from percept into belief with corrected coordinates
  *
  * @author Ben G.
+ * @co-author Isaac S.
  */
 
 module syncPerceptDataIntoBelief {
@@ -16,7 +17,7 @@ module syncPerceptDataIntoBelief {
 	
 	% store explored Mark every Round
 	if bel(agentAt(X, Y, _)),
-	   percept(step(SimStep), SimStep < 150)
+	   percept(step(SimStep), 0 =:= mod(SimStep, 2), SimStep < 200)
 		then insert(mapMarkExplored(X, Y)).
 	
 	% DELETE out of step storedOtherAgentStatus
@@ -100,12 +101,11 @@ module syncPerceptDataIntoBelief {
 	if bel(customRole(customRoleSaboteur), executeManhattan, targetMd(X1,Y1, agent), agentAt(X2,Y2,_)), 
 	   not(percept(thing(X3,Y3,entity,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
        then  delete(targetMd(X1, Y1, agent)) + delete(executeManhattan). 
+
+	% DELETE targetted blokes carrying blocks as Manhattan targets if they have moved away
+	if bel(customRole(customRoleSaboteur), executeManhattan, targetMd(X1,Y1, blockCarrier), agentAt(X2,Y2,_)), 
+	   not(percept(thing(X3,Y3,entity,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
+       then  delete(targetMd(X1, Y1, blockCarrier)) + delete(executeManhattan). 
 	
-	% DELETE detached blokes
-	forall bel(haveBlokeAttached(true,Dir), directionToCoordinate(Dir, X, Y)) do {
-		if not(percept(attached(X, Y))), bel(attachedBlokes(Count), NewCount is Count - 1) 
-		then delete(haveBlokeAttached(true,Dir)) + insert(haveBlokeAttached(false,Dir))
-		     + delete(attachedBlokes(Count)) + insert(attachedBlokes(NewCount)). 
-	}
 	
 } % end module

@@ -6,6 +6,7 @@ use "../pathfinding/executeRandomMove" as module.
 use "../pathfinding/executeMoveAndRequestAroundDispenser" as module.
 use "../pathfinding/executeMoveAroundSubmitter" as module.
 use "../pathfinding/helperMoveWithoutBlock" as module.
+use "../pathfinding/executeDisseminateLeaders" as module.
 use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/detachBloke" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
@@ -19,6 +20,9 @@ use "../blockhandling/connectBlocks" as module.
  */
 
 module executeWorkerRole {
+
+	if bel(customRole(customRoleSaboteur)), percept(roleZone(0,0))
+	   then preActionCleanup + adapt(digger).
 
 	% if caught, get free
 	if bel(getFree) then detachBloke.
@@ -48,8 +52,8 @@ module executeWorkerRole {
 	    	       
 	    	% Explorer map until execute Manhattan is set
 			if not(bel(executeManhattan)),
-			   percept(step(SimStep), SimStep < 150),
-			   bel(exploreDirection(Dir), randomAffinity(Dir2)) 
+			   bel(exploreDirection(Dir), randomAffinity(Dir2)) ,
+			   percept(step(SimStep), SimStep < 200)
 				then { 
 					if bel(Dir == r) then executeRandomMove.
 					if true then delete(randomAffinity(Dir2)) + 
@@ -102,7 +106,12 @@ module executeWorkerRole {
 				   SubmitterBlockTypeAttached == SouthBlock),           
 			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
 				then executeMoveAroundSubmitter.
-			
+
+            % have some distance between submitterLeaders
+            if bel(submitterLeader),
+               percept(goalZone(0,0))
+                then executeDisseminateLeaders.
+		
 	    	% as submitterLeader don't wait on goalzone and on dispenser
 	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _,SubmitType, _)),
 	           bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentThreeTask; 
@@ -118,10 +127,10 @@ module executeWorkerRole {
 	    	    then executeRandomMove.
 	    	    
 	        % as submitter move on occupied south position
-	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _)),
+	    	if bel(currentChosenTask(_, TaskStep, _, _, _, _, SubmitType, _)),
 	    	   percept(goalZone(0,0), thing(0, 1, entity, _), step(SimStep), TaskStep >= SimStep),
-	    	   bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
-	    	       OneOrTwoTask == submittingAgentThreeTask; SubmitType == submittingAgentFourTask) 
+	    	   bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentOneTask; 
+	    	       SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask) 
 	    	    then executeRandomMove.
 	
 	    	% submit 1-task if in goal zone with block and corresponding task available
@@ -160,11 +169,11 @@ module executeWorkerRole {
 	    	    then executeManhattanMove.
 	    	
 	    	% Move to goal zone to submit block
-		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, OneOrTwoTask, _), 
+		    if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, SubmitType, _), 
 		           targetMd(_, _, goalzone)), 
 		       bel(step(SimStep), TaskStep >= SimStep),
-		       bel(OneOrTwoTask == submittingAgentTwoTask; OneOrTwoTask == submittingAgentOneTask; 
-		           OneOrTwoTask == submittingAgentThreeTask; SubmitType == submittingAgentFourTask) 
+		       bel(SubmitType == submittingAgentTwoTask; SubmitType == submittingAgentOneTask; 
+		           SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask) 
 		        then executeManhattanMove.
 	        	
 	    	% random movemement actions while having block attached

@@ -16,6 +16,11 @@ module executeDefaultRole {
 
 		% if caught, get free
 		if bel(getFree) then detachBloke.
+		
+		% adopt digger role if custom role is saboteur
+    	if percept(roleZone(0, 0)), 
+    	   bel(customRole(customRoleSaboteur)) 
+    		then preActionCleanup + adapt(digger).
 
     	% if oppurtunity arises adapt targetRole role until complex role module ready
     	if percept(roleZone(0, 0), step(Step), Step >= 0), 

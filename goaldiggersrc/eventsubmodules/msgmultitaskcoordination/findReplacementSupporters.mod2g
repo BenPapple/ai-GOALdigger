@@ -1,5 +1,5 @@
 use "../../goaldiggerProlog" as knowledge.
-use "../../eventsubmodules/updateNearestAgentDistance" as module.
+use "../../eventsubmodules/distancecalc/updateNearestAgentDistance" as module.
 use "./messageTwoTaskSupporter" as module.
 
 /**
@@ -13,15 +13,13 @@ module findReplacementSupporters {
 	% SUBMODULE update nearest Agent on map for submitterleader for second block
 	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
 	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
-	   bel(multiTaskSupporterStatus(_, needsupporter, _, _, _, noack, _, _, _, _, _, _, _, _, _, _, _, _, _)),
-	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
+	   bel(multiTaskSupporterStatus(_, needsupporter, _, _, _, noack, _, _, _, _, _, _, _, _, _, _, _, _, _))
 	   	then updateNearestAgentDistance.  
         
     % inform other agent with needed second block as replacement supporter
 	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, SubmitType, _)),
 	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
-	   bel(multiTaskSupporterStatus(_, needsupporter, X1, Y1, Block1, noack, _, _, _, _, _, _, _, _, _, _, _, _, _)),
-	   bel(confirmedOffsetOfAgent(_, _, _)) 
+	   bel(multiTaskSupporterStatus(_, needsupporter, X1, Y1, Block1, noack, _, _, _, _, _, _, _, _, _, _, _, _, _))
 	    then {
 			if percept(task(TaskName,_, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), name(SubmitterName)) 
 				then {
@@ -43,15 +41,13 @@ module findReplacementSupporters {
 	% SUBMODULE update nearest Agent on map for submitterleader for third block
 	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
 	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
-	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, needsupporter, _, _, _, noack, _, _, _, _, _, _, _)),
-	   bel(submitterLeader, confirmedOffsetOfAgent(_, _, _)) 
+	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, needsupporter, _, _, _, noack, _, _, _, _, _, _, _))
 	   	then updateNearestAgentDistance. 
 
     % inform other agent with needed third block as replacement supporter
 	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, SubmitType, _)),
 	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
-	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, needsupporter, X1, Y1, Block2, noack, _, _, _, _, _, _, _)),
-	   bel(confirmedOffsetOfAgent(_, _, _)) 
+	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, needsupporter, X1, Y1, Block2, noack, _, _, _, _, _, _, _)) 
 	    then {
 			if percept(task(TaskName,_, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), name(SubmitterName)) 
 				then {

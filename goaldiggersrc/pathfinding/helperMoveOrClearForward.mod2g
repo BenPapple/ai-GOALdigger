@@ -10,6 +10,7 @@ order = linearrandom.
  * handle moving affinity forward and clear block if necessary
  *
  * @author Ben G.
+ * @co-author Marco G.
  */
 
 module helperMoveOrClearForward {
@@ -20,9 +21,20 @@ module helperMoveOrClearForward {
        not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)), 
        not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser)) 
         then preActionCleanup + move(Dir, Dir).
+        
+    if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
+       percept(role(worker)), 
+       not(percept(thing(Xn, Yn, Type,_), Type \== marker)), 
+       not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== marker)) 
+        then preActionCleanup + move(Dir, Dir).
+        
     % normal speed
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
        not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)) 
+        then preActionCleanup + move(Dir).
+    
+    if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
+       not(percept(thing(Xn, Yn, Type,_), Type \== marker)) 
         then preActionCleanup + move(Dir).
     	
     % clear main affinity direction of obstacles and blocks
@@ -46,6 +58,22 @@ module helperMoveOrClearForward {
     		   not(percept(attached(Xn, Yn)))   
     		   	then preActionCleanup + clear(Xn, Yn).
 		}
-    } % 
+    }
+    
+    if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) 
+    	then {
+    		if bel( directionToCoordinate(AltMove, Xm, Ym)), 
+    		   percept(thing(Xm, Ym, Type,_), Type \== marker) 
+    		   	then {
+    		if percept(thing(Xn, Yn, obstacle,_))  
+				then preActionCleanup + clear(Xn, Yn).
+    		if percept(thing(Xn, Yn, block,_)), 
+    		   not(percept(attached(Xn, Yn)))   
+    		   	then preActionCleanup + clear(Xn, Yn).
+		}
+    }
+    
+    %If something applies where no rules are declared agent should skip his action, better than no_action
+    if true then preActionCleanup + skip.
     
 } % end module

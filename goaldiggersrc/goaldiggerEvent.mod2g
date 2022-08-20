@@ -1,8 +1,8 @@
 use goaldiggerProlog as knowledge.
 use goaldiggerAction as actionspec.
-use "./eventsubmodules/updateDispenserDistance" as module.
-use "./eventsubmodules/updateGoalzoneDistance" as module.
-use "./eventsubmodules/updateRolezoneDistance" as module.
+use "./eventsubmodules/distancecalc/updateDispenserDistance" as module.
+use "./eventsubmodules/distancecalc/updateGoalzoneDistance" as module.
+use "./eventsubmodules/distancecalc/updateRolezoneDistance" as module.
 use "./eventsubmodules/debugtools/logMiniPercept" as module.
 use "./eventsubmodules/debugtools/logScoringBoard" as module.
 use "./eventsubmodules/syncLastActionResultDataIntoBelief" as module.
@@ -17,6 +17,8 @@ use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateAgentHierarchy" as module.
+use "./eventsubmodules/saboteurtools/selectClearingTarget" as module.
+use "./eventsubmodules/saboteurtools/trackSightedAgents" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -31,6 +33,7 @@ use "./normhandling/analyzeNorms" as module.
  * Gets executed everytime a percept or message is received and handles them
  *
  * @author Ben G.
+ * @co-author Isaac S.
  */
 
 module goaldiggerEvent {
@@ -47,6 +50,32 @@ module goaldiggerEvent {
 	% Logging made points by agents
 	if true
 		then logScoringBoard.
+
+	% Initialize saboteur beliefs
+	
+	if bel(customRole(customRoleSaboteur)) then {
+	
+		% preferred target switches
+		if not(bel(searchInGoalzone)) 
+		   then insert(searchInGoalzone).
+		
+		% insert minimum distance for different goal zones
+		if not(bel(minimumDistanceEmptyGoalZone(_)))
+		   then insert(minimumDistanceEmptyGoalZone(15)).
+		
+		% insert waiting time in empty goal zone
+		if not(bel(waitingTimeEmptyGoalZone(_)))
+		   then insert(waitingTimeEmptyGoalZone(25)).	
+			
+		% select sabotage goal
+		if not(bel(whitelistedTeam(_))), bel(sabotageThem), percept(team(MyTeam)) 
+		   then insert(whitelistedTeam(MyTeam)).
+		
+		
+		if not(bel(whitelistedTeam(_))), bel(sabotageUs) 
+		   then insert(whitelistedTeam(fakeTeamName)).
+
+	}
 
 	% SUBMODULE managing success and partial_success percepts
 	if true then syncLastActionResultDataIntoBelief.
@@ -69,9 +98,9 @@ module goaldiggerEvent {
 	% SUBMODULE SimpleWorldcalculation
 	if true then handleMessageAgentOffset.
 	% add agentAtComplexWorld, mapDispenserComplexWorld, otherAgentAtComplexWorld (bel)
-	%if true then updateWorldSizeData.
+	if percept(step(123456)) then updateWorldSizeData.
 	% ToDo Marco integrate with explorer to calculate worldsize
-	%if true then calculateWorldSize.
+	if percept(step(12345)) then calculateWorldSize.
 
     % update current task for saboteur before messagePermaSendStatusToOthers
     if bel(customRole(customRoleSaboteur)),
@@ -93,9 +122,10 @@ module goaldiggerEvent {
 	% SUBMODULE help test worker tour around the goal zones
 
     % ToDo Isaac (X \= 0; Y \=0 wont work look for XPlusY solution
-    % remove empty goal zone flag if agent seen in goal zone
+    % remove empty goal zone flag if agent with block seen in goal zone
 	if bel(customRole(customRoleSaboteur)), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam),
-	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0)) then {
+	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0),
+	       thing(X1, Y1, block, _), attached(X1,Y1), abs(X1-X)+abs(Y1-Y) =:= 1) then {
 		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
 	}
 
@@ -112,6 +142,12 @@ module goaldiggerEvent {
 	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
 	   then insert(emptyGoalZoneCounter(X2, Y2, 1)) + allother.send(emptyGoalZoneCounter(X2, Y2, 1)).
 	}
+
+	% SUBMODULE track entities in sight for saboteurs
+	if bel(customRole(customRoleSaboteur)) then trackSightedAgents.
+
+	% SUBMODULE select a target for saboteurs
+	if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
 
     % SUBMODULE chose new task if necessary
     if not(bel(customRole(customRoleSaboteur))) then changeTaskCheck.
@@ -182,8 +218,8 @@ module goaldiggerEvent {
 	if bel(calculateNewGoalzoneMD)
 		then delete(calculateNewGoalzoneMD).
 
-    % ACO explore only until step 150
-    if percept(step(SimStep), SimStep < 150) then {
+    % ACO explore 
+    if percept(step(SimStep), SimStep < 200) then {
 		if true then updateMapExploredMarks.
 	
 		%If not know goalzone or dispenser, exploreMap
