@@ -12,10 +12,6 @@ use "../pathfinding/executeRandomMove" as module.
 
 module executeSaboteurRole {	
 		
-	% clear block if target available
-	if percept(thing(X,Y,block,_), abs(X)+abs(Y) =:= 1, goalzone(_,_)), not(percept(attached(X,Y))) 
-	   then allother.send(msg("Last action performed: clearing block")) +  clear(X,Y).
-
 	% attack agent if target available
 	if bel(clearingTarget(X,Y)) then allother.send(msg("Last action performed: attack agent")) +  clear(X,Y).
 

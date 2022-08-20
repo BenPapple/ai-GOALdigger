@@ -117,6 +117,15 @@ module manageManhattanTarget {
 			if true then insert(targetMd(X3, Y3, blockCarrier)).	
 			if not(bel(executeManhattan)) then insert(executeManhattan).
 	     }
+	     
+%	     % when agent deactivated and block abandoned, go to it and destroy it
+%	     if bel(inactiveSighting(_,_,_), agentAt(X2,Y2,_)),
+%	        percept(thing(X,Y,block,_)), not(percept(attached(X,Y))), bel(localize(X,Y,X2,Y2,X3,Y3)) then
+%	        {
+%	       		if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+%				if true then insert(targetMd(X3, Y3, lonelyBlock)).	
+%				if not(bel(executeManhattan)) then insert(executeManhattan).
+%	        }
 	}
 	         
 	

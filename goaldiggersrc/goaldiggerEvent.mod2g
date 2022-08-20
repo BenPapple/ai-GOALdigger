@@ -249,7 +249,7 @@ module goaldiggerEvent {
 	}
 
 	% SUBMODULE debug with our mini percept
-	if bel(lDebugOn)
+	if true %bel(lDebugOn)
 		then logMiniPercept.
 
 	/**

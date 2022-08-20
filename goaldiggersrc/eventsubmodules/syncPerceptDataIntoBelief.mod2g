@@ -112,5 +112,9 @@ module syncPerceptDataIntoBelief {
 	   not(percept(thing(X3,Y3,entity,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
        then  delete(targetMd(X1, Y1, blockCarrier)) + delete(executeManhattan). 
 	
+%	% DELETE unattached blocks as MdTargets if disappeared
+%	if bel(customRole(customRoleSaboteur), executeManhattan, targetMd(X1,Y1, lonelyBlock), agentAt(X2,Y2,_)), 
+%	   not(percept(thing(X3,Y3,block,_), localize(X3,Y3,X2,Y2,X1,Y1))) 
+%       then  delete(targetMd(X1, Y1, lonelyBlock)) + delete(executeManhattan). 
 	
 } % end module

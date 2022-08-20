@@ -40,5 +40,12 @@ module selectClearingTarget {
 		       
 		    then insert(clearingTarget(X1,Y1)).
 	}
+	
+	if bel(inactiveSighting(_,_,_)), 
+	   percept(thing(X,Y,block,_)), not(percept(attached(X,Y))) then {
+		if bel(clearingTarget(X1, Y1)) 
+		  then delete(clearingTarget(X1,Y1)).
+		if true then insert(clearingTarget(X,Y)) + print("Clearing block").
+	}
 
 }
