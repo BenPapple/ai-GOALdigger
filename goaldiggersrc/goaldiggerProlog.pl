@@ -190,6 +190,7 @@
 :- dynamic clearingTarget/2. % stores the target to clear next.
 :- dynamic oldClearingTarget/2. % stores the last clearing target.
 :- dynamic targetCandidate/5. % targetCandidate(X,Y,DirX,DirY,Energy), caches relevant information to select the next clearing target
+:- dynamic maximumShootingRange/1. % maximum distance from which an agent should be shot at
 :- dynamic inactiveSighting/3. % (X,Y,Timer) stores the coordinates of a bloke which is believed to be inactive and a timer.
 :- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
 
@@ -208,6 +209,16 @@ energyAfterDamage(Energy,X,Y,NewEnergy) :-
 	(abs(X) + abs(Y) =:= 4, NewEnergy is Energy - 2, NewEnergy >= 0);
 	(abs(X) + abs(Y) =:= 5, NewEnergy is Energy - 1, NewEnergy >= 0);
 	(NewEnergy is 0).
+%find free positions to an agent at distance 2
+freePathDistance2(X1,Y1,X2,Y2,X3,Y3) :-
+    (X1 =:= 2, Y1 =:= 0, X2 is 1, Y2 is 0, X3 is 1, Y3 is 0);
+    (X1 =:= -2, Y1 =:= 0, X2 is -1, Y2 is 0, X3 is -1, Y3 is 0);
+    (X1 =:= 0, Y1 =:= 2, X2 is 0, Y2 is 1, X3 is 0, Y3 is 1);
+    (X1 =:= 0, Y1 =:= -2, X2 is 0, Y2 is -1, X3 is 0, Y3 is -1);    
+    (X1 =:= 1, Y1 =:= 1, X2 is 1, Y2 is 0, X3 is 0, Y3 is 1);
+    (X1 =:= 1, Y1 =:= -1, X2 is 1, Y2 is 0, X3 is 0, Y3 is -1);
+    (X1 =:= -1, Y1 =:= 1, X2 is -1, Y2 is 0, X3 is 0, Y3 is 1);
+    (X1 =:= -1, Y1 =:= -1, X2 is -1, Y2 is 0, X3 is 0, Y3 is -1).
 
 % Transform XY coordinates concerning direction D nswe
 transformXYD(n, X1, Y1, X2, Y2) :- X2 = X1, Y2 is Y1 - 1.
