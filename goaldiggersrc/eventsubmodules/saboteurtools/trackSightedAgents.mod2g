@@ -102,8 +102,10 @@ module trackSightedAgents {
 			 	   %not(percept(thing(X3,Y3,entity,_), (X3 \= X; Y3 \= Y), (X3 \= 0; Y3 \= 0), abs(X3-X1) + abs(Y3-Y1) =:= 1)), 
 			 	   bel(localize(X, Y, X2, Y2, X5, Y5)), not(bel(X =:=0, Y=:=0)), 
 			 	   not(bel(agentSighting(X5,Y5,_,_,_,_,_,_))), 
-			 	   not(bel(inactiveSighting(X5,Y5,_))), bel(maxEnergy(MaxEnergy)) 
-			 	   
+			 	   not(bel(inactiveSighting(X5,Y5,_))), bel(maxEnergy(MaxEnergy)),
+			 	   bel(localize(X1,Y1,X2,Y2,X6,Y6)),
+			 	   not(bel(agentSighting(X7,Y7,_,_,_,_,_,OtherDir), directionToCoordinate(OtherDir,X8,Y8),
+			 	   X6 =:= X7 + X8, Y6 =:= Y7 + Y8))
 			 	   then insert(agentSighting(X5,Y5,0,0,NewStep, MaxEnergy, Type, Dir)).
 			 } 
 		% if no agent nearby, don't add anything		 
