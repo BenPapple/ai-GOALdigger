@@ -209,8 +209,8 @@ module goaldiggerEvent {
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)),
 	   percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)),
 	   bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir))
-	    then delete (randomAffinity(DirOld)) +
-	         insert (randomAffinity(NewDir)).
+	    then delete(randomAffinity(DirOld)) +
+	         insert(randomAffinity(NewDir)).
 
 	% remove switch
 	if bel(calculateNewDispenserMD)
@@ -225,7 +225,13 @@ module goaldiggerEvent {
 		%If not know goalzone or dispenser, exploreMap
 		if not(bel(executeManhattan)) then updateExploreMoveDirection.
 	}
-
+	
+	% keep track when last deactivated
+	if percept(deactivated(true), step(SimStep)),
+	   bel(lastDeactivationTracker(OldStep))
+		then delete(lastDeactivationTracker(OldStep)) +
+		     insert(lastDeactivationTracker(SimStep)).
+	
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn)
 		then logMiniPercept.

@@ -1,4 +1,6 @@
 use "../goaldiggerProlog" as knowledge.
+use "./checkBlockNorms" as module.
+use "./checkRoleNorms" as module.
 
 /**
  * analyze norms and make plans about actions to remedy them
@@ -9,37 +11,9 @@ use "../goaldiggerProlog" as knowledge.
  */
 
 module analyzeNorms {
-
-% ready analyzed norm should be saved
-% block-norm draws less energy than the agent has, ignore norm
-if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0)],Dmg)), 
-   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
-   percept(energy(AgentEnergy))
-	then {
-		if bel(Duration is StepEnd - StepStart),
-		   bel(MaxPenalty is Duration * Dmg),
-		   bel(MaxPenalty < AgentEnergy)
-			then insert(avoidNorm(NormName,doNothing,na,na,na,na,na,na,na,na)).
-	}
-
-% block-norm drains more energy than the agent has, drop the block	
-if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0)],Dmg)), 
-   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
-   percept(energy(AgentEnergy))
-	then {
-		if bel(Duration is StepEnd - StepStart),
-		   bel(MaxPenalty is Duration * Dmg),
-		   bel(MaxPenalty >= AgentEnergy)
-			then insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)).
-	}
-	
-%avoidNorm(nameNorm,checkAvoid,stepFirst,stepLast,typeNorm,roleNorm,maxQuant,penaltyDmg,substituteOne,substituteTwo).
-	
+if true then checkBlockNorms.
+if true then checkRoleNorms.
 }
 
-%norm(n3,184,212,[requirement(block,any,3)],3)
-%norm(n3,start,until,[requirement(block,immer auf "any",max nr of carried blocks,)],Schaden)
 
 
-%norm(n1,48,80,[requirement(role,default,5)],3)
-%norm(n1,start,until,[requirement(role,default,max nr of agents in team,)],Schaden)

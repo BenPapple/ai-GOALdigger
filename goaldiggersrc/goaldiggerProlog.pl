@@ -155,14 +155,16 @@
 %(TaskType,Name1,X1,Y1,Block1,Pending1,Connected1,Name2,X2,Y2,Block2,Pending2,Connected2,Name3,X3,Y3,Block3,Pending3,
 % Connected3)
 :- dynamic multiTaskSupporterStatus/19.
-% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
+% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole, [Energy])
 :- dynamic storedOtherAgentStatus/9. 
-
 
 % coordination to avoid a norm or accept punishment
 %(nameNorm,checkAvoid,stepFirst,stepLast,typeNorm,roleNorm,maxQuant,penaltyDmg,substituteOne,substituteTwo)
 :- dynamic avoidNorm/10.
-
+% Role Count for Norms
+:- dynamic roleCount/1.
+% After awakening
+:- dynamic lastDeactivationTracker/1.
 
 % Variables related to customRoleSaboteur role
 :- dynamic emptyGoalZoneCounter/3. % Count of time no agents were seen around a specific goalZone.

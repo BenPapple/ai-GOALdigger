@@ -12,6 +12,7 @@ use "../blockhandling/detachBloke" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
 use "../blockhandling/connectBlocks" as module.
+use "../blockhandling/attachBlocksLyingAround" as module.
 
 /**
  * Main decision rules for role worker
@@ -20,7 +21,11 @@ use "../blockhandling/connectBlocks" as module.
  */
 
 module executeWorkerRole {
-
+	
+	if percept(step(SimStep)), 
+	   bel(lastDeactivationTracker(OldStep), SimStep - 1 == OldStep)
+	   	then attachBlocksLyingAround.
+	
 	if bel(customRole(customRoleSaboteur)), percept(roleZone(0,0))
 	   then preActionCleanup + adapt(digger).
 
@@ -38,6 +43,13 @@ module executeWorkerRole {
 			if percept(roleZone(0, 0), step(Step), Step >= 0, role(Role)), 
 			   bel(targetRole(TargetRole), Role \= TargetRole) 
 			    then preActionCleanup + adapt(TargetRole).
+			
+			% collect blocks lying around 
+			if percept(step(SimStep)),
+			   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep),
+			   percept(team(MyTeam)),
+			   not(percept(thing(X,Y,entity(MyTeam)), abs(X) + abs(Y) =< 3)) 
+				then attachBlocksLyingAround. 
 			
 	 	    % Movement around dispenser when without block
 		    if percept(step(SimStep)), 

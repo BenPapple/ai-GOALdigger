@@ -29,6 +29,7 @@ module goaldiggerInit {
 	if true then insert(stopScoreLogging(0)).
 	if true then insert(stopDurationLogging(0)).	
 	if true then insert(simDuration(0)).
+	if true then insert(roleCount(0)).
 	
 	% variables for saboteur behaviour (againt own team, against other team)
 	%if true then insert(sabotageUs).
