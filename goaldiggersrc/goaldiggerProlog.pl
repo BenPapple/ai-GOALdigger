@@ -188,6 +188,8 @@
 :- dynamic maxEnergy/1. % stores the maximum energy of an agent.
 :- dynamic recoverEnergy/1. % stores the energy recovered in a turn.
 :- dynamic clearingTarget/2. % stores the target to clear next.
+:- dynamic oldClearingTarget/2. % stores the last clearing target.
+:- dynamic targetCandidate/5. % targetCandidate(X,Y,DirX,DirY,Energy), caches relevant information to select the next clearing target
 :- dynamic inactiveSighting/3. % (X,Y,Timer) stores the coordinates of a bloke which is believed to be inactive and a timer.
 :- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
 

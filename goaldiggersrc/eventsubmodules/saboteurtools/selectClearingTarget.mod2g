@@ -20,7 +20,7 @@ module selectClearingTarget {
 	  then insert(recoverEnergy(2)).
 
 	% delete previous clearing target in any case
-	if bel(clearingTarget(X,Y)) then delete(clearingTarget(X,Y)).
+	if bel(clearingTarget(X,Y)) then delete(clearingTarget(X,Y)) + insert(oldClearingTarget(X,Y)).
 	 
 	% deletes data about sightings of agents considered to be inactive (in order not to attack already inactive agents)
 	forall bel(inactiveSighting(X,Y,Timer)) do {
@@ -32,14 +32,67 @@ module selectClearingTarget {
 	
 	% ToDo: It should select a target based on the distance and energy expected to be left on the target after the attack
 	% now it merely selects a target next to the saboteur
-	forall bel(agentSighting(X,Y,DirX,DirY,_,_,_,_)) do {
-		  		  
-		  if not(bel(clearingTarget(_,_))), not(bel(inactiveSighting(X,Y,_))),
-		    bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, X1 is NextPosX - X2, Y1 is NextPosY - Y2), 
-		    not(bel(X1 =:= 0, Y1 =:= 0)), bel(abs(X1) + abs(Y1) =:= 1)
-		       
-		    then insert(clearingTarget(X1,Y1)).
+	
+	forall bel(agentSighting(X,Y,DirX,DirY,_,Energy,_,_)) do insert(targetCandidate(X,Y,DirX,DirY,Energy)).  
+	
+%	% if there are targets which may get deactivated with the next hit, remove every other target
+%	if bel(targetCandidate(X,Y,DirX,DirY,Energy), agentAt(X2,Y2,_)), bel(NextX is X+DirX, NextY is Y+DirY), 
+%	   bel(localize(X1,Y1,X2,Y2,NextX,NextY)),
+%	   bel(energyAfterDamage(Energy,X1,Y1,NewEnergy), NewEnergy =:= 0)
+%	   then { 
+%	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)), bel(NextX0 is X0+DirX0, NextY0 is Y0+DirY0),
+%	   		       bel(localize(X01,Y01,X2,Y2,NextX0,NextY0)), 
+%		   		   bel(energyAfterDamage(Energy,X01,Y01,NewEnergy), NewEnergy > 0)
+%		   		   do delete(targetCandidate(X0,Y0,DirX,DirY,Energy)).
+%	}
+	
+	% if there are targets at distance 1, remove every target at a greater distance
+	if bel(targetCandidate(X,Y,DirX,DirY,_), agentAt(X2,Y2,_)), bel(NextX is X+DirX, NextY is Y+DirY), 
+	   bel(localize(X1,Y1,X2,Y2,NextX,NextY)), bel(abs(X1) + abs(Y1) =:= 1) 
+	   then { 
+	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)) do {
+	   				if bel(NextX0 is X0+DirX0, NextY0 is Y0+DirY0), bel(localize(X01,Y01,X2,Y2,NextX0,NextY0)),
+	   				   bel(abs(X01) + abs(Y01) > 1)
+	   				  then delete(targetCandidate(X0,Y0,DirX0,DirY0,Energy)).
+	   		}
 	}
+	
+	% if there are targets at distance 2, remove every target at a greater distance
+	if bel(targetCandidate(X,Y,DirX,DirY,_), agentAt(X2,Y2,_)), bel(NextX is X+DirX, NextY is Y+DirY), 
+	   bel(localize(X1,Y1,X2,Y2,NextX,NextY)), bel(abs(X1) + abs(Y1) =:= 2) 
+	   then { 
+	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)) do {
+	   				if bel(NextX0 is X0+DirX0, NextY0 is Y0+DirY0), bel(localize(X01,Y01,X2,Y2,NextX0,NextY0)),
+	   				   bel(abs(X01) + abs(Y01) > 2)
+	   				  then delete(targetCandidate(X0,Y0,DirX0,DirY0,Energy)).
+	   		}
+	}
+	
+	
+	% if there are targets which are not moving, remove targets which are moving 
+	if bel(targetCandidate(_,_,DirX,DirY,_), agentAt(X2,Y2,_)), bel(abs(DirX)+abs(DirY) =:= 0) 
+	   then { 
+	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)), bel(abs(DirX0)+abs(DirY0) > 0)
+		   		   do delete(targetCandidate(X0,Y0,DirX,DirY,Energy)).
+	}
+	
+	% if a candidate has already been hit, select it
+	if bel(oldClearingTarget(X,Y), targetCandidate(X0,Y0,DirX,DirY,_), agentAt(X2,Y2,_)), 
+	   bel(NextX is X0 + DirX, NextY is Y0 + DirY), bel(localize(X1,Y1,X2,Y2,NextX,NextY), X1 =:= X, Y1 =:= Y)
+	   then insert(clearingTarget(X,Y)).
+	
+%	forall bel(agentSighting(X,Y,DirX,DirY,_,_,_,_)) do {
+%		  		  
+%		  if not(bel(clearingTarget(_,_))), not(bel(inactiveSighting(X,Y,_))),
+%		    bel(agentAt(X2,Y2,_), NextPosX is X + DirX, NextPosY is Y + DirY, X1 is NextPosX - X2, Y1 is NextPosY - Y2), 
+%		    not(bel(X1 =:= 0, Y1 =:= 0)), bel(abs(X1) + abs(Y1) =:= 1)
+%		       
+%		    then insert(clearingTarget(X1,Y1)).
+%	}
+	
+	if not(bel(clearingTarget(_,_))), bel(targetCandidate(X,Y,DirX,DirY,_), agentAt(X2,Y2,_)), 
+	   bel(NextX is X+DirX, NextY is Y+DirY), bel(localize(X1,Y1,X2,Y2,NextX,NextY))
+	   then insert(clearingTarget(X1,Y1)).
 	
 	if bel(inactiveSighting(_,_,_)), 
 	   percept(thing(X,Y,block,_)), not(percept(attached(X,Y))) then {
