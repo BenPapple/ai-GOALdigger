@@ -73,13 +73,17 @@ module selectClearingTarget {
 	forall bel(targetCandidate(X,Y,DirX,DirY,Energy), agentAt(X2,Y2,_)), bel(NextX is X+DirX, NextY is Y+DirY), 
 	   bel(X1 is NextX - X2, Y1 is NextY - Y2), bel(abs(X1) + abs(Y1) =:= 2) 
 	   do { 
-	   		if true then print("Inside target deletion").
-	   		if bel(freePathDistance2(X1,Y1,X2,Y2,X3,Y3)) then print("Deletion parameters:"+X1+" "+Y1+" "+X2+" "+Y2+" "+X3+" "+Y3).
-	   		if bel(freePathDistance2(X1,Y1,X2,Y2,X3,Y3)),
-	   		   not(percept(thing(X2,Y2,_,_), (thing(X3,Y3,_,_))))
 
-	   		then delete(targetCandidate(X,Y,DirX,DirY,Energy))
-	   		+ print("Deleted target "+X+" "+Y+" "+DirX+" "+DirY+" "+Energy).
+			if bel(abs(X1) =:= 2; abs(Y1) =:= 2), 
+			  not(percept(thing(X01,Y01,_,_), abs(X01)+abs(Y01) =:= 1, abs(X01-X1) + abs(Y01-Y1) =:= 1))
+			  then delete(targetCandidate(X,Y,DirX,DirY,Energy)).
+
+			if not(bel(abs(X1) =:= 2; abs(Y1) =:= 2)), 
+			   not(percept(thing(X01,Y01,_,_), thing(X02,Y02,_,_), (X02 \= X01; Y02 \= Y01), 
+			       abs(X01)+abs(Y01) =:= 1, abs(X01-X1) + abs(Y01-Y1) =:= 1,
+			       abs(X02)+abs(Y02) =:= 1, abs(X02-X1) + abs(Y02-Y1) =:= 1))
+			  then delete(targetCandidate(X,Y,DirX,DirY,Energy)).
+							
 	   	} 
 	   		                                       
 %	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)) do {
