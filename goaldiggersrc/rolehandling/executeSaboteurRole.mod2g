@@ -11,9 +11,17 @@ use "../pathfinding/executeRandomMove" as module.
  */
 
 module executeSaboteurRole {	
+	
+	% persecute southward block carrying agent if available
+	if bel(agentAt(X0,Y0,_), targetMd(X1,Y1, blockCarrierSubmitter), abs(X1-X0) + abs(Y1-Y0) > 2, executeManhattan)
+	then allother.send(msg("Last action performed: persecute southward carrier 1")) + executeManhattanMove.
 		
 	% attack agent if target available
 	if bel(clearingTarget(X,Y)) then allother.send(msg("Last action performed: attack agent")) +  clear(X,Y).
+
+	% persecute southward block carrying agent if available
+	if bel(targetMd(_, _, blockCarrierSubmitter), executeManhattan)
+	then allother.send(msg("Last action performed: persecute southward carrier")) + executeManhattanMove.
 
 	% persecute carried block if available
 	if bel(targetMd(_, _, blockCarrier), executeManhattan)
