@@ -16,16 +16,16 @@ module manageMessageCrowdedGoalZone {
 	    bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY)
 	  do {
 	  
-	        if not(bel(goalZonesSightings(_,_,_,_,_)))
-	          then insert(goalZonesSightings(X1,Y1,Count,Step,SenderName)).
+	        if not(bel(goalZoneSightings(_,_,_,_,_)))
+	          then insert(goalZoneSightings(X1,Y1,Count,Step,SenderName)).
 	         
-	        if bel(goalZonesSightings(X0,Y0,Count0,Step0,SenderName0), agentAt(X2,Y2,_),
+	        if bel(goalZoneSightings(X0,Y0,Count0,Step0,SenderName0), agentAt(X2,Y2,_),
 	           Dist0 is abs(X0-X2) + abs(Y0-Y2), Dist is abs(X-X2) + abs(Y-Y2)),
-	           ((Count > Count0); (Count =:= Count0, Dist < Dist0))
-	           then delete(goalZonesSightings(X0,Y0,Count0,Step0,SenderName0))
-	           + insert(goalZonesSightings(X1,Y1,Count,Step,SenderName)).
+	           bel((Count > Count0); (Count =:= Count0, Dist < Dist0))
+	           then delete(goalZoneSightings(X0,Y0,Count0,Step0,SenderName0))
+	           + insert(goalZoneSightings(X1,Y1,Count,Step,SenderName)).
 	}
 	
-	if bel(goalZonesSightings(X1,Y1,Count,Step,SenderName))
+	if bel(goalZoneSightings(X1,Y1,Count,Step,SenderName))
 	  then print("Goal Zone sightings: "+X1+" "+Y1+" "+Count).
 }

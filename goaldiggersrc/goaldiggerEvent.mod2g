@@ -20,6 +20,7 @@ use "./eventsubmodules/updateAgentHierarchy" as module.
 use "./eventsubmodules/saboteurtools/selectClearingTarget" as module.
 use "./eventsubmodules/saboteurtools/trackSightedAgents" as module.
 use "./eventsubmodules/saboteurtools/messageCrowdedGoalZone" as module.
+use "./eventsubmodules/saboteurtools/manageMessageCrowdedGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -153,6 +154,9 @@ module goaldiggerEvent {
 
 	% SUBMODULE track entities in sight for saboteurs
 	if bel(customRole(customRoleSaboteur)) then trackSightedAgents.
+
+	% SUBMODULE manage messages about crowded goal zones
+	if bel(customRole(customRoleSaboteur)) then manageMessageCrowdedGoalZone.
 
 	% SUBMODULE select a target for saboteurs
 	if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
