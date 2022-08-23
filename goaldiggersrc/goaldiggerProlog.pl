@@ -178,6 +178,7 @@
 
 % MACHINEL LEARNING VARs
 :- dynamic qtable/6.
+:- dynamic randomTaskChoser/1.
 
 recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
 	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 

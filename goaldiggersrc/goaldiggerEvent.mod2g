@@ -27,6 +27,7 @@ use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffset" as modul
 use "./eventsubmodules/updateMapExploredMarks" as module.
 use "./eventsubmodules/updateExploreMoveDirection" as module.
 use "./taskhandling/changeTaskCheck" as module.
+use "./taskhandling/manageQtable" as module.
 use "./normhandling/analyzeNorms" as module.
 
 /**
@@ -148,6 +149,9 @@ module goaldiggerEvent {
 
 	% SUBMODULE select a target for saboteurs
 	if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
+
+    % as submitterLeader calculate q-table
+    if bel(submitterLeader) then manageQtable.
 
     % SUBMODULE chose new task if necessary
     if not(bel(customRole(customRoleSaboteur))) then changeTaskCheck.

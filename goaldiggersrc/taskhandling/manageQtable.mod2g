@@ -9,14 +9,81 @@ use "../goaldiggerProlog" as knowledge.
 module manageQtable {
 	
 	% calculate Q for 40 point submits of team
-	forall (_).sent(made40Points(Name)) do {
+	forall (_).sent(made40Points(_)) do {
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(Q2 is V1 + 10, Q3 is V2 - 5, Q4 is V3 - 5)
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).
 	
 	}
 
     % calculate Q for 90 point submits of team
-	forall (_).sent(made90Points(Name)) do {
-	
+	forall (_).sent(made90Points(_)) do {
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(Q2 is V1 - 5, Q3 is V2 + 10, Q4 is V3 - 5)
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).
+	}	
+
+
+    % calculate Q for 160 point submits of team
+	forall (_).sent(made160Points(_)) do {
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(Q2 is V1 - 5, Q3 is V2 - 5, Q4 is V3 + 10)
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).
 	}	
 	
+	% set minimum 10 and maximum 80 and normalize to 100%
+	if true then {
 	
-}
+        % set minimu 10
+	    if bel(qtable(V1,V2,V3,V4,V5,V6), V1 < 10) 
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(10,V2,V3,V4,V5,V6)).
+	    if bel(qtable(V1,V2,V3,V4,V5,V6), V2 < 10) 
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(V1,10,V3,V4,V5,V6)).	             
+	    if bel(qtable(V1,V2,V3,V4,V5,V6), V3 < 10) 
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(V1,V2,10,V4,V5,V6)).	 
+	                         
+        % set maximum 80
+	    if bel(qtable(V1,V2,V3,V4,V5,V6), V1 > 80) 
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(80,V2,V3,V4,V5,V6)).
+	    if bel(qtable(V1,V2,V3,V4,V5,V6), V2 > 80) 
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(V1,80,V3,V4,V5,V6)).	             
+	    if bel(qtable(V1,V2,V3,V4,V5,V6), V3 > 80) 
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(V1,V2,80,V4,V5,V6)).
+	             
+	    % sum of all 3 Q's can't be bigger than 100
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(QSum is V1 + V2 + V3, QSum > 100),
+	       bel(QDiff is QSum -100)
+	        then {
+	        if bel(V1 >= V2, V1 >= V3),
+	           bel(NewVal is V1 - QDiff)
+	            then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(NewVal,V2,V3,V4,V5,V6)).	        
+	    } % V1             
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(QSum is V1 + V2 + V3, QSum > 100),
+	       bel(QDiff is QSum -100)
+	        then {
+	        if bel(V2 >= V1, V2 >= V3),
+	           bel(NewVal is V2 - QDiff)
+	            then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(V1,NewVal,V3,V4,V5,V6)).	        
+	    } % V2
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(QSum is V1 + V2 + V3, QSum > 100),
+	       bel(QDiff is QSum -100)
+	        then {
+	        if bel(V3 >= V1, V3 >= V2),
+	           bel(NewVal is V3 - QDiff)
+	            then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(V1,V2,NewVal,V4,V5,V6)).	        
+	    } % V3	    	             
+    }
+	
+} % end module

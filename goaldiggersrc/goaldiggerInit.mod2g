@@ -42,6 +42,7 @@ module goaldiggerInit {
 	
 	% machine learning
 	if true then insert(qtable(30,40,30,30,70,100)).
+	if true then insert(randomTaskChoser(0)).
 	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
