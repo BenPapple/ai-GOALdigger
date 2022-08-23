@@ -21,48 +21,48 @@
 % switch to recalculate dispenses distance
 :- dynamic calculateNewDispenserMD/0.
 % switch to recalculate goalzone distance
-:- dynamic calculateNewGoalzoneMD/0. 
+:- dynamic calculateNewGoalzoneMD/0.
 % switch to drop all attached blocks
 :- dynamic dropAllBlocks/0.
 
-% when a marked is north of agent. 
-:- dynamic northExplored/0. 
-% when a marked is south of agent. 
+% when a marked is north of agent.
+:- dynamic northExplored/0.
+% when a marked is south of agent.
 :- dynamic southExplored/0.
-% when a marked is east of agent.  
-:- dynamic eastExplored/0. 
-% when a marked is west of agent. 
-:- dynamic westExplored/0. 
+% when a marked is east of agent.
+:- dynamic eastExplored/0.
+% when a marked is west of agent.
+:- dynamic westExplored/0.
 
 % switch to stop logging score after x sims
-:- dynamic stopScoreLogging/1. 
+:- dynamic stopScoreLogging/1.
 % switch to stop logging duration after x sims
-:- dynamic stopDurationLogging/1. 
+:- dynamic stopDurationLogging/1.
 % to calculate duration for a sim with unix timestamp
 :- dynamic simDuration/1.
 % switch for saboteur
 :- dynamic activateSaboteurFeature/0.
 
-% when a marked is north of agent. 
-:- dynamic currentCustomRoleStatus/1. 
+% when a marked is north of agent.
+:- dynamic currentCustomRoleStatus/1.
 
 % current score
 :- dynamic currentScore/1.
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
 % agents count his submitted 1tasks
-:- dynamic count1Task/2. 
+:- dynamic count1Task/2.
 % agents count his submitted 2tasks
-:- dynamic count2Task/2. 
+:- dynamic count2Task/2.
 % agents count his submitted 3tasks
-:- dynamic count3Task/2. 
+:- dynamic count3Task/2.
 % agents count his submitted 3tasks
-:- dynamic count4Task/2. 
+:- dynamic count4Task/2.
 % cached so it survives map change for score table
-:- dynamic cachedCount1Task/1. 
-:- dynamic cachedCount2Task/1. 
+:- dynamic cachedCount1Task/1.
+:- dynamic cachedCount2Task/1.
 :- dynamic cachedCount3Task/1.
-:- dynamic cachedCount4Task/1.  
+:- dynamic cachedCount4Task/1.
 
 % (Bool, Dir)
 :- dynamic haveBlockAttached/2.
@@ -77,11 +77,11 @@
 % Coordinates of agent XY
 :- dynamic agentAt/3.
 % nswe direction preferred for exploration
-:- dynamic randomAffinity/1. 
+:- dynamic randomAffinity/1.
 % nswe direction in witch should be explored
-:- dynamic exploreDirection/1. 
-% Variables for Manhatten Distance 
-:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0. 
+:- dynamic exploreDirection/1.
+% Variables for Manhatten Distance
+:- dynamic targetMd/3, nMd/1, sMd/1, wMd/1, eMd/1, executeManhattan/0.
 % (X,Y,BlockType,MD) of dispenser to search out for
 :- dynamic targetDispenserAt/4.
 % closest of all known dispensers (X,Y,Blocktype, MD)
@@ -97,7 +97,7 @@
  % goalzone percept data plus MD (X,Y,MD)
 :- dynamic mapGoalZone/3.
 % rolezone percept data plus MD (X,Y,MD)
-:- dynamic mapRoleZone/3. 
+:- dynamic mapRoleZone/3.
 % mapMarkExplored stored position of agents where has explored
 :- dynamic mapMarkExplored/2.
 % goalzone XY plus MD field (X,Y,MD)
@@ -169,7 +169,7 @@
 % Connected3)
 :- dynamic multiTaskSupporterStatus/19.
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
-:- dynamic storedOtherAgentStatus/9. 
+:- dynamic storedOtherAgentStatus/9.
 % wait before chosing next task as submitterLeader
 :- dynamic waitBeforeNewTask/1.
 
@@ -193,13 +193,15 @@
 :- dynamic maximumShootingRange/1. % maximum distance from which an agent should be shot at
 :- dynamic inactiveSighting/3. % (X,Y,Timer) stores the coordinates of a bloke which is believed to be inactive and a timer.
 :- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
+:- dynamic agentCounter/1. % counts possible agents seen
+:- dynamic goalZoneSightings/5. % (X,Y,Number,Step,SenderName) information to be communicated by the saboteur by other agents if other agents seen in goalzone.
 
 % MACHINEL LEARNING VARs
 :- dynamic qtable/6.
 :- dynamic randomTaskChoser/1.
 
-recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
-	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 
+recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :-
+	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100);
 	(NewEnergy is 100).
 %trackDirection(X0,Y0,X1,Y1,DirX,DirY) :- DirX is X1-X0, DirY is Y1-Y0.
 energyAfterDamage(Energy,X,Y,NewEnergy) :-

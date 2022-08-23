@@ -19,6 +19,7 @@ use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateAgentHierarchy" as module.
 use "./eventsubmodules/saboteurtools/selectClearingTarget" as module.
 use "./eventsubmodules/saboteurtools/trackSightedAgents" as module.
+use "./eventsubmodules/saboteurtools/messageCrowdedGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -73,13 +74,15 @@ module goaldiggerEvent {
 		   then insert(waitingTimeEmptyGoalZone(25)).	
 			
 		% select sabotage goal
-		if not(bel(whitelistedTeam(_))), bel(sabotageThem), percept(team(MyTeam)) 
-		   then insert(whitelistedTeam(MyTeam)).
+		if not(bel(whitelistedTeam(_))), percept(team(MyTeam)) 
+		   then {
+			
+			  if bel(sabotageThem) 
+		        then insert(whitelistedTeam(MyTeam)).
 		
-		
-		if not(bel(whitelistedTeam(_))), bel(sabotageUs) 
-		   then insert(whitelistedTeam(fakeTeamName)).
-
+			  if bel(sabotageUs) 
+		         then insert(whitelistedTeam(fakeTeamName)).
+		   }
 	}
 
 	% SUBMODULE managing success and partial_success percepts
@@ -142,11 +145,10 @@ module goaldiggerEvent {
 	       bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
 	then {
 	   if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) then
-	   delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)) +
-	   allother.send(iBelieveGoalZoneCounter(A, B, NewCount, Md)).
+	   delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)).
 
 	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
-	   then insert(emptyGoalZoneCounter(X2, Y2, 1)) + allother.send(emptyGoalZoneCounter(X2, Y2, 1)).
+	   then insert(emptyGoalZoneCounter(X2, Y2, 1)).
 	}
 
 	% SUBMODULE track entities in sight for saboteurs
@@ -164,6 +166,10 @@ module goaldiggerEvent {
 	% SUBMODULE managing messages concerning task coordination
 	if percept(step(SimStep), SimStep >= 2) 
 	    then messageMultiTaskCoordination.
+
+	% SUBMODULE sending saboteur information about crowded goal zones
+	if not(bel(customRole(CustomRoleSaboteur))), percept(goalZone(_,_))
+	  then messageCrowdedGoalZone.
 
 	% SUBMODULE check messages about role zones
 	%if percept(role(default)) then handleMessageRoleZone.
