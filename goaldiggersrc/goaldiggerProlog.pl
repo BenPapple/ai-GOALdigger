@@ -157,6 +157,8 @@
 :- dynamic multiTaskSupporterStatus/19.
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
 :- dynamic storedOtherAgentStatus/9. 
+% wait before chosing next task as submitterLeader
+:- dynamic waitBeforeNewTask/1.
 
 % Variables related to customRoleSaboteur role
 :- dynamic emptyGoalZoneCounter/3. % Count of time no agents were seen around a specific goalZone.

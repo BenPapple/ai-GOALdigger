@@ -47,8 +47,21 @@ module chooseTask {
 
     % create random for ML task choser
 
+    % set waiting period after submit
+    if percept(lastAction(submit)),
+       bel(submitterLeader),
+       bel(waitBeforeNewTask(Del))
+        then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(3)).
+        
+    % reduce waiting period 
+    if bel(submitterLeader),
+       bel(waitBeforeNewTask(Del), Del > 0),
+       bel(NewVal is Del - 1)
+        then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(NewVal)).        
+
     % ToDo ML task chosing		
 	if bel(submitterLeader),
+	   bel(waitBeforeNewTask(0)),
 	   bel(randomBetween(0, 100, RandOut)),
 	   bel(qtable(V1,V2,_,_,_,_))
 	    then {

@@ -10,43 +10,85 @@ use "../taskhandling/chooseTask" as module.
 
 module changeTaskCheck {
 
-		% as worker change task when task expired or initial task has negative steps
-    	if percept(step(Step)), 
-    	   bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < Step) 
-    	    then chooseTask.
-    	    
-    	% change task when chosen task not in percept anymore
-    	if bel(currentChosenTask(TaskName, _, _, _, _, _,_,_)), 
-    	   not(percept(task(TaskName , _, _, _))) 
-    	    then chooseTask.
-
-    	% change from 1-task to 3-task as submitterLeader
-    	if bel(submitterLeader),
-    	   percept(step(SimStep)), 
-    	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
-    	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
-	       bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
-	       bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
-	       bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)),           	   
-    	   percept(task(_ ,TaskStep2, 90,[req(X1,Y1,Block1),req(X2,Y2,Block2),req(X3,Y3,Block3)]), 
-    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 70),
-		   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
-		   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
-		   bel(mapDispenser(_, _, dispenser, Block3, _, _)),
-		   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
-		   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
-		   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
-    	    then chooseTask.    
+    % reset waiting period for new task as submitterLeader when task has 0 steps left
+    if percept(step(SimStep)),
+       bel(currentChosenTask(TaskName, TaskStep, 10, _, _, _, _, _), TaskStep == SimStep),
+       bel(submitterLeader),
+       bel(waitBeforeNewTask(Del))
+        then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(3)).
+        
+	% reset waiting period for new task as submitterLeader when task disappears
+    if percept(step(SimStep)),
+       bel(currentChosenTask(TaskName, TaskStep, 10, _, _, _, _, _), TaskStep >= SimStep),
+       not(percept(task(TaskName , _, 10,[req(_,_,_)]))),
+       bel(submitterLeader),
+       bel(waitBeforeNewTask(Del))
+        then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(3)).
+    if percept(step(SimStep)),
+       bel(currentChosenTask(TaskName, TaskStep, 40, _, _, _, _, _), TaskStep >= SimStep),
+       not(percept(task(TaskName , _, 40,[req(_,_,_),req(_,_,_)]))),
+       bel(submitterLeader),
+       bel(waitBeforeNewTask(Del))
+        then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(3)).
+    if percept(step(SimStep)),
+       bel(currentChosenTask(TaskName, TaskStep, 90, _, _, _, _, _), TaskStep >= SimStep),
+       not(percept(task(TaskName , _, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]))),
+       bel(submitterLeader),
+       bel(waitBeforeNewTask(Del))
+        then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(3)).
+    if percept(step(SimStep)),
+       bel(currentChosenTask(TaskName, TaskStep, 160, _, _, _, _, _), TaskStep >= SimStep),
+       not(percept(task(TaskName , _, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]))),
+       bel(submitterLeader),
+       bel(waitBeforeNewTask(Del))
+        then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(3)).
+                        	
+	% as worker change task when task expired or initial task has negative steps
+	if percept(step(SimStep)), 
+	   bel(currentChosenTask(_, TaskStep, _, _, _, _,_,_), TaskStep < SimStep) 
+	    then chooseTask.
 	    
-    	% change from 1-task to 2-task as submitterLeader
-    	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, OtherAgent1)),
-    	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
-    	   percept(step(SimStep)), 
-    	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
-    	   percept(task(_ ,TaskStep2, 40,[req(_,_,Block1),req(_,_,Block2)]), 
-    	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 40),
-    	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
-	       bel(mapDispenser(_, _, dispenser, Block2, _, _))
-    	    then chooseTask.   
+	% change task when chosen task not in percept anymore
+	if bel(currentChosenTask(TaskName, 10, _, _, _, _,_,_)),
+	   not(percept(task(TaskName , _, 10,[req(_,_,_)])))
+	    then chooseTask.
+	if bel(currentChosenTask(TaskName, 40, _, _, _, _,_,_)),
+	   not(percept(task(TaskName , _, 40,[req(_,_,_),req(_,_,_)])))
+	    then chooseTask.
+	if bel(currentChosenTask(TaskName, 90, _, _, _, _,_,_)),
+	   not(percept(task(TaskName , _, 90,[req(_,_,_),req(_,_,_),req(_,_,_)])))
+	    then chooseTask.
+	if bel(currentChosenTask(TaskName, 160, _, _, _, _,_,_)),
+	   not(percept(task(TaskName , _, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])))
+	    then chooseTask.	    
+	    	    
+	% change from 1-task to 3-task as submitterLeader
+	if bel(submitterLeader),
+	   percept(step(SimStep)), 
+	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
+	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+       bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
+       bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
+       bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)),           	   
+	   percept(task(_ ,TaskStep2, 90,[req(X1,Y1,Block1),req(X2,Y2,Block2),req(X3,Y3,Block3)]), 
+	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 70),
+	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block3, _, _)),
+	   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
+	   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
+	    then chooseTask.    
+    
+	% change from 1-task to 2-task as submitterLeader
+	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
+	   percept(step(SimStep)), 
+	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
+	   percept(task(_ ,TaskStep2, 40,[req(_,_,Block1),req(_,_,Block2)]), 
+	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 40),
+	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+       bel(mapDispenser(_, _, dispenser, Block2, _, _))
+	    then chooseTask.   
     	    
 }
