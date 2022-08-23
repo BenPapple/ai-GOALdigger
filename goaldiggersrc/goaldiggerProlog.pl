@@ -157,6 +157,8 @@
 :- dynamic multiTaskSupporterStatus/19.
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
 :- dynamic storedOtherAgentStatus/9. 
+% wait before chosing next task as submitterLeader
+:- dynamic waitBeforeNewTask/1.
 
 % Variables related to customRoleSaboteur role
 :- dynamic emptyGoalZoneCounter/3. % Count of time no agents were seen around a specific goalZone.
@@ -175,6 +177,11 @@
 :- dynamic clearingTarget/2. % stores the target to clear next.
 :- dynamic inactiveSighting/3. % (X,Y,Timer) stores the coordinates of a bloke which is believed to be inactive and a timer.
 :- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
+
+% MACHINEL LEARNING VARs
+:- dynamic qtable/6.
+:- dynamic randomTaskChoser/1.
+
 recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
 	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 
 	(NewEnergy is 100).

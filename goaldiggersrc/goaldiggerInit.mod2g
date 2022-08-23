@@ -40,6 +40,10 @@ module goaldiggerInit {
 	% lowest and highest limit after which agent changes explore direction
 	if true then insert(limitChangeStepMinMax(10 , 20)). 
 	
+	% machine learning
+	if true then insert(qtable(30,40,30,30,70,100)).
+	if true then insert(randomTaskChoser(0)).
+	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
@@ -91,6 +95,7 @@ module goaldiggerInit {
 	% misc
 	if true then insert ( step(-1)). % init server steps
 	if true then insert (agentAt(0, 0, 0)). % agent starting coordinate	
+	if true then insert(waitBeforeNewTask(0)).
 
 	if bel(randomDirection(X)) 
 		then insert (randomAffinity(X)). % random general direction to explore for agent

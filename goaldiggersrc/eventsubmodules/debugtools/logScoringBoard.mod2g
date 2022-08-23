@@ -17,7 +17,7 @@ module logScoringBoard {
     	then print("I am the sneaky saboteur!").
 
     % 2Task success logging
-	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
+	if bel(submitterLeader, step(CurrentStep)), 
 	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
 	   bel(currentChosenTask(TaskName, _, 40, _, _, _, _, _), count2Task(Num2Task, OldStep), 
 	       NewCount is Num2Task +1, CurrentStep > OldStep)
@@ -25,10 +25,8 @@ module logScoringBoard {
 	        if bel(count2Task(Num2Task, OldStep)),
 	           percept(name(MyName))
 	            then delete(count2Task(Num2Task, OldStep)) +
-	                 insert(count2Task(NewCount, CurrentStep)) +
-	                 print("40 Points by me on step " + CurrentStep + " in sim " + 
-	                         SimCount+"2TaskGoals: "+NewCount) +
-	                 allother.send(made40Points(MyName)).
+	                 insert(count2Task(NewCount, CurrentStep)) +	                 
+	                 all.send(made40Points(MyName)).
 	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
 	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).
 	 }
@@ -44,7 +42,7 @@ module logScoringBoard {
 	    do print("90 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
 	    	 
 	% 3Task success logging
-	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
+	if bel(submitterLeader, step(CurrentStep)), 
 	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
 	   bel(currentChosenTask(TaskName, _, 90, _, _, _, _, _), count3Task(Num3Task, OldStep), 
 	       NewCount is Num3Task +1, CurrentStep > OldStep)
@@ -53,12 +51,14 @@ module logScoringBoard {
 	           percept(name(MyName)) 
 	            then delete(count3Task(Num3Task, OldStep)) +
 	                 insert(count3Task(NewCount, CurrentStep)) +
-	                 print("90 Points by me on step " + CurrentStep + " in sim " + 
-	                         SimCount+"3TaskGoals: "+NewCount) +
-	                 allother.send(made90Points(MyName)).
+	                 all.send(made90Points(MyName)).
 	        if bel(count3Task(NumUpd, _), cachedCount3Task(V1)) 
 	            then delete(cachedCount3Task(V1)) + insert(cachedCount3Task(NumUpd)).
 	 }
+
+    % print qtable ML
+    if bel(submitterLeader, qtable(Q2, Q3, Q4, Task2, Task3, Task4)) 
+        then print("Q-table: "|Q2+Q3+Q4|" Chance: "|Task2+Task3+Task4).
 
 	% score table sim end
     if bel(stopScoreLogging(LastLog)),

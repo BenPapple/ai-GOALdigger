@@ -1,0 +1,64 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../taskhandling/taskHandlingOneBlock" as module.
+use "../taskhandling/taskHandlingTwoBlock" as module.
+use "../taskhandling/taskHandlingThreeBlock" as module.
+use "../taskhandling/taskHandlingFourBlock" as module.
+use "../taskhandling/manageQtable" as module.
+
+/**
+ * prefer 2 task above others
+ *
+ * @author Ben G.
+ */
+
+module preferTwoTask {
+
+	% choose 1-task as submitterLeader if no confirmedOffsetOfAgent known
+	if bel(submitterLeader, step(SimStep)),
+	   not(bel(confirmedOffsetOfAgent(_, _, _))),
+	   percept(task(_ ,TaskStep, 10,[req(_,_,_)]), TaskStep > SimStep)
+	   	then taskHandlingOneBlock + exit-module.
+
+	% choose 2-task as submitterLeader if available
+	if bel(submitterLeader, step(SimStep)),
+	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
+	   percept(task(_ ,TaskStep, 40,[req(_,_,Block1),req(_,_,Block2)])),
+	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 40)  
+	    then taskHandlingTwoBlock + exit-module.
+
+	% choose 3-task as submitterLeader if available
+	if bel(submitterLeader, step(SimStep)),
+	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	   bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
+	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
+	   bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)), 
+	   percept(task(_ ,TaskStep, 90,[req(X1,Y1,Block1),req(X2,Y2,Block2),req(X3,Y3,Block3)])),
+	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block3, _, _)),
+	   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
+	   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
+	   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2),
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 70)  
+	    then taskHandlingThreeBlock + exit-module. 
+	    
+	% ToDo add 4task choosing
+	% choose 4-task as submitterLeader if available
+	if bel(submitterLeader, step(SimStep)),
+	   bel(confirmedOffsetOfAgent(_, _, _)),
+	   percept(task(_ ,TaskStep, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])), 
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 600)  
+	    then taskHandlingFourBlock + exit-module.   
+   
+	% choose 1-task as submitterLeader if 2task, 3task and 4task not available
+	if bel(submitterLeader, step(SimStep)), 
+	   not(percept(task(_ ,TaskStep, 40,[req(_,_,_),req(_,_,_)]), TaskStep >= SimStep)),
+	   not(percept(task(_ ,TaskStep2, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep2 >= SimStep)),
+	   not(percept(task(_ ,TaskStep3, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), TaskStep3 >= SimStep)) 
+	    then taskHandlingOneBlock + exit-module.
+	
+}
