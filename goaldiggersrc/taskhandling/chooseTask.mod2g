@@ -4,6 +4,7 @@ use "../taskhandling/taskHandlingOneBlock" as module.
 use "../taskhandling/taskHandlingTwoBlock" as module.
 use "../taskhandling/taskHandlingThreeBlock" as module.
 use "../taskhandling/taskHandlingFourBlock" as module.
+use "../taskhandling/manageQtable" as module.
 
 /**
  * Choose task from options when having corresponding role; waterfall chosing, advanced choices come first in file: 
@@ -40,6 +41,9 @@ module chooseTask {
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20),
 	   not(bel(submitterLeader))
 		then taskHandlingOneBlock + exit-module.
+
+    % as submitterLeader calculate q-table
+    if bel(submitterLeader) then manageQtable.
 
 	% choose 1-task as submitterLeader if no confirmedOffsetOfAgent known
 	if bel(submitterLeader, step(SimStep)),

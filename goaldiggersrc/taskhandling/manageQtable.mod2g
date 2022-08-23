@@ -1,0 +1,22 @@
+use "../goaldiggerProlog" as knowledge.
+
+/**
+ * calculate new q values from successful multitask submits
+ *
+ * @author Ben G.
+ */
+
+module manageQtable {
+	
+	% calculate Q for 40 point submits of team
+	forall (_).sent(made40Points(Name)) do {
+	
+	}
+
+    % calculate Q for 90 point submits of team
+	forall (_).sent(made90Points(Name)) do {
+	
+	}	
+	
+	
+}

@@ -40,6 +40,9 @@ module goaldiggerInit {
 	% lowest and highest limit after which agent changes explore direction
 	if true then insert(limitChangeStepMinMax(10 , 20)). 
 	
+	% machine learning
+	if true then insert(qtable(30,40,30,30,70,100)).
+	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
 	if true then insert (haveBlockAttached(false, n)). % switch for carried blocks
