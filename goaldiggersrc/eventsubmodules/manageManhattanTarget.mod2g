@@ -55,23 +55,6 @@ module manageManhattanTarget {
 				}
 		}
 			     
-	    /**
-	    % set an agent carrying a block on the south if next to goal zone
-		if not(bel(saboteurHasMhTarget)), 
-		 bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrierSubmitter))),
-	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam, thing(X1, Y1, block, _),
-	     attached(X1,Y1), abs(X1-X0) + abs(Y1-Y0) =:= 1, Y1 > Y0),
-	     percept(goalZone(_,_)),
-		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 1),
-		 not(bel(inactiveSighting(X3,Y3,_)))
-		  then {
-	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-			if true then insert(targetMd(X3, Y3, blockCarrierSubmitter)).	
-			if not(bel(executeManhattan)) then insert(executeManhattan).
-			if true then insert(saboteurHasMhTarget).
-	     }
-		**/
-		
 	    % set an agent carrying a block on the south if next to goal zone
 		if not(bel(saboteurHasMhTarget)), 
 		 not(bel(targetMd(_,_,blockCarrierSubmitter))),
@@ -103,15 +86,15 @@ module manageManhattanTarget {
 	     }
 		% when in goal zone which has not still been declared empty, select distant point of that goal zone
 		if not(bel(saboteurHasMhTarget)),
-		   percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)),
-		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
-		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
+		   percept(goalZone(0,0)), bel(agentAt(X4, Y4, _)), 
 		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), 
 		   emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
 		     	     
-		     if percept(goalZone(X6, Y6)), bel(calculateXYMd(X6, Y6, 0, 0, 5), localize(X6, Y6, X4, Y4, X7, Y7)),
+		     if percept(goalZone(X6, Y6), Dist1 is abs(X6)+abs(Y6)), 
+		     not(percept(goalZone(X7,Y7), Dist2 is abs(X7)+abs(Y7), Dist2 > Dist1)),
+		     bel(localize(X6, Y6, X4, Y4, X8, Y8)),
 		        bel(targetMd(X0, Y0, Target))
-		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X7, Y7, goalzone)).
+		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X8, Y8, goalzone)).
 		     if not(bel(executeManhattan)) then insert(executeManhattan).
 		     if true then insert(saboteurHasMhTarget).	        
 		}

@@ -76,13 +76,14 @@ module selectClearingTarget {
 	   do { 
 
 			if bel(abs(X1) =:= 2; abs(Y1) =:= 2), 
-			  not(percept(thing(X01,Y01,_,_), abs(X01)+abs(Y01) =:= 1, abs(X01-X1) + abs(Y01-Y1) =:= 1))
+			  not(percept(thing(X01,Y01,Type,_), abs(X01)+abs(Y01) =:= 1, abs(X01-X1) + abs(Y01-Y1) =:= 1,
+			      (Type = agent; Type = block)))
 			  then delete(targetCandidate(X,Y,DirX,DirY,Energy)).
 
 			if not(bel(abs(X1) =:= 2; abs(Y1) =:= 2)), 
-			   not(percept(thing(X01,Y01,_,_), thing(X02,Y02,_,_), (X02 \= X01; Y02 \= Y01), 
-			       abs(X01)+abs(Y01) =:= 1, abs(X01-X1) + abs(Y01-Y1) =:= 1,
-			       abs(X02)+abs(Y02) =:= 1, abs(X02-X1) + abs(Y02-Y1) =:= 1))
+			   not(percept(thing(X01,Y01,Type1,_), thing(X02,Y02,Type2,_), (X02 \= X01; Y02 \= Y01), 
+			       abs(X01)+abs(Y01) =:= 1, abs(X01-X1) + abs(Y01-Y1) =:= 1, (Type1 = agent; Type1 = block),
+			       abs(X02)+abs(Y02) =:= 1, abs(X02-X1) + abs(Y02-Y1) =:= 1, (Type2 = agent; Type2 = block)))
 			  then delete(targetCandidate(X,Y,DirX,DirY,Energy)).
 							
 	   	} 
