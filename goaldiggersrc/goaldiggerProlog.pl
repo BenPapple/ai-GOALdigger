@@ -195,6 +195,8 @@
 :- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
 :- dynamic agentCounter/1. % counts possible agents seen
 :- dynamic goalZoneSightings/5. % (X,Y,Number,Step,SenderName) information to be communicated by the saboteur by other agents if other agents seen in goalzone.
+:- dynamic bodyCounter/1. % counts agents deactivated by the saboteur
+:- dynamic saboteurHasMhTarget/0. % switch to decide manhattan target
 
 % MACHINEL LEARNING VARs
 :- dynamic qtable/6.

@@ -12,6 +12,10 @@ use "../pathfinding/executeRandomMove" as module.
 
 module executeSaboteurRole {	
 	
+	% adopt digger role if in role zone
+	if not(percept(role(digger))), percept(roleZone(0,0))
+	  then adapt(digger).
+	
 	% persecute southward block carrying agent if available
 	if bel(agentAt(X0,Y0,_), targetMd(X1,Y1, blockCarrierSubmitter), abs(X1-X0) + abs(Y1-Y0) > 2, executeManhattan)
 	then allother.send(msg("Last action performed: persecute southward carrier 1")) + executeManhattanMove.
@@ -19,21 +23,9 @@ module executeSaboteurRole {
 	% attack agent if target available
 	if bel(clearingTarget(X,Y)) then allother.send(msg("Last action performed: attack agent")) +  clear(X,Y).
 
-	% persecute southward block carrying agent if available
-	if bel(targetMd(_, _, blockCarrierSubmitter), executeManhattan)
-	then allother.send(msg("Last action performed: persecute southward carrier")) + executeManhattanMove.
-
-	% persecute carried block if available
-	if bel(targetMd(_, _, blockCarrier), executeManhattan)
-	then allother.send(msg("Last action performed: persecute carrier")) + executeManhattanMove.
-
-	% persecute agent if available
-	if bel(targetMd(_, _, agent), executeManhattan)
-	then allother.send(msg("Last action performed: persecute agent")) + executeManhattanMove.
-
-	% go to goalzone if available
-	if bel(targetMd(A, B, goalzone), (A \= 111; B \= 111), executeManhattan)
-	then allother.send(msg("Last action performed: go to goalzone")) + executeManhattanMove.
+    % execute manhattan move if not false 
+    if bel(targetMd(A, B, _), (A \= 111; B \= 111), executeManhattan)
+      then executeManhattanMove.
 
 	% roam if no distant goal zone available
 	if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)

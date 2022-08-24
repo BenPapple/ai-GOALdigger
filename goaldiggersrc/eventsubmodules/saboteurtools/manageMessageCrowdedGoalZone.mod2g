@@ -11,9 +11,14 @@ use "../../goaldiggerAction" as actionspec.
 
 module manageMessageCrowdedGoalZone {
 		
+	% delete really old crowded goal zone sightings
+	if percept(step(MyStep)), bel(goalZoneSightings(A,B,C,Step,E), Step < MyStep - 30)
+	  then delete(goalZoneSightings(A,B,C,Step,E)).
+	
 	% Select 
 	forall (_).sent(goalZoneSightings(X,Y,Count,Step,SenderName)),
-	    bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY)
+	    bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY),
+	    bel(minimumDistanceEmptyGoalZone(MinDist))
 	  do {
 	  
 	        if not(bel(goalZoneSightings(_,_,_,_,_)))
@@ -25,7 +30,4 @@ module manageMessageCrowdedGoalZone {
 	           then delete(goalZoneSightings(X0,Y0,Count0,Step0,SenderName0))
 	           + insert(goalZoneSightings(X1,Y1,Count,Step,SenderName)).
 	}
-	
-	if bel(goalZoneSightings(X1,Y1,Count,Step,SenderName))
-	  then print("Goal Zone sightings: "+X1+" "+Y1+" "+Count).
 }

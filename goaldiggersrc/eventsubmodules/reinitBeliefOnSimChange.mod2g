@@ -146,4 +146,20 @@ module reinitBeliefOnSimChange {
 
 	}
 	
+	% reinit saboteur-specific beliefs
+	if bel(goalZoneSightings(_,_,_,_,_)) 
+	   then {
+	      forall bel(goalZoneSightings(A,B,C,D,E))
+	        do delete(goalZoneSightings(A,B,C,D,E)).
+	   }
+	 
+	if bel(bodyCounter(A))
+	  then delete(bodyCounter(A)).
+	  
+	if bel(agentSighting(_,_,_,_,_,_,_,_))
+	  then {
+	    forall bel(agentSighting(A,B,C,D,E,F,G,H))
+	       do delete(agentSighting(A,B,C,D,E,F,G,H)).
+	   }
+	
 } % end module

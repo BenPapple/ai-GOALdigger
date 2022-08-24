@@ -87,23 +87,6 @@ module selectClearingTarget {
 							
 	   	} 
 	   		                                       
-%	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)) do {
-%	   				if bel(NextX0 is X0+DirX0, NextY0 is Y0+DirY0), bel(localize(X01,Y01,X2,Y2,NextX0,NextY0)),
-%	   				   bel(abs(X01) + abs(Y01) > 2)
-%	   				  then delete(targetCandidate(X0,Y0,DirX0,DirY0,Energy)).
-%	   		}
-%	}
-	
-%	% if there are targets at distance 2, remove every target at a greater distance
-%	if bel(targetCandidate(X,Y,DirX,DirY,_), agentAt(X2,Y2,_)), bel(NextX is X+DirX, NextY is Y+DirY), 
-%	   bel(localize(X1,Y1,X2,Y2,NextX,NextY)), bel(abs(X1) + abs(Y1) =:= 2) 
-%	   then { 
-%	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)) do {
-%	   				if bel(NextX0 is X0+DirX0, NextY0 is Y0+DirY0), bel(localize(X01,Y01,X2,Y2,NextX0,NextY0)),
-%	   				   bel(abs(X01) + abs(Y01) > 2)
-%	   				  then delete(targetCandidate(X0,Y0,DirX0,DirY0,Energy)).
-%	   		}
-%	}
 	
 	
 	% if there are targets which are not moving, remove targets which are moving 

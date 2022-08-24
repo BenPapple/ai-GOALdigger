@@ -19,12 +19,6 @@ module manageManhattanTarget {
 		     insert(targetMd(A, B, rolezone)) + 
 		     insert(executeManhattan).	
 
-	% update rolezone target MD
-	if bel(customRole(customRoleSaboteur)), not(percept(role(digger))), 
-	   bel(targetMd(X, Y, Target), targetClosestRoleZone(A, B, MdAlt), MdAlt < 1234567)
-		then delete(targetMd(X, Y, Target)) + 
-		     insert(targetMd(A, B, rolezone)) + 
-		     insert(executeManhattan).
 	
 	% when role default store first seen RoleZone coordinates as targetMd
 	if percept(roleZone(X, Y), role(default)), 
@@ -48,18 +42,121 @@ module manageManhattanTarget {
     % Manhattan targets for custom role saboteur
 	if bel(customRole(customRoleSaboteur)) then {		
 	
-		% set goalzone as target
-		if bel(searchInGoalzone), not(bel(targetMd(_,_,goalzone))), not(bel(targetMd(_,_,blockCarrier))),
-		   not(bel(targetMd(_,_,blockCarrierSubmitter))),
+	    if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
+
+		% update rolezone target MD
+		if bel(customRole(customRoleSaboteur)), not(percept(role(digger))) 
+		then {
+		   		if bel(targetClosestRoleZone(X, Y, _), (X \= 111; Y \= 111)) then {
+					if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+					if true then insert(targetMd(X, Y, rolezone)).	
+					if not(bel(executeManhattan)) then insert(executeManhattan).
+					if true then insert(saboteurHasMhTarget).
+				}
+		}
+			     
+	    /**
+	    % set an agent carrying a block on the south if next to goal zone
+		if not(bel(saboteurHasMhTarget)), 
+		 bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrierSubmitter))),
+	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam, thing(X1, Y1, block, _),
+	     attached(X1,Y1), abs(X1-X0) + abs(Y1-Y0) =:= 1, Y1 > Y0),
+	     percept(goalZone(_,_)),
+		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 1),
+		 not(bel(inactiveSighting(X3,Y3,_)))
+		  then {
+	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+			if true then insert(targetMd(X3, Y3, blockCarrierSubmitter)).	
+			if not(bel(executeManhattan)) then insert(executeManhattan).
+			if true then insert(saboteurHasMhTarget).
+	     }
+		**/
+		
+	    % set an agent carrying a block on the south if next to goal zone
+		if not(bel(saboteurHasMhTarget)), 
+		 not(bel(targetMd(_,_,blockCarrierSubmitter))),
+	     bel(agentAt(X2,Y2,_), agentSighting(X0,Y0,_,_,_,_,_,s), Dist1 is abs(X0-X2) + abs(Y0-Y2)),
+	     not(bel(agentSighting(X1,Y1,_,_,_,_,_,s), Dist2 is abs(X1-X2) + abs(Y1-Y2), Dist2 < Dist1)),
+	     not(bel(agentSighting(X3,Y3,_,_,_,_,_,s), Dist3 is abs(X3-X2) + abs(Y3-Y2), Dist3 =:= Dist1, (X3 > X0; Y3 < Y0))),
+	     percept(goalZone(_,_)),
+		 not(bel(inactiveSighting(X0,Y0,_)))
+		  then {
+	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+			if true then insert(targetMd(X0, Y0, blockCarrierSubmitter)).	
+			if not(bel(executeManhattan)) then insert(executeManhattan).
+			if true then insert(saboteurHasMhTarget).
+	     }
+
+		% set an agent carrying a block as target next to a goal zone
+		if not(bel(saboteurHasMhTarget)), 
+		 not(bel(targetMd(_,_,blockCarrier))),
+	     bel(agentAt(X2,Y2,_), agentSighting(X0,Y0,_,_,_,_,_,_), Dist1 is abs(X0-X2) + abs(Y0-Y2)),
+	     not(bel(agentSighting(X1,Y1,_,_,_,_,_,s), Dist2 is abs(X1-X2) + abs(Y1-Y2), Dist2 < Dist1)),
+	     not(bel(agentSighting(X3,Y3,_,_,_,_,_,s), Dist3 is abs(X3-X2) + abs(Y3-Y2), Dist3 =:= Dist1, (X3 > X0; Y3 < Y0))),
+	     percept(goalZone(_,_)),
+		 not(bel(inactiveSighting(X0,Y0,_)))
+		  then {
+	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+			if true then insert(targetMd(X0, Y0, blockCarrierSubmitter)).	
+			if not(bel(executeManhattan)) then insert(executeManhattan).
+			if true then insert(saboteurHasMhTarget).
+	     }
+		% when in goal zone which has not still been declared empty, select distant point of that goal zone
+		if not(bel(saboteurHasMhTarget)),
+		   percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)),
+		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
+		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
+		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), 
+		   emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
+		     	     
+		     if percept(goalZone(X6, Y6)), bel(calculateXYMd(X6, Y6, 0, 0, 5), localize(X6, Y6, X4, Y4, X7, Y7)),
+		        bel(targetMd(X0, Y0, Target))
+		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X7, Y7, goalzone)).
+		     if not(bel(executeManhattan)) then insert(executeManhattan).
+		     if true then insert(saboteurHasMhTarget).	        
+		}
+
+		% set recommended goalzone as target
+		if not(bel(saboteurHasMhTarget)), 
+		   bel(searchInGoalzone)
+		   then {
+			   		if bel(goalZoneSightings(X,Y,_,_,_)) then {
+			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
+						if not(bel(executeManhattan)) then insert(executeManhattan).
+						if true then insert(saboteurHasMhTarget).			}
+		}
+
+        % To Do Isaac: not right conditions
+		% when in empty goal zone and with crowded goalzone messages, set other goal zone as target
+		if not(bel(saboteurHasMhTarget)),
+		   bel(searchInGoalzone),
+		   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
+		   then {
+			   					   		
+			   		if bel(goalZoneSightings(X,Y,_,_,_)) then {
+			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
+						if not(bel(executeManhattan)) then insert(executeManhattan).
+						if true then insert(saboteurHasMhTarget).
+			   		}		   		
+		}
+	    
+		% set any goalzone as target 
+		if not(bel(saboteurHasMhTarget)), 
+		   bel(searchInGoalzone), not(bel(targetMd(_,_,goalzone))),
 		   not(bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)) then {
 			   		if true then updateGoalzoneDistance.
-			   		if bel(targetClosestGoalZone(X, Y, _)) then {
+			   		if bel(targetClosestGoalZone(X, Y, _), (X \= 111; Y \= 111)) then {
 						if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
 						if true then insert(targetMd(X, Y, goalzone)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
+						if true then insert(saboteurHasMhTarget).
 					}
 		}
-	
+		
+
+	/**
 		% when in empty goal zone, set other goal zone as target
 		if bel(searchInGoalzone), not(bel(targetMd(_,_,blockCarrier))),
 		   not(bel(targetMd(_,_,blockCarrierSubmitter))),
@@ -81,25 +178,17 @@ module manageManhattanTarget {
 						forall bel(tempMapGoalZone(X, Y, D)) do delete(tempMapGoalZone(X, Y, D)).
 			   		}		   		
 		}
+**/
+
+
+
 				
-		% when in goal zone which has not still been declared empty, select distant point of that goal zone
-		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrier))),
-		   not(bel(targetMd(_,_,blockCarrierSubmitter))),
-		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
-		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
-		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), 
-		   emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
-		     	     
-		     if percept(goalZone(X6, Y6)), bel(calculateXYMd(X6, Y6, 0, 0, 5), localize(X6, Y6, X4, Y4, X7, Y7)),
-		        bel(targetMd(X0, Y0, Target))
-		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X7, Y7, goalzone)).
-		     if not(bel(executeManhattan)) then insert(executeManhattan).	        
-		}
 
 
+        /**
 		% when not pursuing any agent carrying a block, set other agent without block as target anywhere
 		if bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrier))), not(bel(targetMd(_,_,blockCarrierSubmitter))), 
-		   not(bel(targetMd(_,_,goalzone))),
+		   not(bel(targetMd(_,_,goalzone))), not(bel(targetMd(_, _, goalzoneRecommendation))),
 	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam),
 		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 2),
 		 not(bel(inactiveSighting(X3,Y3,_)))
@@ -108,40 +197,79 @@ module manageManhattanTarget {
 			if true then insert(targetMd(X3, Y3, agent)).	
 			if not(bel(executeManhattan)) then insert(executeManhattan).
 	     }
-
-		% set an agent carrying a block as target anywhere
-		if bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrierSubmitter))), 
-	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam, thing(X1, Y1, block, _),
-	     attached(X1,Y1), abs(X1-X0) + abs(Y1-Y0) =:= 1),
-		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 2),
-		 not(bel(inactiveSighting(X3,Y3,_)))
-		  then {
-	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-			if true then insert(targetMd(X3, Y3, blockCarrier)).	
-			if not(bel(executeManhattan)) then insert(executeManhattan).
-	     }
-
-		% set an agent carrying a block on the south if next to goal zone
-		if bel(whitelistedTeam(MyTeam)), not(bel(targetMd(_,_,blockCarrierSubmitter))),
-	     percept(thing(X0, Y0, entity, OtherTeam), MyTeam \= OtherTeam, thing(X1, Y1, block, _),
-	     attached(X1,Y1), abs(X1-X0) + abs(Y1-Y0) =:= 1, Y1 > Y0),
-	     percept(goalZone(_,_)),
-		 bel(agentAt(X2, Y2, _), localize(X0, Y0, X2, Y2, X3, Y3), abs(X0) + abs(Y0) >= 2),
-		 not(bel(inactiveSighting(X3,Y3,_)))
-		  then {
-	       	if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-			if true then insert(targetMd(X3, Y3, blockCarrierSubmitter)).	
-			if not(bel(executeManhattan)) then insert(executeManhattan).
-	     }
+        **/
+        
+		
+	    /**
+	    % initializing variables to be reused inside
+	    if bel(whitelistedTeam(MyTeam), waitingTimeEmptyGoalZone(TimeEmpty), minimumDistanceEmptyGoalZone(DistEmpty),
+	       agentAt(X2,Y2,_)) 
+	      then {
+	        
+	        % if next to goal zone
+	        if percept(goalZone(GZX0,GZY0)), bel(distance(GZX0,GZY0,X2,Y2,GZX1,GZY1)) 
+	          then {
+	            % if goal zone empty
+	            if bel(emptyGoalZoneCounter(EmptyGZX, EmptyGZY, C), DistCurrentToEmpty is abs(EmptyGZX - GZX1) + abs(EmptyGZY - GZY1),
+	              DistCurrentToEmpty =< DistEmpty, C >= TimeEmpty)
+	              then {
+	                % if known goal zone recommendation that is the current location, go there
+	                if bel(goalZoneSightings(RecGZX, RecGZY, _), 
+	                       DistRecToEmpty is abs(EmptyGZX - RecGZX) + abs(EmptyGZY - RecGZY),
+	                       DistRecToEmpty > DistEmpty)	                   
+	                   then {
+	                   
+	                   	if bel(targetMD(OldTMDX, OldTMDY, OldTMDName))
+	                      then delete(targetMD(OldTMDX, OldTMDY, OldTMDName)).
+	                    if true then insert(targetMd(RecGZX, RecGZY, goalzoneRecommendation)).
+	                    if not(bel(executeManhattan)) then insert(executeManhattan).
+	                    
+	                }
+ 
+	                % if not known goal zone recommendation, go to other distant goal zone
+	                if not(bel(targetMd(_,_,goalzoneRecommendation))) 
+	                  then {
+							if true then updateGoalzoneDistance.
+			   		
+					   		forall bel(mapGoalZone(MapA,MapB,MapC)) do insert(tempMapGoalZone(MapA,MapB,MapC)).
+					   		forall bel(tempMapGoalZone(MapX,MapY,MapD)) do {
+					   		   if bel(emptyGoalZoneCounter(EmptyGZX1, EmptyGZY1, Count1), 
+					   		          calculateXYMd(EmptyGZX1,EmptyGZY1,MapX,MapY,Md), 
+					   		          Md < DistEmpty, Count1 > TimeEmpty)
+					   		   then delete(tempMapGoalZone(MapX, MapY, MapD)).
+					   		} % end deletion of tempMapGoalZone
+			   		
+			   		if bel(tempMapGoalZone(MapA, MapB, _)) 
+			   		  then {
+			   		
+				   			if bel(targetMD(OldTMDX, OldTMDY, OldTMDName))
+		                      then delete(targetMD(OldTMDX, OldTMDY, OldTMDName)).
+		                    if true then insert(targetMd(MapA, MapB, goalzone)).
+		                    if not(bel(executeManhattan)) then insert(executeManhattan).
+							forall bel(tempMapGoalZone(MapX, MapY, MapD)) do delete(tempMapGoalZone(MapX, MapY, MapD)).
+							}
+					
+	                
+	                % if agent available, persecute them
+	                
+	                % else random move
+	              }
+	             }
+	           
+	           % if goal zone full 
+	        skip.
+	        if not(percept(goalZone(_,_)))
+	      
+	      }
 	     
-%	     % when agent deactivated and block abandoned, go to it and destroy it
-%	     if bel(inactiveSighting(_,_,_), agentAt(X2,Y2,_)),
-%	        percept(thing(X,Y,block,_)), not(percept(attached(X,Y))), bel(localize(X,Y,X2,Y2,X3,Y3)) then
-%	        {
-%	       		if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-%				if true then insert(targetMd(X3, Y3, lonelyBlock)).	
-%				if not(bel(executeManhattan)) then insert(executeManhattan).
-%	        }
+	    if percept(goalZone(_,_)) % persigue a agentes
+	    
+	    if not(percept(goalZone(_,_)) 
+	        % sigue recomendaciones
+	        % ve a goalzone
+	        % persigue a agentes
+	    **/
+	    
 	}
 	         
 	

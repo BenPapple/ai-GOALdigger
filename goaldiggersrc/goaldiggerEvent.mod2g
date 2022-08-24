@@ -66,6 +66,10 @@ module goaldiggerEvent {
 		if not(bel(searchInGoalzone)) 
 		   then insert(searchInGoalzone).
 		
+		% insert saboteur body count
+		if not(bel(bodyCounter(_)))
+		   then insert(bodyCounter(0)).
+		
 		% insert minimum distance for different goal zones
 		if not(bel(minimumDistanceEmptyGoalZone(_)))
 		   then insert(minimumDistanceEmptyGoalZone(15)).
@@ -259,7 +263,7 @@ module goaldiggerEvent {
 	}
 
 	% SUBMODULE debug with our mini percept
-	if true %bel(lDebugOn)
+	if bel(lDebugOn), bel(customRole(customRoleSaboteur))
 		then logMiniPercept.
 
 	/**

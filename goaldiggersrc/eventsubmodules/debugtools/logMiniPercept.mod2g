@@ -138,7 +138,7 @@ module logMiniPercept {
 
 		% logging percept base, message base, believe base
 		%if true then log(pb) + log(mb) + log(bb) + log(gb).
-		if true then log(pb) + log(mb) + log(bb).
+		%if true then log(pb) + log(mb) + log(bb).
 		
 		} % debug
 

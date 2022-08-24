@@ -50,6 +50,7 @@ module messageCrowdedGoalZone {
 	  		if true then delete(agentSighting(A,B,C,D,E,F,G,H)).
 	  }
 	
-	if bel(agentCounter(Count), Count > 0), percept(name(MyName), step(ThisStep)), bel(agentAt(X,Y,_))
+	if bel(agentCounter(Count), Count > 0), percept(name(MyName), step(ThisStep), goalZone(A,B)), bel(agentAt(X2,Y2,_)),
+	   bel(localize(A,B,X2,Y2,X,Y))
 	  then allother.send(goalZoneSightings(X,Y,Count,ThisStep,MyName)).	
 }
