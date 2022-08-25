@@ -197,6 +197,8 @@
 :- dynamic goalZoneSightings/5. % (X,Y,Number,Step,SenderName) information to be communicated by the saboteur by other agents if other agents seen in goalzone.
 :- dynamic bodyCounter/1. % counts agents deactivated by the saboteur
 :- dynamic saboteurHasMhTarget/0. % switch to decide manhattan target
+:- dynamic submitterSighted/3. % (X,Y,Step) switch to decide manhattan target
+:- dynamic inEmptyGoalZone/0. % switch to mark the saboteur is in an empty goalZone
 
 % MACHINEL LEARNING VARs
 :- dynamic qtable/6.

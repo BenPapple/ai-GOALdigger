@@ -51,8 +51,12 @@ module trackSightedAgents {
 						
 						% if agent hasn't rotated its block, just update the direction to 0,0
 						if percept(thing(X01,Y01, block, BlockType), X01 =:= X1 + BlockX, Y01 =:= Y1 + BlockY)
-							then insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,BlockDir)).
-							%+ print("Relocated without displacement or rotation").
+							then {
+								if true then insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,BlockDir)).
+								
+								% add flag if suspected submitter
+								if bel(BlockDir = s) then insert(submitterSighted(X,Y,NewStep)).
+							}
 						
 						% if agent has rotated its block, update the direction to 0,0 and update block direction
 						if not(percept(thing(X01,Y01, block, BlockType), X01 =:= X1 + BlockX, Y01 =:= Y1 + BlockY)),
@@ -102,6 +106,8 @@ module trackSightedAgents {
 			 	   %not(percept(thing(X3,Y3,entity,_), (X3 \= X; Y3 \= Y), (X3 \= 0; Y3 \= 0), abs(X3-X1) + abs(Y3-Y1) =:= 1)), 
 			 	   bel(localize(X, Y, X2, Y2, X5, Y5)), not(bel(X =:=0, Y=:=0)), 
 			 	   not(bel(agentSighting(X5,Y5,_,_,_,_,_,_))), 
+			 	   % to avoid one-taskers, don't register sightings next to dispensers with the same type 
+			 	   not(percept(thing(X01,Y01,dispenser,Type), abs(X-X01)+abs(Y-Y01) =:= 1)), 			 	                                                                             
 			 	   not(bel(inactiveSighting(X5,Y5,_))), bel(maxEnergy(MaxEnergy)),
 			 	   bel(localize(X1,Y1,X2,Y2,X6,Y6)),
 			 	   not(bel(agentSighting(X7,Y7,_,_,_,_,_,OtherDir), directionToCoordinate(OtherDir,X8,Y8),

@@ -44,6 +44,16 @@ module manageManhattanTarget {
 	
 	    if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 
+		% in-empty-goal-zone switch
+		if bel(inEmptyGoalZone) then delete(inEmptyGoalZone).
+		
+		if percept(goalZone(0,0), step(Step)), bel(agentAt(X4, Y4, _)), 
+		   bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time)),
+		   bel((emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time); 
+		       (submitterSighted(SubX, SubY, SubStep), calculateXYMd(SubX, SubY, X4, Y4, SubMd), SubMd < Distance,
+		        SubStep < Step - Time))
+		then insert(inEmptyGoalZone).
+
 		% update rolezone target MD
 		if bel(customRole(customRoleSaboteur)), not(percept(role(digger))) 
 		then {
@@ -84,11 +94,15 @@ module manageManhattanTarget {
 			if not(bel(executeManhattan)) then insert(executeManhattan).
 			if true then insert(saboteurHasMhTarget).
 	     }
+
 		% when in goal zone which has not still been declared empty, select distant point of that goal zone
 		if not(bel(saboteurHasMhTarget)),
-		   percept(goalZone(0,0)), bel(agentAt(X4, Y4, _)), 
-		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), 
-		   emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then {
+		   percept(goalZone(0,0), step(Step)), bel(agentAt(X4, Y4, _)), 
+		   bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time)),
+		   not(bel(emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)), 
+		   not(bel(submitterSighted(SubX, SubY, SubStep), calculateXYMd(SubX, SubY, X4, Y4, SubMd), SubMd < Distance,
+		   SubStep < Step - Time))
+		   then {
 		     	     
 		     if percept(goalZone(X6, Y6), Dist1 is abs(X6)+abs(Y6)), 
 		     not(percept(goalZone(X7,Y7), Dist2 is abs(X7)+abs(Y7), Dist2 > Dist1)),
