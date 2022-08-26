@@ -1,7 +1,11 @@
 use "../../goaldiggerProlog" as knowledge.
 use "../../goaldiggerAction" as actionspec.
 
-
+/**
+ * Manages the detection of empty goal zones
+ *
+ * @author Isaac S.
+ */
 
 module manageEmptyGoalzones {
 

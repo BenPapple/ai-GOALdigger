@@ -47,12 +47,12 @@ module manageManhattanTarget {
 		% in-empty-goal-zone switch
 		if bel(inEmptyGoalZone) then delete(inEmptyGoalZone).
 		
-		if percept(goalZone(0,0), step(Step)), bel(agentAt(X4, Y4, _)), 
+		if percept(goalZone(_,_), step(Step)), bel(agentAt(X4, Y4, _)), 
 		   bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time)),
 		   bel((emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time); 
 		       (submitterSighted(SubX, SubY, SubStep), calculateXYMd(SubX, SubY, X4, Y4, SubMd), SubMd < Distance,
 		        SubStep < Step - Time))
-		then insert(inEmptyGoalZone).
+		then insert(inEmptyGoalZone) + print("in an empty goal zone").
 
 		% update rolezone target MD
 		if bel(customRole(customRoleSaboteur)), not(percept(role(digger))) 
@@ -110,45 +110,61 @@ module manageManhattanTarget {
 		        bel(targetMd(X0, Y0, Target))
 		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X8, Y8, goalzone)).
 		     if not(bel(executeManhattan)) then insert(executeManhattan).
-		     if true then insert(saboteurHasMhTarget).	        
+		     if true then insert(saboteurHasMhTarget).
+		     if true then print("Decision Md: Roaming goal zone").     
 		}
 
-		% set recommended goalzone as target
+		% set recommended goalzone as target while in empty goal zone
 		if not(bel(saboteurHasMhTarget)), 
-		   bel(searchInGoalzone)
+		   bel(searchInGoalzone), bel(inEmptyGoalZone)
 		   then {
-			   		if bel(goalZoneSightings(X,Y,_,_,_)) then {
-			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
-						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
-						if not(bel(executeManhattan)) then insert(executeManhattan).
-						if true then insert(saboteurHasMhTarget).			}
-		}
-
-        % To Do Isaac: not right conditions
-		% when in empty goal zone and with crowded goalzone messages, set other goal zone as target
-		if not(bel(saboteurHasMhTarget)),
-		   bel(searchInGoalzone),
-		   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
-		   then {
-			   					   		
 			   		if bel(goalZoneSightings(X,Y,_,_,_)) then {
 			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
 						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
 						if true then insert(saboteurHasMhTarget).
-			   		}		   		
+						if true then print("Decision Md: Recommended goal zone, empty").			}
 		}
-	    
-		% set any goalzone as target 
+		
+		% set recommended goalzone as target while goal zone not in sight
 		if not(bel(saboteurHasMhTarget)), 
-		   bel(searchInGoalzone), not(bel(targetMd(_,_,goalzone))),
-		   not(bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)) then {
+		   bel(searchInGoalzone), not(percept(goalZone(_,_)))
+		   then {
+			   		if bel(goalZoneSightings(X,Y,_,_,_)) then {
+			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
+						if not(bel(executeManhattan)) then insert(executeManhattan).
+						if true then insert(saboteurHasMhTarget).
+						if true then print("Decision Md: Recommended goal zone, not goal zone in sight").			}
+		}		
+
+%        % To Do Isaac: not right conditions
+%		% when in empty goal zone and with crowded goalzone messages, set other goal zone as target
+%		if not(bel(saboteurHasMhTarget)),
+%		   bel(searchInGoalzone),
+%		   bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
+%		   then {
+%			   					   		
+%			   		if bel(goalZoneSightings(X,Y,_,_,_)) then {
+%			   		    if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+%						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
+%						if not(bel(executeManhattan)) then insert(executeManhattan).
+%						if true then insert(saboteurHasMhTarget).
+%			   		}		   		
+%		}
+	    
+		% set any goalzone as target while goal zone not in sight
+		if not(bel(saboteurHasMhTarget)),
+		   not(percept(goalZone(_,_))),
+		   bel(searchInGoalzone), not(bel(goalZoneSightings(_,_,_,_,_)))
+		    then {
 			   		if true then updateGoalzoneDistance.
 			   		if bel(targetClosestGoalZone(X, Y, _), (X \= 111; Y \= 111)) then {
 						if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
 						if true then insert(targetMd(X, Y, goalzone)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
 						if true then insert(saboteurHasMhTarget).
+						if true then print("Decision Md: Any goal zone, not goal zone in sight").
 					}
 		}
 		
