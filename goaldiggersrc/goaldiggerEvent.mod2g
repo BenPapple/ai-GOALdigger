@@ -21,6 +21,7 @@ use "./eventsubmodules/saboteurtools/selectClearingTarget" as module.
 use "./eventsubmodules/saboteurtools/trackSightedAgents" as module.
 use "./eventsubmodules/saboteurtools/messageCrowdedGoalZone" as module.
 use "./eventsubmodules/saboteurtools/manageMessageCrowdedGoalZone" as module.
+use "./eventsubmodules/saboteurtools/manageEmptyGoalzones" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -76,7 +77,7 @@ module goaldiggerEvent {
 		
 		% insert waiting time in empty goal zone
 		if not(bel(waitingTimeEmptyGoalZone(_)))
-		   then insert(waitingTimeEmptyGoalZone(25)).	
+		   then insert(waitingTimeEmptyGoalZone(50)).	
 			
 		% select sabotage goal
 		if not(bel(whitelistedTeam(_))), percept(team(MyTeam)) 
@@ -133,31 +134,22 @@ module goaldiggerEvent {
 	   percept(role(worker))
 	   	then updateDispenserDistance.
 
-	% SUBMODULE help test worker tour around the goal zones
-
-    % ToDo Isaac (X \= 0; Y \=0 wont work look for XPlusY solution
-    % remove empty goal zone flag if agent with block seen in goal zone
-	if bel(customRole(customRoleSaboteur)), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam),
-	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0),
-	       thing(X1, Y1, block, _), attached(X1,Y1), abs(X1-X)+abs(Y1-Y) =:= 1) then {
-		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
-	}
-
-%   %ToDo: Refactor this. WARNING: Changing A and B for some kind of X3, Y3 doesn't work. I don't know why.
-%	% set flag if test worker in empty goal zone
-	if bel(customRole(customRoleSaboteur)), percept(goalZone(0, 0)), bel(whitelistedTeam(MyTeam)),
-	       not(percept(thing(X1, Y1, entity, OtherTeam), OtherTeam \= MyTeam, goalZone(X1, Y1), (X1 \= 0; Y1 \=0))),
-	       bel(agentAt(X2, Y2, _), minimumDistanceEmptyGoalZone(Distance))
-	then {
-	   if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) then
-	   delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)).
-
-	   if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
-	   then insert(emptyGoalZoneCounter(X2, Y2, 1)).
-	}
+%	% SUBMODULE help test worker tour around the goal zones
+%
+%    % ToDo Isaac (X \= 0; Y \=0 wont work look for XPlusY solution
+%    % remove empty goal zone flag if agent with block seen in goal zone
+%	if bel(customRole(customRoleSaboteur)), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam),
+%	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0),
+%	       thing(X1, Y1, block, _), attached(X1,Y1), abs(X1-X)+abs(Y1-Y) =:= 1) then {
+%		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
+%	}
 
 	% SUBMODULE track entities in sight for saboteurs
 	if bel(customRole(customRoleSaboteur)) then trackSightedAgents.
+
+	% SUBMODULE manage empty goal zone detection
+	if bel(customRole(customRoleSaboteur)), percept(goalZone(_,_))
+	  then manageEmptyGoalzones.
 
 	% SUBMODULE manage messages about crowded goal zones
 	if bel(customRole(customRoleSaboteur)) then manageMessageCrowdedGoalZone.

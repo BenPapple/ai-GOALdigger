@@ -1,0 +1,51 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+
+
+module manageEmptyGoalzones {
+
+	% set flag if test worker in goal zone without submitter sighting
+
+	if bel(customRole(customRoleSaboteur)), percept(goalZone(_, _)), bel(whitelistedTeam(MyTeam)), percept(step(Step)), 
+	       bel(agentAt(X2,Y2,_), minimumDistanceEmptyGoalZone(Distance))	       
+	then {
+	
+	   % if not potential submitter is seen next to a goal zone...
+	   if not(bel(submitterSighted(_,_,SubStep), SubStep =:= Step))
+	      then {
+	            
+	            % update its empty goal zone counter if there is one
+	   			if bel(emptyGoalZoneCounter(A, B, C), NewCount is C +1, calculateXYMd(A, B, X2, Y2, Md), Md < Distance) 
+	   			  then delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A, B, NewCount)).
+
+                % create empty goal zone counter
+	   			if not(bel(emptyGoalZoneCounter(X3, Y3, _), calculateXYMd(X3, Y3, X2, Y2, Md), Md < Distance))
+	   			  then {
+	   			        % where saboteur is, if goal zone field
+	   			  		if percept(goalZone(0,0)) 
+	   			  		  then insert(emptyGoalZoneCounter(X2, Y2, 1)).
+	   			  		
+	   			  		% in goal zone field nearby
+	   			  		if not(percept(goalZone(0,0))), percept(goalZone(goalX,goalY)), 
+	   			  		   bel(localize(goalX, goalY, X2, Y2, X4, Y4))
+	   			  		  then insert(emptyGoalZoneCounter(X4, Y4, 1)).
+	   			  }
+	   	}
+	   	
+	   	% delete empty goal zone counter if submitter has been sighted on a goal zone field
+	   	if bel(submitterSighted(SubX,SubY,SubStep), SubStep =:= Step, emptyGoalZoneCounter(A, B, C), 
+	   	       calculateXYMd(A, B, SubX, SubY, Md), Md < Distance, X1 is SubX - X2, Y1 is SubY - Y2),
+	   	       percept(goalZone(X1,Y1))
+	   	   then delete(emptyGoalZoneCounter(A,B,C)).
+	   	
+	   	% count down goal zone counter by one if an agent carrying a block has been sighted on a goal zone field 
+	   	if bel(agentSighting(SightX,SightY,_,_,SightStep,_,_,_), SightStep =:= Step, emptyGoalZoneCounter(A, B, C),
+	   	       calculateXYMd(A, B, SightX, SightY, Md), Md < Distance, X1 is SightX - X2, Y1 is SightY - Y2,
+	   	       C > 0, NewC is C - 1),
+	   	       percept(goalZone(X1,Y1))
+	   	   then delete(emptyGoalZoneCounter(A,B,C)) + insert(emptyGoalZoneCounter(A,B,NewC)).
+	   	
+	}
+	
+}

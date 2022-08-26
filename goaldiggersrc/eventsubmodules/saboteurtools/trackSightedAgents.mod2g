@@ -55,7 +55,11 @@ module trackSightedAgents {
 								if true then insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,BlockDir)).
 								
 								% add flag if suspected submitter
-								if bel(BlockDir = s) then insert(submitterSighted(X,Y,NewStep)).
+								if bel(BlockDir = s) then {
+								   if bel(submitterSighted(A,B,C)) 
+								     then delete(submitterSighted(A,B,C)).
+								   if true then insert(submitterSighted(X,Y,NewStep)).
+								   }
 							}
 						
 						% if agent has rotated its block, update the direction to 0,0 and update block direction
