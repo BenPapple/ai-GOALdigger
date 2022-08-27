@@ -66,9 +66,9 @@ module manageManhattanTarget {
 	    % set an agent carrying a block on the south if next to goal zone
 		if not(bel(saboteurHasMhTarget)), 
 		 not(bel(targetMd(_,_,blockCarrierSubmitter))),
-	     bel(agentAt(X2,Y2,_), agentSighting(X0,Y0,_,_,_,_,_,s), Dist1 is abs(X0-X2) + abs(Y0-Y2)),
+	     bel(agentAt(X2,Y2,_), agentSighting(X0,Y0,_,_,_,_,_,s), Dist1 is abs(X0-X2) + abs(Y0-Y2), Dist1 > 1),
 	     not(bel(agentSighting(X1,Y1,_,_,_,_,_,s), Dist2 is abs(X1-X2) + abs(Y1-Y2), Dist2 < Dist1)),
-	     not(bel(agentSighting(X3,Y3,_,_,_,_,_,s), Dist3 is abs(X3-X2) + abs(Y3-Y2), Dist3 =:= Dist1, (X3 > X0; Y3 < Y0))),
+	     not(bel(agentSighting(X3,Y3,_,_,_,_,_,s), Dist3 is abs(X3-X2) + abs(Y3-Y2), Dist3 =:= Dist1, (X3 > X0, Y3 < Y0))),
 	     percept(goalZone(_,_)),
 		 not(bel(inactiveSighting(X0,Y0,_)))
 		  then {
@@ -81,9 +81,9 @@ module manageManhattanTarget {
 		% set an agent carrying a block as target next to a goal zone
 		if not(bel(saboteurHasMhTarget)), 
 		 not(bel(targetMd(_,_,blockCarrier))),
-	     bel(agentAt(X2,Y2,_), agentSighting(X0,Y0,_,_,_,_,_,_), Dist1 is abs(X0-X2) + abs(Y0-Y2)),
+	     bel(agentAt(X2,Y2,_), agentSighting(X0,Y0,_,_,_,_,_,_), Dist1 is abs(X0-X2) + abs(Y0-Y2), Dist1 > 1),
 	     not(bel(agentSighting(X1,Y1,_,_,_,_,_,s), Dist2 is abs(X1-X2) + abs(Y1-Y2), Dist2 < Dist1)),
-	     not(bel(agentSighting(X3,Y3,_,_,_,_,_,s), Dist3 is abs(X3-X2) + abs(Y3-Y2), Dist3 =:= Dist1, (X3 > X0; Y3 < Y0))),
+	     not(bel(agentSighting(X3,Y3,_,_,_,_,_,s), Dist3 is abs(X3-X2) + abs(Y3-Y2), Dist3 =:= Dist1, (X3 > X0, Y3 < Y0))),
 	     percept(goalZone(_,_)),
 		 not(bel(inactiveSighting(X0,Y0,_)))
 		  then {
