@@ -20,6 +20,17 @@ module executeSaboteurRole {
 	if bel(clearingTarget(X,Y)) 
 	  then clear(X,Y).
 
+	% attack someone if no target but next to it
+	% (safeguard for strange dancing behaviour)
+	if bel(whitelistedTeam(MyTeam), agentAt(X2,Y2,_)), 
+	   percept(thing(X0,Y0,entity,OtherTeam), thing(X01,Y01,block,_), OtherTeam \= MyTeam, abs(X0)+abs(Y0) =:= 1,
+	   abs(X0-X01)+abs(Y0-Y01)=:=1),
+	   not(percept(thing(X1,Y1,entity,OtherTeam), (X1 \= X0; Y1 \= Y0), OtherTeam \= MyTeam, abs(X1)+abs(Y1) =:= 1,
+	   		thing(X11,Y11,block,_), abs(X11-X1)+abs(Y11-Y1) =:= 1, X1 >= X0, Y1 =< Y0)),
+	   not(bel(inactiveSighting(X3,Y3,_), localize(X0,Y0,X2,Y2,X3,Y3))),
+	   bel(agentSighting(X4,Y4,_,_,_,_,_,_), localize(X0,Y0,X2,Y2,X4,Y4))
+	   then clear(X0,Y0).
+	   
     % execute manhattan move if not false 
     if bel(targetMd(_, _, _), executeManhattan)
       then executeManhattanMove.
