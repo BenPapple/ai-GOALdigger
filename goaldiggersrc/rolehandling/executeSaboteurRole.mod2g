@@ -24,16 +24,16 @@ module executeSaboteurRole {
 	if bel(clearingTarget(X,Y)) then allother.send(msg("Last action performed: attack agent")) +  clear(X,Y).
 
     % execute manhattan move if not false 
-    if bel(targetMd(A, B, _), (A \= 111; B \= 111), executeManhattan)
+    if bel(targetMd(A, B, _), executeManhattan)
       then executeManhattanMove.
 
 	% roam if no distant goal zone available
-	if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
-	   then allother.send(msg("Last action performed: roam")) + executeRandomMove.
+	%if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
+	%   then allother.send(msg("Last action performed: roam")) + executeRandomMove.
 
 	% clear blocks when in goal zone
-	if percept(goalZone(0,0), thing(X, Y, obstacle, _), abs(X) + abs(Y) =:= 1) 
-	   then clear(X,Y).				
+	%if percept(goalZone(0,0), thing(X, Y, obstacle, _), abs(X) + abs(Y) =:= 1) 
+	%   then clear(X,Y).				
 
 	if true then allother.send(msg("Last action performed: randommove")) +executeRandomMove.
 

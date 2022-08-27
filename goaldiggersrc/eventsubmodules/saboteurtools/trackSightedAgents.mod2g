@@ -64,13 +64,13 @@ module trackSightedAgents {
 						
 						% if agent has rotated its block, update the direction to 0,0 and update block direction
 						if not(percept(thing(X01,Y01, block, BlockType), X01 =:= X1 + BlockX, Y01 =:= Y1 + BlockY)),
-							   percept(thing(X02,Y02, block, NewBlockType), attached(X02,Y02)), 
+							   percept(thing(X02,Y02, block, BlockType), attached(X02,Y02)), 
 							   bel(abs(X1-X02) + abs(Y1-Y02) =:= 1),
 							   bel(NewDirX is X02 - X1, NewDirY is Y02 - Y1, 
 							       directionToCoordinate(NewBlockDir,NewDirX,NewDirY)) 
 							     then {
 							     
-							     		if true then insert(agentSighting(X,Y,0,0,NewStep,Energy,NewBlockType,NewBlockDir)).
+							     		if true then insert(agentSighting(X,Y,0,0,NewStep,Energy,BlockType,NewBlockDir)).
 							     		% add flag if suspected submitter
 										if bel(NewBlockDir = s) then {
 										   if bel(submitterSighted(A,B,C)) 
@@ -78,7 +78,7 @@ module trackSightedAgents {
 										   if true then insert(submitterSighted(X,Y,NewStep)).
 								   }
 							     		}
-							     %+ print("Relocated without displacement but with rotation").
+							     %
 							     
 							   
 						% if the block of the agent is not to be seen because of agent on the fringe on the perception 
