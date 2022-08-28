@@ -74,9 +74,138 @@ module connectBlocks {
 			            
         }
 		    	
-	}
+	} % connect 3 block task
 	
-	% ToDo add 4task connect
+    % connect as submitting agent 4task
+	if bel(haveBlockAttached(true,DirBlock), DirBlock == s), 
+	   percept(goalZone(0,0)),
+	   bel(currentChosenTask(_, _, 160, _, _, _, submittingAgentFourTask, _)) 
+	    then {
+
+        % if no connect try possibilities
+        if bel(multiTaskSupporterStatus(_, AgentName1, X1,Y1, _, _, Connect1, AgentName2, X2, Y2, _, _, Connect2, 
+                                AgentName3, _, _, _, _, Connect3)),
+           bel(Connect1 \= connected, Connect2 \= connected, Connect3 \= connected),
+           percept(step(X))
+            then {
+		    if bel(0 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName1, 0, 1).
+		    if bel(1 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName2, 0, 1).
+		    if bel(2 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName1, X2, Y2). 
+		    if bel(3 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName3, 0, 1). 
+		    if bel(4 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName1, 0, 1).
+		    if bel(5 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName2, X2, Y2). 			    
+		    if bel(6 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName2, 0, 1).
+		    if bel(7 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName3, 0, 1).				    			    
+		    if bel(8 =:= mod(X, 9))
+			    then preActionCleanup + connect(AgentName3, X1, Y1).  
+        }
+
+        % connect if first agent already connected
+        if bel(multiTaskSupporterStatus(_, _, X1, Y1, _, _, connected, AgentName2, _, _, _, _, Connect2, 
+                                        AgentName3, _, _, _, _, Connect3)),
+           bel(Connect2 \= connected, Connect3 \= connected),
+           percept(step(X))
+            then {
+		    if bel(0 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, 0, 1).
+		    if bel(1 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, X1, Y1).          
+		    if bel(2 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, 0, 1).
+		    if bel(3 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, X1, Y1).  
+        }
+
+        % connect if second agent already connected
+        if bel(multiTaskSupporterStatus(_, AgentName1, _, _, _, _, Connect1, _, X2, Y2, _, _, connected, 
+                                        AgentName3, _, _, _, _, Connect3)),
+           bel(Connect1 \= connected, Connect3 \= connected),
+           percept(step(X))
+            then {
+		    if bel(0 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, 0, 1).
+		    if bel(1 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, X2, Y2).          
+		    if bel(2 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, 0, 1).
+		    if bel(3 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, X2, Y2).          
+        }
+
+        % connect if third agent already connected
+        if bel(multiTaskSupporterStatus(_, AgentName1, _, _, _, _, Connect1, AgentName2, _, _, _, _, Connect2, 
+                                        _, X3, Y3, _, _, connected)),
+           bel(Connect1 \= connected, Connect2 \= connected),
+           percept(step(X))
+            then {
+		    if bel(0 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, 0, 1).
+		    if bel(1 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, X3, Y3).          
+		    if bel(2 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, 0, 1).
+		    if bel(3 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, X3, Y3).          
+        }
+
+        % connect if first TWO agents already connected
+        if bel(multiTaskSupporterStatus(_, _, X1, Y1, _, _, connected, _, X2, Y2, _, _, connected, 
+                                        AgentName3, _, _, _, _, Connect3)),
+           bel(Connect3 \= connected),
+           percept(step(X))
+            then {
+		    if bel(0 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, 0, 1).
+		    if bel(1 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, X1, Y1).          
+		    if bel(2 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, 0, 1).
+		    if bel(3 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName3, X2, Y2).  
+        }
+
+        % connect if last TWO agent already connected
+        if bel(multiTaskSupporterStatus(_, AgentName1, _, _, _, _, Connect1, _, X2, Y2, _, _, connected, 
+                                        _, X3, Y3, _, _, connected)),
+           bel(Connect1 \= connected),
+           percept(step(X))
+            then {
+		    if bel(0 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, 0, 1).
+		    if bel(1 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, X2, Y2).          
+		    if bel(2 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, 0, 1).
+		    if bel(3 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName1, X3, Y3).          
+        }
+
+        % connect if First and LAST agent already connected
+        if bel(multiTaskSupporterStatus(_, X1, Y1, _, _, _, connected, AgentName2, _, _, _, _, Connect2, 
+                                        _, X3, Y3, _, _, connected)),
+           bel(Connect2 \= connected),
+           percept(step(X))
+            then {
+		    if bel(0 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, 0, 1).
+		    if bel(1 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, X1, Y1).          
+		    if bel(2 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, 0, 1).
+		    if bel(3 =:= mod(X, 4))
+			    then preActionCleanup + connect(AgentName2, X3, Y3).          
+        }
+
+		    	
+	} % connect 4 block task
 	
 	if true then preActionCleanup + skip.
 		

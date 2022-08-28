@@ -20,12 +20,11 @@ module preferFourTask {
 	   percept(task(_ ,TaskStep, 10,[req(_,_,_)]), TaskStep > SimStep)
 	   	then taskHandlingOneBlock + exit-module.
 	    
-	% ToDo add 4task choosing
 	% choose 4-task as submitterLeader if available
 	if bel(submitterLeader, step(SimStep)),
 	   bel(confirmedOffsetOfAgent(_, _, _)),
 	   percept(task(_ ,TaskStep, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])), 
-	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 600)  
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 70)  
 	    then taskHandlingFourBlock + exit-module. 
 
 	% choose 3-task as submitterLeader if available

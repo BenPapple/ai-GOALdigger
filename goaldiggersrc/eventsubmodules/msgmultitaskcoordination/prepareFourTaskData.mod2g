@@ -11,54 +11,78 @@ use "../../goaldiggerProlog" as knowledge.
 module prepareFourTaskData {
 
     % store XY and blocktype for supporters
-	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentThreeTask, 
+	if bel(submitterLeader, currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentFourTask, 
 	                                          supporterREQPending))
 	    then {
-		   if percept(task(TaskName,_, 90,[req(0,1,BlockTypeSubmitter),req(X2,Y2,BlockSupporter),
-		                                   req(X3,Y3, BlockType3)])) 
+		   % block Bxxx
+		   if percept(task(TaskName,_, 160,[req(0,1,BlockTypeSubmitter),req(X2,Y2,BlockSupporter2),
+		                                   req(X3,Y3, BlockSupporter3), req(X4,Y4, BlockSupporter4)])) 
 		    then {
 			if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17,
 			                                W18, W19)) 
 			    then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15,
 			                                         W16, W17, W18, W19)) +
-			         insert(multiTaskSupporterStatus(W1, W2, X2, Y2, BlockSupporter, W6, W7, W8, X3, Y3, BlockType3,
-			                                         W12, W13, W14, W15, W16, W17, W18, W19)).
-			if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentThreeTask, 
+			         insert(multiTaskSupporterStatus(W1, W2, X2, Y2, BlockSupporter2, W6, W7, W8, X3, Y3, 
+			                                         BlockSupporter3, W12, W13, W14, X4, Y4, BlockSupporter4, W18, 
+			                                         W19)).
+			if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentFourTask, 
 			                    supporterREQPending)) + 
-						 insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockTypeSubmitter, submittingAgentThreeTask, 
+						 insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockTypeSubmitter, submittingAgentFourTask, 
 						                          blocksFoundAndInserted)) +
 						 exit-module.						
 		    } % end first block				
-			if percept(task(TaskName ,_, 90,[req(X1,Y1,BlockSupporter),req(0,1, BlockTypeSubmitter),
-			                                 req(X3,Y3, BlockType3)])) 
-				then {
-				if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16,
-				                                W17, W18, W19)) 
-                    then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
-                                                         W15, W16, W17, W18, W19)) +
-                         insert(multiTaskSupporterStatus(W1, W2, X1, Y1, BlockSupporter, W6, W7, W8, X3, Y3, BlockType3,
-                                                         W12, W13, W14, W15, W16, W17, W18, W19)).               						                                      
-				if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentThreeTask, 
-				                    supporterREQPending)) + 
-					         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockTypeSubmitter, 
-					                submittingAgentThreeTask, blocksFoundAndInserted)) +
-					         exit-module.			
-			} % end second block		
-			if percept(task(TaskName ,_, 90,[req(X1,Y1,BlockSupporter),req(X2,Y2, BlockType2),
-			                                 req(0,1, BlockTypeSubmitter)])) 
-				then {
-				if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16,
-				                                W17, W18, W19)) 
-                    then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
-                                                         W15, W16, W17, W18, W19)) +
-                         insert(multiTaskSupporterStatus(W1, W2, X1, Y1, BlockSupporter, W6, W7, W8, X2, Y2, BlockType2,
-                                                         W12, W13, W14, W15, W16, W17, W18, W19)).			                    				                                      
-				if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentThreeTask, 
-				                    supporterREQPending)) + 
-					         insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockTypeSubmitter, 
-					                submittingAgentThreeTask, blocksFoundAndInserted)) +
-					         exit-module.					
-			} % end third block				
+           % block xBxx
+		   if percept(task(TaskName,_, 160,[req(X1,Y1, BlockSupporter1),req(0,1,BlockTypeSubmitter),
+		                                   req(X3,Y3, BlockSupporter3), req(X4,Y4, BlockSupporter4)])) 
+		    then {
+			if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17,
+			                                W18, W19)) 
+			    then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15,
+			                                         W16, W17, W18, W19)) +
+			         insert(multiTaskSupporterStatus(W1, W2, X1, Y1, BlockSupporter1, W6, W7, W8, X3, Y3, 
+			                                         BlockSupporter3, W12, W13, W14, X4, Y4, BlockSupporter4, W18, 
+			                                         W19)).
+			if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentFourTask, 
+			                    supporterREQPending)) + 
+						 insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockTypeSubmitter, submittingAgentFourTask, 
+						                          blocksFoundAndInserted)) +
+						 exit-module.						
+		    } % end first block	
+           % block xxBx
+		   if percept(task(TaskName,_, 160,[req(X1,Y1, BlockSupporter1),req(X2,Y2,BlockSupporter2),
+		                                   req(0,1,BlockTypeSubmitter), req(X4,Y4, BlockSupporter4)])) 
+		    then {
+			if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17,
+			                                W18, W19)) 
+			    then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15,
+			                                         W16, W17, W18, W19)) +
+			         insert(multiTaskSupporterStatus(W1, W2, X2, Y2, BlockSupporter2, W6, W7, W8, X1, Y1, 
+			                                         BlockSupporter1, W12, W13, W14, X4, Y4, BlockSupporter4, W18, 
+			                                         W19)).
+			if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentFourTask, 
+			                    supporterREQPending)) + 
+						 insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockTypeSubmitter, submittingAgentFourTask, 
+						                          blocksFoundAndInserted)) +
+						 exit-module.						
+		    } % end first block	
+           % block xxxB
+		   if percept(task(TaskName,_, 160,[req(X1,Y1, BlockSupporter1),req(X2,Y2,BlockSupporter2),
+		                                   req(X3,Y3, BlockSupporter3), req(0,1,BlockTypeSubmitter)])) 
+		    then {
+			if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17,
+			                                W18, W19)) 
+			    then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15,
+			                                         W16, W17, W18, W19)) +
+			         insert(multiTaskSupporterStatus(W1, W2, X2, Y2, BlockSupporter2, W6, W7, W8, X3, Y3, 
+			                                         BlockSupporter3, W12, W13, W14, X1, Y1, BlockSupporter1, W18, 
+			                                         W19)).
+			if true then delete(currentChosenTask(TaskName, V2, V3, V4, V5, V6, submittingAgentFourTask, 
+			                    supporterREQPending)) + 
+						 insert(currentChosenTask(TaskName, V2, V3, 0, 1, BlockTypeSubmitter, submittingAgentFourTask, 
+						                          blocksFoundAndInserted)) +
+						 exit-module.						
+		    } % end first block	
+			
 	} % store XY and blocktype for supporters
 	
 }

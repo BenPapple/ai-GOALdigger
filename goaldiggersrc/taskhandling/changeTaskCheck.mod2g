@@ -12,7 +12,7 @@ module changeTaskCheck {
 
     % reset waiting period for new task as submitterLeader when task has 0 steps left
     if percept(step(SimStep)),
-       bel(currentChosenTask(TaskName, TaskStep, 10, _, _, _, _, _), TaskStep == SimStep),
+       bel(currentChosenTask(_, TaskStep, _, _, _, _, _, _), TaskStep == SimStep),
        bel(submitterLeader),
        bel(waitBeforeNewTask(Del))
         then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(3)).
@@ -61,6 +61,24 @@ module changeTaskCheck {
 	if bel(currentChosenTask(TaskName, 160, _, _, _, _,_,_)),
 	   not(percept(task(TaskName , _, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])))
 	    then chooseTask.	    
+
+	% change from 1-task to 4-task as submitterLeader
+	if bel(submitterLeader),
+	   percept(step(SimStep)), 
+	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
+	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+       bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
+       bel(confirmedOffsetOfAgent(_, _, OtherAgent3), OtherAgent3 \= OtherAgent1, OtherAgent3 \= OtherAgent2),
+       bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
+       bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)),  
+       bel(storedOtherAgentStatus(OtherAgent3, _, worker, _, _, _, _, _, freeWorkerAgent)),          	   
+	   percept(task(_ ,TaskStep2, 160,[req(_,_,Block1),req(_,_,Block2),req(_,_,Block3),req(_,_,Block4)]), 
+	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 70),
+	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block3, _, _)),
+	   bel(mapDispenser(_, _, dispenser, Block4, _, _))
+	    then chooseTask.  
 	    	    
 	% change from 1-task to 3-task as submitterLeader
 	if bel(submitterLeader),

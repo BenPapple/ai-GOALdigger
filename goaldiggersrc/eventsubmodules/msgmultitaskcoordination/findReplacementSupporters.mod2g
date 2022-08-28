@@ -35,7 +35,22 @@ module findReplacementSupporters {
 	                             insert(multiTaskSupporterStatus(W1, SupporterName, X1, Y1, W5, pending, W7, W8, W9,
 	                                                             W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
 		             }
-			 }
+			 } % 90 points
+			if percept(task(TaskName,_, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), name(SubmitterName)) 
+				then {
+					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
+						then {
+						if true then (channnelMultiTask).send(informSupportingAgent(secondBlock, SubmitterName, 
+						                                      supportingAgent, SupporterName, X1, Y1, 
+						                                      Block1, TaskName)).
+						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+						                                W15, W16, W17, W18, W19)) 
+	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+	                                                             W14, W15, W16, W17, W18, W19)) +
+	                             insert(multiTaskSupporterStatus(W1, SupporterName, X1, Y1, W5, pending, W7, W8, W9,
+	                                                             W10, W11, W12, W13, W14, W15, W16, W17, W18, W19)).
+		             }
+			 } % 160 points			 
     } % end first block			
 
 	% SUBMODULE update nearest Agent on map for submitterleader for third block
@@ -63,9 +78,50 @@ module findReplacementSupporters {
 	                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, SupporterName, X1, Y1,
 	                                                             Block2, pending, W13, W14, W15, W16, W17, W18, W19)).
 		             }
-			 }
+			 } % 90 points
+			if percept(task(TaskName,_, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), name(SubmitterName)) 
+				then {
+					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
+						then {
+						if true then (channnelMultiTask).send(informSupportingAgent(thirdBlock, SubmitterName, 
+						                                      supportingAgent, SupporterName, X1, Y1, 
+						                                      Block2, TaskName)).
+						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+						                                W15, W16, W17, W18, W19)) 
+	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+	                                                             W14, W15, W16, W17, W18, W19)) +
+	                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, SupporterName, X1, Y1,
+	                                                             Block2, pending, W13, W14, W15, W16, W17, W18, W19)).
+		             }
+			 } % 160 points			 
     } % end first block  
     
-    % ToDo add 4task fourth block
+	% SUBMODULE update nearest Agent on map for submitterleader for fourth block
+	if bel(currentChosenTask(_, _, _, _, _, _, SubmitType, _)),
+	   bel(SubmitType == submittingAgentThreeTask; SubmitType == submittingAgentFourTask),
+	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, _, _, _, _, _, _, needsupporter, _, _, _, noack, _))
+	   	then updateNearestAgentDistance. 
+
+    % inform other agent with needed third block as replacement supporter
+	if bel(submitterLeader, currentChosenTask(TaskName, _, _, _, _, _, SubmitType, _)),
+	   bel(SubmitType == submittingAgentFourTask),
+	   bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, _, _, _, _, _, _, needsupporter, X1, Y1, Block2, noack, _)) 
+	    then {
+			if percept(task(TaskName,_, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]), name(SubmitterName)) 
+				then {
+					if bel(targetNearestAgent(SupporterName, _, _, _), SupporterName \= placeholder) 
+						then {
+						if true then (channnelMultiTask).send(informSupportingAgent(fourthBlock, SubmitterName, 
+						                                      supportingAgent, SupporterName, X1, Y1, 
+						                                      Block2, TaskName)).
+						if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14,
+						                                W15, W16, W17, W18, W19)) 
+	                        then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+	                                                             W14, W15, W16, W17, W18, W19)) +
+	                             insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10,
+	                                                             W11, W12, W13, SupporterName, X1, Y1, Block2, pending, W19)).
+		             }
+			 } % 160 points		 
+    } % end first block  
 	
 } % end module
