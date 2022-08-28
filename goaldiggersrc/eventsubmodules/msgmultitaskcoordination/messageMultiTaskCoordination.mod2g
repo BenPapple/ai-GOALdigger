@@ -169,6 +169,18 @@ module messageMultiTaskCoordination {
 				                    supportingAgent, NameSender)) +
 				             (ConnectSender).send(msgACKtask(secondBlock, NameOwn)).					
         } % if 2
+
+        % acknowledge 4-task second block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 160, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(secondBlock, NameOwn)).					
+        } % if 2
         
 	} % forall
 	
@@ -192,6 +204,42 @@ module messageMultiTaskCoordination {
 				             insert(currentChosenTask(TaskName, TaskStep, 90, SendX, SendY, SendBlock, 
 				                    supportingAgent, NameSender)) +
 				             (ConnectSender).send(msgACKtask(thirdBlock, NameOwn)).					
+        } % if 2
+        
+        % acknowledge 4-task second block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 160, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(thirdBlock, NameOwn)).					
+        } % if 2        
+        
+	} % forall
+
+	% RECEIVE become fourthBlock supportingAgent, check block for task and target		
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(fourthBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
+	                                                  SendBlock, TaskName)) 
+	    do{ 
+	    if bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, _)),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then (ConnectSender).send(msgNoACKtask(fourthBlock, SendBlock, NameOwn)). 	
+        
+        % acknowledge 4-task third block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 160, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(fourthBlock, NameOwn)).					
         } % if 2
         
 	} % forall

@@ -51,7 +51,7 @@ module preferTwoTask {
 	if bel(submitterLeader, step(SimStep)),
 	   bel(confirmedOffsetOfAgent(_, _, _)),
 	   percept(task(_ ,TaskStep, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])), 
-	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 600)  
+	   bel(step(SimStep), TaskStep > SimStep, TaskStep - SimStep >= 70)  
 	    then taskHandlingFourBlock + exit-module.   
    
 	% choose 1-task as submitterLeader if 2task, 3task and 4task not available

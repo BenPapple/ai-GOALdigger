@@ -59,7 +59,7 @@ module chooseTask {
        bel(NewVal is Del - 1)
         then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(NewVal)).        
 
-    % ToDo ML task chosing		
+    % ML task chosing		
 	if bel(submitterLeader),
 	   bel(waitBeforeNewTask(0)),
 	   bel(randomBetween(0, 100, RandOut)),
