@@ -22,6 +22,8 @@
 :- dynamic calculateNewDispenserMD/0.
 % switch to recalculate goalzone distance
 :- dynamic calculateNewGoalzoneMD/0. 
+% switch to drop all attached blocks
+:- dynamic dropAllBlocks/0.
 
 % when a marked is north of agent. 
 :- dynamic northExplored/0. 

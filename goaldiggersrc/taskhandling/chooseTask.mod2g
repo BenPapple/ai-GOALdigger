@@ -18,6 +18,18 @@ use "../taskhandling/preferFourTask" as module.
 
 module chooseTask {
 
+	% set switch to drop blocks if blocks connected
+	if bel(multiTaskSupporterStatus(_, _, _, _, _, _, Connect1, _, _, _, _, _, Connect2, _, _, _, _, _, Connect3)) 
+		then {
+		if bel(Connect1 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).
+		if bel(Connect2 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).		
+		if bel(Connect3 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).		
+		
+	}	                                
+
     % reset supporter status for multitask
 	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18, 
 	                                W19)) 
