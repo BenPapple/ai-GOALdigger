@@ -73,6 +73,10 @@ module executeWorkerRole {
 	if bel(haveBlockAttached(true,DirBlock)) 
 		then {
 
+            % drop block on switch as submitterLeader
+            if bel(submitterLeader, dropAllBlocks)
+                then preActionCleanup + detach(DirBlock).
+
 			% detach after connect success as supportingAgent
 			if percept(lastActionResult(success), lastAction(connect)),
 			   not(bel(submitterLeader))
