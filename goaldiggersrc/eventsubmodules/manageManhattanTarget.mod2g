@@ -151,6 +151,19 @@ module manageManhattanTarget {
 	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
 		   targetMd(X, Y, Target)),
 	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
+	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 3 )
+		then delete(targetMd(X, Y, Target)) + 
+			 insert(targetMd(C2, D2, supportingPosition)) + 
+			 insert(executeManhattan).
+
+	% With block and as targetTaskSubmitter update other agent coords as target(or location delivery position or 
+	% goalzone), coordinates converted from A,B to C,D
+	if bel(haveBlockAttached(true, _), step(SimStep), 
+	       currentChosenTask(_, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
+	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
+		   targetMd(X, Y, Target)),
+	   bel(checkBlockPosition(XTask, YTask, Result), Result == alwaysDeliver),
+	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
 	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 1 )
 		then delete(targetMd(X, Y, Target)) + 
 			 insert(targetMd(C2, D2, supportingPosition)) + 
