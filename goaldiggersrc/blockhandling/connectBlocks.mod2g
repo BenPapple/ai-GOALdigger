@@ -88,24 +88,12 @@ module connectBlocks {
            bel(Connect1 \= connected, Connect2 \= connected, Connect3 \= connected),
            percept(step(X))
             then {
-		    if bel(0 =:= mod(X, 9))
+		    if bel(0 =:= mod(X, 3))
 			    then preActionCleanup + connect(AgentName1, 0, 1).
-		    if bel(1 =:= mod(X, 9))
+		    if bel(1 =:= mod(X, 3))
 			    then preActionCleanup + connect(AgentName2, 0, 1).
-		    if bel(2 =:= mod(X, 9))
-			    then preActionCleanup + connect(AgentName1, X2, Y2). 
-		    if bel(3 =:= mod(X, 9))
-			    then preActionCleanup + connect(AgentName3, 0, 1). 
-		    if bel(4 =:= mod(X, 9))
-			    then preActionCleanup + connect(AgentName1, 0, 1).
-		    if bel(5 =:= mod(X, 9))
-			    then preActionCleanup + connect(AgentName2, X2, Y2). 			    
-		    if bel(6 =:= mod(X, 9))
-			    then preActionCleanup + connect(AgentName2, 0, 1).
-		    if bel(7 =:= mod(X, 9))
-			    then preActionCleanup + connect(AgentName3, 0, 1).				    			    
-		    if bel(8 =:= mod(X, 9))
-			    then preActionCleanup + connect(AgentName3, X1, Y1).  
+		    if bel(2 =:= mod(X, 3))
+			    then preActionCleanup + connect(AgentName3, 0, 1).  
         }
 
         % connect if first agent already connected
