@@ -55,6 +55,19 @@ module messageMultiTaskCoordination {
 		                                          W14, W15, W16, W17, W18, W19)).
     }
 
+    % RECEIVE as submitterLeader ACK for fourth block from supporter
+	forall (_).sent(msgACKtask(fourthBlock, NameSupporter)), 
+	       bel(submitterLeader),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, _, _, _, _, _, _, NameSupporter, _, _, _, pending, _))      
+	   	do {
+		 if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter,
+		                                 W15, W16, W17, pending, W19)) 
+		     then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          NameSupporter, W15, W16, W17, pending, W19)) +
+		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          NameSupporter, W15, W16, W17, ack, W19)).
+    }
+
    	% RECEIVE as submitterLeader NoACK secondblock from supporter
 	forall (_).sent(msgNoACKtask(secondBlock, _, NameSupporter)), 
 	       bel(submitterLeader)            
@@ -77,6 +90,18 @@ module messageMultiTaskCoordination {
 		                                          W14, W15, W16, W17, W18, W19)) +
 		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, needsupporter, W9, W10, W11, noack, W13,
 		                                          W14, W15, W16, W17, W18, W19)).
+	}
+
+   	% RECEIVE as submitterLeader NoACK thirdblock from supporter
+	forall (_).sent(msgNoACKtask(fourthBlock, _, NameSupporter)), 
+	       bel(submitterLeader)            
+	   	do {
+	   	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter, W15,
+	   	                                W16, W17, pending, W19)) 
+		     then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          NameSupporter, W15, W16, W17, pending, W19)) +
+		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          needsupporter, W15, W16, W17, noack, W19)).
 	}
 
 	% redo messageTwoTaskSupporter for 2task replacement
