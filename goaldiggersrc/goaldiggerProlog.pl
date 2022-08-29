@@ -368,6 +368,15 @@ rotateToCoord(w, ccw, 0, 1).
 rotateToCoord(e, cw, 0, 1).
 rotateToCoord(e, ccw, 0, -1).
 
+% check supportingAgent block coordinates for wait/immediate delivery
+checkBlockPosition(0, 2, alwaysDeliver).
+checkBlockPosition(-1, 1, alwaysDeliver).
+checkBlockPosition(1, 1, alwaysDeliver).
+checkBlockPosition(-2, 1, alwaysDeliver).
+checkBlockPosition(2, 1, alwaysDeliver).
+checkBlockPosition(3, 1, alwaysDeliver).
+checkBlockPosition(-3, 1, alwaysDeliver).
+
 % Gives the apparent displacement of the observed agent relative to the observing agent between t0 and t1.
 %distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
 
