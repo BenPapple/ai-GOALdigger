@@ -129,6 +129,14 @@ module reinitBeliefOnSimChange {
 		        		  UnknownAgentName, Step)).
 		        		  
 		    forall bel(mapMarkExplored(X, Y)) do delete(mapMarkExplored(X, Y)).
+		    
+		    forall bel(cachedMsgRoleZoneData(X,Y,SenderName)) 
+		        do delete(cachedMsgRoleZoneData(X,Y,SenderName)).
+		    forall bel(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) 
+		        do delete(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)).
+		    forall bel(cachedMsgGoalZoneData(X,Y,SenderName)) 
+		        do delete(cachedMsgGoalZoneData(X,Y,SenderName)).
+
 	}
 	
 } % end module

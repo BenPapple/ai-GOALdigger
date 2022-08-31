@@ -117,7 +117,8 @@ module goaldiggerEvent {
 	if true then messagePermaSendStatusToOthers.
 
 	% SUBMODULE check messages about dispensers if none known
-	if true then handleMessageDispenser.
+	if percept(step(SimStep), SimStep >= 2) 
+	    then handleMessageDispenser.
 
 	% SUBMODULE update dispenser map data as worker with no block and as worker with no active task
 	if bel(calculateNewDispenserMD, haveBlockAttached(false, _)),
@@ -161,18 +162,21 @@ module goaldiggerEvent {
     if not(bel(customRole(customRoleSaboteur))) then changeTaskCheck.
 
 	% SUBMODULE managing messages concerning task coordination
-	if true then messageMultiTaskCoordination.
+	if percept(step(SimStep), SimStep >= 2) 
+	    then messageMultiTaskCoordination.
 
 	% SUBMODULE check messages about role zones
 	%if percept(role(default)) then handleMessageRoleZone.
-	if true then handleMessageRoleZone.
+	if percept(step(SimStep), SimStep >= 2) 
+	    then handleMessageRoleZone.
 
     % SUBMODULE update rolezone map data
     if percept(role(default))
     	then updateRolezoneDistance.
 
 	% SUBMODULE check messages about goal zones
-	if true then handleMessageGoalZone.
+	if percept(step(SimStep), SimStep >= 2) 
+	    then handleMessageGoalZone.
 
 	% SUBMODULE delete goal zones if other agents have found that they don't exist anymore
 	if percept(step(SimStep), SimStep > 3333),
@@ -228,7 +232,7 @@ module goaldiggerEvent {
 
     % ACO explore 
     if bel(limitACOSteps(ACOLimit)),
-       percept(step(SimStep), SimStep < ACOLimit) then {
+       percept(step(SimStep), SimStep > 2, SimStep < ACOLimit) then {
 		if true then updateMapExploredMarks.
 	
 		%If not know goalzone or dispenser, exploreMap

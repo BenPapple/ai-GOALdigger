@@ -85,7 +85,8 @@ module logScoringBoard {
 	    }   
 
     % print qtable ML
-    if bel(submitterLeader, qtable(Q2, Q3, Q4, Task2, Task3, Task4)) 
+    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+       bel(submitterLeader, qtable(Q2, Q3, Q4, Task2, Task3, Task4)) 
         then print("Q-table: "|Q2+Q3+Q4|" Chance: "|Task2+Task3+Task4).
 
 	% score table sim end
