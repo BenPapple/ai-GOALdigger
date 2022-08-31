@@ -111,6 +111,18 @@ module executeWorkerRole {
 			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
 				then executeMoveAroundSubmitter.
 
+			% Moving around 4task Submitting agent in rain drop pattern 
+			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+			           YBlock is YSubmit + 1, thing(XBlock, YBlock, block, SouthBlock), 
+			           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
+			   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
+			   bel(currentChosenTask(TaskName, TaskStep, _, _, _, _, supportingAgent, SubmitterName)),
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
+				   SubmitterBlockTypeAttached == SouthBlock),           
+			   percept(task(TaskName, _, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)]), 
+			           TaskStep >= SimStep)  
+				then executeMoveAroundSubmitter.
+
             % have some distance between submitterLeaders
             if bel(submitterLeader),
                percept(goalZone(0,0))
@@ -169,6 +181,19 @@ module executeWorkerRole {
 	    	% Move to supporting position for multi task
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
 	    	       targetMd(_, _, supportingPosition)), 
+	    	   bel(step(SimStep), TaskStep >= SimStep)
+	    	    then executeManhattanMove.
+
+	    	% wait on waiting position for multi task
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
+	    	       targetMd(XTar, YTar, waitingPosition)), 
+	    	   bel(agentAt(XTar, YTar, _)),
+	    	   bel(step(SimStep), TaskStep >= SimStep)
+	    	    then preActionCleanup + skip.
+
+	    	% Move to waiting position for multi task
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
+	    	       targetMd(_, _, waitingPosition)), 
 	    	   bel(step(SimStep), TaskStep >= SimStep)
 	    	    then executeManhattanMove.
 	    	
