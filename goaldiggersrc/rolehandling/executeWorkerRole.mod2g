@@ -11,6 +11,7 @@ use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/detachBloke" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
+use "../blockhandling/rotateBlockToSouth" as module.
 use "../blockhandling/connectBlocks" as module.
 
 /**
@@ -185,12 +186,12 @@ module executeWorkerRole {
 	    	    then executeManhattanMove.
 
 	    	% rotate to north on waiting position for multi task
-	    	if bel(DirBlock \= n),
+	    	if bel(DirBlock \= s),
 	    	   bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
 	    	       targetMd(XTar, YTar, waitingPosition)), 
 	    	   bel(agentAt(XTar, YTar, _)),
 	    	   bel(step(SimStep), TaskStep >= SimStep)
-	    	    then rotateBlockToNorth.
+	    	    then rotateBlockToSouth.
 
 	    	% wait on waiting position for multi task
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
