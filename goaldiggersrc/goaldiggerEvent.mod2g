@@ -238,6 +238,15 @@ module goaldiggerEvent {
 		%If not know goalzone or dispenser, exploreMap
 		if not(bel(executeManhattan)) then updateExploreMoveDirection.
 	}
+	
+	% delete all explore marks after they are not necessary anymore 
+    if bel(limitACOSteps(ACOLimit)),
+       bel(DeleteStep is ACOLimit + 1),
+       percept(step(SimStep), SimStep == DeleteStep)       
+        then {
+		forall bel(mapMarkExplored(ExploredX,ExploredY)) 
+		    do delete(mapMarkExplored(ExploredX,ExploredY)).		
+	}
 
 	% SUBMODULE debug with our mini percept
 	if bel(lDebugOn)
