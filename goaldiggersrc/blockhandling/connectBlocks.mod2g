@@ -177,7 +177,7 @@ module connectBlocks {
         }
 
         % connect if First and LAST agent already connected
-        if bel(multiTaskSupporterStatus(_, X1, Y1, _, _, _, connected, AgentName2, _, _, _, _, Connect2, 
+        if bel(multiTaskSupporterStatus(_, _, X1, Y1, _, _, connected, AgentName2, _, _, _, _, Connect2, 
                                         _, X3, Y3, _, _, connected)),
            bel(Connect2 \= connected),
            percept(step(X))

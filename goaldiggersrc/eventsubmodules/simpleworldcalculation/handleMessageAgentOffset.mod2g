@@ -36,8 +36,7 @@ module handleMessageAgentOffset {
 	               AgentReceiver \== AgentNameSender2))
 		    	then {
 					% if only 1x inverse coordinates are found
-					if bel(cachedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),
-					   
+					if bel(cachedSeenOtherAgentAt(SenderX, SenderY, OtherX1, OtherY1, Step, AgentNameSender)),					   
 					   bel(OtherXNegative is  -1 * OtherX1, OtherYNegative is  -1 * OtherY1),
 					   bel(AgentReceiver \= AgentNameSender, OtherX == OtherXNegative, OtherY == OtherYNegative) 
 					    then {
@@ -46,17 +45,17 @@ module handleMessageAgentOffset {
 						    	then {
 									% calculate offset
 									if true then {
-								 		if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, 
-								 		       OffsetX, OffsetY)),
-								 		   not(bel(confirmedOffsetOfAgent(_, _, AgentNameSender)))
-									 		then insert(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)) +
-									      		 insert(calculatedNewOffset).
-										 if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, 
+								 	   if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, 
 								 		        OffsetX, OffsetY)),
 								 		    bel(confirmedOffsetOfAgent(OffOldX, OffOldY, AgentNameSender)) 
 										     then
 										     delete(confirmedOffsetOfAgent(OffOldX, OffOldY, AgentNameSender)) + 
-										     insert(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)) .							      
+										     insert(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)) .
+								 		if bel(calculateAgentOffset(OwnX, OwnY, SenderX, SenderY, OtherX, OtherY, 
+								 		       OffsetX, OffsetY)),
+								 		   not(bel(confirmedOffsetOfAgent(_, _, AgentNameSender)))
+									 		then insert(confirmedOffsetOfAgent(OffsetX, OffsetY, AgentNameSender)) +
+									      		 insert(calculatedNewOffset).							      
 							}
 					}
 			}

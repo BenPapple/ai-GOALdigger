@@ -29,6 +29,10 @@ module manageManhattanSwitchStatus {
 	% deactivate to reset pos from percept to prevent recognizing wrong submitterLeader
 	if bel(executeManhattan, targetMd(_, _, supportingPosition)) 
 	    then delete(executeManhattan). 
+
+	% deactivate to reset pos from percept to prevent recognizing wrong submitterLeader
+	if bel(executeManhattan, targetMd(_, _, waitingPosition)) 
+	    then delete(executeManhattan). 
 	
 	% don't use dummy values of targetClosestGoalZone
 	if bel(haveBlockAttached(true, _), executeManhattan, targetMd(_, _, goalzone), 
