@@ -102,6 +102,8 @@
 :- dynamic targetClosestRoleZone/3.
 % lowest and highest limit after which agent changes explore direction
 :- dynamic limitChangeStepMinMax/2.
+% step after which ACO is switched off
+:- dynamic limitACOSteps/1.
 
 % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgent/4.

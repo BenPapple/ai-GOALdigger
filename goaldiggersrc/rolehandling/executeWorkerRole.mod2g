@@ -53,8 +53,9 @@ module executeWorkerRole {
 	    	       
 	    	% Explorer map until execute Manhattan is set
 			if not(bel(executeManhattan)),
+			   bel(limitACOSteps(ACOLimit)),
 			   bel(exploreDirection(Dir), randomAffinity(Dir2)) ,
-			   percept(step(SimStep), SimStep < 200)
+			   percept(step(SimStep), SimStep < ACOLimit)
 				then { 
 					if bel(Dir == r) then executeRandomMove.
 					if true then delete(randomAffinity(Dir2)) + 
