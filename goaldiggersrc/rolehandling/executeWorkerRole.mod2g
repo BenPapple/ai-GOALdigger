@@ -184,6 +184,14 @@ module executeWorkerRole {
 	    	   bel(step(SimStep), TaskStep >= SimStep)
 	    	    then executeManhattanMove.
 
+	    	% rotate to north on waiting position for multi task
+	    	if bel(DirBlock \= n),
+	    	   bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
+	    	       targetMd(XTar, YTar, waitingPosition)), 
+	    	   bel(agentAt(XTar, YTar, _)),
+	    	   bel(step(SimStep), TaskStep >= SimStep)
+	    	    then rotateBlockToNorth.
+
 	    	% wait on waiting position for multi task
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
 	    	       targetMd(XTar, YTar, waitingPosition)), 
