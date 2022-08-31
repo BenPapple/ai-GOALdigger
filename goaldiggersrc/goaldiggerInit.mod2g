@@ -24,7 +24,11 @@ module goaldiggerInit {
 	if not(bel(count3Task(_, _))) 
 		then insert(count3Task(0, 0)). 
 	if not(bel(cachedCount3Task(_))) 
-		then insert(cachedCount3Task(0)). 		
+		then insert(cachedCount3Task(0)). 
+	if not(bel(count4Task(_, _))) 
+		then insert(count4Task(0, 0)). 
+	if not(bel(cachedCount4Task(_))) 
+		then insert(cachedCount4Task(0)).				
 	if true then insert(thisIsTheFirstSim).
 	if true then insert(stopScoreLogging(0)).
 	if true then insert(stopDurationLogging(0)).	
