@@ -88,14 +88,11 @@ module changeTaskCheck {
        bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
        bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
        bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)),           	   
-	   percept(task(_ ,TaskStep2, 90,[req(X1,Y1,Block1),req(X2,Y2,Block2),req(X3,Y3,Block3)]), 
+	   percept(task(_ ,TaskStep2, 90,[req(_,_,Block1),req(_,_,Block2),req(_,_,Block3)]), 
 	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 70),
 	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, Block3, _, _)),
-	   bel(Y1 \= 3, Y2 \= 3, Y3 \= 3),
-	   bel(Calc is X1 + Y1 + X2 + Y2 + X3 + Y3, Calc \= 2),
-	   bel(Calc2 is X1 - Y1 + X2 - Y2 + X3 - Y3, Calc2 \= -2)
+	   bel(mapDispenser(_, _, dispenser, Block3, _, _))
 	    then chooseTask.    
     
 	% change from 1-task to 2-task as submitterLeader

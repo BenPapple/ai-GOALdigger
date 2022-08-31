@@ -172,7 +172,7 @@ module manageManhattanTarget {
 %			 insert(targetMd(C2, D2, supportingPosition)) + 
 %			 insert(executeManhattan).
 	
-	% target waiting position for supporting action 
+	% all multitasks target waiting position for supporting action 
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(_, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), TaskStep >= SimStep, 
 	       confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
@@ -183,8 +183,52 @@ module manageManhattanTarget {
 		then delete(targetMd(X, Y, Target)) + 
 			 insert(targetMd(C2, D2, waitingPosition)) + 
 			 insert(executeManhattan).	 
+
+	% 3task target supporting position if west of Y column and attached block on right of target block position
+	if bel(haveBlockAttached(true, _), step(SimStep), 
+	       currentChosenTask(TaskName, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), YTask > 1, XTask < 0,
+	                         TaskStep >= SimStep, 
+	                         confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
+		                     targetMd(X, Y, Target)),
+	   percept(task(TaskName,_, 90,[req(ReqX1,ReqY1,_),req(ReqX2,ReqY2,_),req(ReqX3,ReqY3,_)])),
+	   bel(CheckY is YTask - 1),
+	   not(bel(ReqX1 == XTask, ReqY1 == CheckY)),
+	   not(bel(ReqX2 == XTask, ReqY2 == CheckY)),
+	   not(bel(ReqX3 == XTask, ReqY3 == CheckY)),	       
+	   bel(checkBlockPosition(XTask, YTask, Result), Result == wait),
+	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
+	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 1 ),
+	   bel(agentAt(_, MyYOff, _)),
+	   bel(AboveBlockY is D2 - MyYOff - 1),
+	   percept(thing(1, AboveBlockY, block, _)),
+	   percept(attached(1, AboveBlockY))
+		then delete(targetMd(X, Y, Target)) + 
+			 insert(targetMd(C2, D2, supportingPosition)) + 
+			 insert(executeManhattan).
+
+	% 3task target supporting position if east of Y column and attached block on left of target block position
+	if bel(haveBlockAttached(true, _), step(SimStep), 
+	       currentChosenTask(TaskName, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), YTask > 1, XTask > 0,
+	                         TaskStep >= SimStep, 
+	                         confirmedOffsetOfAgent(OffsetX, OffsetY, NameSubmitter),
+		                     targetMd(X, Y, Target)),
+	   percept(task(TaskName,_, 90,[req(ReqX1,ReqY1,_),req(ReqX2,ReqY2,_),req(ReqX3,ReqY3,_)])),
+	   bel(CheckY is YTask - 1),
+	   not(bel(ReqX1 == XTask, ReqY1 == CheckY)),
+	   not(bel(ReqX2 == XTask, ReqY2 == CheckY)),
+	   not(bel(ReqX3 == XTask, ReqY3 == CheckY)),
+	   bel(checkBlockPosition(XTask, YTask, Result), Result == wait),
+	   bel(storedOtherAgentStatus(NameSubmitter, _, worker, _, _, A, B, _, _)), 
+	   bel(localize(A, B, OffsetX, OffsetY, C, D), C2 is C + XTask, D2 is D + YTask + 1 ),
+	   bel(agentAt(_, MyYOff, _)),
+	   bel(AboveBlockY is D2 - MyYOff - 1),
+	   percept(thing(-1, AboveBlockY, block, _)),
+	   percept(attached(-1, AboveBlockY))
+		then delete(targetMd(X, Y, Target)) + 
+			 insert(targetMd(C2, D2, supportingPosition)) + 
+			 insert(executeManhattan).
 			 
-	% target supporting position if west of Y column and attached block on right of target block position
+	% 4tasktarget supporting position if west of Y column and attached block on right of target block position
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(TaskName, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), YTask > 1, XTask < 0,
 	                         TaskStep >= SimStep, 
@@ -207,7 +251,7 @@ module manageManhattanTarget {
 			 insert(targetMd(C2, D2, supportingPosition)) + 
 			 insert(executeManhattan).
 
-	% target supporting position if east of Y column and attached block on left of target block position
+	% 4tasktarget supporting position if east of Y column and attached block on left of target block position
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(TaskName, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), YTask > 1, XTask > 0,
 	                         TaskStep >= SimStep, 
@@ -230,7 +274,7 @@ module manageManhattanTarget {
 			 insert(targetMd(C2, D2, supportingPosition)) + 
 			 insert(executeManhattan).
 
-	% target supporting position if on X row and block above own block is attached
+	% all multitasks target supporting position if on X row and block above own block is attached
 	if bel(haveBlockAttached(true, _), step(SimStep), 
 	       currentChosenTask(_, TaskStep, _, XTask, YTask, _,supportingAgent, NameSubmitter), YTask > 1,
 	                         TaskStep >= SimStep, 
