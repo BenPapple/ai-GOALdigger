@@ -4,7 +4,6 @@ use "../taskhandling/taskHandlingOneBlock" as module.
 use "../taskhandling/taskHandlingTwoBlock" as module.
 use "../taskhandling/taskHandlingThreeBlock" as module.
 use "../taskhandling/taskHandlingFourBlock" as module.
-use "../taskhandling/manageQtable" as module.
 
 /**
  * prefer 4 task above others

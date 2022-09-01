@@ -6,7 +6,7 @@ use "../goaldiggerProlog" as knowledge.
  * @author Ben G.
  */
 
-module manageQtable {
+module manageCustomQtable {
 	
 	% calculate Q for 40 point submits of team
 	forall (_).sent(made40Points(_)) do {
