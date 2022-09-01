@@ -64,7 +64,8 @@ module changeTaskCheck {
 
 	% change from 1-task to 4-task as submitterLeader
 	if bel(submitterLeader),
-	   percept(step(SimStep)), 
+	   percept(step(SimStep)),
+	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
 	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
        bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
@@ -73,7 +74,7 @@ module changeTaskCheck {
        bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)),  
        bel(storedOtherAgentStatus(OtherAgent3, _, worker, _, _, _, _, _, freeWorkerAgent)),          	   
 	   percept(task(_ ,TaskStep2, 160,[req(_,_,Block1),req(_,_,Block2),req(_,_,Block3),req(_,_,Block4)]), 
-	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 70),
+	           TaskStep2 > SimStep, TaskStep2 - SimStep >= Task4Limit),
 	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block3, _, _)),
@@ -83,13 +84,14 @@ module changeTaskCheck {
 	% change from 1-task to 3-task as submitterLeader
 	if bel(submitterLeader),
 	   percept(step(SimStep)), 
+	   bel(limitStepsTask(_, _, Task3Limit, _)),
 	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
 	   bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
        bel(confirmedOffsetOfAgent(_, _, OtherAgent2), OtherAgent1 \= OtherAgent2),
        bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
        bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent)),           	   
 	   percept(task(_ ,TaskStep2, 90,[req(_,_,Block1),req(_,_,Block2),req(_,_,Block3)]), 
-	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 70),
+	           TaskStep2 > SimStep, TaskStep2 - SimStep >= Task3Limit),
 	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block2, _, _)),
 	   bel(mapDispenser(_, _, dispenser, Block3, _, _))
@@ -97,11 +99,12 @@ module changeTaskCheck {
     
 	% change from 1-task to 2-task as submitterLeader
 	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	   bel(limitStepsTask(_, Task2Limit, _, _)),	
 	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
 	   percept(step(SimStep)), 
 	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
 	   percept(task(_ ,TaskStep2, 40,[req(_,_,Block1),req(_,_,Block2)]), 
-	           TaskStep2 > SimStep, TaskStep2 - SimStep >= 40),
+	           TaskStep2 > SimStep, TaskStep2 - SimStep >= Task2Limit),
 	   bel(mapDispenser(_, _, dispenser, Block1, _, _)),
        bel(mapDispenser(_, _, dispenser, Block2, _, _))
 	    then chooseTask.   

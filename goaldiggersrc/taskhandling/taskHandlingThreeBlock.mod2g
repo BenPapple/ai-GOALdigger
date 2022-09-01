@@ -24,8 +24,9 @@ module taskHandlingThreeBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
 	   percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockTypeAttached),req(_, _, BlockTypeOther),
-	                                        req(_, _, BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(_, _, BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)),	                                        
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
 	    then {	
@@ -51,8 +52,9 @@ module taskHandlingThreeBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
 	   percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockTypeAttached),
-	                                        req(_, _, BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(_, _, BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
 	    then {
@@ -78,8 +80,9 @@ module taskHandlingThreeBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)),
 	   percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),
-	                                        req(0, 1, BlockTypeAttached)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(0, 1, BlockTypeAttached)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
 	    then {
@@ -107,8 +110,9 @@ module taskHandlingThreeBlock {
 	
 	% choose 3-block tasks if it exists and nearestdispenser with right block LEFT req
 	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(_, _, BlockTypeOther),req(_, _, 
-	                BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -133,8 +137,9 @@ module taskHandlingThreeBlock {
 
 	% choose 3-block tasks if it exists and nearestdispenser with right block MIDDLE req
 	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockType),
-	                                        req(_, _, BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(_, _, BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -159,8 +164,9 @@ module taskHandlingThreeBlock {
 	
 	% choose 3-block tasks if it exists and nearestdispenser with right block RIGHT req
 	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),
-	                                        req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(0, 1, BlockType)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -185,8 +191,9 @@ module taskHandlingThreeBlock {
 
 	% choose 3-block tasks if it exists and currenttask dispenser LEFT req
 	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(_, _, BlockTypeOther),
-	                                        req(_, _, BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(_, _, BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -211,8 +218,9 @@ module taskHandlingThreeBlock {
 
 	% choose 3-block tasks if it exists and currenttask dispenser MIDDLE req
 	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockType),
-	                                        req(_, _, BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(_, _, BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -237,8 +245,9 @@ module taskHandlingThreeBlock {
 	
 	% choose 3-block tasks if it exists and currenttask dispenser RIGHT req
 	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),
-	                                        req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(0, 1, BlockType)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(targetDispenserAt(_, _, BlockType, _), BlockType \= bx),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -263,8 +272,9 @@ module taskHandlingThreeBlock {
 
 	% choose 3-block tasks if it exists and both dispensers known LEFT req
 	if percept(task(TaskName ,TaskStep, 90,[req(0, 1, BlockType),req(_, _, BlockTypeOther),
-	                                        req(_, _, BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(_, _, BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -289,8 +299,9 @@ module taskHandlingThreeBlock {
 
 	% choose 3-block tasks if it exists and both dispensers known MIDDLE req
 	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(0, 1, BlockType),
-	                                        req(_, _, BlockTypeOther2)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(_, _, BlockTypeOther2)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)), 
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))
@@ -315,8 +326,9 @@ module taskHandlingThreeBlock {
 
 	% choose 3-block tasks if it exists and both dispensers known RIGHT req
 	if percept(task(TaskName ,TaskStep, 90,[req(_, _, BlockTypeOther),req(_, _, BlockTypeOther2),
-	                                        req(0, 1, BlockType)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 70),
+	                                        req(0, 1, BlockType)])),
+	   bel(limitStepsTask(_, _, Task3Limit, _)),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task3Limit),
 	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther, _, _)),
 	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _))

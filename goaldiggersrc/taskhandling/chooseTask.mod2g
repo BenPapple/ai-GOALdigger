@@ -53,7 +53,8 @@ module chooseTask {
 
 	% choose 1s task if one is available and not believe submitterLeader
 	if percept(task(_ ,TaskStep, 10,[req(_,_,_)])), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20),
+	   bel(limitStepsTask(Task1Limit, _, _, _)),	
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task1Limit),
 	   not(bel(submitterLeader))
 		then taskHandlingOneBlock + exit-module.
 
