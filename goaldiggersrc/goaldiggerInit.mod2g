@@ -45,6 +45,8 @@ module goaldiggerInit {
 	if true then insert(limitChangeStepMinMax(10 , 20)). 
 	% set step after which ACO exploring turns off
 	if true then insert(limitACOSteps(100)). 	
+	% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
+    if true then insert(limitStepsTask(20, 40, 70, 70)).
 	
 	% machine learning
 	if true then insert(qtable(30,40,30,30,70,100)).

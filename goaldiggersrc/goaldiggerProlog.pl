@@ -104,6 +104,8 @@
 :- dynamic limitChangeStepMinMax/2.
 % step after which ACO is switched off
 :- dynamic limitACOSteps/1.
+% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
+:- dynamic limitStepsTask/4.
 
 % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgent/4.

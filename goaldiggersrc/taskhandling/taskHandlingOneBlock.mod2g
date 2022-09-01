@@ -3,7 +3,7 @@ use "../goaldiggerAction" as actionspec.
 use "../eventsubmodules/distancecalc/updateDispenserDistance" as module.
 
 /**
- * Use the 1s task
+ * Choose 1-block task
  *
  * @author Ben G.
  */
@@ -18,7 +18,8 @@ module taskHandlingOneBlock {
 	if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, A, B)), 
 	   percept(thing(A, B, block, BlockTypeAttached)), 
 	   percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockTypeAttached)])),
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 8) 
+	   bel(limitStepsTask(Task1Limit, _, _, _)),
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task1Limit - 12) 
 	   	then {
 			if not(bel(calculateNewGoalzoneMD)) 
 				then insert(calculateNewGoalzoneMD).
@@ -32,8 +33,9 @@ module taskHandlingOneBlock {
 	
 	% choose/change 1-block tasks if closest dispenser has fitting block
 	if bel(targetClosestOfAllDispensersAt(_, _, BlockType, _), BlockType \== bx), 
-	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),  
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20) 
+	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),
+	   bel(limitStepsTask(Task1Limit, _, _, _)),  
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task1Limit) 
 	   	then {
 	    	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 	    		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
@@ -45,8 +47,9 @@ module taskHandlingOneBlock {
 	
 	% choose 1-block tasks of target Dispenser concerning currenttaskBlockType+targetDispenserAt calc in EventModule
 	if bel(targetDispenserAt(_, _, BlockType, _), BlockType \== bx), 
-	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),  
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 20)
+	   percept(task(TaskName ,TaskStep, 10,[req(X,Y,BlockType)])),
+	   bel(limitStepsTask(Task1Limit, _, _, _)),  
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task1Limit)
 	    then {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
@@ -58,8 +61,9 @@ module taskHandlingOneBlock {
 	
 	% choose 1-block tasks if random known dispenser has fitting block
 	if percept(task(TaskName ,TaskStep, 10,[req(Xt,Yt,BlockType)])),  
-	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)), 
-	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= 30) 
+	   bel(mapDispenser(_, _, dispenser, BlockType, _, _)),
+	   bel(limitStepsTask(Task1Limit, _, _, _)),	    
+	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task1Limit + 10) 
 	   	then {
 		    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 		    	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
