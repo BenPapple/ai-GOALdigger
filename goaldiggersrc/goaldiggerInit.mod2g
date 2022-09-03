@@ -17,6 +17,10 @@ module goaldiggerInit {
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 
+	if not(bel(count1Task(_, _))) 
+		then insert(count1Task(0, 0)). 
+	if not(bel(cachedCount1Task(_))) 
+		then insert(cachedCount1Task(0)).
 	if not(bel(count2Task(_, _))) 
 		then insert(count2Task(0, 0)). 
 	if not(bel(cachedCount2Task(_))) 
@@ -29,6 +33,7 @@ module goaldiggerInit {
 		then insert(count4Task(0, 0)). 
 	if not(bel(cachedCount4Task(_))) 
 		then insert(cachedCount4Task(0)).				
+    if true then insert(currentScore(0)).
 	if true then insert(thisIsTheFirstSim).
 	if true then insert(stopScoreLogging(0)).
 	if true then insert(stopDurationLogging(0)).	
