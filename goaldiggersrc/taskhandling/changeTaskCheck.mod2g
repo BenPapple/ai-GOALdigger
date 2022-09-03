@@ -10,6 +10,41 @@ use "../taskhandling/chooseTask" as module.
 
 module changeTaskCheck {
 
+	% recognize failed multitask missing from percept and send message
+	if bel(currentChosenTask(TaskName, V2, 40, V4, V5, V6, V7, V8)),
+	   not(percept(task(TaskName , _, 40,[req(_,_,_),req(_,_,_)]))),
+	   percept(name(MyName))
+	    then delete(currentChosenTask(TaskName, V2, 40, V4, V5, V6, V7, V8)) +
+	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
+	          all.send(failed40pointtask(MyName)).
+	if bel(currentChosenTask(TaskName, V2, 90, V4, V5, V6, V7, V8)),
+	   not(percept(task(TaskName , _, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]))),
+	   percept(name(MyName))
+	    then  delete(currentChosenTask(TaskName, V2, 90, V4, V5, V6, V7, V8)) +
+	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
+	          all.send(failed90pointtask(MyName)).
+	if bel(currentChosenTask(TaskName, V2, 160, V4, V5, V6, V7, V8)),
+	   not(percept(task(TaskName , _, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]))),
+	   percept(name(MyName))
+	    then  delete(currentChosenTask(TaskName, V2, 160, V4, V5, V6, V7, V8)) +
+	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
+	          all.send(failed160pointtask(MyName)).
+
+	% recognize failed multitask by expired tasksteps and send message
+	if bel(currentChosenTask(_, TaskStep, 40, _, _, _,_,_)),
+	   percept(name(MyName), step(SimStep)),
+	   bel(TaskStep > 2, TaskStep == SimStep - 1)
+	    then all.send(failed40pointtask(MyName)).
+	if bel(currentChosenTask(_, TaskStep, 90, _, _, _,_,_)),
+	   percept(name(MyName), step(SimStep)),
+	   bel(TaskStep > 2, TaskStep == SimStep - 1)
+	    then all.send(failed90pointtask(MyName)).
+	if bel(currentChosenTask(_, TaskStep, 160, _, _, _,_,_)),
+	   percept(name(MyName), step(SimStep)),
+	   bel(TaskStep > 2, TaskStep == SimStep - 1)
+	    then all.send(failed160pointtask(MyName)).
+
+
     % reset waiting period for new task as submitterLeader when task has 0 steps left
     if percept(step(SimStep)),
        bel(currentChosenTask(_, TaskStep, _, _, _, _, _, _), TaskStep == SimStep),
@@ -49,16 +84,16 @@ module changeTaskCheck {
 	    then chooseTask.
 	    
 	% change task when chosen task not in percept anymore
-	if bel(currentChosenTask(TaskName, 10, _, _, _, _,_,_)),
+	if bel(currentChosenTask(TaskName, _, 10, _, _, _,_,_)),
 	   not(percept(task(TaskName , _, 10,[req(_,_,_)])))
 	    then chooseTask.
-	if bel(currentChosenTask(TaskName, 40, _, _, _, _,_,_)),
+	if bel(currentChosenTask(TaskName, _, 40, _, _, _,_,_)),
 	   not(percept(task(TaskName , _, 40,[req(_,_,_),req(_,_,_)])))
 	    then chooseTask.
-	if bel(currentChosenTask(TaskName, 90, _, _, _, _,_,_)),
+	if bel(currentChosenTask(TaskName, _, 90, _, _, _,_,_)),
 	   not(percept(task(TaskName , _, 90,[req(_,_,_),req(_,_,_),req(_,_,_)])))
 	    then chooseTask.
-	if bel(currentChosenTask(TaskName, 160, _, _, _, _,_,_)),
+	if bel(currentChosenTask(TaskName, _, 160, _, _, _,_,_)),
 	   not(percept(task(TaskName , _, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)])))
 	    then chooseTask.	    
 

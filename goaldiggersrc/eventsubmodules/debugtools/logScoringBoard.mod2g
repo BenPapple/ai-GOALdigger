@@ -105,6 +105,20 @@ module logScoringBoard {
 		    if true then print("160 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
 	    }   
 
+    % print failed multitasks
+    forall (_).sent(failed40pointtask(Name)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep), SimStep > 1)
+	    do print("FAILED 40 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+    forall (_).sent(failed90pointtask(Name)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep), SimStep > 1)
+	    do print("FAILED 90 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+    forall (_).sent(failed160pointtask(Name)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep), SimStep > 1)
+	    do print("FAILED 160 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+
 	% divider line
 	if percept(step(X), X >= 25, 0 =:= mod(X, 25)) 
 	    then print("---------------------------------------------------------------------------------").
