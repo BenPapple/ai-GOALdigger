@@ -85,15 +85,17 @@ module syncPerceptDataIntoBelief {
 	    	   bel(agentAt(X2, Y2, _), X3 is X - X2, Y3 is Y - Y2, abs(X3) + abs(Y3) =< 5),
 	           not(percept((goalZone(X3, Y3))))
 	           	then {
-	           		if true then delete(mapGoalZone(X, Y, Md)) +
-  	                 allother.send(messageDeletedGoalZone(X, Y, MyName)) +
-  			         print("DELETED goalzone by percept "+X+Y).
+                if true then delete(mapGoalZone(X, Y, Md)) +
+                     allother.send(messageDeletedGoalZone(X, Y, MyName)) +
+                 print("DELETED goalzone by percept "+X+Y).
 
-                if not(bel(calculateNewGoalzoneMD)) 
-  	        	    then insert(calculateNewGoalzoneMD).
+                if not(bel(calculateNewGoalzoneMD))
+                  then insert(calculateNewGoalzoneMD).
+
 
 	           		if bel(customRole(customRoleSaboteur))  then {
 
+	           			if true then print("deleted goal zone:"+X+" "+Y).
 	           			% Delete empty goal zone counters
 	           			if bel(emptyGoalZoneCounter(X, Y, Timer))
 	           			%minimumDistanceEmptyGoalZone(Distance),  calculateXYMd(X, Y, EmptyX, EmptyY, EmptyMd), EmptyMd < Distance)
@@ -106,8 +108,10 @@ module syncPerceptDataIntoBelief {
 	           			% Delete Manhattan target if goal zone not found upon arrival
 	           			if bel(targetMd(X, Y, Target), (Target = goalzoneRecommendation; Target = goalzone))
 	           			 	then {
+	           			 	  if true then print("Deleted manhattan goal zone").
 	           			 	  if true then delete(targetMd(X, Y, Target)).
 							  if bel(executeManhattan) then delete(executeManhattan).
+							  
 	           				} % end Manhattan target deletion
 	           			} % end actions for saboteurs
 	           	} % end mapGoalZone deletion actions
