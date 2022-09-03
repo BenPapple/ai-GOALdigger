@@ -46,16 +46,20 @@
 % when a marked is north of agent. 
 :- dynamic currentCustomRoleStatus/1. 
 
-
+% current score
+:- dynamic currentScore/1.
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
-% submitterLeader counts his submitted 2tasks
+% agents count his submitted 1tasks
+:- dynamic count1Task/2. 
+% agents count his submitted 2tasks
 :- dynamic count2Task/2. 
-% submitterLeader counts his submitted 3tasks
+% agents count his submitted 3tasks
 :- dynamic count3Task/2. 
-% submitterLeader counts his submitted 3tasks
+% agents count his submitted 3tasks
 :- dynamic count4Task/2. 
 % cached so it survives map change for score table
+:- dynamic cachedCount1Task/1. 
 :- dynamic cachedCount2Task/1. 
 :- dynamic cachedCount3Task/1.
 :- dynamic cachedCount4Task/1.  

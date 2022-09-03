@@ -13,6 +13,10 @@ module reinitBeliefOnSimChange {
 	if bel(simCount(SimCount), NewSimCount is SimCount + 1) 
 		then delete(simCount(SimCount)) + 
 		     insert(simCount(NewSimCount)). 
+
+	if bel(count1Task(Num1Task, V2)) 
+		then delete(count1Task(Num1Task, V2)) + 
+		     insert(count1Task(0, 0)).
 	
 	if bel(count2Task(Num2Task, V2)) 
 		then delete(count2Task(Num2Task, V2)) + 
@@ -25,6 +29,9 @@ module reinitBeliefOnSimChange {
 	if bel(count4Task(Num4Task, V2)) 
 		then delete(count4Task(Num4Task, V2)) + 
 		     insert(count4Task(0, 0)).
+		     
+	if bel(currentScore(Del)) 
+	    then delete(currentScore(Del)) + insert(currentScore(0)).	     
 
 	% restore initial belief
 	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
