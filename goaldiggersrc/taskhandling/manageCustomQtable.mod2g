@@ -7,14 +7,37 @@ use "../goaldiggerProlog" as knowledge.
  */
 
 module manageCustomQtable {
+
+	% calculate Q for failed 40 point tasks
+	forall (_).sent(failed40pointtask(_)) do {
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(Q2 is V1 - 10, Q3 is V2 + 5, Q4 is V3 + 5)
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).	
+	}
+
+	% calculate Q for failed 90 point tasks
+	forall (_).sent(failed90pointtask(_)) do {
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(Q2 is V1 + 5, Q3 is V2 - 10, Q4 is V3 + 5)
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).	
+	}
+
+	% calculate Q for failed 160 point tasks
+	forall (_).sent(failed160pointtask(_)) do {
+	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
+	       bel(Q2 is V1 + 5, Q3 is V2 + 5, Q4 is V3 - 10)
+	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
+	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).	
+	}
 	
 	% calculate Q for 40 point submits of team
 	forall (_).sent(made40Points(_)) do {
 	    if bel(qtable(V1,V2,V3,V4,V5,V6)),
 	       bel(Q2 is V1 + 16, Q3 is V2 - 8, Q4 is V3 - 8)
 	        then delete(qtable(V1,V2,V3,V4,V5,V6)) +
-	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).
-	
+	             insert(qtable(Q2,Q3,Q4,V4,V5,V6)).	
 	}
 
     % calculate Q for 90 point submits of team

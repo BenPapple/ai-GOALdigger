@@ -11,19 +11,22 @@ use "../taskhandling/chooseTask" as module.
 module changeTaskCheck {
 
 	% recognize failed multitask missing from percept and send message
-	if bel(currentChosenTask(TaskName, V2, 40, V4, V5, V6, V7, V8)),
+	if bel(submitterLeader),
+	   bel(currentChosenTask(TaskName, V2, 40, V4, V5, V6, V7, V8)),
 	   not(percept(task(TaskName , _, 40,[req(_,_,_),req(_,_,_)]))),
 	   percept(name(MyName))
 	    then delete(currentChosenTask(TaskName, V2, 40, V4, V5, V6, V7, V8)) +
 	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
 	          all.send(failed40pointtask(MyName)).
 	if bel(currentChosenTask(TaskName, V2, 90, V4, V5, V6, V7, V8)),
+	   bel(submitterLeader),
 	   not(percept(task(TaskName , _, 90,[req(_,_,_),req(_,_,_),req(_,_,_)]))),
 	   percept(name(MyName))
 	    then  delete(currentChosenTask(TaskName, V2, 90, V4, V5, V6, V7, V8)) +
 	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
 	          all.send(failed90pointtask(MyName)).
 	if bel(currentChosenTask(TaskName, V2, 160, V4, V5, V6, V7, V8)),
+	   bel(submitterLeader),
 	   not(percept(task(TaskName , _, 160,[req(_,_,_),req(_,_,_),req(_,_,_),req(_,_,_)]))),
 	   percept(name(MyName))
 	    then  delete(currentChosenTask(TaskName, V2, 160, V4, V5, V6, V7, V8)) +
@@ -32,14 +35,17 @@ module changeTaskCheck {
 
 	% recognize failed multitask by expired tasksteps and send message
 	if bel(currentChosenTask(_, TaskStep, 40, _, _, _,_,_)),
+	   bel(submitterLeader),
 	   percept(name(MyName), step(SimStep)),
 	   bel(TaskStep > 2, TaskStep == SimStep - 1)
 	    then all.send(failed40pointtask(MyName)).
 	if bel(currentChosenTask(_, TaskStep, 90, _, _, _,_,_)),
+	   bel(submitterLeader),
 	   percept(name(MyName), step(SimStep)),
 	   bel(TaskStep > 2, TaskStep == SimStep - 1)
 	    then all.send(failed90pointtask(MyName)).
 	if bel(currentChosenTask(_, TaskStep, 160, _, _, _,_,_)),
+	   bel(submitterLeader),
 	   percept(name(MyName), step(SimStep)),
 	   bel(TaskStep > 2, TaskStep == SimStep - 1)
 	    then all.send(failed160pointtask(MyName)).
