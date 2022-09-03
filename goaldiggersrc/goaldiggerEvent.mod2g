@@ -179,7 +179,7 @@ module goaldiggerEvent {
 	    then handleMessageGoalZone.
 
 	% SUBMODULE delete goal zones if other agents have found that they don't exist anymore
-	if percept(step(SimStep), SimStep > 3333),
+	if percept(step(SimStep), SimStep > 33),
 	   (_).sent(messageDeletedGoalZone(_,_,_))
 	   	then handleMessageDeletedGoalZone.
 
