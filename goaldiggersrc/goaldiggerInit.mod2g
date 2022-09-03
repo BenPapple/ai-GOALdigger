@@ -51,7 +51,7 @@ module goaldiggerInit {
 	% set step after which ACO exploring turns off
 	if true then insert(limitACOSteps(100)). 	
 	% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
-    if true then insert(limitStepsTask(20, 55, 70, 70)).
+    if true then insert(limitStepsTask(20, 60, 85, 95)).
 	
 	% machine learning
 	if true then insert(qtable(33,34,33,30,70,100)).
@@ -86,7 +86,7 @@ module goaldiggerInit {
 	
 	% tasks
 	% filler task -11001001 so it gets replaced when real task available
-	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)).
+	if true then insert(currentChosenTask(task0, -11001001, 999 , 0, 1, bx, placeholder, placeholder2)).
 	
 	% track custom role of agent
 	if true then insert(currentCustomRoleStatus(basicAgent)).

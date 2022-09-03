@@ -36,7 +36,7 @@ module reinitBeliefOnSimChange {
 	% restore initial belief
 	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
-		     insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)).
+		     insert(currentChosenTask(task0, -11001001, 999 , 0, 1, bx, placeholder, placeholder2)).
     % track custom role of agent
 	if bel(currentCustomRoleStatus(Delete)) then delete(currentCustomRoleStatus(Delete)) + 
 	                                             insert(currentCustomRoleStatus(basicAgent)).
