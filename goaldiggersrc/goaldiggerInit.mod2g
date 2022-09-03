@@ -54,7 +54,7 @@ module goaldiggerInit {
     if true then insert(limitStepsTask(20, 40, 70, 70)).
 	
 	% machine learning
-	if true then insert(qtable(30,40,30,30,70,100)).
+	if true then insert(qtable(33,34,33,30,70,100)).
 	if true then insert(randomTaskChoser(0)).
 	
 	% switches
