@@ -54,7 +54,7 @@ module logScoringBoard {
 	% score messages
 	forall (_).sent(made10Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count1Task(Num1Task, OldStep), 
 		       NewCount is Num1Task +1, SimStep >= OldStep),
@@ -67,7 +67,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(made40Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count2Task(Num2Task, OldStep), 
 		       NewCount is Num2Task +1, SimStep >= OldStep),
@@ -80,7 +80,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(made90Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count3Task(Num3Task, OldStep), 
 		       NewCount is Num3Task +1, SimStep >= OldStep),
@@ -93,7 +93,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(made160Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count4Task(Num4Task, OldStep), 
 		       NewCount is Num4Task +1, SimStep >= OldStep),
