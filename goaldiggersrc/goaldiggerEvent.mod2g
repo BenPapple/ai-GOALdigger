@@ -17,11 +17,8 @@ use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateAgentHierarchy" as module.
-use "./eventsubmodules/saboteurtools/selectClearingTarget" as module.
-use "./eventsubmodules/saboteurtools/trackSightedAgents" as module.
-use "./eventsubmodules/saboteurtools/messageCrowdedGoalZone" as module.
-use "./eventsubmodules/saboteurtools/manageMessageCrowdedGoalZone" as module.
-use "./eventsubmodules/saboteurtools/manageEmptyGoalzones" as module.
+use "./eventsubmodules/saboteurtools/initializeSaboteurBeliefs" as module.
+use "./eventsubmodules/saboteurtools/manageSaboteurEvents" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
@@ -61,35 +58,8 @@ module goaldiggerEvent {
 
 	% Initialize saboteur beliefs
 	
-	if bel(customRole(customRoleSaboteur)) then {
-	
-		% preferred target switches
-		if not(bel(searchInGoalzone)) 
-		   then insert(searchInGoalzone).
-		
-		% insert saboteur body count
-		if not(bel(bodyCounter(_)))
-		   then insert(bodyCounter(0)).
-		
-		% insert minimum distance for different goal zones
-		if not(bel(minimumDistanceEmptyGoalZone(_)))
-		   then insert(minimumDistanceEmptyGoalZone(15)).
-		
-		% insert waiting time in empty goal zone
-		if not(bel(waitingTimeEmptyGoalZone(_)))
-		   then insert(waitingTimeEmptyGoalZone(50)).	
-			
-		% select sabotage goal
-		if not(bel(whitelistedTeam(_))), percept(team(MyTeam)) 
-		   then {
-			
-			  if bel(sabotageThem) 
-		        then insert(whitelistedTeam(MyTeam)).
-		
-			  if bel(sabotageUs) 
-		         then insert(whitelistedTeam(fakeTeamName)).
-		   }
-	}
+	if bel(customRole(customRoleSaboteur)) 
+		then initializeSaboteurBeliefs.
 
 	% SUBMODULE managing success and partial_success percepts
 	if true then syncLastActionResultDataIntoBelief.
@@ -134,28 +104,9 @@ module goaldiggerEvent {
 	   percept(role(worker))
 	   	then updateDispenserDistance.
 
-%	% SUBMODULE help test worker tour around the goal zones
-%
-%    % ToDo Isaac (X \= 0; Y \=0 wont work look for XPlusY solution
-%    % remove empty goal zone flag if agent with block seen in goal zone
-%	if bel(customRole(customRoleSaboteur)), bel(whitelistedTeam(MyTeam)), percept(thing(X, Y, entity, OtherTeam),
-%	       OtherTeam \= MyTeam, goalZone(X, Y), (X \= 0; Y \=0),
-%	       thing(X1, Y1, block, _), attached(X1,Y1), abs(X1-X)+abs(Y1-Y) =:= 1) then {
-%		forall bel(emptyGoalZoneCounter(A,B,C)) do delete(emptyGoalZoneCounter(A,B,C)).
-%	}
-
-	% SUBMODULE track entities in sight for saboteurs
-	if bel(customRole(customRoleSaboteur)) then trackSightedAgents.
-
-	% SUBMODULE manage empty goal zone detection
-	if bel(customRole(customRoleSaboteur)), percept(goalZone(_,_))
-	  then manageEmptyGoalzones.
-
-	% SUBMODULE manage messages about crowded goal zones
-	if bel(customRole(customRoleSaboteur)) then manageMessageCrowdedGoalZone.
-
-	% SUBMODULE select a target for saboteurs
-	if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
+	% SUBMODULE manage saboteur-specific events
+	if bel(customRole(customRoleSaboteur))
+	  then manageSaboteurEvents.
 
     % as submitterLeader calculate q-table
     if bel(submitterLeader) then manageCustomQtable.
@@ -166,10 +117,6 @@ module goaldiggerEvent {
 	% SUBMODULE managing messages concerning task coordination
 	if percept(step(SimStep), SimStep >= 2) 
 	    then messageMultiTaskCoordination.
-
-	% SUBMODULE sending saboteur information about crowded goal zones
-	if not(bel(customRole(CustomRoleSaboteur))), percept(goalZone(_,_))
-	  then messageCrowdedGoalZone.
 
 	% SUBMODULE check messages about role zones
 	%if percept(role(default)) then handleMessageRoleZone.
@@ -255,7 +202,7 @@ module goaldiggerEvent {
 	}
 
 	% SUBMODULE debug with our mini percept
-	if bel(lDebugOn), bel(customRole(customRoleSaboteur))
+	if bel(lDebugOn)
 		then logMiniPercept.
 
 	/**

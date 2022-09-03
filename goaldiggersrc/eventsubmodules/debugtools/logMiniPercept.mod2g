@@ -136,7 +136,7 @@ module logMiniPercept {
 	    if true then print("                ").
 
 
-		% logging percept base, message base, believe base
+		%logging percept base, message base, believe base
 		%if true then log(pb) + log(mb) + log(bb) + log(gb).
 		%if true then log(pb) + log(mb) + log(bb).
 		
