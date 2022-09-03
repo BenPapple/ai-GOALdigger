@@ -61,7 +61,7 @@ module reinitBeliefOnSimChange {
 
 	% machine learning
 	if bel(qtable(V1,V2,V3,V4,V5,V6)) 
-	    then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(30,40,30,30,70,100)).
+	    then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(33,34,33,30,70,100)).
 	
 	if bel(haveBlockAttached(X, Y)) 
 		then delete(haveBlockAttached(X, Y)) + 
