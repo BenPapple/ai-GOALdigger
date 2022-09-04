@@ -11,8 +11,29 @@ use "./checkRoleNorms" as module.
  */
 
 module analyzeNorms {
-if true then checkBlockNorms.
-if true then checkRoleNorms.
+	
+	% Delete norms marker
+	if bel(waitingForNorms)
+		then delete(waitingForNorms).
+		
+	% Delete all expired norms
+	if bel(avoidNorm(NormName,V2,V3,StepEnd,V5,V6,V7,V8,V9,V10)),
+	   percept(step(SimStep), SimStep > StepEnd)
+		then delete(avoidNorm(NormName,V2,V3,StepEnd,V5,V6,V7,V8,V9,V10)).
+		
+	% Set norms marker
+	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,V5,V6,V7,V8,V9,V10)),
+	   percept(step(SimStep), SimStep >= StepStart - 1, SimStep =< StepEnd), 
+	   not(bel(waitingForNorms))
+		then insert(waitingForNorms).
+		
+	% Branch into appropriate norms		
+	if true 	
+		then checkBlockNorms.
+		
+	if true 
+		then checkRoleNorms.
+		
 }
 
 

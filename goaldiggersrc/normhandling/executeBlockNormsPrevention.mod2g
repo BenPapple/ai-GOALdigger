@@ -15,17 +15,23 @@ module executeBlockNormsPrevention {
 
 	% treat block-norm with null-condition if block is worn
 	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)),
+	   percept(role(worker)),
+	   percept(step(SimStep), SimStep == StepStart - 1),
    	   bel(haveBlockAttached(true,DirBlock))
 		then preActionCleanup + detach(DirBlock).
 	
 	% skip further actions as long as the norm is active
-	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)), 
-	   percept(step(SimStep), SimStep < StepEnd)
+	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)),
+	   percept(role(worker)), 
+	   not(bel(targetMd(_, _, dispenser))),
+	   not(bel(targetMd(_, _, rolezone))),
+	   percept(step(SimStep), SimStep < StepEnd, SimStep > StepStart)
 	   	then preActionCleanup + skip.
 	
 	% when the norm ends, check if a block is carried and if for an active selected task, 
 	% a matching block is next to the agent and not carried by another agent
 	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)), 
+	   percept(role(worker)),
 	   percept(step(SimStep), SimStep == StepEnd),
 	   bel(haveBlockAttached(false,DirBlock)),
 	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep)

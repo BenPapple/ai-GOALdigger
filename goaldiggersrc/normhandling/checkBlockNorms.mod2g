@@ -13,7 +13,8 @@ module checkBlockNorms {
 	
 	% ready analyzed norm should be saved
 	% block-norm draws less energy than the agent has, ignore norm
-	if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0)],Dmg)), 
+	if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0,_)],Dmg)), 
+	   percept(role(worker)),
 	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
 	   percept(energy(AgentEnergy))
 		then {
@@ -24,7 +25,8 @@ module checkBlockNorms {
 		}
 	
 	% block-norm drains more energy than the agent has, drop the block	
-	if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0)],Dmg)), 
+	if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0,_)],Dmg)), 
+	   percept(role(worker)),
 	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
 	   percept(energy(AgentEnergy))
 		then {
@@ -34,6 +36,19 @@ module checkBlockNorms {
 				then insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)).
 		}
 	
+		% block-norm drains more energy than the agent has, drop the block	
+	if percept(role(worker)),
+	   bel(avoidNorm(NormName,V2,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)), 
+	   percept(step(SimStep), SimStep < StepEnd),
+	   percept(energy(AgentEnergy))
+		then {
+			if bel(Duration is StepEnd - StepStart),
+			   bel(MaxPenalty is Duration * Dmg),
+			   bel(MaxPenalty >= AgentEnergy)
+				then delete(avoidNorm(NormName,V2,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)) + 
+				     insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)).
+		}
+		
 %norm(n3,184,212,[requirement(block,any,3)],3)
 %norm(n3,start,until,[requirement(block,immer auf "any",max nr of carried blocks,)],Schaden)
 

@@ -21,7 +21,7 @@ module checkRoleNorms {
 	% ready analyzed norm should be saved
 	% roles norm expects more agents than are in the role
 	% if percept(norm(NormName,StepStart,StepEnd,[requirement(role,PenaltyRole,MaxQuRole)],Dmg)), 
-	if percept(role(worker), norm(NormName,StepStart,StepEnd,[requirement(role, worker, MaxQuRole)],Dmg)), 
+	if percept(role(worker), norm(NormName,StepStart,StepEnd,[requirement(role, worker, MaxQuRole,_)],Dmg)), 
 	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
 	   percept(energy(AgentEnergy))
 		then {

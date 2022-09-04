@@ -195,7 +195,8 @@ module goaldiggerEvent {
 	if true then manageManhattanSwitchStatus.
 
 	% SUBMODULE manhattan target manipulation
-	if true then manageManhattanTarget.
+	if not(bel(waitingForNorms))
+		then manageManhattanTarget.
 
     % check norms for possible damage to agents
     if true
@@ -267,5 +268,8 @@ module goaldiggerEvent {
 	if bel(haveMove),
 	   percept(step(SimStep), SimStep >= 0)
 	   	then delete(haveMove).
-
+	
+	/* Ablauf in der Simulation verlangsamen - auskommentieren für Turniere und Contest*/   	
+	if true then sleep(500). 
+	
 } % module
