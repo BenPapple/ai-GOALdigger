@@ -1,0 +1,39 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+/**
+ * Initializes the beliefs of the agent with custom role "Saboteur".
+ *
+ * @author Isaac S.
+ */
+
+module initializeSaboteurBeliefs {
+	
+	% preferred target switches
+	if not(bel(searchInGoalzone)) 
+	   then insert(searchInGoalzone).
+	
+	% insert saboteur body count
+	if not(bel(bodyCounter(_)))
+	   then insert(bodyCounter(0)).
+	
+	% insert minimum distance for different goal zones
+	if not(bel(minimumDistanceEmptyGoalZone(_)))
+	   then insert(minimumDistanceEmptyGoalZone(15)).
+	
+	% insert waiting time in empty goal zone
+	if not(bel(waitingTimeEmptyGoalZone(_)))
+	   then insert(waitingTimeEmptyGoalZone(50)).	
+		
+	% select sabotage goal
+	if not(bel(whitelistedTeam(_))), percept(team(MyTeam)) 
+	   then {
+		
+		  if bel(sabotageThem) 
+	        then insert(whitelistedTeam(MyTeam)).
+	
+		  if bel(sabotageUs) 
+	         then insert(whitelistedTeam(fakeTeamName)).
+	   }	
+	
+}

@@ -64,7 +64,9 @@ module syncLastActionResultDataIntoBelief {
 				   		if true then delete(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy,BlockType,BlockDir)) 
 				   		             + insert(agentSighting(X3,Y3,DirX,DirY,OldStep,NewEnergy,BlockType,BlockDir)).
 				   		             %+ print("Energy taken").
-				   	    if bel(NewEnergy =:= 0) then insert(inactiveSighting(X3,Y3,10)).
+				   	    if bel(NewEnergy =:= 0, bodyCounter(BodyCount), NewBodyCount is BodyCount+1) 
+				   	       then insert(inactiveSighting(X3,Y3,10)) 
+				   	          + delete(bodyCounter(BodyCount)) + insert(bodyCounter(NewBodyCount)) + print("Saboteur victims:" +NewBodyCount).
 				   	    			 %+ print("Agent deactivated").
 				   
 					}

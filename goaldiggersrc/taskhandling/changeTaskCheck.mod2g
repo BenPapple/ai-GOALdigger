@@ -18,7 +18,7 @@ module changeTaskCheck {
 	   percept(name(MyName))
 	    then delete(currentChosenTask(TaskName, V2, 40, V4, V5, V6, V7, V8)) +
 	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
-	          all.send(failed40pointtask(MyName)).
+	          all.send(failed40pointtask(MyName, disappeared)).
 	if bel(currentChosenTask(TaskName, V2, 90, V4, V5, V6, V7, V8)),
 	   not(percept(lastAction(submit))),
 	   bel(submitterLeader),
@@ -26,7 +26,7 @@ module changeTaskCheck {
 	   percept(name(MyName))
 	    then  delete(currentChosenTask(TaskName, V2, 90, V4, V5, V6, V7, V8)) +
 	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
-	          all.send(failed90pointtask(MyName)).
+	          all.send(failed90pointtask(MyName, disappeared)).
 	if bel(currentChosenTask(TaskName, V2, 160, V4, V5, V6, V7, V8)),
 	   not(percept(lastAction(submit))),
 	   bel(submitterLeader),	   
@@ -34,7 +34,7 @@ module changeTaskCheck {
 	   percept(name(MyName))
 	    then  delete(currentChosenTask(TaskName, V2, 160, V4, V5, V6, V7, V8)) +
 	          insert(currentChosenTask(TaskName, V2, 999, V4, V5, V6, V7, V8)) + 
-	          all.send(failed160pointtask(MyName)).
+	          all.send(failed160pointtask(MyName, disappeared)).
 
 	% recognize failed multitask by expired tasksteps and send message
 	if bel(currentChosenTask(_, TaskStep, 40, _, _, _,_,_)),
@@ -42,19 +42,19 @@ module changeTaskCheck {
 	   not(percept(lastAction(submit))),
 	   percept(name(MyName), step(SimStep)),
 	   bel(TaskStep > 2, TaskStep == SimStep - 1)
-	    then all.send(failed40pointtask(MyName)).
+	    then all.send(failed40pointtask(MyName, expired)).
 	if bel(currentChosenTask(_, TaskStep, 90, _, _, _,_,_)),
 	   bel(submitterLeader),
 	   not(percept(lastAction(submit))),
 	   percept(name(MyName), step(SimStep)),
 	   bel(TaskStep > 2, TaskStep == SimStep - 1)
-	    then all.send(failed90pointtask(MyName)).
+	    then all.send(failed90pointtask(MyName, expired)).
 	if bel(currentChosenTask(_, TaskStep, 160, _, _, _,_,_)),
 	   bel(submitterLeader),
 	   not(percept(lastAction(submit))),
 	   percept(name(MyName), step(SimStep)),
 	   bel(TaskStep > 2, TaskStep == SimStep - 1)
-	    then all.send(failed160pointtask(MyName)).
+	    then all.send(failed160pointtask(MyName, expired)).
 
 
     % reset waiting period for new task as submitterLeader when task has 0 steps left

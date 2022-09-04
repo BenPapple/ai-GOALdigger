@@ -2,7 +2,10 @@ use "../../goaldiggerProlog" as knowledge.
 use "../../goaldiggerAction" as actionspec.
 
 /**
- * ask for(while role default) and store send rolezone messages
+ *
+ * Handles messages about sighted role zones sent by other agents
+ *
+ * @author Isaac S.
  *
  */
 

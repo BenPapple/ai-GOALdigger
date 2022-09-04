@@ -38,6 +38,19 @@ module helperMoveWithBlock {
 	    			   percept(attached(Xn, Yn)) 
 	    				then preActionCleanup + move(AltMove).
         		}
+        		
+        	if bel( directionToCoordinate(AltMove, Xm, Ym), diagonalCoordForAffiAndOppoBlock(Diry,AltMove,A,B)), 
+        	   not(percept(thing(0, 0, Type3, _), Type3 == marker)),
+    		   percept(thing(Xm, Ym, Type,_), Type == marker), 
+    		   percept(thing(A, B, Type2,_), Type2 == marker) 
+    		   	then {
+	    			if percept(thing(Xn, Yn, entity,_)) 
+	    				then preActionCleanup + skip.
+	    			if percept(thing(Xn, Yn, block,_)), 
+	    			   percept(attached(Xn, Yn)) 
+	    				then preActionCleanup + skip.
+        		}
+        	
         	
         	if bel( directionToCoordinate(AltMove, Xm, Ym), diagonalCoordForAffiAndOppoBlock(Diry,AltMove,A,B)), 
     		   not(percept(thing(Xm, Ym, Type,_), Type \== marker)), 
@@ -61,6 +74,20 @@ module helperMoveWithBlock {
 		    		if percept(thing(Xn, Yn, block,_)), 
 		    		   percept(attached(Xn, Yn)) 
 		    			then preActionCleanup + move(AltAltMove).
+	        	}
+	        	
+	        if bel(oppositeDirection(AltMove, AltAltMove), 
+	               directionToCoordinate(AltAltMove, Xm, Ym), 
+	               diagonalCoordForAffiAndOppoBlock(Diry,AltAltMove,A,B)),
+	           not(percept(thing(0, 0, Type3, _), Type3 == marker)), 
+	           percept(thing(Xm, Ym, Type,_), Type == marker), 
+	           percept(thing(A, B, Type2,_), Type2 == marker) 
+	        	then {
+		    		if percept(thing(Xn, Yn, entity,_)) 
+		    			then preActionCleanup + skip.
+		    		if percept(thing(Xn, Yn, block,_)), 
+		    		   percept(attached(Xn, Yn)) 
+		    			then preActionCleanup + skip.
 	        	}
 	        	
 	        if bel(oppositeDirection(AltMove, AltAltMove), 

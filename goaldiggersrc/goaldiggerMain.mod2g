@@ -44,8 +44,7 @@ module goaldiggerMain {
 %            then executeSaboteurRole.
 
     	% Handle blaster role
-    	if bel(activateSaboteurFeature, customRole(customRoleSaboteur)), 
-    	   percept(role(digger))
+    	if bel(activateSaboteurFeature, customRole(customRoleSaboteur)) 
             then executeSaboteurRole.
 
 	    % Handle DEFAULT role
