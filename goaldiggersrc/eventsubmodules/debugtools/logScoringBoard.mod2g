@@ -16,62 +16,143 @@ module logScoringBoard {
     if percept(step(SimStep), SimStep == 25), bel(customRole(customRoleSaboteur)) 
     	then print("I am the sneaky saboteur!").
 
-    % 2Task success logging
-	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
-	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
-	   bel(currentChosenTask(TaskName, _, 40, _, _, _, _, _), count2Task(Num2Task, OldStep), 
-	       NewCount is Num2Task +1, CurrentStep > OldStep)
+    % 1Task success logging
+	if percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+	   bel(currentChosenTask(TaskName, _, 10, _, _, _, _, _))
 	    then {
-	        if bel(count2Task(Num2Task, OldStep)),
-	           percept(name(MyName))
-	            then delete(count2Task(Num2Task, OldStep)) +
-	                 insert(count2Task(NewCount, CurrentStep)) +
-	                 print("40 Points by me on step " + CurrentStep + " in sim " + 
-	                         SimCount+"2TaskGoals: "+NewCount) +
-	                 allother.send(made40Points(MyName)).
-	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
-	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).
+	        if percept(name(MyName))
+	            then all.send(made10Points(MyName)).
+	 }
+
+    % 2Task success logging
+	if bel(submitterLeader), 
+	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+	   bel(currentChosenTask(TaskName, _, 40, _, _, _, _, _))
+	    then {
+	        if percept(name(MyName))
+	            then all.send(made40Points(MyName)).
+	 }
+
+	% 3Task success logging
+	if bel(submitterLeader), 
+	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+	   bel(currentChosenTask(TaskName, _, 90, _, _, _, _, _))
+	    then {
+	        if percept(name(MyName)) 
+	            then all.send(made90Points(MyName)).
 	 }
 	 
+	% 4Task success logging
+	if bel(submitterLeader), 
+	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+	   bel(currentChosenTask(TaskName, _, 160, _, _, _, _, _))
+	    then {
+	        if percept(name(MyName)) 
+	            then all.send(made160Points(MyName)).
+	 }	 
+	 
 	% score messages
+	forall (_).sent(made10Points(Name)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep))
+	    do {
+	        if bel(count1Task(Num1Task, OldStep), 
+		       NewCount is Num1Task +1, SimStep >= OldStep),
+		       bel(count1Task(Num1Task, OldStep))
+	            then delete(count1Task(Num1Task, OldStep)) +
+	                 insert(count1Task(NewCount, SimStep)).
+	        if bel(count1Task(NumUpd, _), cachedCount1Task(V1)) 
+	            then delete(cachedCount1Task(V1)) + insert(cachedCount1Task(NumUpd)).	    
+		    if true then print("10 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }
 	forall (_).sent(made40Points(Name)),
 	       bel(simCount(SimCount)),
 	       percept(step(SimStep))
-	    do print("40 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    do {
+	        if bel(count2Task(Num2Task, OldStep), 
+		       NewCount is Num2Task +1, SimStep >= OldStep),
+		       bel(count2Task(Num2Task, OldStep))
+	            then delete(count2Task(Num2Task, OldStep)) +
+	                 insert(count2Task(NewCount, SimStep)).
+	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
+	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).	    
+		    if true then print("40 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }
 	forall (_).sent(made90Points(Name)),
 	       bel(simCount(SimCount)),
 	       percept(step(SimStep))
-	    do print("90 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
-	    	 
-	% 3Task success logging
-	if bel(submitterLeader, step(CurrentStep), simCount(SimCount)), 
-	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
-	   bel(currentChosenTask(TaskName, _, 90, _, _, _, _, _), count3Task(Num3Task, OldStep), 
-	       NewCount is Num3Task +1, CurrentStep > OldStep)
-	    then {
-	        if bel(count3Task(Num3Task, OldStep)),
-	           percept(name(MyName)) 
+	    do {
+	        if bel(count3Task(Num3Task, OldStep), 
+		       NewCount is Num3Task +1, SimStep >= OldStep),
+		       bel(count3Task(Num3Task, OldStep))
 	            then delete(count3Task(Num3Task, OldStep)) +
-	                 insert(count3Task(NewCount, CurrentStep)) +
-	                 print("90 Points by me on step " + CurrentStep + " in sim " + 
-	                         SimCount+"3TaskGoals: "+NewCount) +
-	                 allother.send(made90Points(MyName)).
+	                 insert(count3Task(NewCount, SimStep)).
 	        if bel(count3Task(NumUpd, _), cachedCount3Task(V1)) 
-	            then delete(cachedCount3Task(V1)) + insert(cachedCount3Task(NumUpd)).
-	 }
+	            then delete(cachedCount3Task(V1)) + insert(cachedCount3Task(NumUpd)).	    
+		    if true then print("90 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }
+	forall (_).sent(made160Points(Name)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep))
+	    do {
+	        if bel(count4Task(Num4Task, OldStep), 
+		       NewCount is Num4Task +1, SimStep >= OldStep),
+		       bel(count4Task(Num4Task, OldStep))
+	            then delete(count4Task(Num4Task, OldStep)) +
+	                 insert(count4Task(NewCount, SimStep)).
+	        if bel(count4Task(NumUpd, _), cachedCount4Task(V1)) 
+	            then delete(cachedCount4Task(V1)) + insert(cachedCount4Task(NumUpd)).	    
+		    if true then print("160 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }   
+
+	% divider line
+	if percept(step(X), X >= 25, 0 =:= mod(X, 25)) 
+	    then print("---------------------------------------------------------------------------------").
+
+    % print qtable ML 
+    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+       bel(submitterLeader, qtable(Q2, Q3, Q4, Task2, Task3, Task4)) 
+        then print("Q-table: "|Q2+Q3+Q4|" Chance: "|Task2+Task3+Task4+" on step: "|X).
+
+    % update score case first score in percept
+    if percept(score(Score1)),
+       bel(currentScore(Del))
+        then delete(currentScore(Del)) + insert (currentScore(Score1)).
+    
+    % update score case 2 scores in percept
+    if percept(score(Score1), score(Score2), Score1 \= Score2),
+       bel(currentScore(Del))
+        then delete(currentScore(Del)) + insert (currentScore(Score2)).
+    
+    % print  current cumulated score
+    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+       bel(currentScore(CurrentScore)),
+       bel(cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task))
+        then print("Current score: "|CurrentScore+
+                   " 1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task).
+
+	% divider line
+	if percept(step(X), X >= 25, 0 =:= mod(X, 25)) 
+	    then print("_________________________________________________________________________________").
 
 	% score table sim end
     if bel(stopScoreLogging(LastLog)),
        not(percept(score(Score1), score(Score2), Score1 \= Score2)),
        percept(score(Score1), 
                steps(MaxStep), EndStep is MaxStep -1, step(EndStep)),
-       bel(cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), simCount(SimCount), SimCount > LastLog) 
+       bel(cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task), 
+           simCount(SimCount), 
+           SimCount > LastLog) 
        	then print("Simulation"+SimCount+"ended with Score: "+Score1+" : "+
-       			   " 2Task: "+Num2Task+" 3Task: "+Num3Task) +
+       			   " 1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task) +
+		     delete(cachedCount1Task(Num1Task)) + 
+		     insert(cachedCount1Task(0)) +
 		     delete(cachedCount2Task(Num2Task)) + 
 		     insert(cachedCount2Task(0)) +
 		     delete(cachedCount3Task(Num3Task)) + 
 		     insert(cachedCount3Task(0)) +
+		     delete(cachedCount4Task(Num4Task)) + 
+		     insert(cachedCount4Task(0)) +
 		     delete(stopScoreLogging(LastLog)) + 
 		     insert(stopScoreLogging(SimCount)).
 
@@ -79,13 +160,19 @@ module logScoringBoard {
     if bel(stopScoreLogging(LastLog)),
        percept(score(Score1), score(Score2), Score1 \= Score2, 
                steps(MaxStep), EndStep is MaxStep -1, step(EndStep)),
-       bel(cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), simCount(SimCount), SimCount > LastLog) 
+       bel(cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task), 
+           simCount(SimCount), 
+           SimCount > LastLog) 
        	then print("Simulation"+SimCount+"ended with Score: "+Score1+" : "+Score2+
-       			   " 2Task: "+Num2Task+" 3Task: "+Num3Task) +
+       			   " 1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task) +
+		     delete(cachedCount1Task(Num1Task)) + 
+		     insert(cachedCount1Task(0)) +
 		     delete(cachedCount2Task(Num2Task)) + 
 		     insert(cachedCount2Task(0)) +
 		     delete(cachedCount3Task(Num3Task)) + 
 		     insert(cachedCount3Task(0)) +
+		     delete(cachedCount4Task(Num4Task)) + 
+		     insert(cachedCount4Task(0)) +		     
 		     delete(stopScoreLogging(LastLog)) + 
 		     insert(stopScoreLogging(SimCount)).
 		     

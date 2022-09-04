@@ -10,7 +10,9 @@ use "../goaldiggerAction" as actionspec.
 module syncMessageDataIntoBelief {	
 
 	% STORE seenOtherAgent messages
-	forall (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)) 
+	forall percept(step(SimStep)),
+	       (_).sent(seenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)),
+	       bel(Step =< SimStep)
 		do {
 			if not(bel(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)))
 				then insert(cachedSeenOtherAgentAt(OwnX, OwnY, OtherX, OtherY, Step, AgentSender)). 
@@ -57,7 +59,9 @@ module syncMessageDataIntoBelief {
 
 	    
 	% UPDATE belief about status messages
-	forall (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached, TaskRole)) 
+	forall percept(step(SimStep)),
+	       (SenderConnect).sent(otherAgentStatus(SenderName, X, Y, MsgStep, Seed, Role, BlockTypeAttached, TaskRole)),
+	       bel(MsgStep =< SimStep)
 		do {
 	    	if bel(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8, V9), MsgStep > OldMsgStep) 
 	    		then delete(storedOtherAgentStatus(SenderName, OldMsgStep, V3, V4, V5, V6, V7, V8, V9)) + 

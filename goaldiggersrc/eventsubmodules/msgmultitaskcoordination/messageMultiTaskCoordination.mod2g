@@ -55,6 +55,19 @@ module messageMultiTaskCoordination {
 		                                          W14, W15, W16, W17, W18, W19)).
     }
 
+    % RECEIVE as submitterLeader ACK for fourth block from supporter
+	forall (_).sent(msgACKtask(fourthBlock, NameSupporter)), 
+	       bel(submitterLeader),
+	       bel(multiTaskSupporterStatus(_, _, _, _, _, _, _, _, _, _, _, _, _, NameSupporter, _, _, _, pending, _))      
+	   	do {
+		 if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter,
+		                                 W15, W16, W17, pending, W19)) 
+		     then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          NameSupporter, W15, W16, W17, pending, W19)) +
+		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          NameSupporter, W15, W16, W17, ack, W19)).
+    }
+
    	% RECEIVE as submitterLeader NoACK secondblock from supporter
 	forall (_).sent(msgNoACKtask(secondBlock, _, NameSupporter)), 
 	       bel(submitterLeader)            
@@ -77,6 +90,18 @@ module messageMultiTaskCoordination {
 		                                          W14, W15, W16, W17, W18, W19)) +
 		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, needsupporter, W9, W10, W11, noack, W13,
 		                                          W14, W15, W16, W17, W18, W19)).
+	}
+
+   	% RECEIVE as submitterLeader NoACK thirdblock from supporter
+	forall (_).sent(msgNoACKtask(fourthBlock, _, NameSupporter)), 
+	       bel(submitterLeader)            
+	   	do {
+	   	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, NameSupporter, W15,
+	   	                                W16, W17, pending, W19)) 
+		     then delete(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          NameSupporter, W15, W16, W17, pending, W19)) +
+		          insert(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13,
+		                                          needsupporter, W15, W16, W17, noack, W19)).
 	}
 
 	% redo messageTwoTaskSupporter for 2task replacement
@@ -169,6 +194,18 @@ module messageMultiTaskCoordination {
 				                    supportingAgent, NameSender)) +
 				             (ConnectSender).send(msgACKtask(secondBlock, NameOwn)).					
         } % if 2
+
+        % acknowledge 4-task second block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 160, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(secondBlock, NameOwn)).					
+        } % if 2
         
 	} % forall
 	
@@ -192,6 +229,42 @@ module messageMultiTaskCoordination {
 				             insert(currentChosenTask(TaskName, TaskStep, 90, SendX, SendY, SendBlock, 
 				                    supportingAgent, NameSender)) +
 				             (ConnectSender).send(msgACKtask(thirdBlock, NameOwn)).					
+        } % if 2
+        
+        % acknowledge 4-task second block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 160, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(thirdBlock, NameOwn)).					
+        } % if 2        
+        
+	} % forall
+
+	% RECEIVE become fourthBlock supportingAgent, check block for task and target		
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(fourthBlock, NameSender, supportingAgent, NameOwn, SendX, SendY, 
+	                                                  SendBlock, TaskName)) 
+	    do{ 
+	    if bel(currentChosenTask(_, _, _, _, _, _, supportingAgent, _)),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then (ConnectSender).send(msgNoACKtask(fourthBlock, SendBlock, NameOwn)). 	
+        
+        % acknowledge 4-task third block  
+        if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8), ClientServer \= supportingAgent),
+	       percept(task(TaskName ,TaskStep, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)])),
+	       not(bel(submitterLeader)),
+	       not(bel(customRole(customRoleSaboteur))) 
+	   	    then {
+				if true then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, ClientServer, V8)) +
+				             insert(currentChosenTask(TaskName, TaskStep, 160, SendX, SendY, SendBlock, 
+				                    supportingAgent, NameSender)) +
+				             (ConnectSender).send(msgACKtask(fourthBlock, NameOwn)).					
         } % if 2
         
 	} % forall

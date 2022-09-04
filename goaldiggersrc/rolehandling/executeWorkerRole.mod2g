@@ -11,6 +11,7 @@ use "../taskhandling/handleTaskSubmit" as module.
 use "../blockhandling/detachBloke" as module.
 use "../blockhandling/rotateBlockAgainstAffinity" as module.
 use "../blockhandling/rotateBlockToNorth" as module.
+use "../blockhandling/rotateBlockToSouth" as module.
 use "../blockhandling/connectBlocks" as module.
 use "../blockhandling/attachBlocksLyingAround" as module.
 
@@ -64,8 +65,9 @@ module executeWorkerRole {
 	    	       
 	    	% Explorer map until execute Manhattan is set
 			if not(bel(executeManhattan)),
+			   bel(limitACOSteps(ACOLimit)),
 			   bel(exploreDirection(Dir), randomAffinity(Dir2)) ,
-			   percept(step(SimStep), SimStep < 200)
+			   percept(step(SimStep), SimStep < ACOLimit)
 				then { 
 					if bel(Dir == r) then executeRandomMove.
 					if true then delete(randomAffinity(Dir2)) + 
@@ -84,6 +86,10 @@ module executeWorkerRole {
 	 */		  
 	if bel(haveBlockAttached(true,DirBlock)) 
 		then {
+
+            % drop block on switch as submitterLeader
+            if bel(submitterLeader, dropAllBlocks)
+                then preActionCleanup + detach(DirBlock).
 
 			% detach after connect success as supportingAgent
 			if percept(lastActionResult(success), lastAction(connect)),
@@ -117,6 +123,18 @@ module executeWorkerRole {
 			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
 				   SubmitterBlockTypeAttached == SouthBlock),           
 			   percept(task(TaskName, _, 90,[req(_, _, _),req(_, _, _),req(_, _, _)]), TaskStep >= SimStep)  
+				then executeMoveAroundSubmitter.
+
+			% Moving around 4task Submitting agent in rain drop pattern 
+			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,
+			           YBlock is YSubmit + 1, thing(XBlock, YBlock, block, SouthBlock), 
+			           XPlusY is abs(XSubmit) + abs(YSubmit), XPlusY \= 0, attached(XBlock, YBlock), step(SimStep)),
+			   bel(abs(XSubmit) =< 1, abs(YSubmit) =< 1),
+			   bel(currentChosenTask(TaskName, TaskStep, _, _, _, _, supportingAgent, SubmitterName)),
+			   bel(storedOtherAgentStatus(SubmitterName, _, _, _, _, _, _, SubmitterBlockTypeAttached, _), 
+				   SubmitterBlockTypeAttached == SouthBlock),           
+			   percept(task(TaskName, _, 160,[req(_, _, _),req(_, _, _),req(_, _, _),req(_, _, _)]), 
+			           TaskStep >= SimStep)  
 				then executeMoveAroundSubmitter.
 
             % have some distance between submitterLeaders
@@ -177,6 +195,27 @@ module executeWorkerRole {
 	    	% Move to supporting position for multi task
 	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
 	    	       targetMd(_, _, supportingPosition)), 
+	    	   bel(step(SimStep), TaskStep >= SimStep)
+	    	    then executeManhattanMove.
+
+	    	% rotate to north on waiting position for multi task
+	    	if bel(DirBlock \= s),
+	    	   bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
+	    	       targetMd(XTar, YTar, waitingPosition)), 
+	    	   bel(agentAt(XTar, YTar, _)),
+	    	   bel(step(SimStep), TaskStep >= SimStep)
+	    	    then rotateBlockToSouth.
+
+	    	% wait on waiting position for multi task
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
+	    	       targetMd(XTar, YTar, waitingPosition)), 
+	    	   bel(agentAt(XTar, YTar, _)),
+	    	   bel(step(SimStep), TaskStep >= SimStep)
+	    	    then preActionCleanup + skip.
+
+	    	% Move to waiting position for multi task
+	    	if bel(executeManhattan, currentChosenTask(_, TaskStep, _, _, _, _, supportingAgent, _), 
+	    	       targetMd(_, _, waitingPosition)), 
 	    	   bel(step(SimStep), TaskStep >= SimStep)
 	    	    then executeManhattanMove.
 	    	

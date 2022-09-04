@@ -13,6 +13,10 @@ module reinitBeliefOnSimChange {
 	if bel(simCount(SimCount), NewSimCount is SimCount + 1) 
 		then delete(simCount(SimCount)) + 
 		     insert(simCount(NewSimCount)). 
+
+	if bel(count1Task(Num1Task, V2)) 
+		then delete(count1Task(Num1Task, V2)) + 
+		     insert(count1Task(0, 0)).
 	
 	if bel(count2Task(Num2Task, V2)) 
 		then delete(count2Task(Num2Task, V2)) + 
@@ -21,6 +25,13 @@ module reinitBeliefOnSimChange {
 	if bel(count3Task(Num3Task, V2)) 
 		then delete(count3Task(Num3Task, V2)) + 
 		     insert(count3Task(0, 0)).		     
+
+	if bel(count4Task(Num4Task, V2)) 
+		then delete(count4Task(Num4Task, V2)) + 
+		     insert(count4Task(0, 0)).
+		     
+	if bel(currentScore(Del)) 
+	    then delete(currentScore(Del)) + insert(currentScore(0)).	     
 
 	% restore initial belief
 	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
@@ -47,6 +58,10 @@ module reinitBeliefOnSimChange {
                                           placeholder,placeholder, placeholder, placeholder, placeholder, 
                                           placeholder,placeholder, placeholder, placeholder, placeholder, 
                                           placeholder, placeholder,  placeholder, placeholder)). 
+
+	% machine learning
+	if bel(qtable(V1,V2,V3,V4,V5,V6)) 
+	    then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(33,34,33,30,70,100)).
 	
 	if bel(haveBlockAttached(X, Y)) 
 		then delete(haveBlockAttached(X, Y)) + 
@@ -121,6 +136,14 @@ module reinitBeliefOnSimChange {
 		        		  UnknownAgentName, Step)).
 		        		  
 		    forall bel(mapMarkExplored(X, Y)) do delete(mapMarkExplored(X, Y)).
+		    
+		    forall bel(cachedMsgRoleZoneData(X,Y,SenderName)) 
+		        do delete(cachedMsgRoleZoneData(X,Y,SenderName)).
+		    forall bel(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)) 
+		        do delete(cachedMsgDispenserData(X,Y,dispenser,BlockType,Bool,SenderName)).
+		    forall bel(cachedMsgGoalZoneData(X,Y,SenderName)) 
+		        do delete(cachedMsgGoalZoneData(X,Y,SenderName)).
+
 	}
 	
 } % end module

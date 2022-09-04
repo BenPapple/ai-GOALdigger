@@ -12,9 +12,10 @@ module updateMapExploredMarks {
 	% CREATE belief about explored Marks. Where other agents has explored
 	forall bel(storedOtherAgentStatus(SenderName, _, _, _, _, X, Y, _, _))
 		do {
-			if bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SenderName)), 
+			if bel(limitACOSteps(ACOLimit)),
+			   bel(confirmedOffsetOfAgent(OffsetX, OffsetY, SenderName)), 
 			   bel( ExploredX is X + OffsetX, ExploredY is Y + OffsetY),
-	           percept(step(SimStep), 0 =:= mod(SimStep, 2), SimStep < 200)
+	           percept(step(SimStep), 0 =:= mod(SimStep, 2), SimStep < ACOLimit)
 			    then insert(mapMarkExplored(ExploredX,ExploredY)).
 	}
 }

@@ -17,6 +17,10 @@ module goaldiggerInit {
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 
+	if not(bel(count1Task(_, _))) 
+		then insert(count1Task(0, 0)). 
+	if not(bel(cachedCount1Task(_))) 
+		then insert(cachedCount1Task(0)).
 	if not(bel(count2Task(_, _))) 
 		then insert(count2Task(0, 0)). 
 	if not(bel(cachedCount2Task(_))) 
@@ -24,7 +28,12 @@ module goaldiggerInit {
 	if not(bel(count3Task(_, _))) 
 		then insert(count3Task(0, 0)). 
 	if not(bel(cachedCount3Task(_))) 
-		then insert(cachedCount3Task(0)). 		
+		then insert(cachedCount3Task(0)). 
+	if not(bel(count4Task(_, _))) 
+		then insert(count4Task(0, 0)). 
+	if not(bel(cachedCount4Task(_))) 
+		then insert(cachedCount4Task(0)).				
+    if true then insert(currentScore(0)).
 	if true then insert(thisIsTheFirstSim).
 	if true then insert(stopScoreLogging(0)).
 	if true then insert(stopDurationLogging(0)).	
@@ -40,6 +49,14 @@ module goaldiggerInit {
 	if true then insert(expectDifferentSimulations). 
 	% lowest and highest limit after which agent changes explore direction
 	if true then insert(limitChangeStepMinMax(10 , 20)). 
+	% set step after which ACO exploring turns off
+	if true then insert(limitACOSteps(100)). 	
+	% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
+    if true then insert(limitStepsTask(20, 40, 70, 70)).
+	
+	% machine learning
+	if true then insert(qtable(33,34,33,30,70,100)).
+	if true then insert(randomTaskChoser(0)).
 	
 	% switches
 	if true then insert (haveMove). % Semaphore of decision for step
@@ -92,6 +109,7 @@ module goaldiggerInit {
 	% misc
 	if true then insert ( step(-1)). % init server steps
 	if true then insert (agentAt(0, 0, 0)). % agent starting coordinate	
+	if true then insert(waitBeforeNewTask(0)).
 
 	if bel(randomDirection(X)) 
 		then insert (randomAffinity(X)). % random general direction to explore for agent

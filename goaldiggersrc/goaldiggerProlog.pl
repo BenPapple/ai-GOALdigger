@@ -22,6 +22,8 @@
 :- dynamic calculateNewDispenserMD/0.
 % switch to recalculate goalzone distance
 :- dynamic calculateNewGoalzoneMD/0. 
+% switch to drop all attached blocks
+:- dynamic dropAllBlocks/0.
 
 % when a marked is north of agent. 
 :- dynamic northExplored/0. 
@@ -44,16 +46,23 @@
 % when a marked is north of agent. 
 :- dynamic currentCustomRoleStatus/1. 
 
-
+% current score
+:- dynamic currentScore/1.
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
-% submitterLeader counts his submitted 2tasks
+% agents count his submitted 1tasks
+:- dynamic count1Task/2. 
+% agents count his submitted 2tasks
 :- dynamic count2Task/2. 
-% submitterLeader counts his submitted 3tasks
+% agents count his submitted 3tasks
 :- dynamic count3Task/2. 
+% agents count his submitted 3tasks
+:- dynamic count4Task/2. 
 % cached so it survives map change for score table
+:- dynamic cachedCount1Task/1. 
 :- dynamic cachedCount2Task/1. 
-:- dynamic cachedCount3Task/1. 
+:- dynamic cachedCount3Task/1.
+:- dynamic cachedCount4Task/1.  
 
 % (Bool, Dir)
 :- dynamic haveBlockAttached/2.
@@ -97,6 +106,10 @@
 :- dynamic targetClosestRoleZone/3.
 % lowest and highest limit after which agent changes explore direction
 :- dynamic limitChangeStepMinMax/2.
+% step after which ACO is switched off
+:- dynamic limitACOSteps/1.
+% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
+:- dynamic limitStepsTask/4.
 
 % nearest Agent (Name, X, Y, MD).
 :- dynamic targetNearestAgent/4.
@@ -157,6 +170,8 @@
 :- dynamic multiTaskSupporterStatus/19.
 % (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole, [Energy])
 :- dynamic storedOtherAgentStatus/9. 
+% wait before chosing next task as submitterLeader
+:- dynamic waitBeforeNewTask/1.
 
 % coordination to avoid a norm or accept punishment
 %(nameNorm,checkAvoid,stepFirst,stepLast,typeNorm,roleNorm,maxQuant,penaltyDmg,substituteOne,substituteTwo)
@@ -183,6 +198,11 @@
 :- dynamic clearingTarget/2. % stores the target to clear next.
 :- dynamic inactiveSighting/3. % (X,Y,Timer) stores the coordinates of a bloke which is believed to be inactive and a timer.
 :- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
+
+% MACHINEL LEARNING VARs
+:- dynamic qtable/6.
+:- dynamic randomTaskChoser/1.
+
 recoverEnergy(OldEnergy, RecoveredEnergy, NewEnergy) :- 
 	(NewEnergy is OldEnergy + RecoveredEnergy, NewEnergy =< 100); 
 	(NewEnergy is 100).
@@ -366,6 +386,37 @@ rotateToCoord(w, cw, 0, -1).
 rotateToCoord(w, ccw, 0, 1).
 rotateToCoord(e, cw, 0, 1).
 rotateToCoord(e, ccw, 0, -1).
+
+% check supportingAgent block coordinates for wait/immediate delivery
+checkBlockPosition(-1, 1, alwaysDeliver).
+checkBlockPosition(-2, 1, alwaysDeliver).
+checkBlockPosition(-3, 1, alwaysDeliver).
+checkBlockPosition(1, 1, alwaysDeliver).
+checkBlockPosition(2, 1, alwaysDeliver).
+checkBlockPosition(3, 1, alwaysDeliver).
+
+checkBlockPosition(0, 2, alwaysDeliver).
+checkBlockPosition(0, 3, wait).
+checkBlockPosition(0, 4, wait).
+
+checkBlockPosition(-3, 2, wait).
+checkBlockPosition(-2, 2, wait).
+checkBlockPosition(-1, 2, wait).
+checkBlockPosition(1, 2, wait).
+checkBlockPosition(2, 2, wait).
+checkBlockPosition(3, 2, wait).
+checkBlockPosition(-3, 3, wait).
+checkBlockPosition(-2, 3, wait).
+checkBlockPosition(-1, 3, wait).
+checkBlockPosition(1, 3, wait).
+checkBlockPosition(2, 3, wait).
+checkBlockPosition(3, 3, wait).
+checkBlockPosition(-3, 4, wait).
+checkBlockPosition(-2, 4, wait).
+checkBlockPosition(-1, 4, wait).
+checkBlockPosition(1, 4, wait).
+checkBlockPosition(2, 4, wait).
+checkBlockPosition(3, 4, wait).
 
 % Gives the apparent displacement of the observed agent relative to the observing agent between t0 and t1.
 %distanceBetweenPoints(X1, Y1, X2, Y2, DistX, DistY) :- DistX is X1 - X2, DistY is Y1 - Y2.
