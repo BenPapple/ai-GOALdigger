@@ -1,0 +1,56 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+/**
+ * Sends messages to the saboteur if a crowded goal zone has been found
+ *
+ * @author Isaac S.
+ * 
+ */
+
+module messageCrowdedGoalZone {
+	
+	% insert knowledge about whitelisted team
+	if not(bel(whitelistedTeam(_))), percept(team(MyTeam)) 
+	   then {
+		
+		  if bel(sabotageThem) 
+	        then insert(whitelistedTeam(MyTeam)).
+	
+		  if bel(sabotageUs) 
+	         then insert(whitelistedTeam(fakeTeamName)).
+	   }
+	
+	% cache data about agent sighted carrying a block on a goalzone			 
+	 forall bel(whitelistedTeam(MyTeam)), percept(thing(X,Y,entity,OtherTeam), OtherTeam \= MyTeam, goalZone(X,Y)) do {
+	 
+	 	if percept(thing(X1, Y1, block, Type), attached(X1, Y1), abs(X1-X) + abs(Y1-Y) =:= 1),
+	 	   bel(agentAt(X2, Y2, _)),
+	 	   bel(X0 is X1-X, Y0 is Y1-Y, directionToCoordinate(Dir,X0,Y0)),
+	 	   bel(localize(X, Y, X2, Y2, X5, Y5)), not(bel(X =:=0, Y=:=0)), 
+	 	   not(bel(agentSighting(X5,Y5,_,_,_,_,_,_))), 
+	 	   bel(localize(X1,Y1,X2,Y2,X6,Y6)),
+	 	   not(bel(agentSighting(X7,Y7,_,_,_,_,_,OtherDir), directionToCoordinate(OtherDir,X8,Y8),
+	 	   X6 =:= X7 + X8, Y6 =:= Y7 + Y8))
+	 	   then insert(agentSighting(X5,Y5,0,0,0, 100, Type, Dir)).
+	 }
+	
+	
+	% reset agent counter
+	if bel(agentCounter(A))
+	  then delete(agentCounter(A)).
+
+	if true then insert(agentCounter(0)).
+
+	% Count all sightings and remove all sightings	
+	forall bel(agentSighting(A,B,C,D,E,F,G,H))
+	  do {
+	  		if bel(agentCounter(Count), NewCount is Count+1)
+	  		  then delete(agentCounter(Count)) + insert(agentCounter(NewCount)). 
+	  		if true then delete(agentSighting(A,B,C,D,E,F,G,H)).
+	  }
+	
+	if bel(agentCounter(Count), Count > 0), percept(name(MyName), step(ThisStep), goalZone(A,B)), bel(agentAt(X2,Y2,_)),
+	   bel(localize(A,B,X2,Y2,X,Y))
+	  then allother.send(goalZoneSightings(X,Y,Count,ThisStep,MyName)).	
+}

@@ -1,0 +1,36 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+use "./selectClearingTarget" as module.
+use "./trackSightedAgents" as module.
+use "./messageCrowdedGoalZone" as module.
+use "./manageEmptyGoalzones" as module.
+use "./manageMessageCrowdedGoalZone" as module.
+
+
+
+/**
+ * Manages specific events for the agent with the custom role "Saboteur"
+ *
+ * @author Isaac S.
+ */
+
+module manageSaboteurEvents {
+	
+	% SUBMODULE track entities in sight for saboteurs
+	if bel(customRole(customRoleSaboteur)) then trackSightedAgents.
+
+	% SUBMODULE manage empty goal zone detection
+	if bel(customRole(customRoleSaboteur)), percept(goalZone(_,_))
+	  then manageEmptyGoalzones.
+
+	% SUBMODULE manage messages about crowded goal zones
+	if bel(customRole(customRoleSaboteur)) then manageMessageCrowdedGoalZone.
+
+	% SUBMODULE select a target for saboteurs
+	if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
+
+	% SUBMODULE sending saboteur information about crowded goal zones
+	if not(bel(customRole(CustomRoleSaboteur))), percept(goalZone(_,_))
+	  then messageCrowdedGoalZone.	
+	
+}
