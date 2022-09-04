@@ -12,7 +12,7 @@ use "../../goaldiggerAction" as actionspec.
 module manageMessageCrowdedGoalZone {
 		
 	% delete really old crowded goal zone sightings
-	if percept(step(MyStep)), bel(goalZoneSightings(A,B,C,Step,E), Step < MyStep - 30)
+	if percept(step(MyStep)), bel(goalZoneSightings(A,B,C,Step,E), Step < MyStep - 50)
 	  then delete(goalZoneSightings(A,B,C,Step,E)).
 	
 	% Select 
@@ -21,13 +21,20 @@ module manageMessageCrowdedGoalZone {
 	    bel(minimumDistanceEmptyGoalZone(MinDist))
 	  do {
 	  
+	  		% insert goal zone sighting if none known
 	        if not(bel(goalZoneSightings(_,_,_,_,_)))
 	          then insert(goalZoneSightings(X1,Y1,Count,Step,SenderName)).
 	         
+	        % update goal zone sighting if better known
 	        if bel(goalZoneSightings(X0,Y0,Count0,Step0,SenderName0), agentAt(X2,Y2,_),
 	           Dist0 is abs(X0-X2) + abs(Y0-Y2), Dist is abs(X-X2) + abs(Y-Y2)),
 	           bel((Count > Count0); (Count =:= Count0, Dist < Dist0))
 	           then delete(goalZoneSightings(X0,Y0,Count0,Step0,SenderName0))
 	           + insert(goalZoneSightings(X1,Y1,Count,Step,SenderName)).
+	        
+	        % Delete counter for empty goal zone nearby
+	        if bel(emptyGoalZoneCounter(EmptyX, EmptyY, Timer), 
+	        	DistEmpty is abs(X1-EmptyX) + abs(X1-EmptyY), DistEmpty < 10)
+	        	then delete(emptyGoalZoneCounter(EmptyX, EmptyY, Timer)).
 	}
 }

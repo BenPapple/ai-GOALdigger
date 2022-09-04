@@ -16,7 +16,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 		% in-empty-goal-zone switch
 		if bel(inEmptyGoalZone) then delete(inEmptyGoalZone).
 		
-		if percept(goalZone(_,_), step(Step)), bel(agentAt(X4, Y4, _)), 
+		if percept(goalZone(0,0), step(Step)), bel(agentAt(X4, Y4, _)), 
 		   bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time)),
 		   bel(emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)
 		then insert(inEmptyGoalZone) + print("in an empty goal zone").
@@ -95,6 +95,11 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 		     if true then print("Decision Md: Roaming goal zone").     
 		}
 
+		% delete manhattan target if in an empty goal zone and target nearby
+		if bel(searchInGoalzone), bel(inEmptyGoalZone), bel(agentAt(X,Y,_), targetMd(X2,Y2,goalzone),
+		   minimumDistanceEmptyGoalZone(Distance), calculateXYMd(X,Y,X2,Y2,Md), Md < Distance, executeManhattan)
+		   then delete(targetMd(X2,Y2,goalzone)) + delete(executeManhattan).		
+
 		% set recommended goalzone as target while in empty goal zone
 		if not(bel(saboteurHasMhTarget)), 
 		   bel(searchInGoalzone), bel(inEmptyGoalZone)
@@ -110,7 +115,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 		% set next non-empty goalzone as target
 		% (intended to go back to origin goal zone after having pursued some agent)
 		if not(bel(saboteurHasMhTarget)),
-		   %not(percept(goalZone(_,_))),
+		   not(percept(goalZone(_,_))),
 		   bel(searchInGoalzone)
 		    then {
 			   		if true then updateGoalzoneDistance.
@@ -139,9 +144,26 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 						if true then print("Decision Md: Recommended goal zone, not goal zone in sight").			}
 		}		
 	    
+		% set any non-empty goalzone as target, not in empty goal zone
+		if not(bel(saboteurHasMhTarget)),
+		   not(bel(inEmptyGoalZone)), not(bel(targetMd(_,_,goalzone))),
+		   bel(searchInGoalzone), not(bel(goalZoneSightings(_,_,_,_,_)))
+		    then {
+			   		if bel(mapGoalZone(X,Y,_), agentAt(X2,Y2,_)), 
+			   		bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time)),
+		   			not(bel(emptyGoalZoneCounter(X1, Y1, C), calculateXYMd(X, Y, X1, Y1, Md), Md < Distance, C > Time)),
+		   			not(bel(calculateXYMd(X,Y,X2,Y2,Md2), Md2 > 60)) then {
+						if bel(targetMd(X4, Y4, Target)) then delete(targetMd(X4, Y4, Target)). 
+						if true then insert(targetMd(X, Y, goalzone)).	
+						if not(bel(executeManhattan)) then insert(executeManhattan).
+						if true then insert(saboteurHasMhTarget).
+						if true then print("Decision Md: Any goal zone, not in empty goal zone").
+					}
+			}
+		
 		% set any goalzone as target, not in empty goal zone
 		if not(bel(saboteurHasMhTarget)),
-		   not(bel(inEmptyGoalZone)),
+		   not(bel(inEmptyGoalZone)), not(bel(targetMd(_,_,goalzone))),
 		   bel(searchInGoalzone), not(bel(goalZoneSightings(_,_,_,_,_)))
 		    then {
 			   		if true then updateGoalzoneDistance.
