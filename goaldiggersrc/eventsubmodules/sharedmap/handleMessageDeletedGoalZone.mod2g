@@ -15,9 +15,12 @@ module handleMessageDeletedGoalZone {
 		do {
 			if bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY, 
 			   mapGoalZone(X1,Y1,Md)) 
-			    then delete (mapGoalZone(X1,Y1,Md)) +
-			         print("Deleted"+mapGoalZone(X1,Y1,12345)+" Offset "+ 
-			               confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName)).
-		}
+			    then {
+			    if true then delete(mapGoalZone(X1,Y1,Md)) +
+			                 print("DELETED goalzone by message "+X1+Y1).
+			    if not(bel(calculateNewGoalzoneMD)) 
+	        	    then insert(calculateNewGoalzoneMD).
+	        }
+	}
 		
-}
+} % end module

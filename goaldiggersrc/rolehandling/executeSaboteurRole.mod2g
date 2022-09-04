@@ -11,46 +11,33 @@ use "../pathfinding/executeRandomMove" as module.
  */
 
 module executeSaboteurRole {	
-		
-	% clear block if target available
-	if percept(thing(X,Y,block,_), abs(X)+abs(Y) =:= 1, goalzone(_,_)), not(percept(attached(X,Y))) 
-	   then allother.send(msg("Last action performed: clearing block")) +  clear(X,Y).
-
+	
+	% adopt digger role if in role zone
+	if not(percept(role(digger))), percept(roleZone(0,0))
+	  then adapt(digger).
+			
 	% attack agent if target available
-	if bel(clearingTarget(X,Y)) then allother.send(msg("Last action performed: attack agent")) +  clear(X,Y).
+	if bel(clearingTarget(X,Y)) 
+	  then clear(X,Y).
 
-	% persecute carried block if available
-	if bel(targetMd(_, _, blockCarrier), executeManhattan)
-	then allother.send(msg("Last action performed: persecute carrier")) + executeManhattanMove.
+	% attack someone if no target but next to it
+	% (safeguard for strange dancing behaviour)
+	if bel(whitelistedTeam(MyTeam), agentAt(X2,Y2,_)), 
+	   percept(goalZone(_,_), thing(X0,Y0,entity,OtherTeam), thing(X01,Y01,block,_), OtherTeam \= MyTeam, abs(X0)+abs(Y0) =:= 1,
+	   abs(X0-X01)+abs(Y0-Y01)=:=1),
+	   not(percept(thing(X1,Y1,entity,OtherTeam), (X1 \= X0; Y1 \= Y0), OtherTeam \= MyTeam, abs(X1)+abs(Y1) =:= 1,
+	   		thing(X11,Y11,block,_), abs(X11-X1)+abs(Y11-Y1) =:= 1, X1 >= X0, Y1 =< Y0)),
+	   not(bel(inactiveSighting(X3,Y3,_), localize(X0,Y0,X2,Y2,X3,Y3))),
+	   bel(agentSighting(X4,Y4,_,_,_,_,_,_), localize(X0,Y0,X2,Y2,X4,Y4))
+	   then clear(X0,Y0).
+	   
+    % execute manhattan move if not false 
+    if bel(targetMd(_, _, _), executeManhattan)
+      then executeManhattanMove.
 
-	% persecute agent if available
-	if bel(targetMd(_, _, agent), executeManhattan)
-	then allother.send(msg("Last action performed: persecute agent")) + executeManhattanMove.
+	if true then executeRandomMove.
 
-%		% roam goal zone if still not declared empty
-%		if percept(goalZone(0,0)), bel(whitelistedTeam(MyTeam)), 
-%		   not(percept(thing(X1,Y1,entity,OtherTeam), goalZone(X1,Y1), OtherTeam \= MyTeam, (X1 \= 0; Y1 \= 0))), 
-%		   not(percept(attached(X1, Y1))), bel(agentAt(X4, Y4, _)), 
-%		   not(bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time), emptyGoalZoneCounter(X5, Y5, C), 
-%		   calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)) then executeManhattanMove.
-
-	% go to goalzone if available
-	if bel(targetMd(A, B, goalzone), (A \= 111; B \= 111), executeManhattan)
-	then allother.send(msg("Last action performed: go to goalzone")) + executeManhattanMove.
-
-	% roam if no distant goal zone available
-	if bel(emptyGoalZoneCounter(_,_,Count), waitingTimeEmptyGoalZone(Time), Count > Time)
-	   then allother.send(msg("Last action performed: roam")) + executeRandomMove.
-
-	% clear blocks when in goal zone
-	if percept(goalZone(0,0), thing(X, Y, obstacle, _), abs(X) + abs(Y) =:= 1) 
-	   then clear(X,Y).				
-
-	if true then allother.send(msg("Last action performed: randommove")) +executeRandomMove.
-
-	if true then allother.send(msg("Last action performed: skip")) + skip.
+	if true then skip.
 	
-	
-
 	
 }

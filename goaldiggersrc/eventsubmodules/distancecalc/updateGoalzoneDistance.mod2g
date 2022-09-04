@@ -5,9 +5,12 @@ use "../../goaldiggerAction" as actionspec.
  * Handles calculating distance of goalzones to agent and manages inserting goalzone data from percept into belief
  *
  * @author Ben G.
+ * @co-author Isaac S.
+ *
  */
 
 module updateGoalzoneDistance {
+
 	
 	% RESET old MD values in mapGoalZones to high number expected to not occur in simulation
 	forall bel(mapGoalZone(XAlt, YAlt, MdAlt)) 
@@ -15,7 +18,7 @@ module updateGoalzoneDistance {
 		   insert(mapGoalZone(XAlt, YAlt, 123456)).
 
 	% RESET old MD values in targetgoalzones to high number expected to not occur in simulation
-	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), haveBlockAttached(true,_)) 
+	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), (haveBlockAttached(true,_); customRole(customRoleSaboteur))) 
 	    then delete(targetClosestGoalZone(XAlt, YAlt, MdAlt)) + 
 	         insert(targetClosestGoalZone(XAlt, YAlt, 1234567)).
 

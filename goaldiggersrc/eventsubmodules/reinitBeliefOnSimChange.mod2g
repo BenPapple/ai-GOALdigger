@@ -13,6 +13,10 @@ module reinitBeliefOnSimChange {
 	if bel(simCount(SimCount), NewSimCount is SimCount + 1) 
 		then delete(simCount(SimCount)) + 
 		     insert(simCount(NewSimCount)). 
+
+	if bel(count1Task(Num1Task, V2)) 
+		then delete(count1Task(Num1Task, V2)) + 
+		     insert(count1Task(0, 0)).
 	
 	if bel(count2Task(Num2Task, V2)) 
 		then delete(count2Task(Num2Task, V2)) + 
@@ -25,6 +29,9 @@ module reinitBeliefOnSimChange {
 	if bel(count4Task(Num4Task, V2)) 
 		then delete(count4Task(Num4Task, V2)) + 
 		     insert(count4Task(0, 0)).
+		     
+	if bel(currentScore(Del)) 
+	    then delete(currentScore(Del)) + insert(currentScore(0)).	     
 
 	% restore initial belief
 	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
@@ -54,7 +61,7 @@ module reinitBeliefOnSimChange {
 
 	% machine learning
 	if bel(qtable(V1,V2,V3,V4,V5,V6)) 
-	    then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(30,40,30,30,70,100)).
+	    then delete(qtable(V1,V2,V3,V4,V5,V6)) + insert(qtable(33,34,33,30,70,100)).
 	
 	if bel(haveBlockAttached(X, Y)) 
 		then delete(haveBlockAttached(X, Y)) + 
@@ -138,5 +145,27 @@ module reinitBeliefOnSimChange {
 		        do delete(cachedMsgGoalZoneData(X,Y,SenderName)).
 
 	}
+	
+	% reinit saboteur-specific beliefs
+	if bel(emptyGoalZoneCounter(_,_,_))
+	  then {
+	  	forall bel(emptyGoalZoneCounter(A,B,C))
+	  	  do delete(emptyGoalZoneCounter(A,B,C)).
+	  }
+	
+	if bel(goalZoneSightings(_,_,_,_,_)) 
+	   then {
+	      forall bel(goalZoneSightings(A,B,C,D,E))
+	        do delete(goalZoneSightings(A,B,C,D,E)).
+	   }
+	 
+	if bel(bodyCounter(A))
+	  then delete(bodyCounter(A)).
+	  
+	if bel(agentSighting(_,_,_,_,_,_,_,_))
+	  then {
+	    forall bel(agentSighting(A,B,C,D,E,F,G,H))
+	       do delete(agentSighting(A,B,C,D,E,F,G,H)).
+	   }
 	
 } % end module

@@ -16,6 +16,14 @@ module logScoringBoard {
     if percept(step(SimStep), SimStep == 25), bel(customRole(customRoleSaboteur)) 
     	then print("I am the sneaky saboteur!").
 
+    % 1Task success logging
+	if percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
+	   bel(currentChosenTask(TaskName, _, 10, _, _, _, _, _))
+	    then {
+	        if percept(name(MyName))
+	            then all.send(made10Points(MyName)).
+	 }
+
     % 2Task success logging
 	if bel(submitterLeader), 
 	   percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
@@ -44,6 +52,19 @@ module logScoringBoard {
 	 }	 
 	 
 	% score messages
+	forall (_).sent(made10Points(Name)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep))
+	    do {
+	        if bel(count1Task(Num1Task, OldStep), 
+		       NewCount is Num1Task +1, SimStep >= OldStep),
+		       bel(count1Task(Num1Task, OldStep))
+	            then delete(count1Task(Num1Task, OldStep)) +
+	                 insert(count1Task(NewCount, SimStep)).
+	        if bel(count1Task(NumUpd, _), cachedCount1Task(V1)) 
+	            then delete(cachedCount1Task(V1)) + insert(cachedCount1Task(NumUpd)).	    
+		    if true then print("10 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }
 	forall (_).sent(made40Points(Name)),
 	       bel(simCount(SimCount)),
 	       percept(step(SimStep))
@@ -84,20 +105,48 @@ module logScoringBoard {
 		    if true then print("160 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
 	    }   
 
-    % print qtable ML
+	% divider line
+	if percept(step(X), X >= 25, 0 =:= mod(X, 25)) 
+	    then print("---------------------------------------------------------------------------------").
+
+    % print qtable ML 
     if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
        bel(submitterLeader, qtable(Q2, Q3, Q4, Task2, Task3, Task4)) 
         then print("Q-table: "|Q2+Q3+Q4|" Chance: "|Task2+Task3+Task4+" on step: "|X).
+
+    % update score case first score in percept
+    if percept(score(Score1)),
+       bel(currentScore(Del))
+        then delete(currentScore(Del)) + insert (currentScore(Score1)).
+    
+    % update score case 2 scores in percept
+    if percept(score(Score1), score(Score2), Score1 \= Score2),
+       bel(currentScore(Del))
+        then delete(currentScore(Del)) + insert (currentScore(Score2)).
+    
+    % print  current cumulated score
+    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+       bel(currentScore(CurrentScore)),
+       bel(cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task))
+        then print("Current score: "|CurrentScore+
+                   " 1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task).
+
+	% divider line
+	if percept(step(X), X >= 25, 0 =:= mod(X, 25)) 
+	    then print("_________________________________________________________________________________").
 
 	% score table sim end
     if bel(stopScoreLogging(LastLog)),
        not(percept(score(Score1), score(Score2), Score1 \= Score2)),
        percept(score(Score1), 
                steps(MaxStep), EndStep is MaxStep -1, step(EndStep)),
-       bel(cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task), simCount(SimCount), 
+       bel(cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task), 
+           simCount(SimCount), 
            SimCount > LastLog) 
        	then print("Simulation"+SimCount+"ended with Score: "+Score1+" : "+
-       			   " 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task) +
+       			   " 1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task) +
+		     delete(cachedCount1Task(Num1Task)) + 
+		     insert(cachedCount1Task(0)) +
 		     delete(cachedCount2Task(Num2Task)) + 
 		     insert(cachedCount2Task(0)) +
 		     delete(cachedCount3Task(Num3Task)) + 
@@ -111,10 +160,13 @@ module logScoringBoard {
     if bel(stopScoreLogging(LastLog)),
        percept(score(Score1), score(Score2), Score1 \= Score2, 
                steps(MaxStep), EndStep is MaxStep -1, step(EndStep)),
-       bel(cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task), simCount(SimCount), 
+       bel(cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task), 
+           simCount(SimCount), 
            SimCount > LastLog) 
        	then print("Simulation"+SimCount+"ended with Score: "+Score1+" : "+Score2+
-       			   " 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task) +
+       			   " 1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task) +
+		     delete(cachedCount1Task(Num1Task)) + 
+		     insert(cachedCount1Task(0)) +
 		     delete(cachedCount2Task(Num2Task)) + 
 		     insert(cachedCount2Task(0)) +
 		     delete(cachedCount3Task(Num3Task)) + 

@@ -3,7 +3,10 @@ use "../../goaldiggerAction" as actionspec.
 use "../../pathfinding/executeRandomMove" as module.
 
 /**
- * ask for and store send dispenser messages
+ *
+ * Handles messages about sighted dispensers sent by other agents
+ *
+ * @author Isaac S.
  *
  */
 
