@@ -13,6 +13,9 @@ use "../pathfinding/helperMoveWithoutBlock" as module.
 module executeExplorerRole {
 	    
 	    % explore
+	    if percept(thing(0,0, Type, _), Type == marker)
+			then executeRandomMove.
+	    
     	% Explorer map until one Dispenser and one goalZone is known
 		if bel(exploreDirection(Dir), randomAffinity(Dir2)) 
 			then { 

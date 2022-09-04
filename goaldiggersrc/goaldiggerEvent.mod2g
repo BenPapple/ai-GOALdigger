@@ -216,4 +216,6 @@ module goaldiggerEvent {
 	   percept(step(SimStep), SimStep >= 0)
 	   	then delete(haveMove).
 
+	if true then sleep(200).
+
 } % module

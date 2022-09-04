@@ -24,6 +24,9 @@ module executeWorkerRole {
 
 	if bel(customRole(customRoleSaboteur)), percept(roleZone(0,0))
 	   then preActionCleanup + adapt(digger).
+	   
+	if percept(thing(0,0, Type, _), Type == marker)
+		then print("Run!") + executeRandomMove.
 
 	% if caught, get free
 	if bel(getFree) then detachBloke.
