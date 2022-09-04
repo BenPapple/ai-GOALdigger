@@ -30,6 +30,17 @@ module helperMoveWithoutBlock {
         		}
         		
         	if bel( directionToCoordinate(AltMove, Xm, Ym)), 
+        	   not(percept(thing(0, 0, Type2, _), Type2 == marker)),
+    		   percept(thing(Xm, Ym, Type,_), Type == marker)
+    			then {
+    				if percept(thing(Xn, Yn, entity,_)) 
+    					then preActionCleanup + skip.
+    				if percept(thing(Xn, Yn, block,_)), 
+    				   percept(attached(Xn, Yn)) 
+    				   	then preActionCleanup + skip.
+        		}
+        		
+        	if bel( directionToCoordinate(AltMove, Xm, Ym)), 
     		   not(percept(thing(Xm, Ym, Type,_), Type \== marker))
     			then {
     				if percept(thing(Xn, Yn, entity,_)) 
@@ -48,6 +59,17 @@ module helperMoveWithoutBlock {
 	    			   percept(attached(Xn, Yn)) 
 	    			   	then preActionCleanup + move(AltAltMove).
 	        	}
+	        	
+	        if bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), 
+	           not(percept(thing(0, 0, Type2, _), Type2 == marker)),
+	           percept(thing(Xm, Ym, Type,_), Type == marker) 
+	            then {
+	    			if percept(thing(Xn, Yn, entity,_)) 
+	    				then preActionCleanup + skip.
+	    			if percept(thing(Xn, Yn, block,_)), 
+	    			   percept(attached(Xn, Yn)) 
+	    			   	then preActionCleanup + skip.
+        	}
 	        	
 	        if bel(oppositeDirection(AltMove, AltAltMove), directionToCoordinate(AltAltMove, Xm, Ym)), 
 	           not(percept(thing(Xm, Ym, Type,_), Type \== marker)) 

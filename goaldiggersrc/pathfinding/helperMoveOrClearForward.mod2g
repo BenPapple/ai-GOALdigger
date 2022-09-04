@@ -22,16 +22,35 @@ module helperMoveOrClearForward {
        not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser)) 
         then preActionCleanup + move(Dir, Dir).
         
+	if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
+       percept(role(worker)), 
+       not(percept(thing(0, 0, Type3, _), Type3 == marker)),
+       percept(thing(Xn, Yn, Type, _), Type == marker), 
+       percept(thing(Xn+Xn, Yn+Yn, Type2, _), Type2 == marker) 
+        then preActionCleanup + skip.
+        
+   	if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
+       percept(role(worker)), 
+       not(percept(thing(0, 0, Type3, _), Type3 == marker)),
+       percept(thing(Xn+Xn, Yn+Yn, Type2, _), Type2 == marker) 
+        then preActionCleanup + skip.
+        
     if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
        percept(role(worker)), 
-       not(percept(thing(Xn, Yn, Type,_), Type \== marker)), 
-       not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== marker)) 
+       not(percept(thing(Xn, Yn, Type, _), Type \== marker)), 
+       not(percept( thing(Xn+Xn, Yn+Yn, Type2, _), Type2 \== marker)) 
         then preActionCleanup + move(Dir, Dir).
         
     % normal speed
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
        not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)) 
         then preActionCleanup + move(Dir).
+        
+   	if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
+       percept(role(worker)), 
+       not(percept(thing(0, 0, marker, _))),
+       percept(thing(Xn, Yn, Type, _), Type == marker)
+        then preActionCleanup + skip.
     
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
        not(percept(thing(Xn, Yn, Type,_), Type \== marker)) 

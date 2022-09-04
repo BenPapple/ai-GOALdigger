@@ -17,6 +17,9 @@ module executeDefaultRole {
 		% if caught, get free
 		if bel(getFree) then detachBloke.
 		
+		if percept(thing(0,0, Type, _), Type == marker)
+			then executeRandomMove.
+		
 		% adopt digger role if custom role is saboteur
     	if percept(roleZone(0, 0)), 
     	   bel(customRole(customRoleSaboteur)) 
