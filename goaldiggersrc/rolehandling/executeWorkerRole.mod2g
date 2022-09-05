@@ -50,7 +50,7 @@ module executeWorkerRole {
 			
 			% collect blocks lying around 
 			if percept(step(SimStep)),
-			   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep),
+			   bel(currentChosenTask(_, TaskStep, _, _, _, _, _,_), TaskStep >= SimStep),
 			   percept(team(MyTeam)),
 			   not(percept(thing(X,Y,entity(MyTeam)), abs(X) + abs(Y) =< 3)) 
 				then attachBlocksLyingAround. 

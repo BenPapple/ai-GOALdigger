@@ -152,8 +152,8 @@ module goaldiggerEvent {
 		then manageManhattanTarget.
 
 %    % check norms for possible damage to agents
-%    if true
-%        then analyzeNorms.
+    if true
+        then analyzeNorms.
 
 	/**
 	 * MISC SWITCH MANIPULATION

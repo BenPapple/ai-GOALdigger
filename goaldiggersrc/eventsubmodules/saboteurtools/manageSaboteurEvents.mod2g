@@ -30,7 +30,7 @@ module manageSaboteurEvents {
 	if bel(customRole(customRoleSaboteur)) then selectClearingTarget.
 
 	% SUBMODULE sending saboteur information about crowded goal zones
-	if not(bel(customRole(CustomRoleSaboteur))), percept(goalZone(_,_))
+	if not(bel(customRole(customRoleSaboteur))), percept(goalZone(_,_))
 	  then messageCrowdedGoalZone.	
 	
 }

@@ -22,7 +22,7 @@ module analyzeNorms {
 		then delete(avoidNorm(NormName,V2,V3,StepEnd,V5,V6,V7,V8,V9,V10)).
 		
 	% Set norms marker
-	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,V5,V6,V7,V8,V9,V10)),
+	if bel(avoidNorm(_,dropBlock,StepStart,StepEnd,_,_,_,_,_,_)),
 	   percept(step(SimStep), SimStep >= StepStart - 1, SimStep =< StepEnd), 
 	   not(bel(waitingForNorms))
 		then insert(waitingForNorms).

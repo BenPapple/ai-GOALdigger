@@ -190,7 +190,7 @@
 :- dynamic searchInGoalzone/0. % switch to search for blokes next to goalzones
 :- dynamic minimumDistanceEmptyGoalZone/1. % Distance between next goal zone to be visited if current empty
 :- dynamic waitingTimeEmptyGoalZone/1. % Time to wait in an empty goal zone before moving to another one
-:- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
+%:- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
 :- dynamic getFree/0. % switch to detach other bloke
 :- dynamic sabotageUs/0. % if set, the saboteur sabotages its own team members for testing goals
 :- dynamic sabotageThem/0. % if set, the saboteur sabotages the members of other teams

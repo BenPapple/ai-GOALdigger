@@ -18,7 +18,7 @@ module manageMessageCrowdedGoalZone {
 	% Select 
 	forall (_).sent(goalZoneSightings(X,Y,Count,Step,SenderName)),
 	    bel(confirmedOffsetOfAgent(OffsetX,OffsetY,SenderName), X1 is X + OffsetX, Y1 is Y + OffsetY),
-	    bel(minimumDistanceEmptyGoalZone(MinDist))
+	    bel(minimumDistanceEmptyGoalZone(_))
 	  do {
 	  
 	  		% insert goal zone sighting if none known

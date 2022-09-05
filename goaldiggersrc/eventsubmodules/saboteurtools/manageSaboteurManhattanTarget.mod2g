@@ -16,7 +16,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 		% in-empty-goal-zone switch
 		if bel(inEmptyGoalZone) then delete(inEmptyGoalZone).
 		
-		if percept(goalZone(0,0), step(Step)), bel(agentAt(X4, Y4, _)), 
+		if percept(goalZone(0,0), step(_)), bel(agentAt(X4, Y4, _)), 
 		   bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time)),
 		   bel(emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)
 		then insert(inEmptyGoalZone) + print("in an empty goal zone").

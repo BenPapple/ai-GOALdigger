@@ -23,7 +23,7 @@ module checkRoleNorms {
 	% if percept(norm(NormName,StepStart,StepEnd,[requirement(role,PenaltyRole,MaxQuRole)],Dmg)), 
 	if percept(role(worker), norm(NormName,StepStart,StepEnd,[requirement(role, worker, MaxQuRole,_)],Dmg)), 
 	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
-	   percept(energy(AgentEnergy))
+	   percept(energy(_))
 		then {
 			if bel(roleCount(RoleCount)) 
 			    then delete(roleCount(RoleCount)) + 
