@@ -51,7 +51,7 @@ module chooseTask {
 		then { 
 		if bel(currentChosenTask(V1, TaskStep, V3, V4, V5, V6, V7, V8), TaskStep < SimStep) 
 				then delete(currentChosenTask(V1, TaskStep, V3, V4, V5, V6, V7, V8)) +
-		    		 insert(currentChosenTask(noName, -1, 999, 1, 1, noBlock, noClientServer, noTaskSubmitter)).
+		    		 insert(currentChosenTask(noName, -1, 999, 1, 1, noBlock, needNewTask, needNewTask)).
 		%if true then exit-module.
     }
 

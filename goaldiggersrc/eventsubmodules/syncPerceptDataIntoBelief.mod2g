@@ -86,8 +86,7 @@ module syncPerceptDataIntoBelief {
 	           not(percept((goalZone(X3, Y3))))
 	           	then {
                 if true then delete(mapGoalZone(X, Y, Md)) +
-                     allother.send(messageDeletedGoalZone(X, Y, MyName)) +
-                 print("DELETED goalzone by percept "+X+Y).
+                     allother.send(messageDeletedGoalZone(X, Y, MyName)).
 
                 if not(bel(calculateNewGoalzoneMD))
                   then insert(calculateNewGoalzoneMD).

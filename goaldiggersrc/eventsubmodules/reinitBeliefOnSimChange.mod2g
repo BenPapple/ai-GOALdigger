@@ -14,6 +14,10 @@ module reinitBeliefOnSimChange {
 		then delete(simCount(SimCount)) + 
 		     insert(simCount(NewSimCount)). 
 
+	if bel(countFailedTask(NumFailedTask, V2)) 
+		then delete(countFailedTask(NumFailedTask, V2)) + 
+		     insert(countFailedTask(0, 0)).
+
 	if bel(count1Task(Num1Task, V2)) 
 		then delete(count1Task(Num1Task, V2)) + 
 		     insert(count1Task(0, 0)).
@@ -29,6 +33,10 @@ module reinitBeliefOnSimChange {
 	if bel(count4Task(Num4Task, V2)) 
 		then delete(count4Task(Num4Task, V2)) + 
 		     insert(count4Task(0, 0)).
+
+	if bel(cachedCountFailedTask(NumFailedTask)) 
+		then delete(cachedCountFailedTask(NumFailedTask)) + 
+		     insert(cachedCountFailedTask(0)).
 		     
 	if bel(currentScore(Del)) 
 	    then delete(currentScore(Del)) + insert(currentScore(0)).	     
@@ -36,7 +44,7 @@ module reinitBeliefOnSimChange {
 	% restore initial belief
 	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
-		     insert(currentChosenTask(task0, -11001001, 999 , 0, 1, bx, placeholder, placeholder2)).
+		     insert(currentChosenTask(task0, -11001001, 999 , 0, 1, bx, needNewTask, needNewTask)).
     % track custom role of agent
 	if bel(currentCustomRoleStatus(Delete)) then delete(currentCustomRoleStatus(Delete)) + 
 	                                             insert(currentCustomRoleStatus(basicAgent)).

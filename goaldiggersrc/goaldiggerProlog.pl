@@ -52,6 +52,8 @@
 :- dynamic currentScore/1.
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
+% agents count his failed 1tasks
+:- dynamic countFailedTask/2.
 % agents count his submitted 1tasks
 :- dynamic count1Task/2.
 % agents count his submitted 2tasks
@@ -61,6 +63,7 @@
 % agents count his submitted 3tasks
 :- dynamic count4Task/2.
 % cached so it survives map change for score table
+:- dynamic cachedCountFailedTask/1.
 :- dynamic cachedCount1Task/1.
 :- dynamic cachedCount2Task/1.
 :- dynamic cachedCount3Task/1.
