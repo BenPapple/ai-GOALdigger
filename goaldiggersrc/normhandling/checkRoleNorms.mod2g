@@ -1,0 +1,50 @@
+use "../goaldiggerProlog" as knowledge.
+
+
+/**
+ * analyze norms and make plans about actions to remedy them
+ * with block-norm only the zero-set is considered, because agents normally do not carry more blocks. 
+ *
+ * @author Julia H.
+ * @co-author Ben G.
+ */
+ 
+module checkRoleNorms {
+	%normAvoidance
+	%zuerst auf Norm reagieren lassen: (Explorer), Warrior, 1TaskAgents, SupporterAgents, SubmitterAgents
+	%if explorer, stay (dmg taken) or go worker (if norm worker, go digger)
+	%if Worker, go Constructor (speed 1) (if norm Constructor, go default)
+	%if Constructor, go worker 
+	%if Digger, go explorer or worker (if worldsize done)
+	%if default, go old role
+	
+	% ready analyzed norm should be saved
+	% roles norm expects more agents than are in the role
+	% if percept(norm(NormName,StepStart,StepEnd,[requirement(role,PenaltyRole,MaxQuRole)],Dmg)), 
+	if percept(role(worker), norm(NormName,StepStart,StepEnd,[requirement(role, worker, MaxQuRole,_)],Dmg)), 
+	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
+	   percept(energy(_))
+		then {
+			if bel(roleCount(RoleCount)) 
+			    then delete(roleCount(RoleCount)) + 
+		        	 insert(roleCount(0)). 
+			forall bel(storedOtherAgentStatus(_,_,worker,_,_,_,_,_,_))
+				do{ % counter for roll quantity
+					if bel(roleCount(RoleCount), NewRoleCount is RoleCount + 1) 
+					then delete(roleCount(RoleCount)) + 
+		     		     insert(roleCount(NewRoleCount)). 
+		     		if percept(role(worker), NewRoleCount is RoleCount + 1)
+		     			then delete(roleCount(RoleCount)) + 
+		     				 insert(roleCount(NewRoleCount)). 
+		     	}
+		     	if bel(roleCount(CurrentAmount), CurrentAmount =< MaxQuRole)	
+					then insert(avoidNorm(NormName,doNothing,na,na,na,na,na,na,na,na)).
+				if bel(roleCount(CurrentAmount), CurrentAmount > MaxQuRole)	
+					then insert(avoidNorm(NormName,changeRole,StepStart,StepEnd,role,worker,MaxQuRole,Dmg,na,na)).
+		}
+}
+
+%avoidNorm(nameNorm,checkAvoid,stepFirst,stepLast,typeNorm,roleNorm,maxQuant,penaltyDmg,substituteOne,substituteTwo).
+
+%norm(n1,48,80,[requirement(role,default,5)],3)
+%norm(n1,start,until,[requirement(role,default,max nr of agents in team,)],Schaden)

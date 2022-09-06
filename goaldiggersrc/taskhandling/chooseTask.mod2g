@@ -16,6 +16,11 @@ use "../taskhandling/preferFourTask" as module.
  */
 
 module chooseTask {
+ 
+    % set to placeholder
+    if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8))
+		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
+		     insert(currentChosenTask(noname, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
 
 	% set switch to drop blocks if blocks connected
 	if bel(multiTaskSupporterStatus(_, _, _, _, _, _, Connect1, _, _, _, _, _, Connect2, _, _, _, _, _, Connect3)) 
@@ -46,7 +51,7 @@ module chooseTask {
 		then { 
 		if bel(currentChosenTask(V1, TaskStep, V3, V4, V5, V6, V7, V8), TaskStep < SimStep) 
 				then delete(currentChosenTask(V1, TaskStep, V3, V4, V5, V6, V7, V8)) +
-		    		 insert(currentChosenTask(noName, -1, 10, 1, 1, noBlock, noClientServer, noTaskSubmitter)).
+		    		 insert(currentChosenTask(noName, -1, 999, 1, 1, noBlock, needNewTask, needNewTask)).
 		%if true then exit-module.
     }
 
@@ -55,7 +60,7 @@ module chooseTask {
 	   bel(limitStepsTask(Task1Limit, _, _, _)),	
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task1Limit),
 	   not(bel(submitterLeader))
-		then taskHandlingOneBlock + exit-module.
+		then taskHandlingOneBlock.
 
     % create random for ML task choser
 
@@ -77,10 +82,13 @@ module chooseTask {
 	   bel(randomBetween(0, 100, RandOut)),
 	   bel(qtable(V1,V2,_,_,_,_))
 	    then {
-	    if bel(RandOut =< V1) then preferTwoTask + exit-module.
-	    if  bel(Q2 is  V1 + V2),
-	        bel(RandOut =< Q2) then preferThreeTask + exit-module.
-	    if true then preferFourTask.	    
+	    if bel(currentChosenTask(_, _, _, _, _, _, needNewTask, needNewTask)),
+	       bel(RandOut =< V1) then preferTwoTask.
+	    if  bel(currentChosenTask(_, _, _, _, _, _, needNewTask, needNewTask)),
+	        bel(Q2 is  V1 + V2),
+	        bel(RandOut =< Q2) then preferThreeTask.
+	    if bel(currentChosenTask(_, _, _, _, _, _, needNewTask, needNewTask)) 
+	        then preferFourTask.	    
 	}
 		
 } % module

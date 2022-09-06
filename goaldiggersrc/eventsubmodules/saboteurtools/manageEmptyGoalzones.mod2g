@@ -11,7 +11,7 @@ module manageEmptyGoalzones {
 
 	% set flag if test worker in goal zone without submitter sighting
 
-	if bel(customRole(customRoleSaboteur)), percept(goalZone(_, _)), bel(whitelistedTeam(MyTeam)), percept(step(Step)), 
+	if bel(customRole(customRoleSaboteur)), percept(goalZone(_, _)), bel(whitelistedTeam(_)), percept(step(Step)), 
 	       bel(agentAt(X2,Y2,_), minimumDistanceEmptyGoalZone(Distance))	       
 	then {
 	

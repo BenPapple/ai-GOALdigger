@@ -16,6 +16,10 @@ module logScoringBoard {
     if percept(step(SimStep), SimStep == 25), bel(customRole(customRoleSaboteur)) 
     	then print("I am the sneaky saboteur!").
 
+	% print if deactivated
+	if percept(deactivated(true))
+        then print("I am DEACTIVATED! Womp Womp").
+
     % 1Task success logging
 	if percept(lastActionResult(success), lastAction(submit), lastActionParams([TaskName])),
 	   bel(currentChosenTask(TaskName, _, 10, _, _, _, _, _))
@@ -50,11 +54,55 @@ module logScoringBoard {
 	        if percept(name(MyName)) 
 	            then all.send(made160Points(MyName)).
 	 }	 
-	 
+
+    % count failed multitasks of all leaders
+	forall (_).sent(failed40pointtask(Name, Cause)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep), SimStep > 1)
+	    do {
+	        if bel(countFailedTask(NumFailedTask, OldStep), 
+		       NewCount is NumFailedTask +1, SimStep >= OldStep),
+		       bel(countFailedTask(NumFailedTask, OldStep))
+	            then delete(countFailedTask(NumFailedTask, OldStep)) +
+	                 insert(countFailedTask(NewCount, SimStep)).
+	        if bel(countFailedTask(NumUpd, _), cachedCountFailedTask(V1)) 
+	            then delete(cachedCountFailedTask(V1)) + insert(cachedCountFailedTask(NumUpd)).	    
+		    if true 
+		        then print("FAILED 40 Points "+Cause+" failmt by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }
+	forall (_).sent(failed90pointtask(Name, Cause)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep), SimStep > 1)
+	    do {
+	        if bel(countFailedTask(NumFailedTask, OldStep), 
+		       NewCount is NumFailedTask +1, SimStep >= OldStep),
+		       bel(countFailedTask(NumFailedTask, OldStep))
+	            then delete(countFailedTask(NumFailedTask, OldStep)) +
+	                 insert(countFailedTask(NewCount, SimStep)).
+	        if bel(countFailedTask(NumUpd, _), cachedCountFailedTask(V1)) 
+	            then delete(cachedCountFailedTask(V1)) + insert(cachedCountFailedTask(NumUpd)).	    
+		    if true 
+		        then print("FAILED 90 Points "+Cause+" failmt by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }
+	forall (_).sent(failed160pointtask(Name, Cause)),
+	       bel(simCount(SimCount)),
+	       percept(step(SimStep), SimStep > 1)
+	    do {
+	        if bel(countFailedTask(NumFailedTask, OldStep), 
+		       NewCount is NumFailedTask +1, SimStep >= OldStep),
+		       bel(countFailedTask(NumFailedTask, OldStep))
+	            then delete(countFailedTask(NumFailedTask, OldStep)) +
+	                 insert(countFailedTask(NewCount, SimStep)).
+	        if bel(countFailedTask(NumUpd, _), cachedCountFailedTask(V1)) 
+	            then delete(cachedCountFailedTask(V1)) + insert(cachedCountFailedTask(NumUpd)).	    
+		    if true 
+		        then print("FAILED 160 Points "+Cause+" failmt by "+Name+" on step "+SimStep+" in sim "+SimCount).
+	    }
+	    	    	 
 	% score messages
 	forall (_).sent(made10Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count1Task(Num1Task, OldStep), 
 		       NewCount is Num1Task +1, SimStep >= OldStep),
@@ -67,7 +115,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(made40Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count2Task(Num2Task, OldStep), 
 		       NewCount is Num2Task +1, SimStep >= OldStep),
@@ -76,11 +124,11 @@ module logScoringBoard {
 	                 insert(count2Task(NewCount, SimStep)).
 	        if bel(count2Task(NumUpd, _), cachedCount2Task(V1)) 
 	            then delete(cachedCount2Task(V1)) + insert(cachedCount2Task(NumUpd)).	    
-		    if true then print("40 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+		    if true then print("40 Points successmt by "+Name+" on step "+SimStep+" in sim "+SimCount).
 	    }
 	forall (_).sent(made90Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count3Task(Num3Task, OldStep), 
 		       NewCount is Num3Task +1, SimStep >= OldStep),
@@ -89,11 +137,11 @@ module logScoringBoard {
 	                 insert(count3Task(NewCount, SimStep)).
 	        if bel(count3Task(NumUpd, _), cachedCount3Task(V1)) 
 	            then delete(cachedCount3Task(V1)) + insert(cachedCount3Task(NumUpd)).	    
-		    if true then print("90 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+		    if true then print("90 Points successmt by "+Name+" on step "+SimStep+" in sim "+SimCount).
 	    }
 	forall (_).sent(made160Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep))
+	       percept(step(SimStep), SimStep > 1)
 	    do {
 	        if bel(count4Task(Num4Task, OldStep), 
 		       NewCount is Num4Task +1, SimStep >= OldStep),
@@ -102,7 +150,7 @@ module logScoringBoard {
 	                 insert(count4Task(NewCount, SimStep)).
 	        if bel(count4Task(NumUpd, _), cachedCount4Task(V1)) 
 	            then delete(cachedCount4Task(V1)) + insert(cachedCount4Task(NumUpd)).	    
-		    if true then print("160 Points by "+Name+" on step "+SimStep+" in sim "+SimCount).
+		    if true then print("160 Points successmt by "+Name+" on step "+SimStep+" in sim "+SimCount).
 	    }   
 
 	% divider line
@@ -123,13 +171,18 @@ module logScoringBoard {
     if percept(score(Score1), score(Score2), Score1 \= Score2),
        bel(currentScore(Del))
         then delete(currentScore(Del)) + insert (currentScore(Score2)).
+
+    % print  current cumulated score
+    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+       bel(currentScore(CurrentScore))       
+        then print("Current score: "|CurrentScore).
     
     % print  current cumulated score
     if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
-       bel(currentScore(CurrentScore)),
-       bel(cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),cachedCount3Task(Num3Task), cachedCount4Task(Num4Task))
-        then print("Current score: "|CurrentScore+
-                   " 1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task+" 4Task: "+Num4Task).
+       bel(cachedCountFailedTask(NumFailedTask),cachedCount1Task(Num1Task),cachedCount2Task(Num2Task),
+           cachedCount3Task(Num3Task), cachedCount4Task(Num4Task))
+        then print("1Task: "+Num1Task+" 2Task: "+Num2Task+" 3Task: "+Num3Task
+                   +" 4Task: "+Num4Task+" FailedTask: "+NumFailedTask).
 
 	% divider line
 	if percept(step(X), X >= 25, 0 =:= mod(X, 25)) 

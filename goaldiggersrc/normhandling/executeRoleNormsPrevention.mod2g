@@ -1,0 +1,34 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../actionhandling/preActionCleanup" as module.
+use "../blockhandling/attachBlocksLyingAround" as module.
+
+/**
+ * fulfil plan from checkBlockNorms to prevent damage to agents
+ * (Exception submitter-leader, they should continue)
+ *
+ * @author Julia H.
+ * @co-author Ben G.
+ */
+ 
+module executeRoleNormsPrevention {
+
+%	% treat role-norm with worker-condition if current role is worker
+%	if bel(avoidNorm(NormName,changeRole,StepStart,StepEnd,role,worker,MaxQuRole,Dmg,na,na)),
+%   	   bel(haveBlockAttached(true,DirBlock))
+%		then preActionCleanup + detach(DirBlock).
+%	
+%	% skip further actions as long as the norm is active
+%	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)), 
+%	   percept(step(SimStep), SimStep < StepEnd)
+%	   	then preActionCleanup + skip.
+%	
+%	% when the norm ends, check if a block is carried and if for an active selected task, 
+%	% a matching block is next to the agent and not carried by another agent
+%	if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)), 
+%	   percept(step(SimStep), SimStep == StepEnd),
+%	   bel(haveBlockAttached(false,DirBlock)),
+%	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep)
+%	   	then attachBlocksLyingAround.
+	   	
+}

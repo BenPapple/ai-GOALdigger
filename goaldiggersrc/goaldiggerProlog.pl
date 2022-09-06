@@ -24,6 +24,11 @@
 :- dynamic calculateNewGoalzoneMD/0.
 % switch to drop all attached blocks
 :- dynamic dropAllBlocks/0.
+% waiting for norms ending
+:- dynamic waitingForNorms/0.
+
+% switch for norm handling
+:- dynamic activateNormHandling/0.
 
 % when a marked is north of agent.
 :- dynamic northExplored/0.
@@ -50,6 +55,8 @@
 :- dynamic currentScore/1.
 % Counter for sim in tournament mode
 :- dynamic simCount/1.
+% agents count his failed 1tasks
+:- dynamic countFailedTask/2.
 % agents count his submitted 1tasks
 :- dynamic count1Task/2.
 % agents count his submitted 2tasks
@@ -59,6 +66,7 @@
 % agents count his submitted 3tasks
 :- dynamic count4Task/2.
 % cached so it survives map change for score table
+:- dynamic cachedCountFailedTask/1.
 :- dynamic cachedCount1Task/1.
 :- dynamic cachedCount2Task/1.
 :- dynamic cachedCount3Task/1.
@@ -168,17 +176,27 @@
 %(TaskType,Name1,X1,Y1,Block1,Pending1,Connected1,Name2,X2,Y2,Block2,Pending2,Connected2,Name3,X3,Y3,Block3,Pending3,
 % Connected3)
 :- dynamic multiTaskSupporterStatus/19.
-% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole)
-:- dynamic storedOtherAgentStatus/9.
+
+% (SenderName, MsgStep, Role, Seed, SenderConnect, X, Y, BlockTypeAttached, TaskRole, [Energy])
+:- dynamic storedOtherAgentStatus/9. 
+
 % wait before chosing next task as submitterLeader
 :- dynamic waitBeforeNewTask/1.
+
+% coordination to avoid a norm or accept punishment
+%(nameNorm,checkAvoid,stepFirst,stepLast,typeNorm,roleNorm,maxQuant,penaltyDmg,substituteOne,substituteTwo)
+:- dynamic avoidNorm/10.
+% Role Count for Norms
+:- dynamic roleCount/1.
+% After awakening
+:- dynamic lastDeactivationTracker/1.
 
 % Variables related to customRoleSaboteur role
 :- dynamic emptyGoalZoneCounter/3. % Count of time no agents were seen around a specific goalZone.
 :- dynamic searchInGoalzone/0. % switch to search for blokes next to goalzones
 :- dynamic minimumDistanceEmptyGoalZone/1. % Distance between next goal zone to be visited if current empty
 :- dynamic waitingTimeEmptyGoalZone/1. % Time to wait in an empty goal zone before moving to another one
-:- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
+%:- dynamic tempMapGoalZone/3. % Temporal variable to calculate next goal zone far enough of empty goal zones
 :- dynamic getFree/0. % switch to detach other bloke
 :- dynamic sabotageUs/0. % if set, the saboteur sabotages its own team members for testing goals
 :- dynamic sabotageThem/0. % if set, the saboteur sabotages the members of other teams

@@ -125,7 +125,7 @@ module messageMultiTaskCoordination {
 	   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) ,
 	   not(bel(submitterLeader)) 
 	   	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) +
-			 insert(currentChosenTask(V1, -1, V3, V4, V5, V6, needNewTask, needNewTask)).
+			 insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
 			 
     % as saboteur always noack req
 	forall percept(name(NameOwn)), 

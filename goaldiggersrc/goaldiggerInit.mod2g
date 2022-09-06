@@ -9,14 +9,20 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	if true then insert (lDebugOn). 
+	%if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
-	%if true then insert (activateSaboteurFeature).
+	if true then insert (activateSaboteurFeature).
+	% switch for norm handling
+	%if true then insert(activateNormHandling).
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 
+	if not(bel(countFailedTask(_, _))) 
+		then insert(countFailedTask(0, 0)). 
+	if not(bel(cachedCountFailedTask(_))) 
+		then insert(cachedCountFailedTask(0)).
 	if not(bel(count1Task(_, _))) 
 		then insert(count1Task(0, 0)). 
 	if not(bel(cachedCount1Task(_))) 
@@ -38,6 +44,7 @@ module goaldiggerInit {
 	if true then insert(stopScoreLogging(0)).
 	if true then insert(stopDurationLogging(0)).	
 	if true then insert(simDuration(0)).
+	if true then insert(roleCount(0)).
 	
 	% variables for saboteur behaviour (against own team, against other team)
 	%if true then insert(sabotageUs).
@@ -51,7 +58,7 @@ module goaldiggerInit {
 	% set step after which ACO exploring turns off
 	if true then insert(limitACOSteps(100)). 	
 	% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
-    if true then insert(limitStepsTask(20, 40, 70, 70)).
+    if true then insert(limitStepsTask(20, 70, 90, 100)).
 	
 	% machine learning
 	if true then insert(qtable(33,34,33,30,70,100)).
@@ -86,7 +93,7 @@ module goaldiggerInit {
 	
 	% tasks
 	% filler task -11001001 so it gets replaced when real task available
-	if true then insert(currentChosenTask(task0, -11001001, 10 , 0, 1, bx, placeholder, placeholder2)).
+	if true then insert(currentChosenTask(task0, -11001001, 999 , 0, 1, bx, needNewTask, needNewTask)).
 	
 	% track custom role of agent
 	if true then insert(currentCustomRoleStatus(basicAgent)).

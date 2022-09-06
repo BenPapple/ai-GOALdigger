@@ -55,7 +55,7 @@ module connectBlocks {
 
         % if no connect try possibilities
         if bel(multiTaskSupporterStatus(_, AgentName1, X1, Y1, _, _, Connect1, AgentName2, X2, Y2, _, _, Connect2, 
-                                _, _, _, _, _, _)),
+                                		_, _, _, _, _, _)),
            bel(Connect1 \= connected, Connect2 \= connected),
            percept(step(X))
             then {
@@ -83,8 +83,8 @@ module connectBlocks {
 	    then {
 
         % if no connect try possibilities
-        if bel(multiTaskSupporterStatus(_, AgentName1, X1,Y1, _, _, Connect1, AgentName2, X2, Y2, _, _, Connect2, 
-                                AgentName3, _, _, _, _, Connect3)),
+        if bel(multiTaskSupporterStatus(_, AgentName1, _, _, _, _, Connect1, AgentName2, _, _, _, _, Connect2, 
+                                		AgentName3, _, _, _, _, Connect3)),
            bel(Connect1 \= connected, Connect2 \= connected, Connect3 \= connected),
            percept(step(X))
             then {

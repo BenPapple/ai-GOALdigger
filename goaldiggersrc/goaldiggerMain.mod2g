@@ -6,7 +6,8 @@ use "./rolehandling/executeDefaultRole" as module.
 use "./rolehandling/executeWorkerRole" as module.
 use "./rolehandling/executeSaboteurRole" as module.
 use "./rolehandling/executeExplorerRole" as module.
-use "./normhandling/executeNormPrevention" as module.
+use "./normhandling/executeRoleNormsPrevention" as module.
+use "./normhandling/executeBlockNormsPrevention" as module.
 
 exit=never.
 
@@ -28,8 +29,10 @@ module goaldiggerMain {
             then preActionCleanup + skip.
         
         % prevent norm damage when norm active    
-        if true 
-            then executeNormPrevention. 
+        if bel(activateNormHandling) 
+            then executeBlockNormsPrevention. 
+        if bel(activateNormHandling) 
+            then executeRoleNormsPrevention. 
 
     	% agents want to be free randomExploreMove for turn number skipThisStep
     	if percept(step(SimStep)), bel(skipThisStep(SkipStep), SimStep =< SkipStep)

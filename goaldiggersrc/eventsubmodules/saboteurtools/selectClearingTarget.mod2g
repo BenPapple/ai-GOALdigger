@@ -37,7 +37,7 @@ module selectClearingTarget {
 	% now it merely selects a target next to the saboteur
 	
 	% copy all sightings within shooting range into new variables
-	forall bel(agentSighting(X,Y,DirX,DirY,_,Energy,_,Dir)) do 
+	forall bel(agentSighting(X,Y,DirX,DirY,_,Energy,_,_)) do 
 		{	if bel(agentAt(X2,Y2,_), maximumShootingRange(Range)), 
 		       bel(NextX is X + DirX, NextY is Y + DirY, DistX is NextX - X2, DistY is NextY - Y2),
 		       %bel(Dir = s), percept(goalZone(DistX, DistY)), % Just target agents with blocks oriented to the south AND in a goal zone
@@ -91,7 +91,7 @@ module selectClearingTarget {
 	
 	
 	% if there are targets which are not moving, remove targets which are moving 
-	if bel(targetCandidate(_,_,DirX,DirY,_), agentAt(X2,Y2,_)), bel(abs(DirX)+abs(DirY) =:= 0) 
+	if bel(targetCandidate(_,_,DirX,DirY,_), agentAt(_,_,_)), bel(abs(DirX)+abs(DirY) =:= 0) 
 	   then { 
 	   		forall bel(targetCandidate(X0,Y0,DirX0,DirY0,Energy)), bel(abs(DirX0)+abs(DirY0) > 0)
 		   		   do delete(targetCandidate(X0,Y0,DirX,DirY,Energy)).

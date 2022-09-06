@@ -148,10 +148,11 @@ module goaldiggerEvent {
 	if true then manageManhattanSwitchStatus.
 
 	% SUBMODULE manhattan target manipulation
-	if true then manageManhattanTarget.
+	if not(bel(waitingForNorms))
+		then manageManhattanTarget.
 
-    % check norms for possible damage to agents
-    if true
+%    % check norms for possible damage to agents
+    if bel(activateNormHandling)
         then analyzeNorms.
 
 	/**
@@ -174,8 +175,8 @@ module goaldiggerEvent {
 	if bel(changeAffinityAfterTheseSteps(ChangeStep)),
 	   percept(step(X), X >= 2, 0 =:= mod(X, ChangeStep)),
 	   bel(randomAffinity(DirOld), randomGoForwardDirection(DirOld, NewDir))
-	    then delete (randomAffinity(DirOld)) +
-	         insert (randomAffinity(NewDir)).
+	    then delete(randomAffinity(DirOld)) +
+	         insert(randomAffinity(NewDir)).
 
 	% remove switch
 	if bel(calculateNewDispenserMD)
@@ -191,6 +192,12 @@ module goaldiggerEvent {
 		%If not know goalzone or dispenser, exploreMap
 		if not(bel(executeManhattan)) then updateExploreMoveDirection.
 	}
+	
+	% keep track when last deactivated
+	if percept(deactivated(true), step(SimStep)),
+	   bel(lastDeactivationTracker(OldStep))
+		then delete(lastDeactivationTracker(OldStep)) +
+		     insert(lastDeactivationTracker(SimStep)).
 	
 	% delete all explore marks after they are not necessary anymore 
     if bel(limitACOSteps(ACOLimit)),
@@ -210,12 +217,12 @@ module goaldiggerEvent {
 	 *
 	 */
 
-
 	% prepare action chosing in main module
 	if bel(haveMove),
 	   percept(step(SimStep), SimStep >= 0)
 	   	then delete(haveMove).
-
-	if true then sleep(200).
+	
+	/* Ablauf in der Simulation verlangsamen - auskommentieren für Turniere und Contest*/   	
+	%if true then sleep(500). 
 
 } % module
