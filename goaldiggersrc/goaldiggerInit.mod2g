@@ -9,13 +9,13 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	if true then insert (lDebugOn). 
+	%if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
 	if true then insert (activateSaboteurFeature).
 	% switch for norm handling
-	if true then insert(activateNormHandling).
+	%if true then insert(activateNormHandling).
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 

@@ -27,15 +27,8 @@ module goaldiggerMain {
 
     	% handle deactivated by skip
     	if percept(deactivated(true))
-            then preActionCleanup + skip.
- 
-       % as worker pick up block again after deactivation
- 	   if percept(step(SimStep)), 
-	      bel(lastDeactivationTracker(OldStep)),
-	      bel(TimeAfterDeactivation is SimStep - 1),
-	      bel(TimeAfterDeactivation == OldStep)
-	       then attachBlocksLyingAround.
-        
+            then preActionCleanup + skip. 
+      
         % prevent norm damage when norm active    
         if bel(activateNormHandling) 
             then executeBlockNormsPrevention. 
