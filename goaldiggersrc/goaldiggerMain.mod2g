@@ -29,9 +29,9 @@ module goaldiggerMain {
             then preActionCleanup + skip.
         
         % prevent norm damage when norm active    
-        if true 
+        if bel(activateNormHandling) 
             then executeBlockNormsPrevention. 
-        if true 
+        if bel(activateNormHandling) 
             then executeRoleNormsPrevention. 
 
     	% agents want to be free randomExploreMove for turn number skipThisStep

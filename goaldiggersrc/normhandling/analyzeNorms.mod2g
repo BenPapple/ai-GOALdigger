@@ -31,8 +31,10 @@ module analyzeNorms {
 	if true 	
 		then checkBlockNorms.
 		
-	if true 
-		then checkRoleNorms.
+%	if true 
+%		then checkRoleNorms.
+
+    % delete block norms with actions if agent has no blocks before norm starts 
 		
 }
 

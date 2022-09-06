@@ -27,6 +27,9 @@
 % waiting for norms ending
 :- dynamic waitingForNorms/0.
 
+% switch for norm handling
+:- dynamic activateNormHandling/0.
+
 % when a marked is north of agent.
 :- dynamic northExplored/0.
 % when a marked is south of agent.

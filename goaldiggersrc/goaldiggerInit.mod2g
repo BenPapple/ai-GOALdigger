@@ -14,6 +14,8 @@ module goaldiggerInit {
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
 	if true then insert (activateSaboteurFeature).
+	% switch for norm handling
+	%if true then insert(activateNormHandling).
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 
