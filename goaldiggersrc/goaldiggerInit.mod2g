@@ -9,13 +9,13 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	%if true then insert (lDebugOn). 
+	if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
 	if true then insert (activateSaboteurFeature).
 	% switch for norm handling
-	%if true then insert(activateNormHandling).
+	if true then insert(activateNormHandling).
 	% To count sim changes
 	if not(bel(simCount(_))) 
 		then insert(simCount(1)). 
@@ -117,6 +117,8 @@ module goaldiggerInit {
 	if true then insert (agentAt(0, 0, 0)). % agent starting coordinate	
 	if true then insert(waitBeforeNewTask(0)).
 
+    if true then insert(lastDeactivationTracker(-10)).
+
 	if bel(randomDirection(X)) 
 		then insert (randomAffinity(X)). % random general direction to explore for agent
 	if bel(limitChangeStepMinMax(X, Y), randomBetween(X, Y, Out)) 
@@ -130,6 +132,5 @@ module goaldiggerInit {
 	if true then insert ( worldSizeX(54321), worldSizeY(54321) ).
 	if true then insert ( worldListX([]), worldListY([]) ).
 	if true then insert ( messageProcessingDelay(4), messagePersitanceAfterDelay(1) ).
-
-
+	
 }

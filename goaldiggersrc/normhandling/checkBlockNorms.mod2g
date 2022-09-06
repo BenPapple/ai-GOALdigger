@@ -11,45 +11,65 @@ use "../goaldiggerProlog" as knowledge.
  
 module checkBlockNorms {
 	
-	% ready analyzed norm should be saved
-	% block-norm draws less energy than the agent has, ignore norm
-	if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0,_)],Dmg)), 
-	   percept(role(worker)),
-	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
-	   percept(energy(AgentEnergy))
-		then {
-			if bel(Duration is StepEnd - StepStart),
-			   bel(MaxPenalty is Duration * Dmg),
-			   bel(MaxPenalty < AgentEnergy)
-				then insert(avoidNorm(NormName,doNothing,na,na,na,na,na,na,na,na)).
-		}
+%	% ready analyzed norm should be saved
+%	% block-norm draws less energy than the agent has, ignore norm
+%	if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0,_)],Dmg)), 
+%	   percept(role(worker)),
+%	   bel(haveBlockAttached(true,_)),
+%	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
+%	   percept(energy(AgentEnergy)),
+%	   percept(step(SimStep)),
+%	   bel(StepStart == SimStep -2)
+%		then {
+%			if bel(Duration is StepEnd - StepStart),
+%			   bel(MaxPenalty is Duration * Dmg),
+%			   bel(MaxPenalty < AgentEnergy - 20)
+%				then insert(avoidNorm(NormName,doNothing,na,na,na,na,na,na,na,na)).
+%		}
 	
 	% block-norm drains more energy than the agent has, drop the block	
 	if percept(norm(NormName,StepStart,StepEnd,[requirement(block,any,0,_)],Dmg)), 
 	   percept(role(worker)),
+	   bel(haveBlockAttached(true,_)),	   
 	   not(bel(avoidNorm(NormName,_,_,_,_,_,_,_,_,_))), 
-	   percept(energy(AgentEnergy))
+	   percept(energy(AgentEnergy)),
+	   percept(step(SimStep)),
+	   bel(TimeToAnalyze is StepStart - 2),
+	   bel(SimStep == TimeToAnalyze)
 		then {
 			if bel(Duration is StepEnd - StepStart),
 			   bel(MaxPenalty is Duration * Dmg),
-			   bel(MaxPenalty >= AgentEnergy)
-				then insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)).
+			   bel(EnergyPuffered is AgentEnergy - 20),
+			   bel(MaxPenalty >= EnergyPuffered)
+				then insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)) + 
+				     print("Avoid norm with MaxDamage: "+MaxPenalty+" My energy: "+AgentEnergy).
 		}
 	
-		% block-norm drains more energy than the agent has, drop the block	
-	if percept(role(worker)),
-	   bel(avoidNorm(NormName,V2,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)), 
-	   percept(step(SimStep), SimStep < StepEnd),
-	   percept(energy(AgentEnergy))
-		then {
-			if bel(Duration is StepEnd - StepStart),
-			   bel(MaxPenalty is Duration * Dmg),
-			   bel(MaxPenalty >= AgentEnergy)
-				then delete(avoidNorm(NormName,V2,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)) + 
-				     insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)).
-		}
+%	% update block-norm drains more energy than the agent has, drop the block	
+%	if percept(role(worker)),
+%	   bel(haveBlockAttached(true,_)),
+%	   bel(avoidNorm(NormName,doNothing,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)), 
+%	   percept(step(SimStep), SimStep < StepEnd),
+%	   percept(energy(AgentEnergy))
+%		then {
+%			if bel(Duration is StepEnd - StepStart),
+%			   bel(MaxPenalty is Duration * Dmg),
+%			   bel(MaxPenalty >= AgentEnergy)
+%				then delete(avoidNorm(NormName,doNothing,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)) + 
+%				     insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,V5,V6,V7,Dmg,V9,V10)).
+%		}
+
+	% delete norm if lost block before orm gets active	
+%	if percept(role(worker)),
+%	   bel(haveBlockAttached(false,_)),
+%	   bel(avoidNorm(NormName,V2,StepStart,V4,V5,V6,V7,Dmg,V9,V10)), 
+%	   percept(step(SimStep), SimStep < StepStart - 1)
+%		then {
+%			if true
+%				then delete(avoidNorm(NormName,V2,StepStart,V4,V5,V6,V7,Dmg,V9,V10)).
+%		}
 		
-%norm(n3,184,212,[requirement(block,any,3)],3)
-%norm(n3,start,until,[requirement(block,immer auf "any",max nr of carried blocks,)],Schaden)
+	%norm(n3,184,212,[requirement(block,any,3)],3)
+	%norm(n3,start,until,[requirement(block,immer auf "any",max nr of carried blocks,)],Schaden)
 
 }

@@ -9,22 +9,31 @@ use "../actionhandling/preActionCleanup" as module.
  * @co-author Ben G.
  */
 module attachBlocksLyingAround {
+
+    % attach last direction of attached block
+    if bel(haveBlockAttached(_, DirBlock)),
+       bel(directionToCoordinate(DirBlock, X, Y)),
+       percept(step(SimStep)),
+	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep),
+       percept(thing(X, Y, block, BlockType)) 
+		then preActionCleanup + attach(DirBlock).
 	
-	if percept(step(SimStep)),
-	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep)
-	   	then{
-			% take the ownerless matching block
-	   		if percept(thing(0, -1, block, BlockType)),
-	   		   not(percept(attached(0,-1)))
-	   			then preActionCleanup + attach(n).
-	   		if percept(thing(0, 1, block, BlockType)),
-	   		   not(percept(attached(0,1)))
-	   			then preActionCleanup + attach(s).
-	   		if percept(thing(1, 0, block, BlockType)),
-	   		   not(percept(attached(1, 0)))
-	   			then preActionCleanup + attach(e).
-	   		if percept(thing(-1, 0, block, BlockType)),
-	   		   not(percept(attached(-1, 0)))
-	   			then preActionCleanup + attach(w).
-	   	}
+%	if percept(step(SimStep)),
+%	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep)
+%	   	then{
+%			% take the ownerless matching block
+%	   		if percept(thing(0, -1, block, BlockType)),
+%	   		   not(percept(attached(0,-1)))
+%	   			then preActionCleanup + attach(n).
+%	   		if percept(thing(0, 1, block, BlockType)),
+%	   		   not(percept(attached(0,1)))
+%	   			then preActionCleanup + attach(s).
+%	   		if percept(thing(1, 0, block, BlockType)),
+%	   		   not(percept(attached(1, 0)))
+%	   			then preActionCleanup + attach(e).
+%	   		if percept(thing(-1, 0, block, BlockType)),
+%	   		   not(percept(attached(-1, 0)))
+%	   			then preActionCleanup + attach(w).
+%	   	}
+
 }

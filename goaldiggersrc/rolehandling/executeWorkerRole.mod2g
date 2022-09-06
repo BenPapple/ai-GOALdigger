@@ -23,10 +23,6 @@ use "../blockhandling/attachBlocksLyingAround" as module.
 
 module executeWorkerRole {
 	
-	if percept(step(SimStep)), 
-	   bel(lastDeactivationTracker(OldStep), SimStep - 1 == OldStep)
-	   	then attachBlocksLyingAround.
-	
 	if bel(customRole(customRoleSaboteur)), percept(roleZone(0,0))
 	   then preActionCleanup + adapt(digger).
 	   
@@ -48,12 +44,12 @@ module executeWorkerRole {
 			   bel(targetRole(TargetRole), Role \= TargetRole) 
 			    then preActionCleanup + adapt(TargetRole).
 			
-			% collect blocks lying around 
-			if percept(step(SimStep)),
-			   bel(currentChosenTask(_, TaskStep, _, _, _, _, _,_), TaskStep >= SimStep),
-			   percept(team(MyTeam)),
-			   not(percept(thing(X,Y,entity(MyTeam)), abs(X) + abs(Y) =< 3)) 
-				then attachBlocksLyingAround. 
+%			% collect blocks lying around 
+%			if percept(step(SimStep)),
+%			   bel(currentChosenTask(_, TaskStep, _, _, _, _, _,_), TaskStep >= SimStep),
+%			   percept(team(MyTeam)),
+%			   not(percept(thing(X,Y,entity(MyTeam)), abs(X) + abs(Y) =< 3)) 
+%				then attachBlocksLyingAround. 
 			
 	 	    % Movement around dispenser when without block
 		    if percept(step(SimStep)), 
