@@ -119,6 +119,7 @@ module changeTaskCheck {
 
 	% change from 1-task to 4-task as submitterLeader
 	if bel(submitterLeader),
+	   bel(mapGoalZone(_,_,_)),
 	   percept(step(SimStep)),
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
@@ -138,6 +139,7 @@ module changeTaskCheck {
 	    	    
 	% change from 1-task to 3-task as submitterLeader
 	if bel(submitterLeader),
+	   bel(mapGoalZone(_,_,_)),
 	   percept(step(SimStep)), 
 	   bel(limitStepsTask(_, _, Task3Limit, _)),
 	   bel(currentChosenTask(_, TaskStep, 10, _, _, _,_,_), TaskStep > SimStep),
@@ -154,6 +156,7 @@ module changeTaskCheck {
     
 	% change from 1-task to 2-task as submitterLeader
 	if bel(submitterLeader, confirmedOffsetOfAgent(_, _, OtherAgent1)),
+	   bel(mapGoalZone(_,_,_)),
 	   bel(limitStepsTask(_, Task2Limit, _, _)),	
 	   bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
 	   percept(step(SimStep)), 

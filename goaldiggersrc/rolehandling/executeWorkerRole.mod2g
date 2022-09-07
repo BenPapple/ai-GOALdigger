@@ -108,6 +108,10 @@ module executeWorkerRole {
 	    	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _, _), 
 	    	       BlockType \== BlockTypeAttached, TaskStep >= SimStep) 
 	    	    then preActionCleanup + detach(DirBlock).
+	    	    
+	    	% move random with block if no goalzone known
+	    	if not(bel(mapGoalZone(_,_,_)))
+	    	   then executeRandomMove.
 
 			% Moving around 2task Submitting agent in rain drop pattern 
 			if percept(team(Team), thing(XSubmit, YSubmit, entity, Team), goalZone(XSubmit, YSubmit), XBlock is XSubmit,

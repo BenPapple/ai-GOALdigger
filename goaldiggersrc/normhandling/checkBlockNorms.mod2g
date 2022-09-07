@@ -39,7 +39,7 @@ module checkBlockNorms {
 		then {
 			if bel(Duration is StepEnd - StepStart),
 			   bel(MaxPenalty is Duration * Dmg),
-			   bel(EnergyPuffered is AgentEnergy - 20),
+			   bel(EnergyPuffered is AgentEnergy),
 			   bel(MaxPenalty >= EnergyPuffered)
 				then insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)) + 
 				     print("Avoid norm with MaxDamage: "+MaxPenalty+" My energy: "+AgentEnergy).

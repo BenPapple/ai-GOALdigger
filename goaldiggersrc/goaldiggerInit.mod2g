@@ -22,11 +22,11 @@ module goaldiggerInit {
 	
 	% global values
 	% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
-    if true then insert(limitStepsTask(20, 60, 85, 95)).
+    if true then insert(limitStepsTask(20, 80, 85, 95)).
 	% switch to recognize simulations have different characteristics on sim change
 	if true then insert(expectDifferentSimulations). 
 	% lowest and highest limit after which agent changes explore direction
-	if true then insert(limitChangeStepMinMax(10 , 20)). 
+	if true then insert(limitChangeStepMinMax(12, 25)). 
 	% set step after which ACO exploring turns off
 	if true then insert(limitACOSteps(100)). 		
 	
