@@ -71,7 +71,7 @@ module goaldiggerEvent {
 
     % check for drop connected block on disappeared goalzone
     if bel(submitterLeader),
-       not(percept(goalzone(0, 0, _))),
+       not(percept(goalZone(0, 0))),
        bel(multiTaskSupporterStatus(_, _, _, _, _, _, Connect1, _, _, _, _, _, Connect2, 
                                 		_, _, _, _, _, Connect3)),
        bel(Connect1 == connected; Connect2 == connected; Connect3 == connected)
