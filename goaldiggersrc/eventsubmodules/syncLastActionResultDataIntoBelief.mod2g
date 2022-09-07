@@ -55,8 +55,8 @@ module syncLastActionResultDataIntoBelief {
 		   bel(atom_number(X0,X), atom_number(Y0,Y))
 			then {
 		
-				if bel(localize(X,Y,X2,Y2,X3,Y3)) 
-				   then insert(hitSighting(X3,Y3,NewStep)).
+%				if bel(localize(X,Y,X2,Y2,X3,Y3)) 
+%				   then insert(hitSighting(X3,Y3,NewStep)).
 				   
 				if bel(agentSighting(X4,Y4,DirX,DirY,OldStep,Energy,BlockType,BlockDir), X =:= X4 + DirX - X2, 
 					Y =:= Y4 + DirY - Y2, localize(X,Y,X2,Y2,X3,Y3), energyAfterDamage(Energy,X,Y,NewEnergy))

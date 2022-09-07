@@ -228,7 +228,8 @@ module goaldiggerEvent {
 
 	% prepare action chosing in main module
 	if bel(haveMove),
-	   percept(step(SimStep), SimStep >= 0)
+	   percept(step(SimStep), SimStep >= 0),
+	   percept(steps(MaxStep), EndStep is MaxStep -1, SimStep < EndStep)
 	   	then delete(haveMove).
 	
 	/* Ablauf in der Simulation verlangsamen - auskommentieren für Turniere und Contest*/   	

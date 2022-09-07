@@ -34,6 +34,22 @@ module reinitBeliefOnSimChange {
 		then delete(count4Task(Num4Task, V2)) + 
 		     insert(count4Task(0, 0)).
 
+	if bel(cachedCount1Task(Num1Task)) 
+		then delete(cachedCount1Task(Num1Task)) + 
+		     insert(cachedCount1Task(0)).
+	
+	if bel(cachedCount2Task(Num2Task)) 
+		then delete(cachedCount2Task(Num2Task)) + 
+		     insert(cachedCount2Task(0)).
+		     
+	if bel(cachedCount3Task(Num3Task)) 
+		then delete(cachedCount3Task(Num3Task)) + 
+		     insert(cachedCount3Task(0)).		     
+
+	if bel(cachedCount4Task(Num4Task)) 
+		then delete(cachedCount4Task(Num4Task)) + 
+		     insert(cachedCount4Task(0)).
+
 	if bel(cachedCountFailedTask(NumFailedTask)) 
 		then delete(cachedCountFailedTask(NumFailedTask)) + 
 		     insert(cachedCountFailedTask(0)).

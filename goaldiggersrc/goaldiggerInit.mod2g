@@ -9,7 +9,7 @@ module goaldiggerInit {
 	
 	% debug and custom competition rules
 	% Variable fuer Debug, zB elapseStepTime
-	%if true then insert (lDebugOn). 
+	if true then insert (lDebugOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
@@ -22,7 +22,7 @@ module goaldiggerInit {
 	
 	% global values
 	% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
-    if true then insert(limitStepsTask(20, 80, 85, 95)).
+    if true then insert(limitStepsTask(20, 60, 85, 95)).
 	% switch to recognize simulations have different characteristics on sim change
 	if true then insert(expectDifferentSimulations). 
 	% lowest and highest limit after which agent changes explore direction

@@ -16,9 +16,7 @@ module dropOnDisappearedGZ {
                                 		AgentName3, _, _, _, _, Connect3)),
        bel(Connect1 == connected; Connect2 == connected; Connect3 == connected),
        bel(submitterLeader)
-        then {
-        
-        if true then print("!!!DROP CONNECTED BLOCKS, GOALZONE DISAPPEARED!!!").
+        then {     
          
         % set switch to drop blocks and change task
 		if bel(Connect1 == connected),
@@ -43,18 +41,20 @@ module dropOnDisappearedGZ {
 			     insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
 
         % inform supporters of dropped task
-        if bel(Connect1 \= connected),
+        if bel(Connect1 == placeholder),
            percept(name(MyName)),
            bel(storedOtherAgentStatus(AgentName1, _, _, _, SenderConnect1, _, _, _, _))
             then (SenderConnect1).send(informCeaseSupporting(MyName)).
-         if bel(Connect2 \= connected),
+         if bel(Connect2 == placeholder),
            percept(name(MyName)),
            bel(storedOtherAgentStatus(AgentName2, _, _, _, SenderConnect2, _, _, _, _))
             then (SenderConnect2).send(informCeaseSupporting(MyName)).
-        if bel(Connect3 \= connected),
+        if bel(Connect3 == placeholder),
            percept(name(MyName)),
            bel(storedOtherAgentStatus(AgentName3, _, _, _, SenderConnect3, _, _, _, _))
             then (SenderConnect3).send(informCeaseSupporting(MyName)). 
+ 
+         if true then print("!!!DROP CONNECTED BLOCKS, GOALZONE DISAPPEARED!!!").
                               
     }
 	
