@@ -1,0 +1,57 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * as submitterLeader drop connected blocks in disappeared goalzone
+ *
+ * @author Ben G.
+ */
+
+module dropOnDisappearedGZ {
+
+    % 
+    if bel(multiTaskSupporterStatus(_, AgentName1, _, _, _, _, Connect1, AgentName2, _, _, _, _, Connect2, 
+                                		AgentName3, _, _, _, _, Connect3)),
+       bel(Connect1 == connected; Connect2 == connected; Connect3 == connected),
+       bel(submitterLeader)
+        then {
+
+		if bel(Connect1 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).
+		if bel(Connect1 == connected),
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender))
+	   	    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) +
+			     insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
+			     
+		if bel(Connect2 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).
+		if bel(Connect2 == connected),
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender))
+	   	    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) +
+			     insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
+
+		if bel(Connect3 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).	
+		if bel(Connect3 == connected),
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender))
+	   	    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) +
+			     insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
+
+        if bel(Connect1 \= connected),
+           percept(name(MyName)),
+           bel(storedOtherAgentStatus(AgentName1, _, _, _, SenderConnect1, _, _, _, _))
+            then (SenderConnect1).send(informCeaseSupporting(MyName)).
+         if bel(Connect2 \= connected),
+           percept(name(MyName)),
+           bel(storedOtherAgentStatus(AgentName2, _, _, _, SenderConnect2, _, _, _, _))
+            then (SenderConnect2).send(informCeaseSupporting(AgentName2)).
+        if bel(Connect3 \= connected),
+           percept(name(MyName)),
+           bel(storedOtherAgentStatus(AgentName3, _, _, _, SenderConnect3, _, _, _, _))
+            then (SenderConnect3).send(informCeaseSupporting(AgentName3)).                   
+    }
+
+
+
+	
+} % end module
