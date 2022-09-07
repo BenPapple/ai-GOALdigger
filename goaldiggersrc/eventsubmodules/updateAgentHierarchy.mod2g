@@ -37,6 +37,18 @@ module updateAgentHierarchy {
 			    then delete(positionInHirarchie(PositionInHirarchie)) + 
 			         insert (positionInHirarchie(NewPositionInHirarchie)).
 		}
+		
+%	  % remove submitterLeader
+%		if percept(teamSize(SizeTeam)), 
+%		   bel(submitterLeader, positionInHirarchie(PositionInHirarchie), 
+%		       PosCheck is SizeTeam - PositionInHirarchie, PosCheck > 2)
+%			then delete(submitterLeader).
+
+	} % end reset hierarchy value
+
+    % assign custom roles
+	if percept(step(SimStep), SimStep >= 24, SimStep < 30) 
+		then {
 
 		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
@@ -47,10 +59,10 @@ module updateAgentHierarchy {
 			 allother.send(msgSubmitterLeader(MyName)).			 
 		}
 
-		% assign customRoleSaboteur
+		% assign first customRoleSaboteur
 		if bel(activateSaboteurFeature),
 		   percept(teamSize(SizeTeam), SizeTeam > 6, name(MyName)), 
-		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 1),
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 0),
 		   not(bel(submitterLeader)) 
 			then {
 			
@@ -58,13 +70,21 @@ module updateAgentHierarchy {
 			if not(bel(customRole(_))) then insert(customRole(customRoleSaboteur)) +
 			                                allother.send(msgCustomRole(MyName))
 			                                + insert(targetRole(digger)).			 
-		}
+		} % first saboteur
+
+		% assign first customRoleSaboteur
+		if bel(activateSaboteurFeature),
+		   percept(teamSize(SizeTeam), SizeTeam > 6, name(MyName)), 
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 0),
+		   not(bel(submitterLeader)) 
+			then {
+			
+			if bel(targetRole(Role)) then delete(targetRole(Role)).
+			if not(bel(customRole(_))) then insert(customRole(customRoleSaboteur)) +
+			                                allother.send(msgCustomRole(MyName))
+			                                + insert(targetRole(digger)).			 
+		} % first saboteur
 		
-%	  % remove submitterLeader
-%		if percept(teamSize(SizeTeam)), 
-%		   bel(submitterLeader, positionInHirarchie(PositionInHirarchie), 
-%		       PosCheck is SizeTeam - PositionInHirarchie, PosCheck > 2)
-%			then delete(submitterLeader).
-	}
+	} % end assign custom roles
 	
 } % end module
