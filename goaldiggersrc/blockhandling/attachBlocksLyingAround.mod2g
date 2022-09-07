@@ -8,34 +8,49 @@ use "../actionhandling/preActionCleanup" as module.
  * @author Julia H.
  * @co-author Ben G.
  */
+ 
 module attachBlocksLyingAround {
 
-    % attach last direction of attached block after deactivation
-    if bel(haveBlockAttached(_, DirBlock)),
-       bel(directionToCoordinate(DirBlock, X, Y)),
-       percept(step(SimStep)), 
-	   bel(lastDeactivationTracker(OldStep)),
-	   bel(TimeAfterDeactivation is SimStep - 1),
-	   bel(TimeAfterDeactivation == OldStep),
-	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep),
-       percept(thing(X, Y, block, BlockType)) 
-		then preActionCleanup + attach(DirBlock).
-	
+    % pick up block on oppurtunity	
 	if percept(step(SimStep)),
 	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep)
 	   	then{
 			% take the ownerless matching block
 	   		if percept(thing(0, -1, block, BlockType)),
-	   		   not(percept(attached(0,-1)))
+	   		   not(percept(attached(0,-1))),
+	   		   not(percept(thing(0, -2, entity, _))),
+	   		   not(percept(thing(-1, -1, entity, _))),
+	   		   not(percept(thing(1, -1, entity, _))),
+	   		   not(percept(thing(0, -2, block, _))),
+	   		   not(percept(thing(-1, -1, block, _))),
+	   		   not(percept(thing(1, -1, block, _)))
 	   			then preActionCleanup + attach(n).
 	   		if percept(thing(0, 1, block, BlockType)),
-	   		   not(percept(attached(0,1)))
+	   		   not(percept(attached(0,1))),
+	   		   not(percept(thing(0, 2, entity, _))),
+	   		   not(percept(thing(-1, 1, entity, _))),
+	   		   not(percept(thing(1, 1, entity, _))),
+	   		   not(percept(thing(0, 2, block, _))),
+	   		   not(percept(thing(-1, 1, block, _))),
+	   		   not(percept(thing(1, 1, block, _)))
 	   			then preActionCleanup + attach(s).
 	   		if percept(thing(1, 0, block, BlockType)),
-	   		   not(percept(attached(1, 0)))
+	   		   not(percept(attached(1, 0))),
+	   		   not(percept(thing(2, 0, entity, _))),
+	   		   not(percept(thing(1, -1, entity, _))),
+	   		   not(percept(thing(1, 1, entity, _))),
+	   		   not(percept(thing(2, 0, block, _))),
+	   		   not(percept(thing(1, -1, block, _))),
+	   		   not(percept(thing(1, 1, block, _)))
 	   			then preActionCleanup + attach(e).
 	   		if percept(thing(-1, 0, block, BlockType)),
-	   		   not(percept(attached(-1, 0)))
+	   		   not(percept(attached(-1, 0))),
+	   		   not(percept(thing(-2, 0, entity, _))),
+	   		   not(percept(thing(-1, -1, entity, _))),
+	   		   not(percept(thing(-1, 1, entity, _))),	   		   
+	   		   not(percept(thing(-2, 0, block, _))),
+	   		   not(percept(thing(-1, -1, block, _))),
+	   		   not(percept(thing(-1, 1, block, _)))
 	   			then preActionCleanup + attach(w).
 	   	}
 

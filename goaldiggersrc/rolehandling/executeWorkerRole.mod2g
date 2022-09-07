@@ -14,6 +14,7 @@ use "../blockhandling/rotateBlockToNorth" as module.
 use "../blockhandling/rotateBlockToSouth" as module.
 use "../blockhandling/connectBlocks" as module.
 use "../blockhandling/attachBlocksLyingAround" as module.
+use "../blockhandling/reattachBlock" as module.
 
 /**
  * Main decision rules for role worker
@@ -49,7 +50,7 @@ module executeWorkerRole {
 		       bel(lastDeactivationTracker(OldStep)),
 		       bel(TimeAfterDeactivation is SimStep - 1),
 		       bel(TimeAfterDeactivation == OldStep)
-		        then attachBlocksLyingAround.
+		        then reattachBlock.
 			
      		% collect blocks lying around 
 			if percept(step(SimStep)),

@@ -1,0 +1,24 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+use "../actionhandling/preActionCleanup" as module.
+
+/**
+ * collect blocks lying around after a norm or deactivation
+ *
+ * @author Ben G.
+ */
+ 
+ module reattachBlock {
+
+    % attach last direction of attached block after deactivation
+    if bel(haveBlockAttached(_, DirBlock)),
+       bel(directionToCoordinate(DirBlock, X, Y)),
+       percept(step(SimStep)), 
+	   bel(lastDeactivationTracker(OldStep)),
+	   bel(TimeAfterDeactivation is SimStep - 1),
+	   bel(TimeAfterDeactivation == OldStep),
+	   bel(currentChosenTask(_, TaskStep, _, _, _, BlockType, _,_), TaskStep >= SimStep),
+       percept(thing(X, Y, block, BlockType)) 
+		then preActionCleanup + attach(DirBlock).
+	
+}
