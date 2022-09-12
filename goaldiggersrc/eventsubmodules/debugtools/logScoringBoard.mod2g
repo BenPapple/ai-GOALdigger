@@ -58,7 +58,7 @@ module logScoringBoard {
     % count failed multitasks of all leaders
 	forall (_).sent(failed40pointtask(Name, Cause)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep), SimStep > 1)
+	       percept(step(SimStep), SimStep > 2)
 	    do {
 	        if bel(countFailedTask(NumFailedTask, OldStep), 
 		       NewCount is NumFailedTask +1, SimStep >= OldStep),
@@ -72,7 +72,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(failed90pointtask(Name, Cause)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep), SimStep > 1)
+	       percept(step(SimStep), SimStep > 2)
 	    do {
 	        if bel(countFailedTask(NumFailedTask, OldStep), 
 		       NewCount is NumFailedTask +1, SimStep >= OldStep),
@@ -86,7 +86,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(failed160pointtask(Name, Cause)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep), SimStep > 1)
+	       percept(step(SimStep), SimStep > 2)
 	    do {
 	        if bel(countFailedTask(NumFailedTask, OldStep), 
 		       NewCount is NumFailedTask +1, SimStep >= OldStep),
@@ -102,7 +102,7 @@ module logScoringBoard {
 	% score messages
 	forall (_).sent(made10Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep), SimStep > 1)
+	       percept(step(SimStep), SimStep > 2)
 	    do {
 	        if bel(count1Task(Num1Task, OldStep), 
 		       NewCount is Num1Task +1, SimStep >= OldStep),
@@ -115,7 +115,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(made40Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep), SimStep > 1)
+	       percept(step(SimStep), SimStep > 2)
 	    do {
 	        if bel(count2Task(Num2Task, OldStep), 
 		       NewCount is Num2Task +1, SimStep >= OldStep),
@@ -128,7 +128,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(made90Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep), SimStep > 1)
+	       percept(step(SimStep), SimStep > 2)
 	    do {
 	        if bel(count3Task(Num3Task, OldStep), 
 		       NewCount is Num3Task +1, SimStep >= OldStep),
@@ -141,7 +141,7 @@ module logScoringBoard {
 	    }
 	forall (_).sent(made160Points(Name)),
 	       bel(simCount(SimCount)),
-	       percept(step(SimStep), SimStep > 1)
+	       percept(step(SimStep), SimStep > 2)
 	    do {
 	        if bel(count4Task(Num4Task, OldStep), 
 		       NewCount is Num4Task +1, SimStep >= OldStep),

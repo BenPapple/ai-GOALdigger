@@ -34,6 +34,22 @@ module reinitBeliefOnSimChange {
 		then delete(count4Task(Num4Task, V2)) + 
 		     insert(count4Task(0, 0)).
 
+	if bel(cachedCount1Task(Num1Task)) 
+		then delete(cachedCount1Task(Num1Task)) + 
+		     insert(cachedCount1Task(0)).
+	
+	if bel(cachedCount2Task(Num2Task)) 
+		then delete(cachedCount2Task(Num2Task)) + 
+		     insert(cachedCount2Task(0)).
+		     
+	if bel(cachedCount3Task(Num3Task)) 
+		then delete(cachedCount3Task(Num3Task)) + 
+		     insert(cachedCount3Task(0)).		     
+
+	if bel(cachedCount4Task(Num4Task)) 
+		then delete(cachedCount4Task(Num4Task)) + 
+		     insert(cachedCount4Task(0)).
+
 	if bel(cachedCountFailedTask(NumFailedTask)) 
 		then delete(cachedCountFailedTask(NumFailedTask)) + 
 		     insert(cachedCountFailedTask(0)).
@@ -45,6 +61,16 @@ module reinitBeliefOnSimChange {
 	if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 		     insert(currentChosenTask(task0, -11001001, 999 , 0, 1, bx, needNewTask, needNewTask)).
+
+    % reset random seed
+    if bel(randomSeed(MyRandomSeed)) 
+		then delete(randomSeed(MyRandomSeed)) + 
+			 insert (randomSeed(0)).
+
+    % delete submitterLeader switch
+    if bel(submitterLeader) 
+		then delete(submitterLeader).
+
     % track custom role of agent
 	if bel(currentCustomRoleStatus(Delete)) then delete(currentCustomRoleStatus(Delete)) + 
 	                                             insert(currentCustomRoleStatus(basicAgent)).

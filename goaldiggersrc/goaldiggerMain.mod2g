@@ -8,6 +8,7 @@ use "./rolehandling/executeSaboteurRole" as module.
 use "./rolehandling/executeExplorerRole" as module.
 use "./normhandling/executeRoleNormsPrevention" as module.
 use "./normhandling/executeBlockNormsPrevention" as module.
+use "./blockhandling/attachBlocksLyingAround" as module.
 
 exit=never.
 
@@ -26,8 +27,8 @@ module goaldiggerMain {
 
     	% handle deactivated by skip
     	if percept(deactivated(true))
-            then preActionCleanup + skip.
-        
+            then preActionCleanup + skip. 
+      
         % prevent norm damage when norm active    
         if bel(activateNormHandling) 
             then executeBlockNormsPrevention. 

@@ -121,13 +121,13 @@ module messageMultiTaskCoordination {
 	    then findReplacementSupporters.
 	
 	% RECEIVE submitterLeader order cease supporting
-	if (_).sent(informCeaseSupporting(NameSender)), 
+	forall (_).sent(informCeaseSupporting(NameSender)), 
 	   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) ,
 	   not(bel(submitterLeader)) 
-	   	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) +
+	   	do delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, NameSender)) +
 			 insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
 			 
-    % as saboteur always noack req
+    % as saboteur decline all supporting requests secondBlock
 	forall percept(name(NameOwn)), 
 	       (ConnectSender).sent(informSupportingAgent(secondBlock, _, supportingAgent, NameOwn, _, _, 
 	                                                  SendBlock, _)) 
@@ -143,6 +143,14 @@ module messageMultiTaskCoordination {
 	    if bel(customRole(customRoleSaboteur))
 	        then (ConnectSender).send(msgNoACKtask(thirdBlock, SendBlock, NameOwn)).
 	}    
+	% as saboteur decline all supporting requests fourthBlock
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(fourthBlock, _, supportingAgent, NameOwn, _, _, 
+	                                                  SendBlock, _)) 
+	    do{ 
+	    if bel(customRole(customRoleSaboteur))
+	        then (ConnectSender).send(msgNoACKtask(fourthBlock, SendBlock, NameOwn)).
+	} 
 
     % as submitterLeader decline all supporting requests secondBlock	
 	forall percept(name(NameOwn)), 
@@ -159,6 +167,14 @@ module messageMultiTaskCoordination {
 	    do{ 
 	    if bel(submitterLeader)
 	        then (ConnectSender).send(msgNoACKtask(thirdBlock, SendBlock, NameOwn)).
+	}
+	% as submitterLeader decline all supporting requests fourthBlock
+	forall percept(name(NameOwn)), 
+	       (ConnectSender).sent(informSupportingAgent(fourthBlock, _, supportingAgent, NameOwn, _, _, 
+	                                                  SendBlock, _)) 
+	    do{ 
+	    if bel(submitterLeader)
+	        then (ConnectSender).send(msgNoACKtask(fourthBlock, SendBlock, NameOwn)).
 	}
 	        	
 	% RECEIVE become secondBlock supportingAgent, check block for task and target		

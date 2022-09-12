@@ -29,6 +29,7 @@ use "./eventsubmodules/updateExploreMoveDirection" as module.
 use "./taskhandling/changeTaskCheck" as module.
 use "./taskhandling/manageCustomQtable" as module.
 use "./normhandling/analyzeNorms" as module.
+use "./blockhandling/dropOnDisappearedGZ" as module.
 
 /**
  * Gets executed everytime a percept or message is received and handles them
@@ -67,6 +68,14 @@ module goaldiggerEvent {
 	% SUBMODULE Store percept/message data in belief
 	if true then syncPerceptDataIntoBelief.
 	if true then syncMessageDataIntoBelief.
+
+    % check for drop connected block on disappeared goalzone
+    if bel(submitterLeader),
+       not(percept(goalZone(0, 0))),
+       bel(multiTaskSupporterStatus(_, _, _, _, _, _, Connect1, _, _, _, _, _, Connect2, 
+                                		_, _, _, _, _, Connect3)),
+       bel(Connect1 == connected; Connect2 == connected; Connect3 == connected)
+        then dropOnDisappearedGZ.
 
 	% check attached block direction for block and if none found switch haveBlockAttached false
     if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)),
@@ -132,7 +141,7 @@ module goaldiggerEvent {
 	    then handleMessageGoalZone.
 
 	% SUBMODULE delete goal zones if other agents have found that they don't exist anymore
-	if percept(step(SimStep), SimStep > 33),
+	if percept(step(SimStep), SimStep > 5),
 	   (_).sent(messageDeletedGoalZone(_,_,_))
 	   	then handleMessageDeletedGoalZone.
 
@@ -148,7 +157,7 @@ module goaldiggerEvent {
 	if true then manageManhattanSwitchStatus.
 
 	% SUBMODULE manhattan target manipulation
-	if not(bel(waitingForNorms))
+	if true
 		then manageManhattanTarget.
 
 %    % check norms for possible damage to agents
@@ -219,7 +228,8 @@ module goaldiggerEvent {
 
 	% prepare action chosing in main module
 	if bel(haveMove),
-	   percept(step(SimStep), SimStep >= 0)
+	   percept(step(SimStep), SimStep >= 0),
+	   percept(steps(MaxStep), EndStep is MaxStep -1, SimStep < EndStep)
 	   	then delete(haveMove).
 	
 	/* Ablauf in der Simulation verlangsamen - auskommentieren für Turniere und Contest*/   	

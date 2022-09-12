@@ -18,7 +18,12 @@ module updateGoalzoneDistance {
 		   insert(mapGoalZone(XAlt, YAlt, 123456)).
 
 	% RESET old MD values in targetgoalzones to high number expected to not occur in simulation
-	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), (haveBlockAttached(true,_); customRole(customRoleSaboteur))) 
+	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), (haveBlockAttached(true,_))) 
+	    then delete(targetClosestGoalZone(XAlt, YAlt, MdAlt)) + 
+	         insert(targetClosestGoalZone(XAlt, YAlt, 1234567)).
+
+	% RESET old MD values in targetgoalzones to high number expected to not occur in simulation
+	if bel(targetClosestGoalZone(XAlt, YAlt, MdAlt), customRole(customRoleSaboteur))
 	    then delete(targetClosestGoalZone(XAlt, YAlt, MdAlt)) + 
 	         insert(targetClosestGoalZone(XAlt, YAlt, 1234567)).
 

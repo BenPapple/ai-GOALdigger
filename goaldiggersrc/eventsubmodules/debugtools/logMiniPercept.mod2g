@@ -39,6 +39,11 @@ module logMiniPercept {
 	    if true then print("                ").
 	    if true then print("====== Our Mini Percept =====").
 
+        if bel(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,_,na,na)),
+           percept(step(SimStep)),
+           bel(SimStep =< StepEnd, SimStep >= StepStart)
+            then print("Avoiding Norm: "+NormName+" till step: "+StepEnd).
+
 	    if bel(submitterLeader, positionInHirarchie(PositionInHirarchie))
 	        then print("Agent hierarchy position:"| PositionInHirarchie| "submitterLeader").
 	    if not(bel(submitterLeader)) ,bel(positionInHirarchie(PositionInHirarchie))
@@ -93,8 +98,8 @@ module logMiniPercept {
 		if not(bel(executeManhattan))
 			then print("Manhattan Switch Inactive").
 
-		if bel(haveBlockAttached(BoolBlock, _), haveDispenserDelivery(BoolDelivery, _))
-			then print("HaveBlock:"+BoolBlock| "HaveDelivery:"+BoolDelivery).
+		if bel(haveBlockAttached(BoolBlock, Dir), haveDispenserDelivery(BoolDelivery, _))
+			then print("HaveBlock:"+BoolBlock+" Direction: "+Dir+"HaveDelivery:"+BoolDelivery).
 
 		if bel(haveBlockAttached(true, DirBlock), directionToCoordinate(DirBlock, X, Y)),
 		   percept(attached(X, Y), thing(X, Y, block, BlockType))
@@ -104,8 +109,9 @@ module logMiniPercept {
 		if true then print("++++++ MISC DATA ++++++++++++").
 		if percept(step(SimStep)), bel(elapseStepTime(T1), calculateMinusOne(SimStep, SimStep2))
 			then print("Calculated time for Step"+SimStep2+"in milliseconds: "+ T1).
-		if percept(energy(Ener), deactivated(Status))
-			then print("Energy:"+Ener| "Deactivated:"+Status).
+		if percept(energy(Ener), deactivated(Status)),
+		   bel(lastDeactivationTracker(LastStepDeactivated))
+			then print("Energy:"+Ener| "Deactivated:"+Status+" Last deactivation on step: "+LastStepDeactivated).
 		if bel(changeAffinityAfterTheseSteps(Change), randomAffinity(Affi), randomSeed(Seed))
 			then print("Affinity:"+Affi|"Change after:"+Change|"Seed:"+Seed).
 		if percept(goalZone(0, 0))
@@ -139,6 +145,7 @@ module logMiniPercept {
 		%logging percept base, message base, believe base
 		%if true then log(pb) + log(mb) + log(bb) + log(gb).
 		%if true then log(pb) + log(mb) + log(bb).
+		if true then log(pb) + log(bb).
 		
 		} % debug
 

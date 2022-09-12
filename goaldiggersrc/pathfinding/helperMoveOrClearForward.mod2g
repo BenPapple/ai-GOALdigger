@@ -18,8 +18,8 @@ module helperMoveOrClearForward {
     % Move into main affinity direction if possible
     if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
        percept(role(worker)), 
-       not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)), 
-       not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser)) 
+       not(percept(thing(Xn, Yn, Type,_), Type \== dispenser, Type \== marker)), 
+       not(percept( thing(Xn+Xn, Yn+Yn, Type2,_), Type2 \== dispenser, Type \== marker)) 
         then preActionCleanup + move(Dir, Dir).
         
 	if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
@@ -37,13 +37,13 @@ module helperMoveOrClearForward {
         
     if bel(activateDoubleSpeed, randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn), haveBlockAttached(false, _)), 
        percept(role(worker)), 
-       not(percept(thing(Xn, Yn, Type, _), Type \== marker)), 
-       not(percept( thing(Xn+Xn, Yn+Yn, Type2, _), Type2 \== marker)) 
+       not(percept(thing(Xn, Yn, Type, _), Type \== dispenser, Type \== marker)), 
+       not(percept( thing(Xn+Xn, Yn+Yn, Type2, _), Type \== dispenser, Type2 \== marker)) 
         then preActionCleanup + move(Dir, Dir).
         
     % normal speed
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
-       not(percept(thing(Xn, Yn, Type,_), Type \== dispenser)) 
+       not(percept(thing(Xn, Yn, Type,_), Type \== dispenser, Type \== marker)) 
         then preActionCleanup + move(Dir).
         
    	if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
@@ -53,7 +53,7 @@ module helperMoveOrClearForward {
         then preActionCleanup + skip.
     
     if bel(randomAffinity(Dir), directionToCoordinate(Dir, Xn, Yn)), 
-       not(percept(thing(Xn, Yn, Type,_), Type \== marker)) 
+       not(percept(thing(Xn, Yn, Type,_), Type \== dispenser, Type \== marker)) 
         then preActionCleanup + move(Dir).
     	
     % clear main affinity direction of obstacles and blocks
@@ -69,7 +69,7 @@ module helperMoveOrClearForward {
     if bel(randomAffinity(Diry), directionToCoordinate(Diry, Xn, Yn), random90Direction(Diry, AltMove)) 
     	then {
     		if bel( directionToCoordinate(AltMove, Xm, Ym)), 
-    		   percept(thing(Xm, Ym, Type,_), Type \== dispenser) 
+    		   percept(thing(Xm, Ym, Type,_), Type \== dispenser, Type \== marker) 
     		   	then {
     		if percept(thing(Xn, Yn, obstacle,_))  
 				then preActionCleanup + clear(Xn, Yn).

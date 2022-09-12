@@ -76,9 +76,15 @@ module chooseTask {
        bel(NewVal is Del - 1)
         then delete(waitBeforeNewTask(Del)) + insert(waitBeforeNewTask(NewVal)).        
 
+    % if submitterLeader and no goalzone known chose 1task
+    if not(bel(mapGoalZone(_,_,_))),
+       bel(submitterLeader) 
+        then taskHandlingOneBlock.
+
     % ML task chosing		
 	if bel(submitterLeader),
 	   bel(waitBeforeNewTask(0)),
+	   bel(mapGoalZone(_,_,_)),
 	   bel(randomBetween(0, 100, RandOut)),
 	   bel(qtable(V1,V2,_,_,_,_))
 	    then {

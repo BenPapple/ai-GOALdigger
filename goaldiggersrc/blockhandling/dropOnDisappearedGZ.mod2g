@@ -1,0 +1,61 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * as submitterLeader drop connected blocks in disappeared goalzone
+ *
+ * @author Ben G.
+ */
+
+module dropOnDisappearedGZ {
+
+    % 
+    if bel(submitterLeader),
+       not(percept(goalZone(0, 0))),
+       bel(multiTaskSupporterStatus(_, AgentName1, _, _, _, _, Connect1, AgentName2, _, _, _, _, Connect2, 
+                                		AgentName3, _, _, _, _, Connect3)),
+       bel(Connect1 == connected; Connect2 == connected; Connect3 == connected),
+       bel(submitterLeader)
+        then {     
+         
+        % set switch to drop blocks and change task
+		if bel(Connect1 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).
+		if bel(Connect1 == connected),
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8))
+	   	    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
+			     insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
+			     
+		if bel(Connect2 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).
+		if bel(Connect2 == connected),
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8))
+	   	    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
+			     insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
+
+		if bel(Connect3 == connected),
+		   not(bel(dropAllBlocks)) then insert(dropAllBlocks).	
+		if bel(Connect3 == connected),
+		   bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8))
+	   	    then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
+			     insert(currentChosenTask(V1, -1, 999, V4, V5, V6, needNewTask, needNewTask)).
+
+        % inform supporters of dropped task
+        if bel(Connect1 == placeholder),
+           percept(name(MyName)),
+           bel(storedOtherAgentStatus(AgentName1, _, _, _, SenderConnect1, _, _, _, _))
+            then (SenderConnect1).send(informCeaseSupporting(MyName)).
+         if bel(Connect2 == placeholder),
+           percept(name(MyName)),
+           bel(storedOtherAgentStatus(AgentName2, _, _, _, SenderConnect2, _, _, _, _))
+            then (SenderConnect2).send(informCeaseSupporting(MyName)).
+        if bel(Connect3 == placeholder),
+           percept(name(MyName)),
+           bel(storedOtherAgentStatus(AgentName3, _, _, _, SenderConnect3, _, _, _, _))
+            then (SenderConnect3).send(informCeaseSupporting(MyName)). 
+ 
+         if true then print("!!!DROP CONNECTED BLOCKS, GOALZONE DISAPPEARED!!!").
+                              
+    }
+	
+} % end module
