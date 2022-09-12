@@ -21,8 +21,5 @@ module helperManhattanChoice {
 	% manhattan movement with 1 or 2 blocks attached
 	if bel(haveBlockAttached(false, _)) 
 		then helperMoveManhattanWithoutBlock.
-		
-	% obligatory skip continue action if above unsuccessful
-	if true then preActionCleanup + executeRandomMove.
 	
 }

@@ -19,9 +19,9 @@ module rotateBlockAgainstAffinity {
 	      then {
 	 
 		 	% rotate if free
-			if not(percept(thing(X, Y, Type, _), Type \== dispenser)) 
+			if not(percept(thing(X, Y, Type, _), Type \== dispenser, Type \== marker)) 
 			 	then preActionCleanup + rotate(Rot).
-			if not(percept(thing(F, G, Type, _), Type \== dispenser)) 
+			if not(percept(thing(F, G, Type, _), Type \== dispenser, Type \== marker)) 
 			 	then preActionCleanup + rotate(AltRot).
 	
 			% clear blocked rotate targets
@@ -44,7 +44,7 @@ module rotateBlockAgainstAffinity {
 	   bel(randomAffinity(DirAffi), oppositeDirection(DirAffi, DirOppo), DirBlock \== DirAffi, DirBlock \== DirOppo, 
 	       rotateAgainstAffinity(DirAffi, DirBlock, Rot), rotateToCoord(DirBlock, Rot, X, Y)) 
 	 	then {
-			if not(percept(thing(X, Y, Type, _), Type \== dispenser)) 
+			if not(percept(thing(X, Y, Type, _), Type \== dispenser, Type \== marker)) 
 				then preActionCleanup + rotate(Rot).
 		 	if percept(thing(X, Y, obstacle, _)) 
 		 		then preActionCleanup + clear(X, Y).
@@ -52,4 +52,5 @@ module rotateBlockAgainstAffinity {
 		 	   not(percept(attached(X, Y))) 
 		     	then preActionCleanup + clear(X, Y).
 	} % rotate random if block 90 degree
+	
 } % module

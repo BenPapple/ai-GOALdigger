@@ -53,8 +53,8 @@ module helperMoveWithBlock {
         	
         	
         	if bel( directionToCoordinate(AltMove, Xm, Ym), diagonalCoordForAffiAndOppoBlock(Diry,AltMove,A,B)), 
-    		   not(percept(thing(Xm, Ym, Type,_), Type \== marker)), 
-    		   not(percept(thing(A, B, Type,_), Type \== marker)) 
+    		   not(percept(thing(Xm, Ym, Type,_), Type \== dispenser, Type \== marker)), 
+    		   not(percept(thing(A, B, Type,_), Type \== dispenser, Type \== marker)) 
     		   	then {
 	    			if percept(thing(Xn, Yn, entity,_)) 
 	    				then preActionCleanup + move(AltMove).
@@ -66,8 +66,8 @@ module helperMoveWithBlock {
 	        if bel(oppositeDirection(AltMove, AltAltMove), 
 	               directionToCoordinate(AltAltMove, Xm, Ym), 
 	               diagonalCoordForAffiAndOppoBlock(Diry,AltAltMove,A,B)), 
-	           not(percept(thing(Xm, Ym, Type,_), Type \== dispenser)), 
-	           not(percept(thing(A, B, Type,_), Type \== dispenser)) 
+	           not(percept(thing(Xm, Ym, Type,_), Type \== dispenser, Type \== marker)), 
+	           not(percept(thing(A, B, Type,_), Type \== dispenser, Type \== marker)) 
 	        	then {
 		    		if percept(thing(Xn, Yn, entity,_)) 
 		    			then preActionCleanup + move(AltAltMove).
@@ -93,8 +93,8 @@ module helperMoveWithBlock {
 	        if bel(oppositeDirection(AltMove, AltAltMove), 
 	               directionToCoordinate(AltAltMove, Xm, Ym), 
 	               diagonalCoordForAffiAndOppoBlock(Diry,AltAltMove,A,B)), 
-	           not(percept(thing(Xm, Ym, Type,_), Type \== marker)), 
-	           not(percept(thing(A, B, Type,_), Type \== marker)) 
+	           not(percept(thing(Xm, Ym, Type,_), Type \== dispenser, Type \== marker)), 
+	           not(percept(thing(A, B, Type,_), Type \== dispenser, Type \== marker)) 
 	        	then {
 		    		if percept(thing(Xn, Yn, entity,_)) 
 		    			then preActionCleanup + move(AltAltMove).

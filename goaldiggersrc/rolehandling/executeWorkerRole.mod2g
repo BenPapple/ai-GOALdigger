@@ -182,7 +182,7 @@ module executeWorkerRole {
 	    	 
 	    	% as 1tasksubmitter/supportingAgent with no active task explore  
 	        if bel(currentChosenTask(_, TaskStep, _, _, _, _, PlanType, _)),
-	           bel(PlanType == supportingAgent; PlanType == submittingAgentOneTask),
+	           bel(PlanType == supportingAgent; PlanType == submittingAgentOneTask; PlanType == needNewTask),
 	    	   percept(step(SimStep), TaskStep < SimStep) 
 	    	   	then executeRandomMove.
 	    
