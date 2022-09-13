@@ -8,7 +8,18 @@ use "../eventsubmodules/distancecalc/updateDispenserDistance" as module.
  * @author Ben G.
  */
  
-% ToDo rewrite for 4task 
+% MACRO
+define checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4) as  
+    bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
+	bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
+	bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _)),
+    bel(storedOtherAgentStatus(OtherAgent1, _, worker, _, _, _, _, _, freeWorkerAgent)),
+	bel(confirmedOffsetOfAgent(_, _, OtherAgent1)),
+    bel(storedOtherAgentStatus(OtherAgent2, _, worker, _, _, _, _, _, freeWorkerAgent), OtherAgent1 \= OtherAgent2),  
+    bel(confirmedOffsetOfAgent(_, _, OtherAgent2)),
+    bel(storedOtherAgentStatus(OtherAgent3, _, worker, _, _, _, _, _, freeWorkerAgent), OtherAgent3 \= OtherAgent1, 
+        OtherAgent3 \= OtherAgent2),
+    bel(confirmedOffsetOfAgent(_, _, OtherAgent3)).
 
 module taskHandlingFourBlock {
 
@@ -34,10 +45,7 @@ module taskHandlingFourBlock {
 	           req(_, _, BlockTypeOther4)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)),	            
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -53,7 +61,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits") + 
+				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -66,10 +74,7 @@ module taskHandlingFourBlock {
 	           req(_, _, BlockTypeOther4)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -85,7 +90,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits") + 
+				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	} 
  
@@ -98,10 +103,7 @@ module taskHandlingFourBlock {
 	           req(_, _, BlockTypeOther4)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -117,7 +119,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits") + 
+				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -130,10 +132,7 @@ module taskHandlingFourBlock {
 	           req(0, 1, BlockType1)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -149,7 +148,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits") + 
+				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -168,9 +167,7 @@ module taskHandlingFourBlock {
 	   bel(limitStepsTask(_, _, _, Task4Limit)),
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -186,7 +183,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser") + 
+				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -198,9 +195,7 @@ module taskHandlingFourBlock {
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -216,7 +211,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser") + 
+				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -229,9 +224,7 @@ module taskHandlingFourBlock {
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -247,7 +240,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser") + 
+				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -259,9 +252,7 @@ module taskHandlingFourBlock {
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
 	   bel(targetClosestOfAllDispensersAt(_, _, BlockType1, _), BlockType1 \= bx),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -277,7 +268,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser") + 
+				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -291,9 +282,8 @@ module taskHandlingFourBlock {
 	           req(_, _, BlockTypeOther4)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)), 
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockType1, _, _)),
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -309,7 +299,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known") + 
+				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -320,9 +310,8 @@ module taskHandlingFourBlock {
 	           req(_, _, BlockTypeOther4)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)),
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockType1, _, _)),
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -338,7 +327,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known") + 
+				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -350,9 +339,8 @@ module taskHandlingFourBlock {
 	           req(_, _, BlockTypeOther4)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)),
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockType1, _, _)),
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -368,7 +356,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known") + 
+				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -379,9 +367,8 @@ module taskHandlingFourBlock {
 	           req(0, 1, BlockType1)])),
 	   bel(limitStepsTask(_, _, _, Task4Limit)),
 	   bel(step(SimStep), TaskStep >= SimStep, TaskStep - SimStep >= Task4Limit),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther2, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther3, _, _)),
-	   bel(mapDispenser(_, _, dispenser, BlockTypeOther4, _, _))
+	   bel(mapDispenser(_, _, dispenser, BlockType1, _, _)),
+	   checkAvailableAgentsAndDispensers(BlockTypeOther2, BlockTypeOther3, BlockTypeOther4)
 	    then {
        	if bel(multiTaskSupporterStatus(W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, W12, W13, W14, W15, W16, W17, W18,
        	                                W19)) 
@@ -397,7 +384,7 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known") + 
+				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 	

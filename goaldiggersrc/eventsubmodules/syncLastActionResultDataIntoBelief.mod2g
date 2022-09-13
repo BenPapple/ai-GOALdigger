@@ -51,7 +51,7 @@ module syncLastActionResultDataIntoBelief {
 
 		% succesfull clearing action on an agent
 		if bel(customRole(customRoleSaboteur), agentAt(X2,Y2,_)), 
-		   percept(lastAction(clear), lastActionParams([X0,Y0]), step(NewStep)),
+		   percept(lastAction(clear), lastActionParams([X0,Y0]), step(_)),
 		   bel(atom_number(X0,X), atom_number(Y0,Y))
 			then {
 		

@@ -158,7 +158,7 @@ module logScoringBoard {
 	    then print("---------------------------------------------------------------------------------").
 
     % print qtable ML 
-    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),       
        bel(submitterLeader, qtable(Q2, Q3, Q4, Task2, Task3, Task4)) 
         then print("Q-table: "|Q2+Q3+Q4|" Chance: "|Task2+Task3+Task4+" on step: "|X).
 
@@ -174,8 +174,9 @@ module logScoringBoard {
 
     % print  current cumulated score
     if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+       bel(simCount(SimCount)),
        bel(currentScore(CurrentScore))       
-        then print("Current score: "|CurrentScore).
+        then print("Current score: "|CurrentScore+" in sim "+SimCount).
     
     % print  current cumulated score
     if percept(step(X), X >= 25, 0 =:= mod(X, 25)),

@@ -56,7 +56,7 @@ module updateAgentHierarchy {
 		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie),
-		   bel(0 =:= mod(PosCheck, 5))
+		   bel(0 =:= mod(PosCheck, 6))
 			  then {
 			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 
