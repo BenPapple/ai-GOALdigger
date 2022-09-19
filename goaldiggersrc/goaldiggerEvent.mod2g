@@ -50,7 +50,7 @@ module goaldiggerEvent {
 		then delete(thisIsTheFirstSim).
 
 	% Logging made points by agents
-	if true
+	if bel(scoringBoardOn)
 		then logScoringBoard.
 
     % remove switch to drop all blocks
