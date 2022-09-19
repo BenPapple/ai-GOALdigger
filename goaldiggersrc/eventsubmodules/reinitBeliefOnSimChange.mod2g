@@ -66,6 +66,10 @@ module reinitBeliefOnSimChange {
     if bel(randomSeed(MyRandomSeed)) 
 		then delete(randomSeed(MyRandomSeed)) + 
 			 insert (randomSeed(0)).
+    
+    % prevent crash handling in new sim
+    if bel(simulationCrashed(SimStep))
+        then delete(simulationCrashed(SimStep)).
 
     % delete submitterLeader switch
     if bel(submitterLeader) 

@@ -11,9 +11,9 @@ use "../goaldiggerAction" as actionspec.
 module updateAgentHierarchyEmergency {
 
     % find seed collisions during early sim steps
-	if percept(step(SimStep), SimStep < 800),
+	if percept(step(SimStep)),
 	   bel(simulationCrashed(CrashStep)),
-	   bel(SimStep < CrashStep + 6)
+	   bel(SimStep < CrashStep + 8)
 	    then {
 		% seed collision choose new seed
 		forall bel(storedOtherAgentStatus(_, _, worker, OtherAgentSeed, _, _, _, _, _)) 
@@ -28,9 +28,9 @@ module updateAgentHierarchyEmergency {
     } % end seed collision
     
     % reset hierarchy value
-	if percept(step(SimStep), SimStep > 30),
+	if percept(step(SimStep)),
 	   bel(simulationCrashed(CrashStep)),
-	   bel(SimStep < CrashStep + 6)
+	   bel(SimStep < CrashStep + 8)
 		then {
 		% RESET
 		if bel(positionInHirarchie(PositionInHirarchie)) 
@@ -49,8 +49,9 @@ module updateAgentHierarchyEmergency {
 
     % assign custom roles
 	if percept(step(SimStep)),
+       percept(role(worker)),
 	   bel(simulationCrashed(CrashStep)),
-	   bel(SimStep >= CrashStep + 6)
+	   bel(SimStep >= CrashStep + 8)
 		then {
 
 		% assign submitterLeader
