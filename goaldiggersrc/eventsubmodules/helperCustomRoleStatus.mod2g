@@ -20,6 +20,7 @@ module helperCustomRoleStatus {
 	    bel(currentCustomRoleStatus(Delete), Delete \= saboteurAgent) 
 	     then delete(currentCustomRoleStatus(Delete)) + 
 		      insert(currentCustomRoleStatus(saboteurAgent)).		
+ 
     % explorer      
     if  percept(role(explorer)),
         not(bel(submitterLeader)),

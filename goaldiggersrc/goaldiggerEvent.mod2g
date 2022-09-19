@@ -17,6 +17,7 @@ use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateAgentHierarchy" as module.
+use "./eventsubmodules/updateAgentHierarchyEmergency" as module.
 use "./eventsubmodules/saboteurtools/initializeSaboteurBeliefs" as module.
 use "./eventsubmodules/saboteurtools/manageSaboteurEvents" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
@@ -56,6 +57,17 @@ module goaldiggerEvent {
     % remove switch to drop all blocks
     if bel(dropAllBlocks) 
         then delete(dropAllBlocks).
+
+    % detect crash of MAS
+	if not(bel(simulationCrashed(_))),
+	   percept(step(SimStep), SimStep > 30),
+	   bel(randomSeed(0)),
+       percept(role(worker))
+	    then insert(simulationCrashed(SimStep)).
+
+    % reinit emergency hierarchy after crash
+    if bel(simulationCrashed(_))
+        then updateAgentHierarchyEmergency.
 
     % reinit saboteur after client crash
     if percept(role(digger), step(SimStep), SimStep > 30),

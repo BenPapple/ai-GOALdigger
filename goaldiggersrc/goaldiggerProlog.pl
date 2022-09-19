@@ -26,6 +26,9 @@
 :- dynamic calculateNewGoalzoneMD/0.
 % switch to drop all attached blocks
 :- dynamic dropAllBlocks/0.
+% switch for MAS crash handling
+:- dynamic simulationCrashed/1.
+
 % waiting for norms ending
 %:- dynamic waitingForNorms/0.
 
