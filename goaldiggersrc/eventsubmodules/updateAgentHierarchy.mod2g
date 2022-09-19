@@ -56,7 +56,7 @@ module updateAgentHierarchy {
 		% assign submitterLeader
 		if percept(teamSize(SizeTeam), name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie),
-		   bel(0 =:= mod(PosCheck, 5))
+		   bel(0 =:= mod(PosCheck, 6))
 			  then {
 			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
 			 allother.send(msgSubmitterLeader(MyName)).			 
@@ -92,7 +92,7 @@ module updateAgentHierarchy {
 
 		% assign THIRD customRoleSaboteur
 		if bel(activateSaboteurFeature),
-		   percept(teamSize(SizeTeam), SizeTeam > 20, name(MyName)), 
+		   percept(teamSize(SizeTeam), SizeTeam > 10, name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 3),
 		   not(bel(submitterLeader)) 
 			then {
@@ -106,7 +106,7 @@ module updateAgentHierarchy {
 
 		% assign FOURTH customRoleSaboteur
 		if bel(activateSaboteurFeature),
-		   percept(teamSize(SizeTeam), SizeTeam > 20, name(MyName)), 
+		   percept(teamSize(SizeTeam), SizeTeam > 10, name(MyName)), 
 		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 4),
 		   not(bel(submitterLeader)) 
 			then {
@@ -117,6 +117,34 @@ module updateAgentHierarchy {
 			         insert(targetRole(digger)) +	
 			         allother.send(msgCustomRole(MyName)).				 
 		} % fourth saboteur
+
+		% assign FIFTH customRoleSaboteur
+		if bel(activateSaboteurFeature),
+		   percept(teamSize(SizeTeam), SizeTeam > 20, name(MyName)), 
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 5),
+		   not(bel(submitterLeader)) 
+			then {
+			if not(bel(customRole(_))),
+			   bel(targetRole(Role)) 
+			    then insert(customRole(customRoleSaboteur)) + 
+			         delete(targetRole(Role)) +
+			         insert(targetRole(digger)) +	
+			         allother.send(msgCustomRole(MyName)).				 
+		} % fifth saboteur
+
+		% assign SIXTH customRoleSaboteur
+		if bel(activateSaboteurFeature),
+		   percept(teamSize(SizeTeam), SizeTeam > 20, name(MyName)), 
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie, PosCheck == 7),
+		   not(bel(submitterLeader)) 
+			then {
+			if not(bel(customRole(_))),
+			   bel(targetRole(Role)) 
+			    then insert(customRole(customRoleSaboteur)) + 
+			         delete(targetRole(Role)) +
+			         insert(targetRole(digger)) +	
+			         allother.send(msgCustomRole(MyName)).				 
+		} % sixth saboteur
 		
 	} % end assign custom roles
 	
