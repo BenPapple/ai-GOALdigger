@@ -13,7 +13,7 @@ module goaldiggerInit {
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
-	%if true then insert (activateSaboteurFeature).
+	if true then insert (activateSaboteurFeature).
 	% variables for saboteur behaviour (against own team, against other team)
 	%if true then insert(sabotageUs).
 	if true then insert(sabotageThem).	
@@ -22,7 +22,7 @@ module goaldiggerInit {
 	
 	% global values
 	% limits the tasks by remaining steps (Task1Limit,Task2Limit,Task3Limit,Task4Limit)
-    if true then insert(limitStepsTask(0, 40, 60, 70)).
+    if true then insert(limitStepsTask(0, 60, 85, 95)).
 	% switch to recognize simulations have different characteristics on sim change
 	if true then insert(expectDifferentSimulations). 
 	% lowest and highest limit after which agent changes explore direction
