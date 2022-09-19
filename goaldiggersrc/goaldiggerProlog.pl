@@ -25,7 +25,7 @@
 % switch to drop all attached blocks
 :- dynamic dropAllBlocks/0.
 % waiting for norms ending
-:- dynamic waitingForNorms/0.
+%:- dynamic waitingForNorms/0.
 
 % switch for norm handling
 :- dynamic activateNormHandling/0.
@@ -210,7 +210,7 @@
 :- dynamic targetCandidate/5. % targetCandidate(X,Y,DirX,DirY,Energy), caches relevant information to select the next clearing target
 :- dynamic maximumShootingRange/1. % maximum distance from which an agent should be shot at
 :- dynamic inactiveSighting/3. % (X,Y,Timer) stores the coordinates of a bloke which is believed to be inactive and a timer.
-:- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
+%:- dynamic hitSighting/3. % (X,Y,Step) stores the coordinates of a bloke that has been hit as well as the step it was hit.
 :- dynamic agentCounter/1. % counts possible agents seen
 :- dynamic goalZoneSightings/5. % (X,Y,Number,Step,SenderName) information to be communicated by the saboteur by other agents if other agents seen in goalzone.
 :- dynamic bodyCounter/1. % counts agents deactivated by the saboteur

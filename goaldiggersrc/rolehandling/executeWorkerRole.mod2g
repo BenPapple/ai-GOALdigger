@@ -148,6 +148,12 @@ module executeWorkerRole {
 			           TaskStep >= SimStep)  
 				then executeMoveAroundSubmitter.
 
+	        % as submitter with no active task do random move
+	    	if bel(submitterLeader),
+	    	   bel(currentChosenTask(_, TaskStep, _, _, _, _, _, _)),
+	    	   percept(step(SimStep), TaskStep =< SimStep) 
+	    	    then executeRandomMove.
+
             % have some distance between submitterLeaders
             if bel(submitterLeader),
                percept(goalZone(0,0))

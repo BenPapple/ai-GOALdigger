@@ -158,9 +158,16 @@ module logScoringBoard {
 	    then print("---------------------------------------------------------------------------------").
 
     % print qtable ML 
-    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+    if percept(step(X), X >= 25, 0 =:= mod(X, 25)),       
        bel(submitterLeader, qtable(Q2, Q3, Q4, Task2, Task3, Task4)) 
         then print("Q-table: "|Q2+Q3+Q4|" Chance: "|Task2+Task3+Task4+" on step: "|X).
+
+    % log supporter status
+	if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+	   bel(multiTaskSupporterStatus(_, NameSuppo1, _, _, _, Ack1, Connect1, NameSuppo2, _, _, _, Ack2, Connect2, 
+	                                NameSuppo3, _, _, _, Ack3, Connect3))
+		then print("2-BLOCK: "| NameSuppo1 | Ack1+" 3-BLOCK: "| NameSuppo2 | Ack2+" 4-BLOCK: " |NameSuppo3 | Ack3) +
+		     print("Connects: "+Connect1+Connect2+Connect3).
 
     % update score case first score in percept
     if percept(score(Score1)),
@@ -174,8 +181,9 @@ module logScoringBoard {
 
     % print  current cumulated score
     if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
+       bel(simCount(SimCount)),
        bel(currentScore(CurrentScore))       
-        then print("Current score: "|CurrentScore).
+        then print("Current score: "|CurrentScore+" in sim "+SimCount).
     
     % print  current cumulated score
     if percept(step(X), X >= 25, 0 =:= mod(X, 25)),
