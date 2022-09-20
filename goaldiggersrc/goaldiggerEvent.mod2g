@@ -153,6 +153,11 @@ module goaldiggerEvent {
        bel(mapRoleZone(_, _, _))
         then deleteAllRoleZones.
 
+    % delete rolezones
+    if percept(step(SimStep), SimStep > 30),
+       bel(cachedMsgRoleZoneData(_,_,_))
+        then deleteAllRoleZones.
+
     % SUBMODULE update rolezone map data
     if percept(role(default))
     	then updateRolezoneDistance.

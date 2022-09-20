@@ -11,7 +11,7 @@ module goaldiggerInit {
 	% Variable fuer Debug, zB elapseStepTime
 	%if true then insert (lDebugOn).
 	% activate simple logging 
-	if true then insert (scoringBoardOn). 
+	%if true then insert (scoringBoardOn). 
 	% switch to deactivate because not allowed in competition1
 	if true then insert (activateDoubleSpeed). 
 	% switch that activates saboteur in sim
