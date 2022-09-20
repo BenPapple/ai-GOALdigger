@@ -17,12 +17,14 @@ use "./eventsubmodules/msgmultitaskcoordination/messageMultiTaskCoordination" as
 use "./eventsubmodules/simpleworldcalculation/updateWorldSizeData" as module.
 use "./eventsubmodules/messagePermaSendStatusToOthers" as module.
 use "./eventsubmodules/updateAgentHierarchy" as module.
+use "./eventsubmodules/updateAgentHierarchyEmergency" as module.
 use "./eventsubmodules/saboteurtools/initializeSaboteurBeliefs" as module.
 use "./eventsubmodules/saboteurtools/manageSaboteurEvents" as module.
 use "./eventsubmodules/sharedmap/handleMessageGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageRoleZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDeletedGoalZone" as module.
 use "./eventsubmodules/sharedmap/handleMessageDispenser" as module.
+use "./eventsubmodules/sharedmap/deleteAllRoleZones" as module.
 use "./eventsubmodules/simpleworldcalculation/handleMessageAgentOffset" as module.
 use "./eventsubmodules/updateMapExploredMarks" as module.
 use "./eventsubmodules/updateExploreMoveDirection" as module.
@@ -50,15 +52,29 @@ module goaldiggerEvent {
 		then delete(thisIsTheFirstSim).
 
 	% Logging made points by agents
-	if true
+	if bel(scoringBoardOn)
 		then logScoringBoard.
 
     % remove switch to drop all blocks
     if bel(dropAllBlocks) 
         then delete(dropAllBlocks).
 
-	% Initialize saboteur beliefs
-	
+    % detect crash of MAS
+	if not(bel(simulationCrashed(_))),
+	   percept(step(SimStep), SimStep > 30),
+	   bel(randomSeed(0)),
+       percept(role(worker))
+	    then insert(simulationCrashed(SimStep)).
+
+    % reinit emergency hierarchy after crash
+    if bel(simulationCrashed(_))
+        then updateAgentHierarchyEmergency.
+
+    % reinit saboteur after client crash
+    if percept(role(digger), step(SimStep), SimStep > 30),
+       not(bel(customRole(customRoleSaboteur)))
+        then insert(customRole(customRoleSaboteur)).
+	% Initialize saboteur beliefs	
 	if bel(customRole(customRoleSaboteur)) 
 		then initializeSaboteurBeliefs.
 
@@ -131,6 +147,16 @@ module goaldiggerEvent {
 	%if percept(role(default)) then handleMessageRoleZone.
 	if percept(step(SimStep), SimStep >= 2) 
 	    then handleMessageRoleZone.
+
+    % delete rolezones
+    if percept(step(SimStep), SimStep > 30),
+       bel(mapRoleZone(_, _, _))
+        then deleteAllRoleZones.
+
+    % delete rolezones
+    if percept(step(SimStep), SimStep > 30),
+       bel(cachedMsgRoleZoneData(_,_,_))
+        then deleteAllRoleZones.
 
     % SUBMODULE update rolezone map data
     if percept(role(default))

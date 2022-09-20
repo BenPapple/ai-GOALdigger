@@ -1,5 +1,4 @@
 use "../../goaldiggerProlog" as knowledge.
-use logScoringBoard as module.
 
 /**
  * Handles logging custom data in Our Mini Percept

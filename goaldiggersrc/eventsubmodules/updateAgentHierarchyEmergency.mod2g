@@ -1,0 +1,68 @@
+use "../goaldiggerProlog" as knowledge.
+use "../goaldiggerAction" as actionspec.
+
+/**
+ * Handle emergency ranking of agents and assign submitterLeader to agents after crash
+ *
+ * @author Marco G.
+ * @co-author Ben G.
+ */
+
+module updateAgentHierarchyEmergency {
+
+    % find seed collisions during early sim steps
+	if percept(step(SimStep)),
+	   bel(simulationCrashed(CrashStep)),
+	   bel(SimStep < CrashStep + 8)
+	    then {
+		% seed collision choose new seed
+		forall bel(storedOtherAgentStatus(_, _, worker, OtherAgentSeed, _, _, _, _, _)) 
+			do {
+		    	if bel(randomSeed(MyRandomSeed), MyRandomSeed == OtherAgentSeed) 
+		    		then {
+				    	if bel(getRandomNumberSeed(NewSeed)) 
+				    		then delete(randomSeed(MyRandomSeed)) + 
+				                 insert (randomSeed(NewSeed)).
+			}
+	    }
+    } % end seed collision
+    
+    % reset hierarchy value
+	if percept(step(SimStep)),
+	   bel(simulationCrashed(CrashStep)),
+	   bel(SimStep < CrashStep + 8)
+		then {
+		% RESET
+		if bel(positionInHirarchie(PositionInHirarchie)) 
+			then delete(positionInHirarchie(PositionInHirarchie)) +
+		         insert(positionInHirarchie(0)).	
+		
+		% position in hierarchy will increase for every lower other agent's randomSeed
+		forall bel(storedOtherAgentStatus(_, _, worker, OtherAgentSeed, _, _, _, _, _)) 
+			do {
+		    if bel(randomSeed(MyRandomSeed), positionInHirarchie(PositionInHirarchie), MyRandomSeed > OtherAgentSeed, 
+			       NewPositionInHirarchie is PositionInHirarchie + 1) 
+			    then delete(positionInHirarchie(PositionInHirarchie)) + 
+			         insert (positionInHirarchie(NewPositionInHirarchie)).
+		}
+    } % end reset hierarchy
+
+    % assign custom roles
+	if percept(step(SimStep)),
+       percept(role(worker)),
+	   bel(simulationCrashed(CrashStep)),
+	   bel(SimStep >= CrashStep + 8)
+		then {
+
+		% assign submitterLeader
+		if percept(teamSize(SizeTeam), name(MyName)), 
+		   bel(positionInHirarchie(PositionInHirarchie), PosCheck is SizeTeam - PositionInHirarchie),
+		   bel(0 =:= mod(PosCheck, 5))
+			  then {
+			 if not(bel(submitterLeader)) then insert(submitterLeader) + 
+			 allother.send(msgSubmitterLeader(MyName)).			 
+		}	
+		
+	} % end assign custom roles
+	
+} % end module

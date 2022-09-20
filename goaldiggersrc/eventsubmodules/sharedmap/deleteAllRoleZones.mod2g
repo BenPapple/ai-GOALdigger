@@ -1,0 +1,43 @@
+use "../../goaldiggerProlog" as knowledge.
+use "../../goaldiggerAction" as actionspec.
+
+/**
+ *
+ * Delete all rolezones when they are not needed anymore
+ *
+ * @author Ben G.
+ *
+ */
+
+module deleteAllRoleZones {
+
+    % delete all rolezones as submitterleader
+    if bel(submitterLeader) 
+        then {
+		forall bel(mapRoleZone(V1, V2, V3)) 
+			do delete(mapRoleZone(V1, V2, V3)).
+	    forall bel(cachedMsgRoleZoneData(X,Y,SenderName)) 
+	        do delete(cachedMsgRoleZoneData(X,Y,SenderName)).			
+	}
+	
+    % delete all rolezones as saboteur
+    if bel(customRole(customRoleSaboteur)) 
+        then {
+		forall bel(mapRoleZone(V1, V2, V3)) 
+			do delete(mapRoleZone(V1, V2, V3)).
+	    forall bel(cachedMsgRoleZoneData(X,Y,SenderName)) 
+	        do delete(cachedMsgRoleZoneData(X,Y,SenderName)).	
+	}
+
+    % delete all rolezones as saboteur
+    if percept(role(worker)),
+       not(bel(customRole(customRoleSaboteur))),
+       not(bel(submitterLeader))
+        then {
+		forall bel(mapRoleZone(V1, V2, V3)) 
+			do delete(mapRoleZone(V1, V2, V3)).
+	    forall bel(cachedMsgRoleZoneData(X,Y,SenderName)) 
+	        do delete(cachedMsgRoleZoneData(X,Y,SenderName)).	
+	}
+	
+}

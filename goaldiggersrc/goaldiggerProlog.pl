@@ -6,6 +6,8 @@
 % Bool Switches
 % true enables debug features logging, timing etc
 :- dynamic lDebugOn/0.
+% true enables scoring board
+:- dynamic scoringBoardOn/0.
 % switch to deactivate double speed for workers
 :- dynamic activateDoubleSpeed/0.
 % Switch that signals Main Module to get active
@@ -24,6 +26,9 @@
 :- dynamic calculateNewGoalzoneMD/0.
 % switch to drop all attached blocks
 :- dynamic dropAllBlocks/0.
+% switch for MAS crash handling
+:- dynamic simulationCrashed/1.
+
 % waiting for norms ending
 %:- dynamic waitingForNorms/0.
 
