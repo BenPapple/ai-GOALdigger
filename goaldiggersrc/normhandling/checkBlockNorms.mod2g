@@ -41,8 +41,7 @@ module checkBlockNorms {
 			   bel(MaxPenalty is Duration * Dmg),
 			   bel(EnergyPuffered is AgentEnergy),
 			   bel(MaxPenalty >= EnergyPuffered)
-				then insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)) + 
-				     print("Avoid norm with MaxDamage: "+MaxPenalty+" My energy: "+AgentEnergy).
+				then insert(avoidNorm(NormName,dropBlock,StepStart,StepEnd,block,any,0,Dmg,na,na)) .
 		}
 	
 %	% update block-norm drains more energy than the agent has, drop the block	

@@ -19,7 +19,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 		if percept(goalZone(0,0), step(_)), bel(agentAt(X4, Y4, _)), 
 		   bel(minimumDistanceEmptyGoalZone(Distance), waitingTimeEmptyGoalZone(Time)),
 		   bel(emptyGoalZoneCounter(X5, Y5, C), calculateXYMd(X5, Y5, X4, Y4, Md), Md < Distance, C > Time)
-		then insert(inEmptyGoalZone) + print("in an empty goal zone").
+		then insert(inEmptyGoalZone).
 
 		% update rolezone target MD
 		if bel(customRole(customRoleSaboteur)), not(percept(role(digger))) 
@@ -92,7 +92,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 		     	then delete(targetMd(X0, Y0, Target)) + insert(targetMd(X8, Y8, goalzone)).
 		     if not(bel(executeManhattan)) then insert(executeManhattan).
 		     if true then insert(saboteurHasMhTarget).
-		     if true then print("Decision Md: Roaming goal zone").     
+		     if bel(printsAllowed) then print("Decision Md: Roaming goal zone").     
 		}
 
 		% delete manhattan target if in an empty goal zone and target nearby
@@ -109,7 +109,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
 						if true then insert(saboteurHasMhTarget).
-						if true then print("Decision Md: Recommended goal zone, empty").			}
+						if bel(printsAllowed) then print("Decision Md: Recommended goal zone, empty").			}
 		}
 		
 		% set next non-empty goalzone as target
@@ -128,7 +128,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 						if true then insert(targetMd(X, Y, goalzone)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
 						if true then insert(saboteurHasMhTarget).
-						if true then print("Decision Md: Next non-empty goalzone").
+						if bel(printsAllowed) then print("Decision Md: Next non-empty goalzone").
 					}
 		}
 		
@@ -141,7 +141,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 						if true then insert(targetMd(X, Y, goalzoneRecommendation)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
 						if true then insert(saboteurHasMhTarget).
-						if true then print("Decision Md: Recommended goal zone, not goal zone in sight").			}
+						if bel(printsAllowed) then print("Decision Md: Recommended goal zone, not goal zone in sight").			}
 		}		
 	    
 		% set any non-empty goalzone as target, not in empty goal zone
@@ -157,7 +157,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 						if true then insert(targetMd(X, Y, goalzone)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
 						if true then insert(saboteurHasMhTarget).
-						if true then print("Decision Md: Any goal zone, not in empty goal zone").
+						if bel(printsAllowed) then print("Decision Md: Any goal zone, not in empty goal zone").
 					}
 			}
 		
@@ -172,7 +172,7 @@ if bel(saboteurHasMhTarget) then delete(saboteurHasMhTarget).
 						if true then insert(targetMd(X, Y, goalzone)).	
 						if not(bel(executeManhattan)) then insert(executeManhattan).
 						if true then insert(saboteurHasMhTarget).
-						if true then print("Decision Md: Any goal zone, not in empty goal zone").
+						if bel(printsAllowed) then print("Decision Md: Any goal zone, not in empty goal zone").
 					}
 			}		
 }

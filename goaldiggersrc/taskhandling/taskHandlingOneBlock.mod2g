@@ -27,7 +27,6 @@ module taskHandlingOneBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) +
 		    		 insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockTypeAttached, submittingAgentOneTask, 
 		                    oneTaskSubmitter)) +
-		    		 print("ModuleChoseTask 1task Block fits") +
 		      		 exit-module.
 	} % if
 	
@@ -41,7 +40,6 @@ module taskHandlingOneBlock {
 	    		then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 	        		 insert(currentChosenTask(TaskName, TaskStep, 10, X, Y, BlockType, submittingAgentOneTask, 
 	        		        oneTaskSubmitter)) + 
-	        		 print("ModuleChoseTask 1task closest Dispenser") +
 	        		 exit-module.
 	} % if
 	
@@ -55,7 +53,6 @@ module taskHandlingOneBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 		    		 insert(currentChosenTask(TaskName, TaskStep, 10, X, Y, BlockType, 
 		    		        submittingAgentOneTask, oneTaskSubmitter)) +
-		    		 print("ModuleChoseTask 1task fits last target dispenser") +
 		     		 exit-module.
 	} % if
 	
@@ -69,7 +66,6 @@ module taskHandlingOneBlock {
 		    	then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 	                 insert(currentChosenTask(TaskName, TaskStep, 10, Xt, Yt, BlockType, submittingAgentOneTask, 
 	                        oneTaskSubmitter)) +
-	        		 print("ModuleChoseTask 1task fits random known dispenser") +
 	         		 exit-module.
 	} % if
 

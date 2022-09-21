@@ -61,7 +61,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -90,7 +89,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	} 
  
@@ -119,7 +117,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -148,7 +145,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task own block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -183,7 +179,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -210,8 +205,7 @@ module taskHandlingFourBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
-				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
+				            supporterREQPending)) +  
 				     exit-module.
 	}
 
@@ -240,7 +234,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -268,7 +261,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task nearest dispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -299,7 +291,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -327,7 +318,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -356,7 +346,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -384,7 +373,6 @@ module taskHandlingFourBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 160, 0, 1, BlockType1, submittingAgentFourTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 4task basic dispenser known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 	

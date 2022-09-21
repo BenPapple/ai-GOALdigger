@@ -37,13 +37,11 @@ module calculateWorldSize {
 									 		if bel(worldSizeX(OldWorldX), WorldSizeX =< OldWorldX) 
 									 		    then delete(worldSizeX(OldWorldX)) + 
 									 		         insert(worldSizeX(WorldSizeX)) +
-									 		         all.send(worldSizeX(WorldSizeX)) + 
-									 		         print("WorldX="+WorldSizeX).
+									 		         all.send(worldSizeX(WorldSizeX)) .
 						                    if bel(worldSizeY(OldWorldY), WorldSizeY =< OldWorldY) 
 						                        then delete(worldSizeY(OldWorldY)) + 
 									 		         insert(worldSizeY(WorldSizeY)) +
-									 		         all.send(worldSizeY(WorldSizeY)) + 
-									 		         print("WorldY="+WorldSizeY).
+									 		         all.send(worldSizeY(WorldSizeY)) .
 									 	}						      
 							         }
 					}

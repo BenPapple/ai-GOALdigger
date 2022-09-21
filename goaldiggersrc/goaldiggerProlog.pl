@@ -26,6 +26,8 @@
 :- dynamic calculateNewGoalzoneMD/0.
 % switch to drop all attached blocks
 :- dynamic dropAllBlocks/0.
+% switch for misc debug prints
+:- dynamic printsAllowed/0.
 % switch for MAS crash handling
 :- dynamic simulationCrashed/1.
 

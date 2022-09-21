@@ -94,7 +94,7 @@ module syncPerceptDataIntoBelief {
 
 	           		if bel(customRole(customRoleSaboteur))  then {
 
-	           			if true then print("deleted goal zone:"+X+" "+Y).
+	           			if bel(printsAllowed) then print("deleted goal zone:"+X+" "+Y).
 	           			% Delete empty goal zone counters
 	           			if bel(emptyGoalZoneCounter(X, Y, Timer))
 	           			%minimumDistanceEmptyGoalZone(Distance),  calculateXYMd(X, Y, EmptyX, EmptyY, EmptyMd), EmptyMd < Distance)
@@ -107,7 +107,7 @@ module syncPerceptDataIntoBelief {
 	           			% Delete Manhattan target if goal zone not found upon arrival
 	           			if bel(targetMd(X, Y, Target), (Target = goalzoneRecommendation; Target = goalzone))
 	           			 	then {
-	           			 	  if true then print("Deleted manhattan goal zone").
+	           			 	  if bel(printsAllowed) then print("Deleted manhattan goal zone").
 	           			 	  if true then delete(targetMd(X, Y, Target)).
 							  if bel(executeManhattan) then delete(executeManhattan).
 							  

@@ -52,7 +52,6 @@ module taskHandlingThreeBlock {
 			then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 			     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockTypeAttached, submittingAgentThreeTask, 
 			            supporterREQPending)) + 
-			     print("ModuleChoseTask 3task own Block fits on step "+SimStep+" till "+TaskStep) + 
 			     exit-module.
 	}
 
@@ -79,7 +78,6 @@ module taskHandlingThreeBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockTypeAttached, submittingAgentThreeTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task own Block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 	
@@ -106,7 +104,6 @@ module taskHandlingThreeBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockTypeAttached, submittingAgentThreeTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task own Block fits on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -135,8 +132,7 @@ module taskHandlingThreeBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
-				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task nearestDispenser on step "+SimStep+" till "+TaskStep) + 
+				            supporterREQPending)) +  
 				     exit-module.
 	}
 
@@ -161,8 +157,7 @@ module taskHandlingThreeBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
-				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task nearestDispenser on step "+SimStep+" till "+TaskStep) + 
+				            supporterREQPending)) +
 				     exit-module.
 	}
 	
@@ -187,8 +182,7 @@ module taskHandlingThreeBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
-				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task nearestDispenser on step "+SimStep+" till "+TaskStep) + 
+				            supporterREQPending)) +
 				     exit-module.
 	}
 
@@ -214,7 +208,6 @@ module taskHandlingThreeBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
 				       supporterREQPending)) + 
-				     print("ModuleChoseTask 3task OldTask nearestDispenser on step "+SimStep+" till "+TaskStep) + 
 					 exit-module.
 	}
 
@@ -239,8 +232,7 @@ module taskHandlingThreeBlock {
 			if bel(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) 
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
-				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task OldTask nearestDispenser on step "+SimStep+" till "+TaskStep) + 
+				            supporterREQPending)) +  
 				     exit-module.
 	}
 	
@@ -266,7 +258,6 @@ module taskHandlingThreeBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task OldTask nearestDispenser on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	}
 
@@ -292,7 +283,6 @@ module taskHandlingThreeBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 				     insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task basic disp known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	} 	
 
@@ -318,7 +308,6 @@ module taskHandlingThreeBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 					 insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task basic disp known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	} 
 
@@ -344,7 +333,6 @@ module taskHandlingThreeBlock {
 				then delete(currentChosenTask(V1, V2, V3, V4, V5, V6, V7, V8)) + 
 					 insert(currentChosenTask(TaskName, TaskStep, 90, 0, 1, BlockType, submittingAgentThreeTask, 
 				            supporterREQPending)) + 
-				     print("ModuleChoseTask 3task basic disp known on step "+SimStep+" till "+TaskStep) + 
 				     exit-module.
 	} 
 	

@@ -54,7 +54,7 @@ module dropOnDisappearedGZ {
            bel(storedOtherAgentStatus(AgentName3, _, _, _, SenderConnect3, _, _, _, _))
             then (SenderConnect3).send(informCeaseSupporting(MyName)). 
  
-         if true then print("!!!DROP CONNECTED BLOCKS, GOALZONE DISAPPEARED!!!").
+         if bel(printsAllowed) then print("!!!DROP CONNECTED BLOCKS, GOALZONE DISAPPEARED!!!").
                               
     }
 	
