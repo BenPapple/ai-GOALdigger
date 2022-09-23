@@ -1,7 +1,7 @@
 # GOALdigger multi-agent system Documentation
 
 * [Introduction](#introduction)
-* [Tournament record](#tournament record)
+* [Tournament record](#tournament-record)
 
 * [Launch](#launch)
 * [License](#license)
