@@ -10,6 +10,10 @@ This is the work of a 4 person student team at University of Hagen for the pract
 
 The [multi-agent system (MAS)](https://en.wikipedia.org/wiki/Multi-agent_system) is written in the [GOAL agent programming language](https://en.wikipedia.org/wiki/GOAL_agent_programming_language).
 
+### Tournament record
+
+Second place in [The 16th edition of the Multi-Agent Programming Contest.](https://multiagentcontest.org/2022/)
+
 ### Launch
 
 The MAS can be launched as is with the PowerShell script.
