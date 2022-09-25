@@ -5,6 +5,7 @@ use "../../eventsubmodules/distancecalc/updateNearestAgentWithBlock" as module.
 /**
  * coordination messages to 2-task suppportingAgent)
  *
+ * @author Julia H.
  * @author Ben G.
  */
 

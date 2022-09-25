@@ -11,8 +11,6 @@ use "../../goaldiggerAction" as actionspec.
 
 module handleMessageRoleZone {
 	
-	%ToDo: There doesn't seem to be a flag to recalc the distance to role zones, as for goal zones. Is it so by design?
-	
 	% Check cached msgRoleZoneData messages.
 	forall bel(cachedMsgRoleZoneData(X,Y,SenderName)) 
 		do {

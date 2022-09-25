@@ -6,8 +6,6 @@ use "../../goaldiggerProlog" as knowledge.
  * @author Ben G.
  */
 
-% ToDo add fourth block and more
-
 module prepareFourTaskData {
 
     % store XY and blocktype for supporters

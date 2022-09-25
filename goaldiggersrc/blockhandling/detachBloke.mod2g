@@ -3,17 +3,13 @@ use "../goaldiggerAction" as actionspec.
 use "../actionhandling/preActionCleanup" as module.
 
 /**
- * ToDo Isaac
+ * Deprecated since enemy agents cannot attach to our agents, so no detach from them is necessary
  *
  * @author Isaac S.
  */
 
 module detachBloke {
 
-	% ToDo: Reset belief if attached for a long time (with counter).
-	
-	% detach a bloke during dragger routine
-	
 	%if bel(customRole(customRoleSaboteur)) then allother.send(mensaje("Trying to detach")).
 	if bel(customRole(customRoleSaboteur), whitelistedTeam(OurTeam)), 
 	   percept(attached(X,Y), thing(X,Y, entity, OtherTeam), OurTeam \= OtherTeam), not(bel(X =:= 0, Y =:=0)),
@@ -25,12 +21,6 @@ module detachBloke {
 	   bel(directionToCoordinate(Dir, X, Y)) 
 	    then preActionCleanup + detach(Dir).
 
-% ToDo check logic	
-%	% detach a block if it has a saboteur from other team attached to it
-%	if percept(attached(X,Y), (abs(X) =:= 0; abs(Y) =:= 0), thing(X, Y, block, _), team(MyTeam),
-%	   attached(X1,Y1), thing(X1, Y1, entity, OtherTeam), (X1 is X+1; X1 is X-1, Y1 is Y+1; Y1 is Y-1),
-%	   OtherTeam \= MyTeam), 
-%	   bel(directionToCoordinate(Dir, X, Y)) 
-%	    then detach(Dir).
+
 	
 }

@@ -135,12 +135,6 @@
 
 % relative coordinates to other agents coordinate system (relX, relY, TheirName)
 :- dynamic confirmedOffsetOfAgent/3.
-% message to find relative coordinates between agents (myX, myY, seenX, seenY, SeenAtStep, MyName)
-%:- dynamic seenOtherAgentAt/6.
-% data for message (X,X, MyAgentName)
-%:- dynamic sawGoalzoneAt/3.
-% data for messages (X,Y, Type, MyAgentName)
-%:- dynamic sawDispenserAt/4.
 
 % Variables related to world measurement
 % lists containing world X and Y sizes
@@ -159,16 +153,6 @@
 :- dynamic cachedMsgGoalZoneData/3.
 :- dynamic cachedMsgRoleZoneData/3.
 :- dynamic cachedMsgDispenserData/6.
-% goalzone percept data plus sender name (X, Y, SenderName).
-%:- dynamic messageGoalZone/3.
-% goalzone percept data plus sender name (X, Y, SenderName).
-%:- dynamic messageDeletedGoalZone/3.
-% dispenser data plus sender name (X,Y,Type,Details,SenderName)
-%:- dynamic messageDispenser/6.
-% message containing just the sender name
-%:- dynamic messageNeedGoalZone/1.
-% message containing the requested dispenser details (BlockType) and the sender name
-%:- dynamic messageNeedDispenser/2.
 
 % Variables related to choosing or Determine Role
 :- dynamic customRole/1. % role belief for non standard roles
@@ -362,10 +346,6 @@ directionToCoordinate(n, 0, -1).
 directionToCoordinate(s, 0, 1).
 directionToCoordinate(w, -1, 0).
 directionToCoordinate(e, 1, 0).
-
-% helper function number to roles
-%numbertoRoles(0, worker).
-%numbertoRoles(1, explorer).
 
 % helper function direction to opposite direction
 oppositeDirection(n, s).

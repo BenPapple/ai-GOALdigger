@@ -23,7 +23,6 @@ module preferThreeTask {
 	   bel(submitterLeader)
 	    then taskHandlingTwoBlock.
     
-	% ToDo add 4task choosing
 	% choose 4-task as submitterLeader if available
 	if bel(currentChosenTask(_, _, _, _, _, _, needNewTask, needNewTask)),
 	   bel(submitterLeader) 

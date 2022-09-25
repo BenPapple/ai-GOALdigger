@@ -5,6 +5,7 @@ use "../eventsubmodules/distancecalc/updateDispenserDistance" as module.
 /**
  * Use the 2-task as 2task submitterLeader
  *
+ * @author Julia H.
  * @author Ben G.
  */
 

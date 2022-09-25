@@ -11,6 +11,7 @@ use "../../pathfinding/executeRandomMove" as module.
  */
 
 module handleMessageDispenser {
+
 	% ToDo: When the world measurement is ready, adapt coordinates additionaly to world size
 		
 	% Check cached msgDispenserData messages.

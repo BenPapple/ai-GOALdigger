@@ -97,8 +97,7 @@ module syncPerceptDataIntoBelief {
 	           			if true then print("deleted goal zone:"+X+" "+Y).
 	           			% Delete empty goal zone counters
 	           			if bel(emptyGoalZoneCounter(X, Y, Timer))
-	           			%minimumDistanceEmptyGoalZone(Distance),  calculateXYMd(X, Y, EmptyX, EmptyY, EmptyMd), EmptyMd < Distance)
-	           			   then delete(emptyGoalZoneCounter(X,Y,Timer)).
+	           			    then delete(emptyGoalZoneCounter(X,Y,Timer)).
 
 	           			% Delete goal zone recommendation if found to be empty
 	           			if bel(goalZoneSightings(X,Y,A,B,C))
@@ -115,9 +114,6 @@ module syncPerceptDataIntoBelief {
 	           			} % end actions for saboteurs
 	           	} % end mapGoalZone deletion actions
 
-	       % ToDo: In order to activate the messages for deletd goal zones, add:
-	       % To the conditions: percept(name(MyName))
-	       % To the actions: allother.send(messageDeletedGoalZone(X, Y, MyName))
 	}
 
 	% DELETE disappeared rolezones
