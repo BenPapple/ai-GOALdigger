@@ -18,9 +18,7 @@ Second place in [The 16th edition of the Multi-Agent Programming Contest.](https
 
 ### Launch
 
-The MAS can be launched as is with the PowerShell script.
-
-Or it can be launched directly in the Eclipse IDE with [GOAL plugin](https://goalapl.atlassian.net/wiki/spaces/GOAL/overview) installed.
+The MAS can be launched can be launched directly in the Eclipse IDE with [GOAL plugin](https://goalapl.atlassian.net/wiki/spaces/GOAL/overview) installed.
 
 ### License
 
