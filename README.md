@@ -12,6 +12,8 @@ This is the work of a 4 person student team at University of Hagen for the pract
 
 The [multi-agent system (MAS)](https://en.wikipedia.org/wiki/Multi-agent_system) is written in the [GOAL agent programming language](https://en.wikipedia.org/wiki/GOAL_agent_programming_language).
 
+![Scan with gordo on metasploitable2](https://github.com/BenPapple/ai-GOALdigger/blob/main/pics/game01.png?raw=true)
+
 ### Tournament record
 
 Second place in [The 16th edition of the Multi-Agent Programming Contest.](https://multiagentcontest.org/2022/)
